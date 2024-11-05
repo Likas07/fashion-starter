@@ -15,8 +15,6 @@ export const getCategoriesList = cache(async function (
 ) {
   return sdk.store.category.list(
     {
-      // TODO: Look into fixing the type
-      // @ts-ignore
       limit,
       offset,
       fields: fields ? fields.join(",") : undefined,
@@ -29,8 +27,6 @@ export const getCategoryByHandle = cache(async function (
   categoryHandle: string[]
 ) {
   return sdk.store.category.list(
-    // TODO: Look into fixing the type
-    // @ts-ignore
     { handle: categoryHandle },
     { next: { tags: ["categories"] } }
   )

@@ -60,6 +60,7 @@ const Addresses = ({
         )}
       </div>
       {isOpen ? (
+        // TODO: replace with react-hook-form and add validation
         <form action={formAction}>
           <ShippingAddress
             customer={customer}
