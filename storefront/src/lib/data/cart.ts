@@ -36,6 +36,16 @@ export async function retrieveCart() {
   return cart
 }
 
+export async function getCartQuantity() {
+  const cart = await retrieveCart()
+
+  if (!cart || !cart.items || !cart.items.length) {
+    return 0
+  }
+
+  return cart.items.reduce((acc, item) => acc + item.quantity, 0)
+}
+
 export async function getOrSetCart(input: unknown) {
   if (typeof input !== "string") {
     throw new Error("Invalid input when retrieving cart")
