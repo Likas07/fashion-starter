@@ -12,6 +12,7 @@ module.exports = {
     colors: {
       black: "#050505",
       "black-10%": "rgba(5, 5, 5, 0.1)",
+      "black-30%": "rgba(5, 5, 5, 0.3)",
       white: "#FDFDFD",
       grayscale: {
         800: "#1F1F20",
@@ -57,9 +58,11 @@ module.exports = {
       md: "768px",
       lg: "1024px",
       xl: "1280px",
+      "2xl": "1400px",
     },
     extend: {
       spacing: {
+        13: "3.25rem",
         13.5: "3.375rem",
         14.5: "3.625rem",
         15: "3.75rem",
@@ -82,12 +85,17 @@ module.exports = {
         37: "9.25rem",
         39: "9.75rem",
         42: "10.5rem",
+        45: "11.25rem",
         46: "11.5rem",
         47: "11.75rem",
         50: "12.5rem",
+        54: "13.5rem",
         61: "15.25rem",
+        65: "16.25rem",
+        66: "16.5rem",
         75: "18.75rem",
         90: "22.5rem",
+        93: "23.25rem",
         100: "25rem",
         108: "27rem",
         120: "30rem",
@@ -96,10 +104,15 @@ module.exports = {
         125: "31.25rem",
         135: "33.75rem",
         150: "37.5rem",
+        154: "38.5rem",
         159: "39.75rem",
+        200: "50rem",
       },
       borderWidth: {
         6: "6px",
+      },
+      boxShadow: {
+        modal: "0px 0px 40px -16px rgba(0, 0, 0, 0.20)",
       },
       transitionProperty: {
         fontWeight: "font-weight",
@@ -126,5 +139,5 @@ module.exports = {
       variants: ["xs", "sm", "md", "lg", "xl"],
     },
   ],
-  plugins: [require("tailwindcss-radix")()],
+  plugins: [require("tailwindcss-radix"), require("tailwindcss-animate")],
 }

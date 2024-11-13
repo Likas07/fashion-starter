@@ -1,3 +1,5 @@
+"use client"
+
 // External packages
 import {
   Button,
