@@ -27,7 +27,7 @@ This starter kit is an ideal solution for developers who need to set up a profes
 - **Fully Responsive Design**: Optimized for mobile, tablet, and desktop devices, ensuring a smooth, consistent experience across all platforms.
 - **Stripe Integration for Payments**: Accept payments effortlessly by integrating **Stripe**. Simply add your Stripe API key to `medusa/.env` and the publishable key to `storefront/.env` to get started.
 - **Full E-commerce Functionality**: The starter includes all the essential e-commerce features you need, including product pages, a shopping cart, a checkout process, and order confirmation.
-- **Next.js and Tailwind CSS**: Built with **Next.js** v14 app router and **Tailwind CSS**, the starter is highly performant, customizable, and easy to extend with additional features.
+- **Next.js and Tailwind CSS**: Built with **Next.js** v15 app router and **Tailwind CSS**, the starter is highly performant, customizable, and easy to extend with additional features.
 
 ## Roadmap
 - **Figma Design Templates**: This will enable you to easily customize the design of the storefront to match your brand.

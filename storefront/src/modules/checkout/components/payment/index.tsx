@@ -89,9 +89,7 @@ const Payment = ({
         isStripeFunc(selectedPaymentMethod) && !activeSession
 
       if (!activeSession) {
-        await initiatePaymentSession(cart, {
-          provider_id: selectedPaymentMethod,
-        })
+        await initiatePaymentSession(selectedPaymentMethod)
       }
 
       if (!shouldInputCard) {

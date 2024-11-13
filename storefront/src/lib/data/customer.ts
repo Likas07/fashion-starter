@@ -15,6 +15,7 @@ export const getCustomer = cache(async function () {
     .catch(() => null)
 })
 
+// TODO: add input validation
 export const updateCustomer = cache(async function (
   body: HttpTypes.StoreUpdateCustomer
 ) {
@@ -27,6 +28,7 @@ export const updateCustomer = cache(async function (
   return updateRes
 })
 
+// TODO: add input validation
 export async function signup(_currentState: unknown, formData: FormData) {
   const password = formData.get("password") as string
   const customerForm = {
@@ -70,6 +72,7 @@ export async function signup(_currentState: unknown, formData: FormData) {
   }
 }
 
+// TODO: add input validation
 export async function login(_currentState: unknown, formData: FormData) {
   const email = formData.get("email") as string
   const password = formData.get("password") as string
@@ -101,6 +104,7 @@ export async function signout(countryCode: string) {
   redirect(`/${countryCode}/account`)
 }
 
+// TODO: add input validation
 export const addCustomerAddress = async (
   _currentState: unknown,
   formData: FormData
@@ -129,6 +133,7 @@ export const addCustomerAddress = async (
     })
 }
 
+// TODO: add input validation
 export const deleteCustomerAddress = async (
   addressId: string
 ): Promise<void> => {
@@ -143,6 +148,7 @@ export const deleteCustomerAddress = async (
     })
 }
 
+// TODO: add input validation
 export const updateCustomerAddress = async (
   currentState: Record<string, unknown>,
   formData: FormData
