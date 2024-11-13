@@ -27,7 +27,7 @@ const ImageGallery = ({ images, className }: ImageGalleryProps) => {
             priority={index <= 2 ? true : false}
             alt={`Product image ${index + 1}`}
             fill
-            sizes="(max-width: 576px) 575px, (max-width: 768px) 767px, (max-width: 1024px) 589px, 456px"
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 589px, (max-width: 1279px) 384px, 456px"
             className="object-cover"
           />
         </div>
