@@ -2,7 +2,7 @@
 
 // External components
 import * as React from "react"
-import { useParams, usePathname } from "next/navigation"
+import { usePathname } from "next/navigation"
 import { Popover, Select } from "react-aria-components"
 
 // Components
@@ -14,6 +14,7 @@ import {
   UiSelectValue,
 } from "@/components/ui/Select"
 import { updateRegion } from "@lib/data/cart"
+import { useCountryCode } from "hooks/country-code"
 
 export const RegionSwitcher: React.FC<{
   countryOptions: {
@@ -31,8 +32,12 @@ export const RegionSwitcher: React.FC<{
   selectIconClassName,
 }) => {
   const pathName = usePathname()
-  const { countryCode } = useParams()
-  const currentPath = pathName.split(`/${countryCode}`)[1]
+  const countryCode = useCountryCode(countryOptions)
+  let currentPath = pathName
+
+  if (countryCode) {
+    currentPath = pathName.split(`/${countryCode}`)[1]
+  }
 
   return (
     <Select

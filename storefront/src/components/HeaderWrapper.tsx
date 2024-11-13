@@ -1,14 +1,17 @@
 "use client"
 
 import * as React from "react"
-import { useParams, usePathname } from "next/navigation"
+import { usePathname } from "next/navigation"
+import { useCountryCode } from "hooks/country-code"
 
 export const HeaderWrapper: React.FC<{ children?: React.ReactNode }> = ({
   children,
 }) => {
   const pathName = usePathname()
-  const { countryCode } = useParams()
-  const currentPath = pathName.split(`/${countryCode}`)[1]
+  const countryCode = useCountryCode()
+  const currentPath = countryCode
+    ? pathName.split(`/${countryCode}`)[1]
+    : pathName
   const isPageWithHeroImage =
     !currentPath ||
     currentPath === "/" ||

@@ -1,7 +1,6 @@
 "use client"
 
 import { isEqual } from "lodash"
-import { useParams } from "next/navigation"
 import { useEffect, useMemo, useState } from "react"
 import { HttpTypes } from "@medusajs/types"
 import { Popover, Radio, RadioGroup, Select } from "react-aria-components"
@@ -17,6 +16,7 @@ import {
   UiSelectListBoxItem,
   UiSelectValue,
 } from "@/components/ui/Select"
+import { useCountryCode } from "hooks/country-code"
 import ProductPrice from "../product-price"
 
 type ProductActionsProps = {
@@ -81,7 +81,7 @@ export default function ProductActions({
   )
   const [quantity, setQuantity] = useState(1)
   const [isAdding, setIsAdding] = useState(false)
-  const countryCode = useParams().countryCode as string
+  const countryCode = useCountryCode()
 
   // If there is only 1 variant, preselect the options
   useEffect(() => {
