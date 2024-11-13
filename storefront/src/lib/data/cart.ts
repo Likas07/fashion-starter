@@ -61,7 +61,11 @@ export async function getOrSetCart(input: unknown) {
   }
 
   if (!cart) {
-    const cartResp = await sdk.store.cart.create({ region_id: region.id })
+    const cartResp = await sdk.store.cart.create(
+      { region_id: region.id },
+      {},
+      await getAuthHeaders()
+    )
     cart = cartResp.cart
     await setCartId(cart.id)
     revalidateTag("cart")
