@@ -1,11 +1,28 @@
+"use client"
+
+// External components
+import { useParams, usePathname } from "next/navigation"
+import { twMerge } from "tailwind-merge"
+
 // Components
 import { Layout, LayoutColumn } from "@/components/Layout"
 import { NewsletterForm } from "@/components/NewsletterForm"
 import { LocalizedLink } from "@/components/LocalizedLink"
 
 export const Footer: React.FC = () => {
+  const pathName = usePathname()
+  const { countryCode } = useParams()
+  const currentPath = pathName.split(`/${countryCode}`)[1]
+
+  const isAuthPage = currentPath === "/register" || currentPath === "/login"
+
   return (
-    <div className="bg-grayscale-50 py-8 md:py-20">
+    <div
+      className={twMerge(
+        "bg-grayscale-50 py-8 md:py-20",
+        isAuthPage && "hidden"
+      )}
+    >
       <Layout>
         <LayoutColumn className="col-span-13">
           <div className="flex max-lg:flex-col justify-between md:gap-20 max-md:px-4">

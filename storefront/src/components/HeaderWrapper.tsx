@@ -18,8 +18,13 @@ export const HeaderWrapper: React.FC<{ children?: React.ReactNode }> = ({
     currentPath === "/about" ||
     currentPath === "/inspiration" ||
     currentPath.startsWith("/collections")
+  const isAuthPage = currentPath.startsWith("/auth")
 
   React.useEffect(() => {
+    if (isAuthPage) {
+      return
+    }
+
     const headerElement = document.querySelector("#site-header")
 
     if (!headerElement) {
@@ -80,7 +85,7 @@ export const HeaderWrapper: React.FC<{ children?: React.ReactNode }> = ({
       id="site-header"
       className="top-0 left-0 w-full max-md:bg-grayscale-50 data-[light=true]:md:text-white data-[sticky=true]:md:bg-white data-[sticky=true]:md:text-black transition-colors fixed max-md:px-6 z-40 group"
       data-light={isPageWithHeroImage}
-      data-sticky={false}
+      data-sticky={isAuthPage}
     >
       {children}
     </div>
