@@ -11,30 +11,23 @@ import { Icon } from "@/components/Icon"
 import { IconCircle } from "@/components/IconCircle"
 import { Layout, LayoutColumn } from "@/components/Layout"
 
-// Utils
-import useWindowSize from "@lib/hooks/useWindowSize"
-
 export type CarouselProps = {
   heading?: React.ReactNode
   button?: React.ReactNode
   arrows?: boolean
-  disableOnDesktop?: boolean
 } & React.ComponentPropsWithRef<"div">
 
 export const Carousel: React.FC<CarouselProps> = ({
   heading,
   button,
   arrows = true,
-  disableOnDesktop = false,
   children,
   className,
 }) => {
-  const { width } = useWindowSize()
-
   const [emblaRef, emblaApi] = useEmblaCarousel({
     containScroll: "trimSnaps",
     skipSnaps: true,
-    active: disableOnDesktop ? (width > 768 ? false : true) : true,
+    active: true,
   })
   const [prevBtnDisabled, setPrevBtnDisabled] = React.useState(true)
   const [nextBtnDisabled, setNextBtnDisabled] = React.useState(true)
@@ -66,15 +59,14 @@ export const Carousel: React.FC<CarouselProps> = ({
         <LayoutColumn className="relative">
           <div
             className={twJoin(
-              "mb-8 md:mb-15 flex flex-wrap justify-between items-center gap-x-10 gap-y-2",
-              disableOnDesktop && "md:mb-8"
+              "mb-8 md:mb-15 flex flex-wrap justify-between items-center gap-x-10 gap-y-2"
             )}
           >
             {heading}
             {(arrows || button) && (
-              <div className={twJoin(!disableOnDesktop && "flex md:gap-6")}>
+              <div className={twJoin("flex md:gap-6")}>
                 {button}
-                {arrows && !disableOnDesktop && (
+                {arrows && (
                   <div className="flex gap-2">
                     <button
                       type="button"
@@ -114,12 +106,7 @@ export const Carousel: React.FC<CarouselProps> = ({
             )}
           </div>
           <div ref={emblaRef}>
-            <div
-              className={twJoin(
-                "flex touch-pan-y gap-4 md:gap-10",
-                disableOnDesktop && "md:gap-6"
-              )}
-            >
+            <div className={twJoin("flex touch-pan-y gap-4 md:gap-10")}>
               {children}
             </div>
           </div>

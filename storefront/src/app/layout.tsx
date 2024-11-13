@@ -1,6 +1,7 @@
-import { getBaseURL } from "@lib/util/env"
 import { Metadata } from "next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import localFont from "next/font/local"
+import { getBaseURL } from "@lib/util/env"
 
 import "../styles/globals.css"
 
@@ -69,6 +70,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
     <html lang="en" data-mode="light" className="antialiased">
       <body className={`${monaSans.className}`}>
         <main className="relative">{props.children}</main>
+        <SpeedInsights />
       </body>
     </html>
   )
