@@ -21,11 +21,10 @@ export default function AccountLayout(props: { children: React.ReactNode }) {
           <div className="max-md:flex max-md:gap-22">
             <h1 className="text-lg mb-16 max-md:hidden">My account</h1>
             <LocalizedLink
-              href="/account/personal-and-security"
+              href="/account"
               className={twJoin(
                 "inline-flex items-start py-3 max-md:whitespace-nowrap",
-                currentPath === "/account/personal-and-security" &&
-                  "font-semibold"
+                currentPath === "/account" && "font-semibold"
               )}
             >
               Personal &amp; security

@@ -11,6 +11,7 @@ import { CartIcon } from "./CartIcon"
 import { HeaderDrawer } from "./HeaderDrawer"
 import { RegionSwitcher } from "./RegionSwitcher"
 import { HeaderWrapper } from "./HeaderWrapper"
+import { Icon } from "./Icon"
 
 export const Header: React.FC = async () => {
   const regions = await listRegions()
@@ -47,18 +48,19 @@ export const Header: React.FC = async () => {
                   selectButtonClassName="bg-transparent border-0 h-auto !gap-0 !p-1 w-full"
                   selectIconClassName="text-current"
                 />
-                {/* <Button
+                {/* <LocalizedButtonLink
                   variant="ghost"
                   className="p-1 group-data-[light=true]:md:text-white group-data-[sticky=true]:md:text-black"
                 >
                   <Icon name="search" className="w-5 h-5" />
-                </Button> */}
-                {/* <Button
+                </LocalizedButtonLink> */}
+                <LocalizedButtonLink
+                  href="/auth/login"
                   variant="ghost"
                   className="p-1 group-data-[light=true]:md:text-white"
                 >
                   <Icon name="user" className="w-6 h-6" />
-                </Button> */}
+                </LocalizedButtonLink>
 
                 <LocalizedButtonLink
                   href="/cart"
