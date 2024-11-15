@@ -33,7 +33,7 @@ This starter kit is an ideal solution for developers who need to set up a profes
 - [ ] **Figma Design Templates**: This will enable you to easily customize the design of the storefront to match your brand.
 - [ ] **Search**: Integration with Meilisearch for a powerful search experience.
 - [x] ~~**404 Page**: Custom 404 page for a better user experience.~~
-- [ ] **Account Management**: Allow customers to create accounts, view order history, and manage their personal information.
+- [x] ~~**Account Management**: Allow customers to create accounts, view order history, and manage their personal information.~~
 - [ ] **Cart Drawer**: Cart drawer that slides in from the side where customers can view and edit their cart items.
 - [ ] **Email Templates**: Customizable email templates for order confirmation, shipping updates, and more.
 - [ ] **Infinite Scroll Pagination**: Improve the product discovery experience with infinite scroll pagination on store and collection pages.
