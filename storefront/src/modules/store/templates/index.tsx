@@ -66,7 +66,7 @@ const StoreTemplate = async ({
   page?: string
   countryCode: string
 }) => {
-  const pageNumber = page ? parseInt(page) : 1
+  const pageNumber = page ? parseInt(page, 10) : 1
   const collections = await getCollectionsList(0, 100, [
     "id",
     "title",

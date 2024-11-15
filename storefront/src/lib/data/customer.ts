@@ -1,60 +1,100 @@
 "use server"
 
-import { sdk } from "@lib/config"
-import medusaError from "@lib/util/medusa-error"
-import { HttpTypes } from "@medusajs/types"
-import { revalidateTag } from "next/cache"
+import { z } from "zod"
 import { redirect } from "next/navigation"
-import { cache } from "react"
+import { revalidateTag } from "next/cache"
+
+import { sdk } from "@lib/config"
 import { getAuthHeaders, removeAuthToken, setAuthToken } from "./cookies"
 
-export const getCustomer = cache(async function () {
-  return await sdk.store.customer
+export const getCustomer = async function () {
+  return sdk.store.customer
     .retrieve({}, { next: { tags: ["customer"] }, ...(await getAuthHeaders()) })
     .then(({ customer }) => customer)
     .catch(() => null)
+}
+
+const updateCustomerFormSchema = z.object({
+  first_name: z.string().min(1),
+  last_name: z.string().min(1),
+  phone: z.string().optional().nullable(),
+})
+export const updateCustomer = async function (
+  _currentState: unknown,
+  formData: FormData
+): Promise<
+  { state: "initial" | "success" } | { state: "error"; error: string }
+> {
+  const validatedData = updateCustomerFormSchema.parse({
+    first_name: formData.get("first_name"),
+    last_name: formData.get("last_name"),
+    phone: formData.get("phone"),
+  })
+
+  return sdk.store.customer
+    .update(
+      {
+        first_name: validatedData.first_name,
+        last_name: validatedData.last_name,
+        phone: validatedData.phone ?? undefined,
+      },
+      {},
+      await getAuthHeaders()
+    )
+    .then(() => {
+      revalidateTag("customer")
+      return {
+        state: "success" as const,
+      }
+    })
+    .catch((error) => {
+      revalidateTag("customer")
+      return {
+        state: "error" as const,
+        error: "Failed to update customer personal information",
+      }
+    })
+}
+
+const signupFormSchema = z.object({
+  email: z.string().email(),
+  first_name: z.string().min(1),
+  last_name: z.string().min(1),
+  phone: z.string().optional().nullable(),
+  password: z.string().min(6),
 })
 
-// TODO: add input validation
-export const updateCustomer = cache(async function (
-  body: HttpTypes.StoreUpdateCustomer
-) {
-  const updateRes = await sdk.store.customer
-    .update(body, {}, await getAuthHeaders())
-    .then(({ customer }) => customer)
-    .catch(medusaError)
-
-  revalidateTag("customer")
-  return updateRes
-})
-
-// TODO: add input validation
 export async function signup(_currentState: unknown, formData: FormData) {
-  const password = formData.get("password") as string
-  const customerForm = {
-    email: formData.get("email") as string,
-    first_name: formData.get("first_name") as string,
-    last_name: formData.get("last_name") as string,
-    phone: formData.get("phone") as string,
-  }
+  const validatedData = signupFormSchema.parse({
+    email: formData.get("email"),
+    first_name: formData.get("first_name"),
+    last_name: formData.get("last_name"),
+    phone: formData.get("phone"),
+    password: formData.get("password"),
+  })
 
   try {
     const token = await sdk.auth.register("customer", "emailpass", {
-      email: customerForm.email,
-      password: password,
+      email: validatedData.email,
+      password: validatedData.password,
     })
 
     const customHeaders = { authorization: `Bearer ${token}` }
 
     const { customer: createdCustomer } = await sdk.store.customer.create(
-      customerForm,
+      {
+        email: validatedData.email,
+        first_name: validatedData.first_name,
+        last_name: validatedData.last_name,
+        phone: validatedData.phone ?? undefined,
+      },
       {},
       customHeaders
     )
 
     const loginToken = await sdk.auth.login("customer", "emailpass", {
-      email: customerForm.email,
-      password,
+      email: validatedData.email,
+      password: validatedData.password,
     })
 
     if (typeof loginToken === "object") {
@@ -64,7 +104,6 @@ export async function signup(_currentState: unknown, formData: FormData) {
     }
 
     await setAuthToken(loginToken)
-
     revalidateTag("customer")
     return createdCustomer
   } catch (error: any) {
@@ -72,15 +111,21 @@ export async function signup(_currentState: unknown, formData: FormData) {
   }
 }
 
-// TODO: add input validation
+const loginFormSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6),
+})
+
 export async function login(_currentState: unknown, formData: FormData) {
-  const email = formData.get("email") as string
-  const password = formData.get("password") as string
+  const validatedData = loginFormSchema.parse({
+    email: formData.get("email"),
+    password: formData.get("password"),
+  })
 
   try {
     const token = await sdk.auth.login("customer", "emailpass", {
-      email,
-      password,
+      email: validatedData.email,
+      password: validatedData.password,
     })
 
     if (typeof token === "object") {
@@ -99,82 +144,142 @@ export async function login(_currentState: unknown, formData: FormData) {
 export async function signout(countryCode: string) {
   await sdk.auth.logout()
   await removeAuthToken()
-  revalidateTag("auth")
   revalidateTag("customer")
   redirect(`/${countryCode}/account`)
+  return countryCode
 }
 
-// TODO: add input validation
+const customerAddressSchema = z.object({
+  first_name: z.string().min(1),
+  last_name: z.string().min(1),
+  company: z.string().optional().nullable(),
+  address_1: z.string().min(1),
+  address_2: z.string().optional().nullable(),
+  city: z.string().min(1),
+  postal_code: z.string().min(1),
+  province: z.string().optional().nullable(),
+  country_code: z.string().min(2),
+  phone: z.string().optional().nullable(),
+})
+
 export const addCustomerAddress = async (
   _currentState: unknown,
   formData: FormData
-): Promise<any> => {
-  const address = {
-    first_name: formData.get("first_name") as string,
-    last_name: formData.get("last_name") as string,
-    company: formData.get("company") as string,
-    address_1: formData.get("address_1") as string,
-    address_2: formData.get("address_2") as string,
-    city: formData.get("city") as string,
-    postal_code: formData.get("postal_code") as string,
-    province: formData.get("province") as string,
-    country_code: formData.get("country_code") as string,
-    phone: formData.get("phone") as string,
-  }
+) => {
+  const validatedData = customerAddressSchema.parse({
+    first_name: formData.get("first_name"),
+    last_name: formData.get("last_name"),
+    company: formData.get("company"),
+    address_1: formData.get("address_1"),
+    address_2: formData.get("address_2"),
+    city: formData.get("city"),
+    postal_code: formData.get("postal_code"),
+    province: formData.get("province"),
+    country_code: formData.get("country_code"),
+    phone: formData.get("phone"),
+  })
 
   return sdk.store.customer
-    .createAddress(address, {}, await getAuthHeaders())
+    .createAddress(
+      {
+        first_name: validatedData.first_name,
+        last_name: validatedData.last_name,
+        company: validatedData.company ?? undefined,
+        address_1: validatedData.address_1,
+        address_2: validatedData.address_2 ?? undefined,
+        city: validatedData.city,
+        postal_code: validatedData.postal_code,
+        province: validatedData.province ?? undefined,
+        country_code: validatedData.country_code,
+        phone: validatedData.phone ?? undefined,
+      },
+      {},
+      await getAuthHeaders()
+    )
     .then(({ customer }) => {
       revalidateTag("customer")
-      return { success: true, error: null }
+      return {
+        addressId: customer.addresses[customer.addresses.length - 1].id,
+        success: true,
+        error: null,
+      }
     })
     .catch((err) => {
-      return { success: false, error: err.toString() }
+      revalidateTag("customer")
+      return { addressId: "", success: false, error: err.toString() }
     })
 }
 
-// TODO: add input validation
 export const deleteCustomerAddress = async (
-  addressId: string
+  addressId: unknown
 ): Promise<void> => {
+  if (typeof addressId !== "string") {
+    throw new Error("Invalid input data")
+  }
+
   await sdk.store.customer
     .deleteAddress(addressId, await getAuthHeaders())
     .then(() => {
-      revalidateTag("customer")
       return { success: true, error: null }
     })
     .catch((err) => {
       return { success: false, error: err.toString() }
     })
+  revalidateTag("customer")
 }
 
-// TODO: add input validation
 export const updateCustomerAddress = async (
-  currentState: Record<string, unknown>,
+  currentState: unknown,
   formData: FormData
-): Promise<any> => {
-  const addressId = currentState.addressId as string
-
-  const address = {
-    first_name: formData.get("first_name") as string,
-    last_name: formData.get("last_name") as string,
-    company: formData.get("company") as string,
-    address_1: formData.get("address_1") as string,
-    address_2: formData.get("address_2") as string,
-    city: formData.get("city") as string,
-    postal_code: formData.get("postal_code") as string,
-    province: formData.get("province") as string,
-    country_code: formData.get("country_code") as string,
-    phone: formData.get("phone") as string,
+) => {
+  if (
+    typeof currentState !== "object" ||
+    !currentState ||
+    !("addressId" in currentState) ||
+    typeof currentState.addressId !== "string"
+  ) {
+    throw new Error("Invalid input data")
   }
 
+  const addressId = currentState.addressId
+
+  const validatedData = customerAddressSchema.parse({
+    first_name: formData.get("first_name"),
+    last_name: formData.get("last_name"),
+    company: formData.get("company"),
+    address_1: formData.get("address_1"),
+    address_2: formData.get("address_2"),
+    city: formData.get("city"),
+    postal_code: formData.get("postal_code"),
+    province: formData.get("province"),
+    country_code: formData.get("country_code"),
+    phone: formData.get("phone"),
+  })
+
   return sdk.store.customer
-    .updateAddress(addressId, address, {}, await getAuthHeaders())
+    .updateAddress(
+      currentState.addressId,
+      {
+        first_name: validatedData.first_name,
+        last_name: validatedData.last_name,
+        company: validatedData.company ?? undefined,
+        address_1: validatedData.address_1,
+        address_2: validatedData.address_2 ?? undefined,
+        city: validatedData.city,
+        postal_code: validatedData.postal_code,
+        province: validatedData.province ?? undefined,
+        country_code: validatedData.country_code,
+        phone: validatedData.phone ?? undefined,
+      },
+      {},
+      await getAuthHeaders()
+    )
     .then(() => {
       revalidateTag("customer")
-      return { success: true, error: null }
+      return { addressId, success: true, error: null }
     })
     .catch((err) => {
-      return { success: false, error: err.toString() }
+      revalidateTag("customer")
+      return { addressId, success: false, error: err.toString() }
     })
 }

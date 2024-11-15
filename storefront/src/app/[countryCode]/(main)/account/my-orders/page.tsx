@@ -1,320 +1,123 @@
-// External components
+import * as React from "react"
 import Image from "next/image"
+import { HttpTypes } from "@medusajs/types"
 
-// Components
+import { listOrders } from "@lib/data/orders"
+import { Pagination } from "@modules/store/components/pagination"
 import { ButtonLink } from "@/components/Button"
 import { UiTag } from "@/components/ui/Tag"
 import { LocalizedLink } from "@/components/LocalizedLink"
 
-export default function AccountMyOrdersPage() {
+const OrderStatus: React.FC<{ order: HttpTypes.StoreOrder }> = ({ order }) => {
+  if (order.fulfillment_status === "canceled") {
+    return (
+      <UiTag iconName="close" isActive className="self-start mt-auto">
+        Canceled
+      </UiTag>
+    )
+  }
+
+  if (order.fulfillment_status === "delivered") {
+    return (
+      <UiTag iconName="check" isActive className="self-start mt-auto">
+        Delivered
+      </UiTag>
+    )
+  }
+
+  if (
+    order.fulfillment_status === "shipped" ||
+    order.fulfillment_status === "partially_delivered"
+  ) {
+    return (
+      <UiTag iconName="truck" isActive className="self-start mt-auto">
+        Delivering
+      </UiTag>
+    )
+  }
+
+  return (
+    <UiTag iconName="package" isActive className="self-start mt-auto">
+      Packing
+    </UiTag>
+  )
+}
+
+type PageProps = {
+  searchParams: Promise<{
+    page?: string
+  }>
+}
+
+const ORDERS_PER_PAGE = 6
+
+export default async function AccountMyOrdersPage({ searchParams }: PageProps) {
+  const { page } = await searchParams
+  const pageNumber = page ? parseInt(page, 10) : 1
+  const { orders, count } = await listOrders(
+    ORDERS_PER_PAGE,
+    (pageNumber - 1) * ORDERS_PER_PAGE
+  )
+  const totalPages = Math.ceil(count / ORDERS_PER_PAGE)
+
   return (
     <>
       <h1 className="text-lg mb-13">My orders</h1>
-      {true ? (
-        <div className="flex flex-col gap-4">
-          <div className="rounded-xs border border-grayscale-200 flex flex-col gap-6 sm:gap-8 md:gap-6 lg:gap-8 p-4">
-            <div className="flex max-sm:flex-col-reverse md:flex-col-reverse lg:flex-row gap-y-6 gap-x-10 justify-between lg:flex-wrap">
-              <div className="flex-shrink-0">
-                <p className="text-md mb-2">
-                  <span className="font-semibold">Order: </span>00000000004
-                </p>
-                <p className="text-grayscale-500">
-                  Order date: 29 December 2024
-                </p>
-              </div>
-              <div className="flex gap-4 max-lg:overflow-x-auto">
-                <LocalizedLink
-                  href="/account/my-orders/order1"
-                  className="shrink-0"
-                >
-                  <Image
-                    src="/images/content/product1.png"
-                    width={1200}
-                    height={1600}
-                    alt="Sofa"
-                    className="w-19 rounded-2xs aspect-[3/4]"
-                  />
-                </LocalizedLink>
-              </div>
-            </div>
-            <div className="flex max-sm:flex-col md:flex-col lg:flex-row justify-between gap-6">
-              <UiTag isActive iconName="package" className="self-start mt-auto">
-                Packing
-              </UiTag>
-              <ButtonLink
-                href="/account/my-orders/order1"
-                variant="outline"
-                size="sm"
-                className="sm:self-end md:self-start lg:self-end"
+      {orders.length > 0 ? (
+        <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-4">
+            {orders.map((order) => (
+              <div
+                key={order.id}
+                className="rounded-xs border border-grayscale-200 flex flex-col gap-6 sm:gap-8 md:gap-6 lg:gap-8 p-4"
               >
-                Check status
-              </ButtonLink>
-            </div>
-          </div>
-          <div className="rounded-xs border border-grayscale-200 flex flex-col gap-6 sm:gap-8 md:gap-6 lg:gap-8 p-4">
-            <div className="flex max-sm:flex-col-reverse md:flex-col-reverse lg:flex-row gap-y-6 gap-x-10 justify-between lg:flex-wrap">
-              <div className="flex-shrink-0">
-                <p className="text-md mb-2">
-                  <span className="font-semibold">Order: </span>00000000022
-                </p>
-                <p className="text-grayscale-500">
-                  Order date: 29 December 2024
-                </p>
-              </div>
-              <div className="flex gap-4 max-lg:overflow-x-auto">
-                <LocalizedLink
-                  href="/account/my-orders/order1"
-                  className="shrink-0"
-                >
-                  <Image
-                    src="/images/content/product1.png"
-                    width={1200}
-                    height={1600}
-                    alt="Sofa"
-                    className="w-19 rounded-2xs aspect-[3/4]"
-                  />
-                </LocalizedLink>
-                <LocalizedLink
-                  href="/account/my-orders/order1"
-                  className="shrink-0"
-                >
-                  <Image
-                    src="/images/content/product1.png"
-                    width={1200}
-                    height={1600}
-                    alt="Sofa"
-                    className="w-19 rounded-2xs aspect-[3/4]"
-                  />
-                </LocalizedLink>
-                <LocalizedLink
-                  href="/account/my-orders/order1"
-                  className="shrink-0"
-                >
-                  <Image
-                    src="/images/content/product1.png"
-                    width={1200}
-                    height={1600}
-                    alt="Sofa"
-                    className="w-19 rounded-2xs aspect-[3/4]"
-                  />
-                </LocalizedLink>
-              </div>
-            </div>
-            <div className="flex max-sm:flex-col md:flex-col lg:flex-row justify-between gap-6">
-              <UiTag isActive iconName="package" className="self-start mt-auto">
-                Packing
-              </UiTag>
-              <ButtonLink
-                href="/account/my-orders/order1"
-                variant="outline"
-                size="sm"
-                className="sm:self-end md:self-start lg:self-end"
-              >
-                Check status
-              </ButtonLink>
-            </div>
-          </div>
-          <div className="rounded-xs border border-grayscale-200 flex flex-col gap-6 sm:gap-8 md:gap-6 lg:gap-8 p-4">
-            <div className="flex max-sm:flex-col-reverse md:flex-col-reverse lg:flex-row gap-y-6 gap-x-10 justify-between lg:flex-wrap">
-              <div className="flex-shrink-0">
-                <p className="text-md mb-2">
-                  <span className="font-semibold">Order: </span>00000000013
-                </p>
-                <p className="text-grayscale-500">
-                  Order date: 29 December 2024
-                </p>
-              </div>
-              <div className="flex gap-4 max-lg:overflow-x-auto">
-                <LocalizedLink
-                  href="/account/my-orders/order1"
-                  className="shrink-0"
-                >
-                  <Image
-                    src="/images/content/product1.png"
-                    width={1200}
-                    height={1600}
-                    alt="Sofa"
-                    className="w-19 rounded-2xs aspect-[3/4]"
-                  />
-                </LocalizedLink>
-                <LocalizedLink
-                  href="/account/my-orders/order1"
-                  className="shrink-0"
-                >
-                  <Image
-                    src="/images/content/product1.png"
-                    width={1200}
-                    height={1600}
-                    alt="Sofa"
-                    className="w-19 rounded-2xs aspect-[3/4]"
-                  />
-                </LocalizedLink>
-                <LocalizedLink
-                  href="/account/my-orders/order1"
-                  className="shrink-0"
-                >
-                  <Image
-                    src="/images/content/product1.png"
-                    width={1200}
-                    height={1600}
-                    alt="Sofa"
-                    className="w-19 rounded-2xs aspect-[3/4]"
-                  />
-                </LocalizedLink>
-                <LocalizedLink
-                  href="/account/my-orders/order1"
-                  className="shrink-0"
-                >
-                  <Image
-                    src="/images/content/product1.png"
-                    width={1200}
-                    height={1600}
-                    alt="Sofa"
-                    className="w-19 rounded-2xs aspect-[3/4]"
-                  />
-                </LocalizedLink>
-              </div>
-            </div>
-            <div className="flex max-sm:flex-col md:flex-col lg:flex-row justify-between gap-6">
-              <UiTag isActive iconName="package" className="self-start mt-auto">
-                Packing
-              </UiTag>
-              <ButtonLink
-                href="/account/my-orders/order1"
-                variant="outline"
-                size="sm"
-                className="sm:self-end md:self-start lg:self-end"
-              >
-                Check status
-              </ButtonLink>
-            </div>
-          </div>
-          <div className="rounded-xs border border-grayscale-200 flex flex-col gap-6 sm:gap-8 md:gap-6 lg:gap-8 p-4">
-            <div className="flex max-sm:flex-col-reverse md:flex-col-reverse lg:flex-row gap-y-6 gap-x-10 justify-between lg:flex-wrap">
-              <div className="flex-shrink-0">
-                <p className="text-md mb-2">
-                  <span className="font-semibold">Order: </span>00000000001
-                </p>
-                <p className="text-grayscale-500">
-                  Order date: 29 December 2024
-                </p>
-              </div>
-              <div className="flex gap-4 max-lg:overflow-x-auto">
-                <LocalizedLink
-                  href="/account/my-orders/order1"
-                  className="shrink-0"
-                >
-                  <Image
-                    src="/images/content/product1.png"
-                    width={1200}
-                    height={1600}
-                    alt="Sofa"
-                    className="w-19 rounded-2xs aspect-[3/4]"
-                  />
-                </LocalizedLink>
-                <LocalizedLink
-                  href="/account/my-orders/order1"
-                  className="shrink-0"
-                >
-                  <Image
-                    src="/images/content/product1.png"
-                    width={1200}
-                    height={1600}
-                    alt="Sofa"
-                    className="w-19 rounded-2xs aspect-[3/4]"
-                  />
-                </LocalizedLink>
-                <LocalizedLink
-                  href="/account/my-orders/order1"
-                  className="shrink-0"
-                >
-                  <Image
-                    src="/images/content/product1.png"
-                    width={1200}
-                    height={1600}
-                    alt="Sofa"
-                    className="w-19 rounded-2xs aspect-[3/4]"
-                  />
-                </LocalizedLink>
-                <LocalizedLink
-                  href="/account/my-orders/order1"
-                  className="shrink-0 lg:hidden"
-                >
-                  <Image
-                    src="/images/content/product1.png"
-                    width={1200}
-                    height={1600}
-                    alt="Sofa"
-                    className="w-19 rounded-2xs aspect-[3/4]"
-                  />
-                </LocalizedLink>
-                <LocalizedLink
-                  href="/account/my-orders/order1"
-                  className="shrink-0 lg:hidden"
-                >
-                  <Image
-                    src="/images/content/product1.png"
-                    width={1200}
-                    height={1600}
-                    alt="Sofa"
-                    className="w-19 rounded-2xs aspect-[3/4]"
-                  />
-                </LocalizedLink>
-                <LocalizedLink
-                  href="/account/my-orders/order1"
-                  className="shrink-0 lg:hidden"
-                >
-                  <Image
-                    src="/images/content/product1.png"
-                    width={1200}
-                    height={1600}
-                    alt="Sofa"
-                    className="w-19 rounded-2xs aspect-[3/4]"
-                  />
-                </LocalizedLink>
-                <LocalizedLink
-                  href="/account/my-orders/order1"
-                  className="shrink-0 lg:hidden"
-                >
-                  <Image
-                    src="/images/content/product1.png"
-                    width={1200}
-                    height={1600}
-                    alt="Sofa"
-                    className="w-19 rounded-2xs aspect-[3/4]"
-                  />
-                </LocalizedLink>
-                <LocalizedLink
-                  href="/account/my-orders/order1"
-                  className="rounded-2xs aspect-[3/4] overflow-hidden relative shrink-0 max-lg:hidden"
-                >
-                  <Image
-                    src="/images/content/product1.png"
-                    width={1200}
-                    height={1600}
-                    alt="Sofa"
-                    className="w-19"
-                  />
-                  <div className="h-full w-full bg-black-30% flex items-center justify-center absolute left-0 top-0 z-10 text-md font-semibold text-white">
-                    <p>+4</p>
+                <div className="flex max-sm:flex-col-reverse md:flex-col-reverse lg:flex-row gap-y-6 gap-x-10 justify-between lg:flex-wrap">
+                  <div className="flex-shrink-0">
+                    <p className="text-md mb-2">
+                      <span className="font-semibold">Order:</span>{" "}
+                      {order.display_id}
+                    </p>
+                    <p className="text-grayscale-500">
+                      Order date:{" "}
+                      {new Date(order.created_at).toLocaleDateString()}
+                    </p>
                   </div>
-                </LocalizedLink>
+                  <div className="flex gap-4 max-lg:overflow-x-auto">
+                    {order.items
+                      ?.filter((item) => item.thumbnail)
+                      .map((item) => (
+                        <LocalizedLink
+                          key={item.id}
+                          href={`/account/my-orders/${order.id}`}
+                          className="shrink-0 w-19 aspect-[3/4] rounded-2xs relative overflow-hidden"
+                        >
+                          <Image
+                            src={item.thumbnail!}
+                            alt={item.title}
+                            fill
+                            className="object-cover"
+                          />
+                        </LocalizedLink>
+                      ))}
+                  </div>
+                </div>
+                <div className="flex max-sm:flex-col md:flex-col lg:flex-row justify-between gap-6">
+                  <OrderStatus order={order} />
+                  <ButtonLink
+                    href={`/account/my-orders/${order.id}`}
+                    variant="outline"
+                    size="sm"
+                    className="sm:self-end md:self-start lg:self-end"
+                  >
+                    Check details
+                  </ButtonLink>
+                </div>
               </div>
-            </div>
-            <div className="flex max-sm:flex-col md:flex-col lg:flex-row justify-between gap-6">
-              <UiTag isActive iconName="package" className="self-start mt-auto">
-                Packing
-              </UiTag>
-              <ButtonLink
-                href="/account/my-orders/order1"
-                variant="outline"
-                size="sm"
-                className="sm:self-end md:self-start lg:self-end"
-              >
-                Check status
-              </ButtonLink>
-            </div>
+            ))}
           </div>
+          {totalPages > 1 && (
+            <Pagination page={pageNumber} totalPages={totalPages} />
+          )}
         </div>
       ) : (
         <p className="text-md mt-16">You haven&apos;t ordered anything yet</p>

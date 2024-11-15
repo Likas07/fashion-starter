@@ -12,13 +12,17 @@ import {
   UiSelectValue,
 } from "@/components/ui/Select"
 
-const CountrySelect: React.FC<
-  SelectProps<
-    Exclude<HttpTypes.StoreRegion["countries"], undefined>[number]
-  > & {
-    region?: HttpTypes.StoreRegion
-  }
-> = ({ placeholder = "Country", region, ...props }) => {
+export type CountrySelectProps = SelectProps<
+  Exclude<HttpTypes.StoreRegion["countries"], undefined>[number]
+> & {
+  region?: HttpTypes.StoreRegion
+}
+
+const CountrySelect: React.FC<CountrySelectProps> = ({
+  placeholder = "Country",
+  region,
+  ...props
+}) => {
   const countryOptions = useMemo(() => {
     if (!region) {
       return []

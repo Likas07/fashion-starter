@@ -1,12 +1,21 @@
-// External components
 import Image from "next/image"
+import { redirect } from "next/navigation"
 
-// Components
-import { Input } from "@/components/Forms"
-import { SubmitButton } from "@modules/checkout/components/submit-button"
+import { getCustomer } from "@lib/data/customer"
+import { SignUpForm } from "@modules/auth/components/SignUpForm"
 import { LocalizedLink } from "@/components/LocalizedLink"
 
-export default function RegisterPage() {
+export default async function RegisterPage({
+  params,
+}: {
+  params: Promise<{ countryCode: string }>
+}) {
+  const customer = await getCustomer().catch(() => null)
+
+  if (customer) {
+    redirect(`/${(await params).countryCode}/account`)
+  }
+
   return (
     <div className="flex min-h-screen">
       <Image
@@ -20,48 +29,7 @@ export default function RegisterPage() {
         <h1 className="text-2xl mb-10 md:mb-16">
           Hey, welcome to Sofa Society!
         </h1>
-        <div className="flex flex-col gap-8 mb-10 md:mb-16">
-          <div className="flex gap-6">
-            <Input
-              placeholder="First name"
-              name="first_name"
-              required
-              variant="outline"
-              wrapperClassName="flex-1"
-            />
-            <Input
-              placeholder="Last name"
-              name="last_name"
-              required
-              variant="outline"
-              wrapperClassName="flex-1"
-            />
-          </div>
-          <Input
-            placeholder="Email"
-            name="email"
-            required
-            variant="outline"
-            wrapperClassName="flex-1"
-          />
-          <Input
-            placeholder="Password"
-            name="password"
-            type="password"
-            required
-            variant="outline"
-            wrapperClassName="flex-1"
-          />
-          <Input
-            placeholder="Confirm password"
-            name="confirm_password"
-            type="password"
-            required
-            variant="outline"
-            wrapperClassName="flex-1"
-          />
-          <SubmitButton>Register</SubmitButton>
-        </div>
+        <SignUpForm />
         <p className="text-grayscale-500">
           Already have an account? No worries, just{" "}
           <LocalizedLink

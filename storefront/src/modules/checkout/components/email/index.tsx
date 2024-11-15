@@ -6,10 +6,10 @@ import { twJoin } from "tailwind-merge"
 import { HttpTypes } from "@medusajs/types"
 
 import { setEmail } from "@lib/data/cart"
+import ErrorMessage from "@modules/checkout/components/error-message"
+import { SubmitButton } from "@modules/common/components/submit-button"
 import { Button } from "@/components/Button"
 import { Input } from "@/components/Forms"
-import ErrorMessage from "../error-message"
-import { SubmitButton } from "../submit-button"
 
 const Email = ({
   cart,

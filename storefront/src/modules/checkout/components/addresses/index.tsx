@@ -8,11 +8,11 @@ import { HttpTypes } from "@medusajs/types"
 
 import { setAddresses } from "@lib/data/cart"
 import compareAddresses from "@lib/util/compare-addresses"
+import { SubmitButton } from "@modules/common/components/submit-button"
+import BillingAddress from "@modules/checkout/components/billing_address"
+import ErrorMessage from "@modules/checkout/components/error-message"
+import ShippingAddress from "@modules/checkout/components/shipping-address"
 import { Button } from "@/components/Button"
-import BillingAddress from "../billing_address"
-import ErrorMessage from "../error-message"
-import ShippingAddress from "../shipping-address"
-import { SubmitButton } from "../submit-button"
 
 const Addresses = ({
   cart,

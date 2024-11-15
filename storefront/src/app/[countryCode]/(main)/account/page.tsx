@@ -1,12 +1,36 @@
-// Components
+import { redirect } from "next/navigation"
+
+import { getCustomer } from "@lib/data/customer"
+import { getRegion, listRegions } from "@lib/data/regions"
+import { AddressForm } from "@modules/account/components/AddressForm"
+import { DeleteAddressButton } from "@modules/account/components/DeleteAddressButton"
+import { PersonalInfoForm } from "@modules/account/components/PersonalInfoForm"
+import { SignOutButton } from "@modules/account/components/SignOutButton"
 import { Icon } from "@/components/Icon"
 import { Button } from "@/components/Button"
-import { Input } from "@/components/Forms"
 import { UiModal, UiModalOverlay } from "@/components/ui/Modal"
-import CountrySelect from "@modules/checkout/components/country-select"
 import { UiDialog, UiDialogTrigger, UiCloseButton } from "@/components/Dialog"
 
-export default function AccountPersonalAndSecurityPage() {
+export default async function AccountPersonalAndSecurityPage({
+  params,
+}: {
+  params: Promise<{ countryCode: string }>
+}) {
+  const { countryCode } = await params
+  const customer = await getCustomer().catch(() => null)
+
+  if (!customer) {
+    redirect(`/${countryCode}/auth/login`)
+  }
+
+  const [region, regions] = await Promise.all([
+    getRegion(countryCode),
+    listRegions(),
+  ])
+  const countries = regions.flatMap((region) => region.countries ?? [])
+
+  console.log(customer)
+
   return (
     <>
       <h1 className="text-lg mb-8 md:mb-16">Personal &amp; security</h1>
@@ -17,11 +41,15 @@ export default function AccountPersonalAndSecurityPage() {
           <div className="flex max-sm:flex-col sm:flex-wrap gap-6 sm:gap-x-16">
             <div>
               <p className="text-xs text-grayscale-500 mb-1.5">Name</p>
-              <p>Jovana Jerimic</p>
+              <p>
+                {[customer.first_name, customer.last_name]
+                  .filter(Boolean)
+                  .join(" ")}
+              </p>
             </div>
             <div>
               <p className="text-xs text-grayscale-500 mb-1.5">Number</p>
-              <p>-</p>
+              <p>{customer.phone || "-"}</p>
             </div>
           </div>
         </div>
@@ -30,36 +58,13 @@ export default function AccountPersonalAndSecurityPage() {
           <UiModalOverlay>
             <UiModal>
               <UiDialog>
-                <p className="text-md mb-8 sm:mb-10">Personal information</p>
-                <div className="flex flex-col gap-4 sm:gap-8">
-                  <div className="flex max-xs:flex-col gap-y-4 gap-x-6">
-                    <Input
-                      placeholder="First name"
-                      name="first_name"
-                      required
-                      variant="outline"
-                      wrapperClassName="flex-1"
-                    />
-                    <Input
-                      placeholder="Last name"
-                      name="last_name"
-                      required
-                      variant="outline"
-                      wrapperClassName="flex-1"
-                    />
-                  </div>
-                  <Input
-                    placeholder="Phone"
-                    name="last_name"
-                    required
-                    variant="outline"
-                    wrapperClassName="flex-1 mb-8 sm:mb-10"
-                  />
-                </div>
-                <div className="flex gap-6 justify-between">
-                  <Button>Save changes</Button>
-                  <UiCloseButton variant="outline">Cancel</UiCloseButton>
-                </div>
+                <PersonalInfoForm
+                  defaultValues={{
+                    first_name: customer.first_name ?? "",
+                    last_name: customer.last_name ?? "",
+                    phone: customer.phone ?? undefined,
+                  }}
+                />
               </UiDialog>
             </UiModal>
           </UiModalOverlay>
@@ -70,141 +75,127 @@ export default function AccountPersonalAndSecurityPage() {
         <Icon name="user" className="w-6 h-6" />
         <div>
           <p className="text-xs text-grayscale-500 mb-1.5">Email</p>
-          <p>jovana.jerimic@gmail.com</p>
+          <p>{customer.email}</p>
         </div>
       </div>
       <p className="text-xs text-grayscale-500 mb-16">
         If you want to change your email please contact us via customer support.
       </p>
-      <h2 className="text-md font-normal mb-6">Address</h2>
-      <div className="w-full border border-grayscale-200 rounded-xs p-4 flex flex-wrap gap-8 max-lg:flex-col mb-6">
-        <div className="flex flex-1 gap-8">
-          <Icon name="user" className="w-6 h-6 mt-2.5" />
-          <div className="flex flex-col gap-8 flex-1">
-            <div className="flex flex-wrap justify-between gap-6">
-              <div className="grow basis-0">
-                <p className="text-xs text-grayscale-500 mb-1.5">Country</p>
-                <p>Croatia</p>
+      <h2 className="text-md font-normal mb-6">Addresses</h2>
+      {customer.addresses.length === 0 && (
+        <p className="text-grayscale-500 mb-6">
+          You don't have any addresses saved yet.
+        </p>
+      )}
+      {customer.addresses.map((address) => (
+        <div
+          key={address.id}
+          className="w-full border border-grayscale-200 rounded-xs p-4 flex flex-wrap gap-8 max-lg:flex-col mb-6"
+        >
+          <div className="flex flex-1 gap-8">
+            <Icon name="user" className="w-6 h-6 mt-2.5" />
+            <div className="flex flex-col gap-8 flex-1">
+              <div className="flex flex-wrap justify-between gap-6">
+                <div className="grow basis-0">
+                  <p className="text-xs text-grayscale-500 mb-1.5">Country</p>
+                  <p>
+                    {countries.find(
+                      (country) => country.iso_2 === address.country_code
+                    )?.display_name || address.country_code}
+                  </p>
+                </div>
+                <div className="grow basis-0">
+                  <p className="text-xs text-grayscale-500 mb-1.5">Address</p>
+                  <p>{address.address_1}</p>
+                </div>
               </div>
-              <div className="grow basis-0">
-                <p className="text-xs text-grayscale-500 mb-1.5">Address</p>
-                <p>Duvanjska 3</p>
-              </div>
-            </div>
-            <div>
-              <p className="text-xs text-grayscale-500 mb-1.5">
-                Apartment, suite, etc. (Optional)
-              </p>
-              <p>2nd floor</p>
-            </div>
-            <div className="flex flex-wrap justify-between gap-6">
-              <div className="grow basis-0">
-                <p className="text-xs text-grayscale-500 mb-1.5">Postal Code</p>
-                <p>10000</p>
-              </div>
-              <div className="grow basis-0">
-                <p className="text-xs text-grayscale-500 mb-1.5">City</p>
-                <p>Zagreb</p>
+              {Boolean(address.address_2) && (
+                <div>
+                  <p className="text-xs text-grayscale-500 mb-1.5">
+                    Apartment, suite, etc.
+                  </p>
+                  <p>{address.address_2}</p>
+                </div>
+              )}
+              <div className="flex flex-wrap justify-between gap-6">
+                <div className="grow basis-0">
+                  <p className="text-xs text-grayscale-500 mb-1.5">
+                    Postal Code
+                  </p>
+                  <p>{address.postal_code}</p>
+                </div>
+                <div className="grow basis-0">
+                  <p className="text-xs text-grayscale-500 mb-1.5">City</p>
+                  <p>{address.city}</p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="flex gap-4">
-          <UiDialogTrigger>
-            <Button
-              iconName="trash"
-              size="sm"
-              variant="outline"
-              className="w-8 px-0 shrink-0"
-            />
-            <UiModalOverlay>
-              <UiModal>
-                <UiDialog className="text-center">
-                  <p className="text-md mb-8">
-                    Do you want to delete this address?
-                  </p>
-                  <div className="flex gap-6 justify-center">
-                    <Button>Confirm</Button>
-                    <UiCloseButton variant="outline">Cancel</UiCloseButton>
-                  </div>
-                </UiDialog>
-              </UiModal>
-            </UiModalOverlay>
-          </UiDialogTrigger>
-          <UiDialogTrigger>
-            <Button variant="outline" size="sm" className="shrink-0 flex-1">
-              Change
-            </Button>
-            <UiModalOverlay>
-              <UiModal>
-                <UiDialog>
-                  <p className="text-md mb-8 md:mb-10">Change address</p>
-                  <div className="flex flex-col gap-4 md:gap-8 mb-8 md:mb-10">
-                    <CountrySelect />
-                    <Input placeholder="Adress" required variant="outline" />
-                    <Input
-                      placeholder="Apartment, suite, etc. (Optional)"
-                      required
-                      variant="outline"
-                    />
-                    <div className="flex max-xs:flex-col gap-4 md:gap-6">
-                      <Input
-                        placeholder="Postal code"
-                        required
-                        variant="outline"
-                        wrapperClassName="flex-1"
-                      />
-                      <Input
-                        placeholder="City"
-                        required
-                        variant="outline"
-                        wrapperClassName="flex-1"
-                      />
+          <div className="flex gap-4">
+            <UiDialogTrigger>
+              <Button
+                iconName="trash"
+                size="sm"
+                variant="outline"
+                className="w-8 px-0 shrink-0"
+              />
+              <UiModalOverlay>
+                <UiModal>
+                  <UiDialog className="text-center">
+                    <p className="text-md mb-8">
+                      Do you want to delete this address?
+                    </p>
+                    <div className="flex gap-6 justify-center">
+                      <DeleteAddressButton addressId={address.id}>
+                        Confirm
+                      </DeleteAddressButton>
+                      <UiCloseButton variant="outline">Cancel</UiCloseButton>
                     </div>
-                  </div>
-                  <div className="flex gap-6 justify-between">
-                    <Button>Save changes</Button>
-                    <UiCloseButton variant="outline">Cancel</UiCloseButton>
-                  </div>
-                </UiDialog>
-              </UiModal>
-            </UiModalOverlay>
-          </UiDialogTrigger>
+                  </UiDialog>
+                </UiModal>
+              </UiModalOverlay>
+            </UiDialogTrigger>
+            <UiDialogTrigger>
+              <Button variant="outline" size="sm" className="shrink-0 flex-1">
+                Change
+              </Button>
+              <UiModalOverlay>
+                <UiModal>
+                  <UiDialog>
+                    <AddressForm
+                      region={region ?? undefined}
+                      addressId={address.id}
+                      defaultValues={{
+                        first_name: address.first_name ?? "",
+                        last_name: address.last_name ?? "",
+                        company: address.company ?? "",
+                        phone: address.phone ?? "",
+                        address_1: address.address_1 ?? "",
+                        address_2: address.address_2 ?? "",
+                        postal_code: address.postal_code ?? "",
+                        city: address.city ?? "",
+                        province: address.province ?? "",
+                        country_code: address.country_code ?? "",
+                      }}
+                    />
+                  </UiDialog>
+                </UiModal>
+              </UiModalOverlay>
+            </UiDialogTrigger>
+          </div>
         </div>
-      </div>
+      ))}
       <UiDialogTrigger>
         <Button className="mb-16">Add another address</Button>
         <UiModalOverlay>
           <UiModal>
             <UiDialog>
-              <p className="text-md mb-8 md:mb-10">Add another address</p>
-              <div className="flex flex-col gap-4 md:gap-8 mb-8 md:mb-10">
-                <CountrySelect />
-                <Input placeholder="Adress" required variant="outline" />
-                <Input
-                  placeholder="Apartment, suite, etc. (Optional)"
-                  required
-                  variant="outline"
-                />
-                <div className="flex max-xs:flex-col gap-4 md:gap-6">
-                  <Input
-                    placeholder="Postal code"
-                    required
-                    variant="outline"
-                    wrapperClassName="flex-1"
-                  />
-                  <Input
-                    placeholder="City"
-                    required
-                    variant="outline"
-                    wrapperClassName="flex-1"
-                  />
-                </div>
-              </div>
-              <div className="flex gap-6 justify-between">
-                <Button>Save changes</Button>
-                <UiCloseButton variant="outline">Cancel</UiCloseButton>
-              </div>
+              <AddressForm
+                region={region ?? undefined}
+                defaultValues={{
+                  country_code: countryCode,
+                }}
+              />
             </UiDialog>
           </UiModal>
         </UiModalOverlay>
@@ -236,9 +227,7 @@ export default function AccountPersonalAndSecurityPage() {
       </UiDialogTrigger>
       <div className="mt-16 md:hidden">
         <p className="text-md mb-6">Log out</p>
-        <Button variant="outline" isFullWidth>
-          Log out
-        </Button>
+        <SignOutButton variant="outline" isFullWidth />
       </div>
     </>
   )

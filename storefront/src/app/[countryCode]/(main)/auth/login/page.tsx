@@ -1,12 +1,21 @@
-// External components
 import Image from "next/image"
+import { redirect } from "next/navigation"
 
-// Components
-import { Input } from "@/components/Forms"
-import { SubmitButton } from "@modules/checkout/components/submit-button"
+import { getCustomer } from "@lib/data/customer"
+import { LoginForm } from "@modules/auth/components/LoginForm"
 import { LocalizedLink } from "@/components/LocalizedLink"
 
-export default function LoginPage() {
+export default async function LoginPage({
+  params,
+}: {
+  params: Promise<{ countryCode: string }>
+}) {
+  const customer = await getCustomer().catch(() => null)
+
+  if (customer) {
+    redirect(`/${(await params).countryCode}/account`)
+  }
+
   return (
     <div className="flex min-h-screen">
       <Image
@@ -20,25 +29,7 @@ export default function LoginPage() {
         <h1 className="text-2xl mb-10 md:mb-16">
           Welcome back to Sofa Society!
         </h1>
-        <div className="flex flex-col gap-8 mb-10 md:mb-16">
-          <Input
-            placeholder="Email"
-            name="email"
-            required
-            variant="outline"
-            wrapperClassName="flex-1"
-          />
-          <Input
-            placeholder="Password"
-            name="password"
-            type="password"
-            required
-            variant="outline"
-            wrapperClassName="flex-1"
-          />
-
-          <SubmitButton>Log in</SubmitButton>
-        </div>
+        <LoginForm />
         <p className="text-grayscale-500">
           Don&apos;t have an account yet? You can{" "}
           <LocalizedLink

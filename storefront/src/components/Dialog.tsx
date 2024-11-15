@@ -12,6 +12,7 @@ import {
   DialogTrigger,
   DialogTriggerProps,
   OverlayTriggerStateContext,
+  PressEvent,
 } from "react-aria-components"
 
 export const UiDialogTrigger: React.FC<DialogTriggerProps> = ({
@@ -36,4 +37,17 @@ export const UiCloseButton: React.FC<ButtonProps> = (props) => {
   const { close } = React.useContext(OverlayTriggerStateContext)!
 
   return <Button {...props} onPress={close} />
+}
+
+export const UiConfirmButton: React.FC<
+  ButtonProps & { onConfirm: () => Promise<void> }
+> = (props) => {
+  const { close } = React.useContext(OverlayTriggerStateContext)!
+  const onPress = React.useCallback(async (e: PressEvent) => {
+    await props.onConfirm()
+    close()
+    props.onPress?.(e)
+  }, [])
+
+  return <Button {...props} onPress={onPress} />
 }
