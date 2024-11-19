@@ -10,6 +10,7 @@ import { Icon } from "@/components/Icon"
 import { Button } from "@/components/Button"
 import { UiModal, UiModalOverlay } from "@/components/ui/Modal"
 import { UiDialog, UiDialogTrigger, UiCloseButton } from "@/components/Dialog"
+import { RequestPasswordResetButton } from "@modules/account/components/RequestPasswordResetButton"
 
 export default async function AccountPersonalAndSecurityPage({
   params,
@@ -28,8 +29,6 @@ export default async function AccountPersonalAndSecurityPage({
     listRegions(),
   ])
   const countries = regions.flatMap((region) => region.countries ?? [])
-
-  console.log(customer)
 
   return (
     <>
@@ -205,26 +204,7 @@ export default async function AccountPersonalAndSecurityPage({
         To change your password, we'll send you an email. Just click on the
         reset button below.
       </p>
-      <UiDialogTrigger>
-        <Button>Reset password</Button>
-        <UiModalOverlay isDismissable={false} className="bg-transparent">
-          <UiModal className="relative">
-            <UiDialog>
-              <p className="text-md mb-12">Reset password</p>
-              <p className="text-grayscale-500">
-                We have sent an email with instructions on how to change the
-                password.
-              </p>
-              <UiCloseButton
-                variant="ghost"
-                className="absolute top-4 right-6 p-0"
-              >
-                <Icon name="close" className="w-6 h-6" />
-              </UiCloseButton>
-            </UiDialog>
-          </UiModal>
-        </UiModalOverlay>
-      </UiDialogTrigger>
+      <RequestPasswordResetButton />
       <div className="mt-16 md:hidden">
         <p className="text-md mb-6">Log out</p>
         <SignOutButton variant="outline" isFullWidth />

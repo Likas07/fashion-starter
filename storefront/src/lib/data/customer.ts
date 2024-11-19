@@ -283,3 +283,22 @@ export const updateCustomerAddress = async (
       return { addressId, success: false, error: err.toString() }
     })
 }
+
+export async function requestPasswordReset() {
+  const customer = await getCustomer()
+
+  if (!customer) {
+    return {
+      success: false as const,
+      error: "No customer found",
+    }
+  }
+
+  await sdk.auth.resetPassword("customer", "emailpass", {
+    identifier: customer.email,
+  })
+
+  return {
+    success: true as const,
+  }
+}
