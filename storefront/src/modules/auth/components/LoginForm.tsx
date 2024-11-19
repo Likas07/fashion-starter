@@ -17,6 +17,7 @@ export const LoginForm: React.FC = () => {
         required
         variant="outline"
         wrapperClassName="flex-1"
+        autoComplete="email"
       />
       <Input
         placeholder="Password"
@@ -25,6 +26,7 @@ export const LoginForm: React.FC = () => {
         required
         variant="outline"
         wrapperClassName="flex-1"
+        autoComplete="current-password"
       />
       {message && <p className="text-red-500 text-sm">{message}</p>}
       <SubmitButton>Log in</SubmitButton>
