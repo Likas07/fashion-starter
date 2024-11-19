@@ -36,7 +36,13 @@ export default function LoginPage() {
             variant="outline"
             wrapperClassName="flex-1"
           />
-
+          <LocalizedLink
+            href="/forgotten-password"
+            variant="underline"
+            className="self-start !pb-0 text-grayscale-500 leading-none"
+          >
+            Forgotten password?
+          </LocalizedLink>
           <SubmitButton>Log in</SubmitButton>
         </div>
         <p className="text-grayscale-500">
