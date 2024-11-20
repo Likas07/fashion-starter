@@ -13542,7 +13542,7 @@ __metadata:
     react-dom: "npm:^18.2.0"
     react-dropzone: "npm:^14.2.3"
     react-email: "npm:3.0.2"
-    resend: "npm:^4.0.1-alpha.0"
+    resend: "npm:^4.0.1"
     ts-node: "npm:^10.9.2"
     typescript: "npm:^5.6.2"
     vite: "npm:^5.2.11"
@@ -15494,12 +15494,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resend@npm:^4.0.1-alpha.0":
-  version: 4.0.1-alpha.0
-  resolution: "resend@npm:4.0.1-alpha.0"
+"resend@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "resend@npm:4.0.1"
   dependencies:
     "@react-email/render": "npm:1.0.1"
-  checksum: 10/4a2fa4f19d69accef7fc625974dc38328bce226781b8342cae03763113c9b7f924836b9380004d67feeecfb9f5a000d233a521030f54ce1937fe11aad3cc097c
+  checksum: 10/e68affa7f61464ddce702204c9a15d600fd2aeb49698a340b1af496a3873c41894ec339a01887572440f1ebdba03877b3735f401eb5112595fc093dfca462bb1
   languageName: node
   linkType: hard
 
