@@ -39,11 +39,11 @@ export default async function LoginLoadingPage() {
             disabled
           />
           <LocalizedLink
-            href="/forgotten-password"
+            href="/auth/forgot-password"
             variant="underline"
             className="self-start !pb-0 text-grayscale-500 leading-none"
           >
-            Forgotten password?
+            Forgot password?
           </LocalizedLink>
           <Button isLoading isDisabled>
             Log in

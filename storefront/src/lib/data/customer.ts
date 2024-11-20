@@ -365,3 +365,34 @@ export async function resetPassword(
       }
     })
 }
+
+const forgotPasswordFormSchema = z.object({
+  email: z.string().email(),
+})
+
+export async function forgotPassword(
+  _currentState: unknown,
+  formData: FormData
+): Promise<
+  { state: "initial" | "success" } | { state: "error"; error: string }
+> {
+  const validatedData = forgotPasswordFormSchema.parse({
+    email: formData.get("email"),
+  })
+
+  return sdk.auth
+    .resetPassword("customer", "emailpass", {
+      identifier: validatedData.email,
+    })
+    .then(() => {
+      return {
+        state: "success" as const,
+      }
+    })
+    .catch(() => {
+      return {
+        state: "error" as const,
+        error: "Failed to reset password",
+      }
+    })
+}
