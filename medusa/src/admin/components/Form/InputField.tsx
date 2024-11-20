@@ -58,7 +58,7 @@ export const InputField: React.FC<InputFieldProps> = ({
           className={clx('block mb-1', labelProps?.className)}
         >
           {label}
-          {isRequired ? <span className="text-red-500">*</span> : ''}
+          {isRequired ? <span className="text-red-primary">*</span> : ''}
         </Label>
       )}
       {suffix ? (
@@ -82,7 +82,7 @@ export const InputField: React.FC<InputFieldProps> = ({
         inputEl
       )}
       {fieldState.error && (
-        <div className="text-red-500 text-sm mt-1">
+        <div className="text-red-primary text-sm mt-1">
           {fieldState.error.message}
         </div>
       )}
