@@ -16,7 +16,7 @@ export const RequestPasswordResetButton: React.FC = () => {
   return (
     <>
       {errorMessage && (
-        <div className="text-sm text-red-500">{errorMessage}</div>
+        <div className="text-sm text-red-primary">{errorMessage}</div>
       )}
       <UiDialogTrigger
         isOpen={isModalOpen}

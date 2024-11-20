@@ -61,7 +61,7 @@ export const PersonalInfoForm: React.FC<{
           defaultValue={defaultValues?.phone}
         />
         {formState.state === "error" && (
-          <div className="text-sm text-red-500">{formState.error}</div>
+          <div className="text-sm text-red-primary">{formState.error}</div>
         )}
       </div>
       <div className="flex gap-6 justify-between">

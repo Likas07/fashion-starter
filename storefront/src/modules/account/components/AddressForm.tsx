@@ -142,12 +142,12 @@ export const AddressForm: React.FC<{
         {!addressId &&
           addAddressFormMessage &&
           !addAddressFormMessage.success && (
-            <p className="text-red-500">{addAddressFormMessage.error}</p>
+            <p className="text-red-primary">{addAddressFormMessage.error}</p>
           )}
         {addressId &&
           updateAddressFormMessage &&
           !updateAddressFormMessage.success && (
-            <p className="text-red-500">{updateAddressFormMessage.error}</p>
+            <p className="text-red-primary">{updateAddressFormMessage.error}</p>
           )}
       </div>
       <div className="flex gap-6 justify-between">

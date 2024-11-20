@@ -64,7 +64,7 @@ export const SignUpForm: React.FC = () => {
         autoComplete="new-password"
         minLength={6}
       />
-      {message && <p className="text-red-500 text-sm">{message}</p>}
+      {message && <p className="text-red-primary text-sm">{message}</p>}
       <SubmitButton>Register</SubmitButton>
     </form>
   )
