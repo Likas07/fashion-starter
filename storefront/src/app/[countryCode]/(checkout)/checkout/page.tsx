@@ -58,7 +58,7 @@ export default async function Checkout({
         </Layout>
       </div>
       <Layout>
-        <LayoutColumn className="flex max-lg:flex-col-reverse lg:justify-between">
+        <LayoutColumn className="flex max-lg:flex-col-reverse lg:justify-between relative">
           <div className="flex-1 pt-7 lg:max-w-125 xl:max-w-150 pb-9 lg:pb-40">
             <LocalizedLink
               href="/"
@@ -74,12 +74,12 @@ export default async function Checkout({
               />
             </Wrapper>
           </div>
-          <div className="relative lg:max-w-100 xl:max-w-123 flex-1 pt-32 max-lg:hidden z-10">
+          <div className="sticky top-0 lg:max-w-100 xl:max-w-123 flex-1 py-32 max-lg:hidden z-10 self-start">
             <CheckoutSummary cart={cart} />
           </div>
+          <div className="absolute right-0 top-0 lg:max-w-[calc((50vw-50%)+448px)] xl:max-w-[calc((50vw-50%)+540px)] -mr-[calc(50vw-50%)] bg-grayscale-50 h-full w-full max-lg:hidden" />
         </LayoutColumn>
       </Layout>
-      <div className="absolute right-0 top-0 w-[45%] bg-grayscale-50 h-full max-lg:hidden" />
     </>
   )
 }
