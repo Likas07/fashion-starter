@@ -302,3 +302,66 @@ export async function requestPasswordReset() {
     success: true as const,
   }
 }
+
+const resetPasswordFormSchema = z.object({
+  current_password: z.string().min(6),
+  new_password: z.string().min(6),
+  confirm_new_password: z.string().min(6),
+})
+
+const resetPasswordStateSchema = z.object({
+  email: z.string().email(),
+  token: z.string(),
+})
+
+export async function resetPassword(
+  currentState: unknown,
+  formData: FormData
+): Promise<
+  z.infer<typeof resetPasswordStateSchema> &
+    ({ state: "initial" | "success" } | { state: "error"; error: string })
+> {
+  const validatedState = resetPasswordStateSchema.parse(currentState)
+
+  const validatedData = resetPasswordFormSchema.parse({
+    current_password: formData.get("current_password"),
+    new_password: formData.get("new_password"),
+    confirm_new_password: formData.get("confirm_new_password"),
+  })
+
+  if (validatedData.new_password !== validatedData.confirm_new_password) {
+    return {
+      ...validatedState,
+      state: "error" as const,
+      error: "Passwords do not match",
+    }
+  }
+
+  // check current password
+  await sdk.auth.login("customer", "emailpass", {
+    email: validatedState.email,
+    password: validatedData.current_password,
+  })
+
+  return sdk.client
+    .fetch(`/auth/customer/emailpass/update?token=${validatedState.token}`, {
+      method: "POST",
+      body: {
+        email: validatedState.email,
+        password: validatedData.new_password,
+      },
+    })
+    .then(() => {
+      return {
+        ...validatedState,
+        state: "success" as const,
+      }
+    })
+    .catch(() => {
+      return {
+        ...validatedState,
+        state: "error" as const,
+        error: "Failed to update password",
+      }
+    })
+}
