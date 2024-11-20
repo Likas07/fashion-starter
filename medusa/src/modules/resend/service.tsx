@@ -11,7 +11,8 @@ type InjectedDependencies = {
   logger: Logger;
 };
 
-class ResendNotificationProviderService extends AbstractNotificationProviderService {
+export default class ResendNotificationProviderService extends AbstractNotificationProviderService {
+  public static identifier = 'resend';
   private resendClient: Resend;
   private from: string;
   private logger: Logger;
@@ -73,5 +74,3 @@ class ResendNotificationProviderService extends AbstractNotificationProviderServ
     return { id: data.id };
   }
 }
-
-export default ResendNotificationProviderService;
