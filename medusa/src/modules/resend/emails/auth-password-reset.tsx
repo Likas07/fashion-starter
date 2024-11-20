@@ -29,7 +29,11 @@ export default function AuthPasswordResetEmail({ customer, token }: Props) {
           </Text>
 
           <Button
-            href={`${process.env.STOREFRONT_URL}/auth/reset-password?token=${token}`}
+            href={`${
+              process.env.STOREFRONT_URL
+            }/auth/reset-password?email=${encodeURIComponent(
+              customer.email,
+            )}&token=${encodeURIComponent(token)}`}
           >
             Reset password
           </Button>
