@@ -1,16 +1,16 @@
 "use client"
 
-import { clx } from "@medusajs/ui"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { twMerge } from "tailwind-merge"
 
 export function Pagination({
   page,
   totalPages,
-  'data-testid': dataTestid
+  "data-testid": dataTestid,
 }: {
   page: number
   totalPages: number
-  'data-testid'?: string
+  "data-testid"?: string
 }) {
   const router = useRouter()
   const pathname = usePathname()
@@ -35,9 +35,10 @@ export function Pagination({
   ) => (
     <button
       key={p}
-      className={clx("txt-xlarge-plus text-ui-fg-muted", {
-        "text-ui-fg-base hover:text-ui-fg-subtle": isCurrent,
-      })}
+      className={twMerge(
+        "txt-xlarge-plus text-ui-fg-muted",
+        isCurrent && "text-ui-fg-base hover:text-ui-fg-subtle"
+      )}
       disabled={isCurrent}
       onClick={() => handlePageChange(p)}
     >
@@ -108,7 +109,9 @@ export function Pagination({
   // Render the component
   return (
     <div className="flex justify-center w-full mt-12">
-      <div className="flex gap-3 items-end" data-testid={dataTestid}>{renderPageButtons()}</div>
+      <div className="flex gap-3 items-end" data-testid={dataTestid}>
+        {renderPageButtons()}
+      </div>
     </div>
   )
 }

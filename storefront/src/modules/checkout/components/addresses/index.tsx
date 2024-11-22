@@ -1,7 +1,6 @@
 "use client"
 
-import { useActionState } from "react"
-import { useToggleState } from "@medusajs/ui"
+import * as React from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { twJoin } from "tailwind-merge"
 import { HttpTypes } from "@medusajs/types"
@@ -27,13 +26,17 @@ const Addresses = ({
 
   const isOpen = searchParams.get("step") === "delivery"
 
-  const { state: sameAsBilling, toggle: toggleSameAsBilling } = useToggleState(
+  const [sameAsBilling, setSameAsBilling] = React.useState(
     cart?.shipping_address && cart?.billing_address
       ? compareAddresses(cart?.shipping_address, cart?.billing_address)
       : true
   )
 
-  const [message, formAction] = useActionState(setAddresses, null)
+  const toggleSameAsBilling = React.useCallback(() => {
+    setSameAsBilling((prev) => !prev)
+  }, [setSameAsBilling])
+
+  const [message, formAction] = React.useActionState(setAddresses, null)
 
   return (
     <>
