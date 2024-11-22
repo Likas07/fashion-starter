@@ -2,15 +2,13 @@ import * as React from 'react';
 import {
   Text,
   Column,
-  Container,
   Heading,
-  Html,
   Img,
   Row,
   Section,
-  Tailwind,
 } from '@react-email/components';
 import { HttpTypes } from '@medusajs/framework/types';
+import EmailLayout from './components/EmailLayout';
 
 type Props = {
   order: Pick<
@@ -45,143 +43,128 @@ export default function OrderPlacedEmail({ order }: Props) {
   });
 
   return (
-    <Html>
-      <Tailwind>
-        <Container>
-          <Heading>Thank you for your order</Heading>
+    <EmailLayout>
+      <Heading>Thank you for your order</Heading>
+      <Text>
+        We are pleased to confirm that your order has been successfully placed
+        and will be processed shortly. Your order number is #100002.
+      </Text>
+      <Text>
+        You’ll receive another update once your order is shipped. For any
+        questions, feel free to contact us at info@sofasociety.com.
+      </Text>
+      <Text>Thank you for shopping with us!</Text>
+      <Row>
+        <Column>
+          <Text>Delivery Address</Text>
           <Text>
-            We are pleased to confirm that your order has been successfully
-            placed and will be processed shortly. Your order number is #100002.
+            {[
+              order.shipping_address.first_name,
+              order.shipping_address.last_name,
+            ]
+              .filter(Boolean)
+              .join(' ')}
           </Text>
           <Text>
-            You’ll receive another update once your order is shipped. For any
-            questions, feel free to contact us at info@sofasociety.com.
+            {[
+              order.shipping_address.address_1,
+              order.shipping_address.address_2,
+              [order.shipping_address.postal_code, order.shipping_address.city]
+                .filter(Boolean)
+                .join(' '),
+              order.shipping_address.province,
+              order.shipping_address.country.display_name,
+            ]
+              .filter(Boolean)
+              .join(', ')}
           </Text>
-          <Text>Thank you for shopping with us!</Text>
-          <Row>
-            <Column>
-              <Text>Delivery Address</Text>
-              <Text>
-                {[
-                  order.shipping_address.first_name,
-                  order.shipping_address.last_name,
-                ]
-                  .filter(Boolean)
-                  .join(' ')}
-              </Text>
-              <Text>
-                {[
-                  order.shipping_address.address_1,
-                  order.shipping_address.address_2,
-                  [
-                    order.shipping_address.postal_code,
-                    order.shipping_address.city,
-                  ]
-                    .filter(Boolean)
-                    .join(' '),
-                  order.shipping_address.province,
-                  order.shipping_address.country.display_name,
-                ]
-                  .filter(Boolean)
-                  .join(', ')}
-              </Text>
-              {order.shipping_address.phone && (
-                <Text>{order.shipping_address.phone}</Text>
-              )}
-            </Column>
-            <Column>
-              <Text>Billing Address</Text>
-              <Text>
-                {[
-                  order.billing_address.first_name,
-                  order.billing_address.last_name,
-                ]
-                  .filter(Boolean)
-                  .join(' ')}
-              </Text>
-              <Text>
-                {[
-                  order.billing_address.address_1,
-                  order.billing_address.address_2,
-                  [
-                    order.billing_address.postal_code,
-                    order.billing_address.city,
-                  ]
-                    .filter(Boolean)
-                    .join(' '),
-                  order.billing_address.province,
-                  order.billing_address.country.display_name,
-                ]
-                  .filter(Boolean)
-                  .join(', ')}
-              </Text>
-              {order.billing_address.phone && (
-                <Text>{order.billing_address.phone}</Text>
-              )}
-            </Column>
-          </Row>
+          {order.shipping_address.phone && (
+            <Text>{order.shipping_address.phone}</Text>
+          )}
+        </Column>
+        <Column>
+          <Text>Billing Address</Text>
+          <Text>
+            {[order.billing_address.first_name, order.billing_address.last_name]
+              .filter(Boolean)
+              .join(' ')}
+          </Text>
+          <Text>
+            {[
+              order.billing_address.address_1,
+              order.billing_address.address_2,
+              [order.billing_address.postal_code, order.billing_address.city]
+                .filter(Boolean)
+                .join(' '),
+              order.billing_address.province,
+              order.billing_address.country.display_name,
+            ]
+              .filter(Boolean)
+              .join(', ')}
+          </Text>
+          {order.billing_address.phone && (
+            <Text>{order.billing_address.phone}</Text>
+          )}
+        </Column>
+      </Row>
 
-          {order.items.map((item) => {
-            return (
-              <Section
-                key={item.id}
-                style={{ paddingTop: '40px', paddingBottom: '40px' }}
-              >
-                <Row>
-                  <Column>
-                    <Img
-                      src={item.thumbnail}
-                      alt={item.product_title}
-                      style={{ float: 'left' }}
-                      width="260px"
-                    />
-                  </Column>
-                  <Column style={{ verticalAlign: 'top', paddingLeft: '12px' }}>
-                    <Text style={{ fontWeight: '500' }}>
-                      {item.product_title}
-                    </Text>
-                    {Object.entries(item.variant_option_values).flatMap(
-                      ([key, value]) =>
-                        typeof value === 'string' ? (
-                          <Text key={key}>
-                            {key}: {value}
-                          </Text>
-                        ) : (
-                          []
-                        ),
-                    )}
-                    <Text>Quantity: {item.quantity}</Text>
-                  </Column>
-                  <Column
-                    style={{
-                      verticalAlign: 'bottom',
-                      paddingLeft: '12px',
-                      textAlign: 'right',
-                    }}
-                  >
-                    <Text>{formatter.format(item.total)}</Text>
-                  </Column>
-                </Row>
-              </Section>
-            );
-          })}
-
-          <Section>
+      {order.items.map((item) => {
+        return (
+          <Section
+            key={item.id}
+            style={{ paddingTop: '40px', paddingBottom: '40px' }}
+          >
             <Row>
-              <Column className="w-1/2">
-                <Text>Payment</Text>
+              <Column>
+                <Img
+                  src={item.thumbnail}
+                  alt={item.product_title}
+                  style={{ float: 'left' }}
+                  width="260px"
+                />
               </Column>
-              <Column className="w-1/2">
-                <Text>Subtotal {formatter.format(order.subtotal)}</Text>
-                <Text>Shipping {formatter.format(order.shipping_total)}</Text>
-                <Text>Total {formatter.format(order.total)}</Text>
-                <Text>Including {formatter.format(order.tax_total)} tax</Text>
+              <Column style={{ verticalAlign: 'top', paddingLeft: '12px' }}>
+                <Text style={{ fontWeight: '600' }}>{item.product_title}</Text>
+                {Object.entries(item.variant_option_values).flatMap(
+                  ([key, value]) =>
+                    typeof value === 'string' ? (
+                      <Text key={key}>
+                        {key}: {value}
+                      </Text>
+                    ) : (
+                      []
+                    ),
+                )}
+                <Text>Quantity: {item.quantity}</Text>
+              </Column>
+              <Column
+                style={{
+                  verticalAlign: 'bottom',
+                  paddingLeft: '12px',
+                  textAlign: 'right',
+                }}
+              >
+                <Text>{formatter.format(item.total)}</Text>
               </Column>
             </Row>
           </Section>
-        </Container>
-      </Tailwind>
-    </Html>
+        );
+      })}
+
+      <Section>
+        <Row>
+          <Column className="w-1/2">
+            <Text>Payment</Text>
+          </Column>
+          <Column className="w-1/2">
+            <Text>Subtotal {formatter.format(order.subtotal)}</Text>
+            <Text>Shipping {formatter.format(order.shipping_total)}</Text>
+            <Text>Total {formatter.format(order.total)}</Text>
+            <Text>Including {formatter.format(order.tax_total)} tax</Text>
+          </Column>
+        </Row>
+      </Section>
+    </EmailLayout>
   );
 }
 
