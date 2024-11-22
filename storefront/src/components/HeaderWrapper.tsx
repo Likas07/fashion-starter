@@ -79,7 +79,7 @@ export const HeaderWrapper: React.FC<{ children?: React.ReactNode }> = ({
       window.removeEventListener("orientationchange", updateTriggerPosition)
       window.removeEventListener("scroll", handleScroll)
     }
-  }, [pathName, isPageWithHeroImage])
+  }, [pathName, isPageWithHeroImage, isAlwaysSticky])
 
   return (
     <div

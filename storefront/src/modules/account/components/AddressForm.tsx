@@ -47,7 +47,7 @@ export const AddressForm: React.FC<{
     if (addAddressFormMessage?.success || updateAddressFormMessage?.success) {
       close()
     }
-  }, [addAddressFormMessage, updateAddressFormMessage])
+  }, [addAddressFormMessage, updateAddressFormMessage, close])
 
   return (
     <form action={addressId ? updateAddressFormAction : addAddressFormAction}>

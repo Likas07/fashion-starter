@@ -43,11 +43,14 @@ export const UiConfirmButton: React.FC<
   ButtonProps & { onConfirm: () => Promise<void> }
 > = (props) => {
   const { close } = React.useContext(OverlayTriggerStateContext)!
-  const onPress = React.useCallback(async (e: PressEvent) => {
-    await props.onConfirm()
-    close()
-    props.onPress?.(e)
-  }, [])
+  const onPress = React.useCallback(
+    async (e: PressEvent) => {
+      await props.onConfirm()
+      close()
+      props.onPress?.(e)
+    },
+    [props, close]
+  )
 
   return <Button {...props} onPress={onPress} />
 }

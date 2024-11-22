@@ -25,7 +25,7 @@ export const PersonalInfoForm: React.FC<{
     if (formState.state === "success") {
       close()
     }
-  }, [formState])
+  }, [formState, close])
 
   return (
     <form action={formAction}>
