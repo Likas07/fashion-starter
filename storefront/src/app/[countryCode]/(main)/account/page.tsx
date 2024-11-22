@@ -83,7 +83,7 @@ export default async function AccountPersonalAndSecurityPage({
       <h2 className="text-md font-normal mb-6">Addresses</h2>
       {customer.addresses.length === 0 && (
         <p className="text-grayscale-500 mb-6">
-          You don't have any addresses saved yet.
+          You don&apos;t have any addresses saved yet.
         </p>
       )}
       {customer.addresses.map((address) => (
@@ -201,7 +201,7 @@ export default async function AccountPersonalAndSecurityPage({
       </UiDialogTrigger>
       <h2 className="text-md font-normal mb-4">Change password</h2>
       <p className="text-grayscale-500 mb-6">
-        To change your password, we'll send you an email. Just click on the
+        To change your password, we&apos;ll send you an email. Just click on the
         reset button below.
       </p>
       <RequestPasswordResetButton />
