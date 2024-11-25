@@ -29,14 +29,14 @@ export type EmailLayoutProps = {
 export default function EmailLayout(
   props: {
     children: React.ReactNode;
-  } & EmailLayoutProps
+  } & EmailLayoutProps,
 ) {
   return (
     <Html>
       <Head>
         <Font
           fontFamily="Mona Sans"
-          fallbackFontFamily="serif"
+          fallbackFontFamily={['Arial', 'Helvetica', 'Verdana', 'sans-serif']}
           webFont={{
             url: 'https://fonts.gstatic.com/s/monasans/v1/o-0mIpQmx24alC5A4PNB6Ryti20_6n1iPHjcz6L1SoM-jCpoiyD9A99Y41P6zHtY.woff2',
             format: 'woff2',
@@ -46,7 +46,7 @@ export default function EmailLayout(
         />
         <Font
           fontFamily="Mona Sans"
-          fallbackFontFamily="serif"
+          fallbackFontFamily={['Arial', 'Helvetica', 'Verdana', 'sans-serif']}
           webFont={{
             url: 'https://fonts.gstatic.com/s/monasans/v1/o-0kIpQmx24alC5A4PNr4C5OaxRsfNNlKbCePevHtVtX57DGjDU1QDce6VLYyWtY1rI.woff2',
             format: 'woff2',
@@ -56,7 +56,7 @@ export default function EmailLayout(
         />
         <Font
           fontFamily="Mona Sans"
-          fallbackFontFamily="serif"
+          fallbackFontFamily={['Arial', 'Helvetica', 'Verdana', 'sans-serif']}
           webFont={{
             url: 'https://fonts.gstatic.com/s/monasans/v1/o-0mIpQmx24alC5A4PNB6Ryti20_6n1iPHjcz6L1SoM-jCpoiyAjBN9Y41P6zHtY.woff2',
             format: 'woff2',
@@ -66,7 +66,7 @@ export default function EmailLayout(
         />
         <Font
           fontFamily="Mona Sans"
-          fallbackFontFamily="serif"
+          fallbackFontFamily={['Arial', 'Helvetica', 'Verdana', 'sans-serif']}
           webFont={{
             url: 'https://fonts.gstatic.com/s/monasans/v1/o-0kIpQmx24alC5A4PNr4C5OaxRsfNNlKbCePevHtVtX57DGjDU1QOkZ6VLYyWtY1rI.woff2',
             format: 'woff2',
@@ -76,7 +76,7 @@ export default function EmailLayout(
         />
         <Font
           fontFamily="Mona Sans"
-          fallbackFontFamily="serif"
+          fallbackFontFamily={['Arial', 'Helvetica', 'Verdana', 'sans-serif']}
           webFont={{
             url: 'https://fonts.gstatic.com/s/monasans/v1/o-0mIpQmx24alC5A4PNB6Ryti20_6n1iPHjcz6L1SoM-jCpoiyAaBN9Y41P6zHtY.woff2',
             format: 'woff2',
@@ -86,7 +86,7 @@ export default function EmailLayout(
         />
         <Font
           fontFamily="Mona Sans"
-          fallbackFontFamily="serif"
+          fallbackFontFamily={['Arial', 'Helvetica', 'Verdana', 'sans-serif']}
           webFont={{
             url: 'https://fonts.gstatic.com/s/monasans/v1/o-0kIpQmx24alC5A4PNr4C5OaxRsfNNlKbCePevHtVtX57DGjDU1QNAZ6VLYyWtY1rI.woff2',
             format: 'woff2',
@@ -133,12 +133,14 @@ export default function EmailLayout(
               },
             },
           },
-        }}>
+        }}
+      >
         <Body className="bg-grayscale-50 font-normal">
           <Container className="bg-white py-18 px-22 rounded-sm max-w-228 w-full">
             <Link
               href={process.env.STOREFRONT_URL || 'http://localhost:8000'}
-              className="text-lg mb-18 inline-block text-black">
+              className="text-lg mb-18 inline-block text-black"
+            >
               {props.siteTitle || 'SofaSocietyCo.'}
             </Link>
             {props.children}
@@ -148,7 +150,8 @@ export default function EmailLayout(
                 <Column className="w-full">
                   <Link
                     href={process.env.STOREFRONT_URL || 'http://localhost:8000'}
-                    className="text-lg text-grayscale-500">
+                    className="text-lg text-grayscale-500"
+                  >
                     {props.siteTitle || 'SofaSocietyCo.'}
                   </Link>
                   <Text className="text-xs m-0">
