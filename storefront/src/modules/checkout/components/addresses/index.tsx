@@ -16,7 +16,6 @@ import { UiDialogTrigger, UiDialog, UiCloseButton } from "@/components/Dialog"
 import { UiModalOverlay, UiModal } from "@/components/ui/Modal"
 import { RadioGroup } from "react-aria-components"
 import { UiRadio, UiRadioBox, UiRadioLabel } from "@/components/ui/Radio"
-import { convertToLocale } from "@lib/util/money"
 import CountrySelect from "../country-select"
 import { Input } from "@/components/Forms"
 import { Icon } from "@/components/Icon"
@@ -73,14 +72,7 @@ const Addresses = ({
       {isOpen ? (
         // TODO: replace with react-hook-form and add validation
         <form action={formAction}>
-          <ShippingAddress
-            customer={customer}
-            checked={sameAsBilling}
-            onChange={toggleSameAsBilling}
-            cart={cart}
-          />
-
-          <>
+          {customer && (
             <div className="w-full border border-grayscale-200 rounded-xs p-4 flex flex-wrap gap-8 max-lg:flex-col mb-8">
               <div className="flex flex-1 gap-8">
                 <Icon name="user" className="w-6 h-6 mt-2.5" />
@@ -224,10 +216,19 @@ const Addresses = ({
                 </UiModalOverlay>
               </UiDialogTrigger>
             </div>
-            {!sameAsBilling && <BillingAddress cart={cart} />}
-            <SubmitButton>Next</SubmitButton>
-            <ErrorMessage error={message} />
-          </>
+          )}
+
+          <ShippingAddress
+            customer={customer}
+            checked={sameAsBilling}
+            onChange={toggleSameAsBilling}
+            cart={cart}
+          />
+
+          {!sameAsBilling && <BillingAddress cart={cart} />}
+
+          <SubmitButton>Next</SubmitButton>
+          <ErrorMessage error={message} />
         </form>
       ) : cart?.shipping_address ? (
         <div className="flex flex-col gap-4">
