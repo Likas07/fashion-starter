@@ -1,17 +1,20 @@
 // External packages
-import { Text, Heading } from "@react-email/components";
-import { CustomerDTO } from "@medusajs/framework/types";
+import { Text, Heading } from '@react-email/components';
+import { CustomerDTO } from '@medusajs/framework/types';
 
 // Components
-import EmailLayout from "./components/EmailLayout";
+import EmailLayout, { EmailLayoutProps } from './components/EmailLayout';
 
 type Props = {
-  customer: Pick<CustomerDTO, "id" | "email" | "first_name" | "last_name">;
+  customer: Pick<CustomerDTO, 'id' | 'email' | 'first_name' | 'last_name'>;
 };
 
-export default function WelcomeEmail({ customer }: Props) {
+export default function WelcomeEmail({
+  customer,
+  ...emailLayoutProps
+}: Props & EmailLayoutProps) {
   return (
-    <EmailLayout>
+    <EmailLayout {...emailLayoutProps}>
       <Heading className="text-2xl mt-0 mb-10">
         Welcome to Sofa Society!
       </Heading>
@@ -46,9 +49,9 @@ export default function WelcomeEmail({ customer }: Props) {
 
 WelcomeEmail.PreviewProps = {
   customer: {
-    id: "1",
-    email: "example@medusa.local",
-    first_name: "John",
-    last_name: "Doe",
+    id: '1',
+    email: 'example@medusa.local',
+    first_name: 'John',
+    last_name: 'Doe',
   },
 } satisfies Props;

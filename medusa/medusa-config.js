@@ -72,6 +72,22 @@ module.exports = defineConfig({
               channels: ['email'],
               api_key: process.env.RESEND_API_KEY,
               from: process.env.RESEND_FROM,
+              siteTitle: 'SofaSocietyCo.',
+              companyName: 'Sofa Society',
+              footerLinks: [
+                {
+                  url: 'https://agilo.com',
+                  label: 'Agilo',
+                },
+                {
+                  url: 'https://www.instagram.com/agiloltd/',
+                  label: 'Instagram',
+                },
+                {
+                  url: 'https://www.linkedin.com/company/agilo/',
+                  label: 'LinkedIn',
+                },
+              ],
             },
           },
         ],

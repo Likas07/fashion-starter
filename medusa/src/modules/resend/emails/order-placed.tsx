@@ -8,7 +8,7 @@ import {
   Section,
 } from '@react-email/components';
 import { HttpTypes } from '@medusajs/framework/types';
-import EmailLayout from './components/EmailLayout';
+import EmailLayout, { EmailLayoutProps } from './components/EmailLayout';
 
 type Props = {
   order: Pick<
@@ -35,7 +35,10 @@ type Props = {
   };
 };
 
-export default function OrderPlacedEmail({ order }: Props) {
+export default function OrderPlacedEmail({
+  order,
+  ...emailLayoutProps
+}: Props & EmailLayoutProps) {
   const formatter = new Intl.NumberFormat([], {
     style: 'currency',
     currencyDisplay: 'narrowSymbol',
@@ -43,7 +46,7 @@ export default function OrderPlacedEmail({ order }: Props) {
   });
 
   return (
-    <EmailLayout>
+    <EmailLayout {...emailLayoutProps}>
       <Heading>Thank you for your order</Heading>
       <Text>
         We are pleased to confirm that your order has been successfully placed

@@ -1,20 +1,24 @@
 // External packages
-import { Text, Heading, Button } from "@react-email/components";
+import { Text, Heading, Button } from '@react-email/components';
 
 // Types
-import { CustomerDTO, OrderDTO } from "@medusajs/framework/types";
+import { CustomerDTO, OrderDTO } from '@medusajs/framework/types';
 
 // Components
-import EmailLayout from "./components/EmailLayout";
+import EmailLayout, { EmailLayoutProps } from './components/EmailLayout';
 
 type Props = {
-  customer: Pick<CustomerDTO, "id" | "email" | "first_name" | "last_name">;
-  order: Pick<OrderDTO, "id" | "display_id">;
+  customer: Pick<CustomerDTO, 'id' | 'email' | 'first_name' | 'last_name'>;
+  order: Pick<OrderDTO, 'id' | 'display_id'>;
 };
 
-export default function AuthPasswordResetEmail({ customer, order }: Props) {
+export default function AuthPasswordResetEmail({
+  customer,
+  order,
+  ...emailLayoutProps
+}: Props & EmailLayoutProps) {
   return (
-    <EmailLayout>
+    <EmailLayout {...emailLayoutProps}>
       <Heading className="text-2xl mt-0 mb-10">Shipping update</Heading>
       <Text className="text-md !mb-6">
         Great news! Your order #{order.display_id} is now on its way to you.
@@ -26,9 +30,10 @@ export default function AuthPasswordResetEmail({ customer, order }: Props) {
       </Text>
       <Button
         href={`${
-          process.env.STOREFRONT_URL || "http://localhost:8000"
+          process.env.STOREFRONT_URL || 'http://localhost:8000'
         }/account/my-orders/${order.id}`}
-        className="inline-flex items-center focus-visible:outline-none rounded-xs justify-center transition-colors bg-black hover:bg-grayscale-500 text-white h-10 px-6 mb-10">
+        className="inline-flex items-center focus-visible:outline-none rounded-xs justify-center transition-colors bg-black hover:bg-grayscale-500 text-white h-10 px-6 mb-10"
+      >
         Order details
       </Button>
       <Text className="text-md m-0">
@@ -41,13 +46,13 @@ export default function AuthPasswordResetEmail({ customer, order }: Props) {
 
 AuthPasswordResetEmail.PreviewProps = {
   customer: {
-    id: "1",
-    email: "example@medusa.local",
-    first_name: "John",
-    last_name: "Doe",
+    id: '1',
+    email: 'example@medusa.local',
+    first_name: 'John',
+    last_name: 'Doe',
   },
   order: {
-    id: "order_01JCNYH6VADAK90W7CBSPV5BT6",
+    id: 'order_01JCNYH6VADAK90W7CBSPV5BT6',
     display_id: 1,
   },
 } satisfies Props;

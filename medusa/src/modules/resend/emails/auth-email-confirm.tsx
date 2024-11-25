@@ -1,12 +1,14 @@
 // External packages
-import { Text, Heading, Button } from "@react-email/components";
+import { Text, Heading, Button } from '@react-email/components';
 
 // Components
-import EmailLayout from "./components/EmailLayout";
+import EmailLayout, { EmailLayoutProps } from './components/EmailLayout';
 
-export default function AuthEmailConfirm() {
+export default function AuthEmailConfirm({
+  ...emailLayoutProps
+}: EmailLayoutProps) {
   return (
-    <EmailLayout>
+    <EmailLayout {...emailLayoutProps}>
       <Heading className="text-2xl mt-0 mb-10">Verify your email</Heading>
       <Text className="text-md !mb-6">
         Hey Jovana, thanks for registering for an account on Sofa Society!

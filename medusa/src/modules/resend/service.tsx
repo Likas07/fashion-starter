@@ -6,6 +6,7 @@ import {
 } from '@medusajs/types';
 import { Resend } from 'resend';
 import emails, { subjects } from './emails';
+import type { EmailLayoutProps } from './emails/components/EmailLayout';
 
 type InjectedDependencies = {
   logger: Logger;
@@ -15,6 +16,7 @@ export default class ResendNotificationProviderService extends AbstractNotificat
   public static identifier = 'resend';
   private resendClient: Resend;
   private from: string;
+  private layoutOptions?: EmailLayoutProps;
   private logger: Logger;
 
   constructor({ logger }: InjectedDependencies, options: unknown) {
@@ -33,9 +35,35 @@ export default class ResendNotificationProviderService extends AbstractNotificat
       );
     }
 
+    const layoutOptions: EmailLayoutProps = {};
+
+    if ('siteTitle' in options && typeof options.siteTitle === 'string') {
+      layoutOptions.siteTitle = options.siteTitle;
+    }
+
+    if ('companyName' in options && typeof options.companyName === 'string') {
+      layoutOptions.companyName = options.companyName;
+    }
+
+    if ('footerLinks' in options) {
+      if (
+        !Array.isArray(options.footerLinks) ||
+        !options.footerLinks.every(
+          (l) => typeof l.url === 'string' && typeof l.label === 'string',
+        )
+      ) {
+        this.logger.warn(
+          `Invalid footer links provided to Resend module. Expected an array of { url: string, label: string } objects.`,
+        );
+      } else {
+        layoutOptions.footerLinks = options.footerLinks;
+      }
+    }
+
     this.resendClient = new Resend(options.api_key);
     this.from = options.from;
     this.logger = logger;
+    this.layoutOptions = layoutOptions;
   }
 
   async send(
@@ -63,7 +91,7 @@ export default class ResendNotificationProviderService extends AbstractNotificat
       from: this.from,
       to: [notification.to],
       subject,
-      react: <Template {...notification.data} />,
+      react: <Template {...this.layoutOptions} {...notification.data} />,
     });
 
     if (error) {

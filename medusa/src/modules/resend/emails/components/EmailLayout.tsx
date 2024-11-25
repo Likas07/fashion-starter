@@ -16,7 +16,21 @@ import {
 
 // Google Font API is used to load the Mona Sans font
 // You can find other variants here: https://webfonts.googleapis.com/v1/webfonts?capability=WOFF2&family=Mona%20Sans&subset=latin-ext&key=[YOUR_API_KEY]
-export default function EmailLayout(props: { children: React.ReactNode }) {
+
+export type EmailLayoutProps = {
+  siteTitle?: string;
+  companyName?: string;
+  footerLinks?: {
+    url: string;
+    label: string;
+  }[];
+};
+
+export default function EmailLayout(
+  props: {
+    children: React.ReactNode;
+  } & EmailLayoutProps,
+) {
   return (
     <Html>
       <Head>
@@ -122,43 +136,41 @@ export default function EmailLayout(props: { children: React.ReactNode }) {
       >
         <Body className="bg-grayscale-50 font-normal">
           <Container className="bg-white py-20 px-22 rounded-sm max-w-228 w-full">
-            <Link href="/" className="text-md mb-20 inline-block text-black">
-              SofaSocietyCo.
+            <Link
+              href={process.env.STOREFRONT_URL || 'http://localhost:8000'}
+              className="text-md mb-20 inline-block text-black"
+            >
+              {props.siteTitle || 'SofaSocietyCo.'}
             </Link>
             {props.children}
             <Hr className="mt-20 mb-10" />
             <Section className="gap-4 text-grayscale-500">
               <Row>
                 <Column className="w-full">
-                  <Link href="/" className="text-grayscale-500">
-                    SofaSocietyCo.
+                  <Link
+                    href={process.env.STOREFRONT_URL || 'http://localhost:8000'}
+                    className="text-grayscale-500"
+                  >
+                    {props.siteTitle || 'SofaSocietyCo.'}
                   </Link>
-                  <Text className="text-xs m-0">© 2024, Sofa Society</Text>
+                  <Text className="text-xs m-0">
+                    &copy; {new Date().getFullYear()},{' '}
+                    {props.companyName || 'Sofa Society'}
+                  </Text>
                 </Column>
-                <Column valign="top">
-                  <Row>
-                    <Column className="px-2">
-                      <Link href="/" className="text-grayscale-500">
-                        Instagram
-                      </Link>
-                    </Column>
-                    <Column className="px-2">
-                      <Link href="/" className="text-grayscale-500">
-                        TikTok
-                      </Link>
-                    </Column>
-                    <Column className="px-2">
-                      <Link href="/" className="text-grayscale-500">
-                        Pinterest
-                      </Link>
-                    </Column>
-                    <Column className="px-2">
-                      <Link href="/" className="text-grayscale-500">
-                        Facebook
-                      </Link>
-                    </Column>
-                  </Row>
-                </Column>
+                {props.footerLinks && props.footerLinks.length > 0 && (
+                  <Column valign="top">
+                    <Row>
+                      {props.footerLinks.map((link, index) => (
+                        <Column className="px-2" key={index}>
+                          <Link href={link.url} className="text-grayscale-500">
+                            {link.label}
+                          </Link>
+                        </Column>
+                      ))}
+                    </Row>
+                  </Column>
+                )}
               </Row>
             </Section>
           </Container>
