@@ -10,6 +10,9 @@ import ErrorMessage from "@modules/checkout/components/error-message"
 import { SubmitButton } from "@modules/common/components/submit-button"
 import { Button } from "@/components/Button"
 import { Input } from "@/components/Forms"
+import { UiCloseButton, UiDialog, UiDialogTrigger } from "@/components/Dialog"
+import { UiModal, UiModalOverlay } from "@/components/ui/Modal"
+import { Icon } from "@/components/Icon"
 
 const Email = ({
   cart,
@@ -31,15 +34,62 @@ const Email = ({
   return (
     <>
       <div className="flex justify-between mb-8">
-        <div>
-          <p
-            className={twJoin(
-              "transition-fontWeight duration-75",
-              isOpen && "font-semibold"
-            )}
-          >
-            1. Email
-          </p>
+        <div className="flex justify-between flex-1">
+          <div>
+            <p
+              className={twJoin(
+                "transition-fontWeight duration-75",
+                isOpen && "font-semibold"
+              )}
+            >
+              1. Email
+            </p>
+          </div>
+          {isOpen && (
+            <div className="text-grayscale-500">
+              <p>
+                Already have an account? No worries, just{" "}
+                <UiDialogTrigger>
+                  <Button variant="link">log in.</Button>
+                  <UiModalOverlay>
+                    <UiModal className="relative max-w-108">
+                      <UiDialog>
+                        <p className="text-md mb-10">Log in</p>
+                        <div className="flex flex-col gap-10 mb-5">
+                          <Input
+                            type="email"
+                            placeholder="Email"
+                            required
+                            variant="outline"
+                          />
+                          <Input
+                            type="password"
+                            placeholder="Password"
+                            required
+                            variant="outline"
+                          />
+                        </div>
+                        <Button
+                          variant="link"
+                          size="sm"
+                          className="text-grayscale-500 mb-10"
+                        >
+                          Forgotten password?
+                        </Button>
+                        <Button isFullWidth>Log in</Button>
+                        <UiCloseButton
+                          variant="ghost"
+                          className="absolute top-4 right-6 p-0"
+                        >
+                          <Icon name="close" className="w-6 h-6" />
+                        </UiCloseButton>
+                      </UiDialog>
+                    </UiModal>
+                  </UiModalOverlay>
+                </UiDialogTrigger>
+              </p>
+            </div>
+          )}
         </div>
         {!isOpen && (
           <Button

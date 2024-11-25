@@ -12,6 +12,14 @@ import BillingAddress from "@modules/checkout/components/billing_address"
 import ErrorMessage from "@modules/checkout/components/error-message"
 import ShippingAddress from "@modules/checkout/components/shipping-address"
 import { Button } from "@/components/Button"
+import { UiDialogTrigger, UiDialog, UiCloseButton } from "@/components/Dialog"
+import { UiModalOverlay, UiModal } from "@/components/ui/Modal"
+import { RadioGroup } from "react-aria-components"
+import { UiRadio, UiRadioBox, UiRadioLabel } from "@/components/ui/Radio"
+import { convertToLocale } from "@lib/util/money"
+import CountrySelect from "../country-select"
+import { Input } from "@/components/Forms"
+import { Icon } from "@/components/Icon"
 
 const Addresses = ({
   cart,
@@ -72,9 +80,154 @@ const Addresses = ({
             cart={cart}
           />
 
-          {!sameAsBilling && <BillingAddress cart={cart} />}
-          <SubmitButton className="mt-6">Next</SubmitButton>
-          <ErrorMessage error={message} />
+          <>
+            <div className="w-full border border-grayscale-200 rounded-xs p-4 flex flex-wrap gap-8 max-lg:flex-col mb-8">
+              <div className="flex flex-1 gap-8">
+                <Icon name="user" className="w-6 h-6 mt-2.5" />
+                <div className="flex flex-col gap-8 flex-1">
+                  <div className="flex flex-wrap justify-between gap-6">
+                    <div className="grow basis-0">
+                      <p className="text-xs text-grayscale-500 mb-1.5">
+                        Country
+                      </p>
+                      <p>Croatia</p>
+                    </div>
+                    <div className="grow basis-0">
+                      <p className="text-xs text-grayscale-500 mb-1.5">
+                        Address
+                      </p>
+                      <p>Duvanjska 3</p>
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-xs text-grayscale-500 mb-1.5">
+                      Apartment, suite, etc. (Optional)
+                    </p>
+                    <p>2nd floor</p>
+                  </div>
+                  <div className="flex flex-wrap justify-between gap-6">
+                    <div className="grow basis-0">
+                      <p className="text-xs text-grayscale-500 mb-1.5">
+                        Postal Code
+                      </p>
+                      <p>10000</p>
+                    </div>
+                    <div className="grow basis-0">
+                      <p className="text-xs text-grayscale-500 mb-1.5">City</p>
+                      <p>Zagreb</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <UiDialogTrigger>
+                <Button variant="outline" size="sm" className="shrink-0">
+                  Change
+                </Button>
+                <UiModalOverlay>
+                  <UiModal>
+                    <UiDialog>
+                      <p className="text-md mb-10">Change address</p>
+                      <RadioGroup
+                        className="flex flex-col gap-4 mb-10"
+                        aria-label="Shipping methods"
+                      >
+                        <UiRadio
+                          variant="outline"
+                          value="home"
+                          className="gap-4"
+                        >
+                          <UiRadioBox />
+                          <UiRadioLabel className="group-data-[selected=true]:font-normal">
+                            Home
+                          </UiRadioLabel>
+                          <UiRadioLabel className="ml-auto text-grayscale-500 group-data-[selected=true]:font-normal">
+                            Duvanjska 3, Zagreb, 10000, Croatia
+                          </UiRadioLabel>
+                        </UiRadio>
+                        <UiRadio
+                          variant="outline"
+                          value="address2"
+                          className="gap-4"
+                        >
+                          <UiRadioBox />
+                          <UiRadioLabel className="group-data-[selected=true]:font-normal">
+                            Address 2
+                          </UiRadioLabel>
+                          <UiRadioLabel className="ml-auto text-grayscale-500 group-data-[selected=true]:font-normal">
+                            Duvanjska 3, Zagreb, 10000, Croatia
+                          </UiRadioLabel>
+                        </UiRadio>
+                        <UiRadio
+                          variant="outline"
+                          value="work"
+                          className="gap-4"
+                        >
+                          <UiRadioBox />
+                          <UiRadioLabel className="group-data-[selected=true]:font-normal">
+                            Work
+                          </UiRadioLabel>
+                          <UiRadioLabel className="ml-auto text-grayscale-500 group-data-[selected=true]:font-normal">
+                            Duvanjska 3, Zagreb, 10000, Croatia
+                          </UiRadioLabel>
+                        </UiRadio>
+                      </RadioGroup>
+                      <div className="flex justify-between">
+                        <UiDialogTrigger>
+                          <Button>Add new address</Button>
+                          <UiModalOverlay>
+                            <UiModal>
+                              <UiDialog>
+                                <p className="text-md mb-8 md:mb-10">
+                                  Add new address
+                                </p>
+                                <div className="flex flex-col gap-4 md:gap-8 mb-8 md:mb-10">
+                                  <CountrySelect />
+                                  <Input
+                                    placeholder="Adress"
+                                    required
+                                    variant="outline"
+                                  />
+                                  <Input
+                                    placeholder="Apartment, suite, etc. (Optional)"
+                                    required
+                                    variant="outline"
+                                  />
+                                  <div className="flex max-xs:flex-col gap-4 md:gap-6">
+                                    <Input
+                                      placeholder="Postal code"
+                                      required
+                                      variant="outline"
+                                      wrapperClassName="flex-1"
+                                    />
+                                    <Input
+                                      placeholder="City"
+                                      required
+                                      variant="outline"
+                                      wrapperClassName="flex-1"
+                                    />
+                                  </div>
+                                </div>
+                                <div className="flex gap-6 justify-between">
+                                  <Button>Add address</Button>
+                                  <UiCloseButton variant="outline">
+                                    Cancel
+                                  </UiCloseButton>
+                                </div>
+                              </UiDialog>
+                            </UiModal>
+                          </UiModalOverlay>
+                        </UiDialogTrigger>
+                        <UiCloseButton variant="outline">Cancel</UiCloseButton>
+                      </div>
+                    </UiDialog>
+                  </UiModal>
+                </UiModalOverlay>
+              </UiDialogTrigger>
+            </div>
+            {!sameAsBilling && <BillingAddress cart={cart} />}
+            <SubmitButton>Next</SubmitButton>
+            <ErrorMessage error={message} />
+          </>
         </form>
       ) : cart?.shipping_address ? (
         <div className="flex flex-col gap-4">
