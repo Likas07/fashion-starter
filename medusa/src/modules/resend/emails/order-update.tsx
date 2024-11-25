@@ -12,15 +12,17 @@ type Props = {
   order: Pick<OrderDTO, 'id' | 'display_id'>;
 };
 
-export default function AuthPasswordResetEmail({
+export default function OrderUpdateEmail({
   customer,
   order,
   ...emailLayoutProps
 }: Props & EmailLayoutProps) {
   return (
     <EmailLayout {...emailLayoutProps}>
-      <Heading className="text-2xl mt-0 mb-10">Shipping update</Heading>
-      <Text className="text-md !mb-6">
+      <Heading className="text-2xl mt-0 mb-10 font-medium">
+        Shipping update
+      </Heading>
+      <Text className="text-md !mb-8">
         Great news! Your order #{order.display_id} is now on its way to you.
         <br />
         Here are the shipping details.
@@ -32,8 +34,7 @@ export default function AuthPasswordResetEmail({
         href={`${
           process.env.STOREFRONT_URL || 'http://localhost:8000'
         }/account/my-orders/${order.id}`}
-        className="inline-flex items-center focus-visible:outline-none rounded-xs justify-center transition-colors bg-black hover:bg-grayscale-500 text-white h-10 px-6 mb-10"
-      >
+        className="inline-flex items-center focus-visible:outline-none rounded-xs justify-center transition-colors bg-black hover:bg-grayscale-500 text-white h-10 px-6 mb-10">
         Order details
       </Button>
       <Text className="text-md m-0">
@@ -44,7 +45,7 @@ export default function AuthPasswordResetEmail({
   );
 }
 
-AuthPasswordResetEmail.PreviewProps = {
+OrderUpdateEmail.PreviewProps = {
   customer: {
     id: '1',
     email: 'example@medusa.local',
