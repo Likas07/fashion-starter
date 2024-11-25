@@ -72,6 +72,18 @@ export const Header: React.FC = async () => {
               </div>
               <div className="flex items-center gap-6 md:hidden">
                 <LocalizedButtonLink
+                  href="/auth/login"
+                  variant="ghost"
+                  className="p-1 group-data-[light=true]:md:text-white"
+                >
+                  <Icon
+                    name="user"
+                    className="w-6 h-6"
+                    wrapperClassName="w-6 h-6"
+                  />
+                </LocalizedButtonLink>
+
+                <LocalizedButtonLink
                   href="/cart"
                   variant="ghost"
                   className="p-1 group-data-[light=true]:md:text-white"
