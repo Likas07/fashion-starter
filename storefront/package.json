@@ -24,8 +24,8 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
-    "@medusajs/js-sdk": "2.0.0",
-    "@medusajs/types": "2.0.0",
+    "@medusajs/js-sdk": "2.0.4",
+    "@medusajs/types": "2.0.4",
     "@medusajs/ui": "4.0.0",
     "@meilisearch/instant-meilisearch": "^0.21.1",
     "@paypal/paypal-js": "^8.1.2",
