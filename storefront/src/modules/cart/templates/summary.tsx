@@ -18,11 +18,11 @@ function getCheckoutStep(cart: HttpTypes.StoreCart) {
   }
 
   if (!cart?.shipping_address?.address_1) {
-    return "address"
+    return "delivery"
   }
 
   if (cart?.shipping_methods?.length === 0) {
-    return "delivery"
+    return "shipping"
   }
 
   return "payment"
