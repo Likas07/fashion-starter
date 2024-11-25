@@ -15,15 +15,15 @@ export default function WelcomeEmail({
 }: Props & EmailLayoutProps) {
   return (
     <EmailLayout {...emailLayoutProps}>
-      <Heading className="text-2xl mt-0 mb-10">
+      <Heading className="text-2xl mt-0 mb-10 font-medium">
         Welcome to Sofa Society!
       </Heading>
-      <Text className="text-md !mb-6">
+      <Text className="text-md !mb-8">
         Welcome to Sofa Society! We're excited to have you join our community of
         comfort enthusiasts. With our carefully crafted sofas, you&apos;re just
         steps away from adding elegance and coziness to your living space.
       </Text>
-      <Text className="text-md font-semibold !mb-6">
+      <Text className="text-md font-semibold !mb-8">
         As a new member, here&apos;s what you can expect:
       </Text>
       <Text className="text-md m-0">
@@ -35,7 +35,7 @@ export default function WelcomeEmail({
       <Text className="text-md m-0">
         Exclusive offers and early access to new collections
       </Text>
-      <Text className="text-md !mt-0 mb-6">
+      <Text className="text-md !mt-0 !mb-8">
         Explore our collections and find the sofa that suits your style!
       </Text>
       <Text className="text-md">
