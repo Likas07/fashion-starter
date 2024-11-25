@@ -57,7 +57,7 @@ export const Header: React.FC = async () => {
                 <LocalizedButtonLink
                   href="/auth/login"
                   variant="ghost"
-                  className="p-1 group-data-[light=true]:md:text-white"
+                  className="p-1 group-data-[light=true]:md:text-white group-data-[sticky=true]:md:text-black"
                 >
                   <Icon name="user" className="w-6 h-6" />
                 </LocalizedButtonLink>
