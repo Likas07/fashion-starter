@@ -29,7 +29,7 @@ export type EmailLayoutProps = {
 export default function EmailLayout(
   props: {
     children: React.ReactNode;
-  } & EmailLayoutProps,
+  } & EmailLayoutProps
 ) {
   return (
     <Html>
@@ -103,6 +103,7 @@ export default function EmailLayout(
             },
             extend: {
               spacing: {
+                18: '4.5rem',
                 22: '5.5rem',
               },
               colors: {
@@ -121,36 +122,33 @@ export default function EmailLayout(
                 228: '57rem',
               },
               fontSize: {
-                '3xl': '3.5rem',
-                '2xl': '3rem',
-                xl: '2.5rem',
-                lg: '2rem',
-                md: '1.5rem',
-                sm: '1.125rem',
-                base: '1rem',
-                xs: '0.75rem',
+                '3xl': ['3.5rem', '1.5'],
+                '2xl': ['3rem', '1.5'],
+                xl: ['2.5rem', '1.5'],
+                lg: ['1.75rem', '1.5'],
+                md: ['1.5rem', '1.5'],
+                sm: ['1.125rem', '1.5'],
+                base: ['1rem', '1.5'],
+                xs: ['0.75rem', '1.5'],
               },
             },
           },
-        }}
-      >
+        }}>
         <Body className="bg-grayscale-50 font-normal">
-          <Container className="bg-white py-20 px-22 rounded-sm max-w-228 w-full">
+          <Container className="bg-white py-18 px-22 rounded-sm max-w-228 w-full">
             <Link
               href={process.env.STOREFRONT_URL || 'http://localhost:8000'}
-              className="text-md mb-20 inline-block text-black"
-            >
+              className="text-lg mb-18 inline-block text-black">
               {props.siteTitle || 'SofaSocietyCo.'}
             </Link>
             {props.children}
-            <Hr className="mt-20 mb-10" />
+            <Hr className="mt-20 mb-8" />
             <Section className="gap-4 text-grayscale-500">
               <Row>
                 <Column className="w-full">
                   <Link
                     href={process.env.STOREFRONT_URL || 'http://localhost:8000'}
-                    className="text-grayscale-500"
-                  >
+                    className="text-lg text-grayscale-500">
                     {props.siteTitle || 'SofaSocietyCo.'}
                   </Link>
                   <Text className="text-xs m-0">
