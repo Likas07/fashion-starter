@@ -1,9 +1,39 @@
 // External packages
-import { Text, Heading } from '@react-email/components';
+import { Text, Heading, Row, Column } from '@react-email/components';
 import { CustomerDTO } from '@medusajs/framework/types';
 
 // Components
 import EmailLayout, { EmailLayoutProps } from './components/EmailLayout';
+
+const UnorderedList: React.FC<{
+  children?: React.ReactNode;
+  className?: string;
+}> = ({ children, className }) => {
+  return (
+    <Row className={['align-top', className].filter(Boolean).join(' ')}>
+      <Column className="pl-6">{children}</Column>
+    </Row>
+  );
+};
+
+const UnorderedListItem: React.FC<{
+  children?: React.ReactNode;
+  className?: string;
+  textClassName?: string;
+}> = ({ children, className, textClassName }) => {
+  return (
+    <ul
+      role="presentation"
+      className={['list-disc mt-0 mb-0 p-0', className]
+        .filter(Boolean)
+        .join(' ')}
+    >
+      <li role="listitem" className="m-0 p-0">
+        <span className={textClassName}>{children}</span>
+      </li>
+    </ul>
+  );
+};
 
 type Props = {
   customer: Pick<CustomerDTO, 'id' | 'email' | 'first_name' | 'last_name'>;
@@ -26,18 +56,20 @@ export default function WelcomeEmail({
       <Text className="text-md font-semibold !mb-8">
         As a new member, here&apos;s what you can expect:
       </Text>
-      <Text className="text-md m-0">
-        Premium, high-quality sofas in a range of styles and materials
-      </Text>
-      <Text className="text-md m-0">
-        Dedicated customer support ready to assist you
-      </Text>
-      <Text className="text-md m-0">
-        Exclusive offers and early access to new collections
-      </Text>
-      <Text className="text-md !mt-0 !mb-8">
-        Explore our collections and find the sofa that suits your style!
-      </Text>
+      <UnorderedList className="mb-8">
+        <UnorderedListItem className="text-md">
+          Premium, high-quality sofas in a range of styles and materials
+        </UnorderedListItem>
+        <UnorderedListItem className="text-md">
+          Dedicated customer support ready to assist you
+        </UnorderedListItem>
+        <UnorderedListItem className="text-md">
+          Exclusive offers and early access to new collections
+        </UnorderedListItem>
+        <UnorderedListItem className="text-md">
+          Explore our collections and find the sofa that suits your style!
+        </UnorderedListItem>
+      </UnorderedList>
       <Text className="text-md">
         Best wishes,
         <br />
