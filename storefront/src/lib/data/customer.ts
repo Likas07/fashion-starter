@@ -104,6 +104,12 @@ export async function signup(_currentState: unknown, formData: FormData) {
     }
 
     await setAuthToken(loginToken)
+
+    await sdk.client.fetch("/store/custom/customer/send-welcome-email", {
+      method: "POST",
+      headers: await getAuthHeaders(),
+    })
+
     revalidateTag("customer")
     return createdCustomer
   } catch (error: any) {
