@@ -53,7 +53,7 @@ export default function OrderPlacedEmail({
         and will be processed shortly. Your order number is #100002.
       </Text>
       <Text>
-        You’ll receive another update once your order is shipped. For any
+        You&apos;ll receive another update once your order is shipped. For any
         questions, feel free to contact us at info@sofasociety.com.
       </Text>
       <Text>Thank you for shopping with us!</Text>
