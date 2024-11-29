@@ -7,6 +7,7 @@ import {
   Row,
   Section,
   Link,
+  Hr,
 } from '@react-email/components';
 import { HttpTypes } from '@medusajs/framework/types';
 import EmailLayout, { EmailLayoutProps } from './components/EmailLayout';
@@ -46,9 +47,17 @@ export default function OrderPlacedEmail({
     currency: order.currency_code,
   });
 
+  const arr = [];
+  arr.push(...order.items);
+  arr.push(...order.items);
+  arr.push(...order.items);
+  arr.push(...order.items);
+
   return (
     <EmailLayout {...emailLayoutProps}>
-      <Heading className="text-2xl mt-0 mb-10">Order confirmation</Heading>
+      <Heading className="text-2xl font-medium mt-0 mb-10">
+        Order confirmation
+      </Heading>
       <Text className="text-md !mb-6">
         We are pleased to confirm that your order has been successfully placed
         and will be processed shortly. Your order number is #100002.
@@ -129,113 +138,111 @@ export default function OrderPlacedEmail({
         </Row>
       </Section>
       <Section className="border border-solid border-grayscale-200 rounded-xs px-4 mb-6">
-        {order.items.map((item) => {
+        {arr.map((item, index) => {
           return (
-            <Row className="py-4 [&:not(:first-child)]:border [&:not(:first-child)]:border-solid [&:not(:first-child)]:border-grayscale-100">
-              <Column>
-                <Link href="/">
-                  <Img
-                    src={item.thumbnail}
-                    alt={item.product_title}
-                    className="aspect-[3/4] object-cover max-w-37 float-left"
-                  />
-                </Link>
-              </Column>
-              <Column className="w-full pl-8 relative" valign="top">
-                <Text className="text-md !mt-0 !mb-2">
-                  {item.product_title}
-                </Text>
-                {Object.entries(item.variant_option_values).flatMap(
-                  ([key, value]) =>
-                    typeof value === 'string' ? (
-                      <Section key={key} className="mb-1">
-                        <Row>
-                          <Column className="flex gap-2">
-                            <Text className="text-grayscale-500 m-0 text-xs">
-                              {key}:
-                            </Text>
-                            <Text className="m-0 text-xs">{value}</Text>
-                          </Column>
-                        </Row>
-                      </Section>
-                    ) : (
-                      []
-                    )
-                )}
-                <Section className="absolute bottom-0">
-                  <Row>
-                    <Column className="flex gap-2">
-                      <Text className="text-grayscale-500 m-0 text-xs">
-                        Quantity:{' '}
-                      </Text>
-                      <Text className="m-0 text-xs">{item.quantity}</Text>
-                    </Column>
-                  </Row>
-                </Section>
-              </Column>
-              <Column valign="bottom">
-                <Text className="m-0 text-md">
-                  {formatter.format(item.total)}
-                </Text>
-              </Column>
-            </Row>
+            <>
+              {index > 0 && (
+                <Hr className="border-t border-solid border-grayscale-100 m-0" />
+              )}
+              <Row className="py-4">
+                <Column>
+                  <Link href="/">
+                    <Img
+                      src={item.thumbnail}
+                      alt={item.product_title}
+                      className="aspect-[3/4] object-cover max-w-37 float-left"
+                    />
+                  </Link>
+                </Column>
+                <Column className="w-full pl-8 relative" valign="top">
+                  <Text className="text-md !mt-0 !mb-2">
+                    {item.product_title}
+                  </Text>
+                  <Section className="mb-1">
+                    {Object.entries(item.variant_option_values).flatMap(
+                      ([key, value]) =>
+                        typeof value === 'string' ? (
+                          <Row key={key}>
+                            <Column className="flex">
+                              <Text className="text-grayscale-500 m-0 text-xs">
+                                {key}:
+                              </Text>
+                              <Text className="m-0 text-xs ml-2">{value}</Text>
+                            </Column>
+                          </Row>
+                        ) : (
+                          []
+                        )
+                    )}
+                    <Row className="absolute bottom-0">
+                      <Column className="flex">
+                        <Text className="text-grayscale-500 m-0 text-xs">
+                          Quantity:
+                        </Text>
+                        <Text className="m-0 text-xs ml-2">
+                          {item.quantity}
+                        </Text>
+                      </Column>
+                    </Row>
+                  </Section>
+                </Column>
+                <Column valign="bottom">
+                  <Text className="m-0 text-md">
+                    {formatter.format(item.total)}
+                  </Text>
+                </Column>
+              </Row>
+            </>
           );
         })}
       </Section>
       <Section className="border border-solid border-grayscale-200 rounded-xs p-4">
         <Row>
-          <Column className="w-1/2 flex gap-2 items-center" valign="top">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
+          <Column className="w-1/2 flex items-center" valign="top">
+            <Img
+              src="./credit-card.png"
+              alt="Credit card"
               width="16"
               height="16"
-              fill="none">
-              <path
-                stroke="#050505"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width=".667"
-                d="M2.665 3.5c-.644 0-1.166.522-1.166 1.167v1.166h-.167a.837.837 0 0 0-.167.017V4.667a1.5 1.5 0 0 1 1.5-1.5h10.667a1.5 1.5 0 0 1 1.5 1.5V5.85a.837.837 0 0 0-.167-.017H14.5V4.667c0-.645-.523-1.167-1.167-1.167H2.665Zm-1.333 3h.167v.333h-.167a.167.167 0 1 1 0-.333Zm.833.333V6.5h11.667v.333H2.165Zm-.833.667h.167v3.833c0 .645.522 1.167 1.166 1.167h10.667c.644 0 1.167-.522 1.167-1.167V7.5h.166a.837.837 0 0 0 .167-.017v3.85a1.5 1.5 0 0 1-1.5 1.5H2.665a1.5 1.5 0 0 1-1.5-1.5v-3.85c.054.011.11.017.167.017Zm13.333-.667H14.5V6.5h.166a.167.167 0 0 1 0 .333Z"
-              />
-            </svg>
-            <Text className="m-0">Payment</Text>
+            />
+            <Text className="m-0 ml-2">Payment</Text>
           </Column>
           <Column className="w-1/2">
             <Section>
               <Row className="mb-2">
-                <Column className="flex justify-between">
+                <Column className="flex">
                   <Text className="text-grayscale-500 m-0 text-base">
                     Subtotal
                   </Text>
-                  <Text className="m-0 text-base">
+                  <Text className="m-0 text-base ml-auto">
                     {formatter.format(order.subtotal)}
                   </Text>
                 </Column>
               </Row>
               <Row className="mb-6">
-                <Column className="flex justify-between">
+                <Column className="flex">
                   <Text className="text-grayscale-500 m-0 text-base">
                     Shipping
                   </Text>
-                  <Text className="m-0 text-base">
+                  <Text className="m-0 text-base ml-auto">
                     {formatter.format(order.shipping_total)}
                   </Text>
                 </Column>
               </Row>
               <Row>
-                <Column className="flex justify-between">
+                <Column className="flex">
                   <Text className="m-0 text-md">Total</Text>
-                  <Text className="m-0 text-md">
+                  <Text className="m-0 text-md ml-auto">
                     {formatter.format(order.total)}
                   </Text>
                 </Column>
               </Row>
               <Row>
-                <Column className="flex gap-1">
+                <Column className="flex">
                   <Text className="text-grayscale-500 m-0 text-xs">
                     Including
                   </Text>
-                  <Text className="m-0 text-xs text-grayscale-500">
+                  <Text className="m-0 text-xs text-grayscale-500 ml-1">
                     {formatter.format(order.tax_total)} tax
                   </Text>
                 </Column>
