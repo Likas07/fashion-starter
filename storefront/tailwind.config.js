@@ -50,6 +50,7 @@ module.exports = {
       md: "24px",
       lg: "30px",
       full: "100%",
+      none: "0px",
     },
     screens: {
       xs: "400px",
@@ -88,6 +89,7 @@ module.exports = {
         61: "15.25rem",
         75: "18.75rem",
         90: "22.5rem",
+        98: "24.5rem",
         100: "25rem",
         108: "27rem",
         120: "30rem",
@@ -104,6 +106,7 @@ module.exports = {
       transitionProperty: {
         fontWeight: "font-weight",
         padding: "padding",
+        width: "width",
       },
       zIndex: {
         header: "9999",

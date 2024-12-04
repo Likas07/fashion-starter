@@ -11,6 +11,7 @@ import { CartIcon } from "./CartIcon"
 import { HeaderDrawer } from "./HeaderDrawer"
 import { RegionSwitcher } from "./RegionSwitcher"
 import { HeaderWrapper } from "./HeaderWrapper"
+import { SearchField } from "./SearchField"
 
 export const Header: React.FC = async () => {
   const regions = await listRegions()
@@ -47,12 +48,7 @@ export const Header: React.FC = async () => {
                   selectButtonClassName="bg-transparent border-0 h-auto !gap-0 !p-1 w-full"
                   selectIconClassName="text-current"
                 />
-                {/* <Button
-                  variant="ghost"
-                  className="p-1 group-data-[light=true]:md:text-white group-data-[sticky=true]:md:text-black"
-                >
-                  <Icon name="search" className="w-5 h-5" />
-                </Button> */}
+                <SearchField />
                 {/* <Button
                   variant="ghost"
                   className="p-1 group-data-[light=true]:md:text-white"
