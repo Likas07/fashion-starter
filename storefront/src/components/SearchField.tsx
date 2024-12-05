@@ -2,7 +2,13 @@
 
 // External packages
 import * as React from "react"
-import { ComboBox, ListBox, ListBoxItem, Popover } from "react-aria-components"
+import {
+  ComboBox,
+  ListBox,
+  ListBoxItem,
+  Popover,
+  Section,
+} from "react-aria-components"
 import { twJoin } from "tailwind-merge"
 
 // Components
@@ -12,7 +18,7 @@ import { Button } from "@/components/Button"
 import { Input } from "@/components/Forms"
 import { Icon } from "@/components/Icon"
 
-export const SearchField: React.FC<{}> = ({}) => {
+export const SearchField = () => {
   const [isInputShown, setIsInputShown] = React.useState(true)
 
   return (
@@ -24,7 +30,7 @@ export const SearchField: React.FC<{}> = ({}) => {
       >
         <Icon name="search" className="w-5 h-5" />
       </Button>
-      <ComboBox className="overflow-hidden">
+      <ComboBox className="overflow-hidden" aria-label="Search">
         <div
           className={twJoin(
             "overflow-hidden transition-width duration-500",
@@ -37,78 +43,53 @@ export const SearchField: React.FC<{}> = ({}) => {
           />
         </div>
         <Popover
-          className="max-w-98 w-full bg-white p-6 rounded-xs border border-grayscale-200 overflow-y-scroll"
+          crossOffset={-228}
           maxHeight={243}
+          offset={16}
+          className="max-w-95 lg:max-w-98 w-full bg-white rounded-xs border border-grayscale-200 overflow-y-scroll"
         >
           <ListBox className="outline-none">
             <ListBoxItem
-              className="border-b border-grayscale-100 py-6 first:pt-0 last:pb-0 last:border-b-0"
-              textValue="a"
+              className="relative after:absolute after:content-[''] after:h-px after:bg-grayscale-100 after:-bottom-px after:left-6 after:right-6 last:after:hidden mb-px"
+              textValue="Paloma Haven"
             >
-              <div className="flex gap-6">
-                <LocalizedLink href="">
-                  <Thumbnail
-                    thumbnail="/images/content/shop1.png"
-                    size="3/4"
-                    className="w-20"
-                  />
-                </LocalizedLink>
+              <LocalizedLink
+                href="/"
+                className="flex gap-6 p-6 transition-colors hover:bg-grayscale-50"
+              >
+                <Thumbnail
+                  thumbnail="/images/content/shop1.png"
+                  size="3/4"
+                  className="w-20"
+                />
                 <div>
-                  <p className="text-base font-normal">
-                    <LocalizedLink href="">Paloma Haven</LocalizedLink>
-                  </p>
+                  <p className="text-base font-normal">Paloma Haven</p>
                   <p className="text-grayscale-500 text-xs">
                     Linen / Light Gray
                   </p>
                 </div>
                 <p className="text-base font-semibold ml-auto">€1500</p>
-              </div>
+              </LocalizedLink>
             </ListBoxItem>
             <ListBoxItem
-              className="border-b border-grayscale-100 py-6 first:pt-0 last:pb-0 last:border-b-0"
-              textValue="b"
+              className="relative after:absolute after:content-[''] after:h-px after:bg-grayscale-100 after:-bottom-px after:left-6 after:right-6 last:after:hidden mb-px"
+              textValue="Velora Luxe"
             >
-              <div className="flex gap-6">
-                <LocalizedLink href="">
-                  <Thumbnail
-                    thumbnail="/images/content/shop1.png"
-                    size="3/4"
-                    className="w-20"
-                  />
-                </LocalizedLink>
+              <LocalizedLink
+                href="/"
+                className="flex gap-6 p-6 transition-colors hover:bg-grayscale-50"
+              >
+                <Thumbnail
+                  thumbnail="/images/content/shop1.png"
+                  size="3/4"
+                  className="w-20"
+                />
                 <div>
-                  <p className="text-base font-normal">
-                    <LocalizedLink href="">Paloma Haven</LocalizedLink>
-                  </p>
-                  <p className="text-grayscale-500 text-xs">
-                    Linen / Light Gray
-                  </p>
+                  <p className="text-base font-normal">Velora Luxe</p>
+                  <p className="text-grayscale-500 text-xs">Velvet / Yellow</p>
                 </div>
                 <p className="text-base font-semibold ml-auto">€1500</p>
-              </div>
-            </ListBoxItem>
-            <ListBoxItem
-              className="border-b border-grayscale-100 py-6 first:pt-0 last:pb-0 last:border-b-0"
-              textValue="c"
-            >
-              <div className="flex gap-6">
-                <LocalizedLink href="">
-                  <Thumbnail
-                    thumbnail="/images/content/shop1.png"
-                    size="3/4"
-                    className="w-20"
-                  />
-                </LocalizedLink>
-                <div>
-                  <p className="text-base font-normal">
-                    <LocalizedLink href="">Paloma Haven</LocalizedLink>
-                  </p>
-                  <p className="text-grayscale-500 text-xs">
-                    Linen / Light Gray
-                  </p>
-                </div>
-                <p className="text-base font-semibold ml-auto">€1500</p>
-              </div>
+              </LocalizedLink>
             </ListBoxItem>
           </ListBox>
         </Popover>
