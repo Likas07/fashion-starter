@@ -100,7 +100,11 @@ export default function SearchPage() {
         </LayoutColumn>
       </Layout>
       <Carousel
-        heading={<h3 className="text-lg md:text-2xl">Collections</h3>}
+        heading={
+          <h3 className="text-md md:text-2xl">
+            Check out our collections for more products
+          </h3>
+        }
         button={
           <>
             <LocalizedButtonLink
