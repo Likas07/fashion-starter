@@ -57,10 +57,10 @@ export const Carousel: React.FC<CarouselProps> = ({
     <div className={twMerge("overflow-hidden", className)}>
       <Layout>
         <LayoutColumn className="relative">
-          <div className="mb-8 md:mb-15 flex max-sm:flex-col justify-between items-center gap-x-10 gap-y-6">
+          <div className="mb-8 md:mb-15 flex max-sm:flex-col justify-between sm:items-center gap-x-10 gap-y-6">
             {heading}
             {(arrows || button) && (
-              <div className="flex md:gap-6 shrink-0 self-start sm:self-end">
+              <div className="flex md:gap-6 shrink-0">
                 {button}
                 {arrows && (
                   <div className="flex gap-2">
