@@ -26,7 +26,7 @@ export const InputField: React.FC<InputFieldProps> = ({
   suffix,
 }) => {
   const { field, fieldState } = useController<{ __name__: string }, '__name__'>(
-    { name: name as '__name__' },
+    { name: name as '__name__' }
   );
 
   const inputEl = (
@@ -44,7 +44,7 @@ export const InputField: React.FC<InputFieldProps> = ({
             (inputProps?.size === 'base' || !inputProps?.size),
           'pr-7': Boolean(suffix) && inputProps?.size === 'small',
         },
-        inputProps?.className,
+        inputProps?.className
       )}
     />
   );
@@ -70,10 +70,10 @@ export const InputField: React.FC<InputFieldProps> = ({
               {
                 'h-8 w-8': inputProps?.size === 'base' || !inputProps?.size,
                 'h-7 w-7': inputProps?.size === 'small',
-              },
+              }
             )}
           >
-            <div className="h-fit w-fit rounded-sm outline-none font-normal font-sans txt-medium text-ui-fg-muted pointer-events-none select-none">
+            <div className="h-fit w-fit rounded-sm outline-none font-normal font-sans txt-medium text-fg-muted-light dark:text-fg-muted-dark pointer-events-none select-none">
               {suffix}
             </div>
           </div>
