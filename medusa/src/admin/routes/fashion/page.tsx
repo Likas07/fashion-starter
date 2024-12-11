@@ -296,7 +296,7 @@ const FashionPage = () => {
                             variant="transparent"
                             className="flex flex-row gap-2 items-center w-full justify-start"
                           >
-                            <PencilSquare className="text-fg-subtle-light dark:text-fg-subtle-dark" />
+                            <PencilSquare className="text-fg-subtle dark:text-fg-subtle-dark" />
                             Edit
                           </Button>
                         </EditMaterialDrawer>
@@ -312,7 +312,7 @@ const FashionPage = () => {
                               variant="transparent"
                               className="flex flex-row gap-2 items-center w-full justify-start"
                             >
-                              <ArrowPath className="text-fg-subtle-light dark:text-fg-subtle-dark" />
+                              <ArrowPath className="text-fg-subtle dark:text-fg-subtle-dark" />
                               Restore
                             </Button>
                           </RestoreMaterialPrompt>
@@ -327,7 +327,7 @@ const FashionPage = () => {
                               variant="transparent"
                               className="flex flex-row gap-2 items-center w-full justify-start"
                             >
-                              <Trash className="text-fg-subtle-light dark:text-fg-subtle-dark" />
+                              <Trash className="text-fg-subtle dark:text-fg-subtle-dark" />
                               Delete
                             </Button>
                           </DeleteMaterialPrompt>

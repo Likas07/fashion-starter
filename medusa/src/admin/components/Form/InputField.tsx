@@ -73,7 +73,7 @@ export const InputField: React.FC<InputFieldProps> = ({
               }
             )}
           >
-            <div className="h-fit w-fit rounded-sm outline-none font-normal font-sans txt-medium text-fg-muted-light dark:text-fg-muted-dark pointer-events-none select-none">
+            <div className="h-fit w-fit rounded-sm outline-none font-normal font-sans txt-medium text-fg-muted dark:text-fg-muted-dark pointer-events-none select-none">
               {suffix}
             </div>
           </div>

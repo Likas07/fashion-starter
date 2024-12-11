@@ -61,7 +61,7 @@ const Payment = ({
         },
       },
       classes: {
-        base: "pt-3 pb-1 block w-full h-11 px-4 mt-0 bg-bg-field-light dark:bg-bg-field-dark border rounded-md appearance-none focus:outline-none focus:ring-0 focus:shadow-borders-interactive-with-active dark:focus:shadow-borders-interactive-with-active-dark border-border-base-light dark:border-border-base-dark hover:bg-bg-field-hover-light dark:hover:bg-bg-field-hover-dark transition-all duration-300 ease-in-out",
+        base: "pt-3 pb-1 block w-full h-11 px-4 mt-0 bg-bg-field dark:bg-bg-field-dark border rounded-md appearance-none focus:outline-none focus:ring-0 focus:shadow-borders-interactive-with-active dark:focus:shadow-borders-interactive-with-active-dark border-border-base dark:border-border-base-dark hover:bg-bg-field-hover dark:hover:bg-bg-field-hover-dark transition-all duration-300 ease-in-out",
       },
     }
   }, [])

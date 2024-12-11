@@ -209,7 +209,7 @@ const ProductFashionWidget = withQueryClient(
           <Heading>Materials &amp; Colors</Heading>
           <IconButton
             variant="transparent"
-            className="text-fg-muted-light dark:text-fg-muted-dark hover:text-fg-subtle-light dark:hover:text-fg-subtle-dark"
+            className="text-fg-muted dark:text-fg-muted-dark hover:text-fg-subtle dark:hover:text-fg-subtle-dark"
             onClick={(event) => {
               event.preventDefault();
               productFashion.refetch();
@@ -220,7 +220,7 @@ const ProductFashionWidget = withQueryClient(
             <ArrowPath />
           </IconButton>
         </div>
-        <div className="text-fg-subtle-light dark:text-fg-subtle-dark px-6 py-4">
+        <div className="text-fg-subtle dark:text-fg-subtle-dark px-6 py-4">
           {productFashion.isLoading ? (
             <Text>Loading...</Text>
           ) : productFashion.isError ? (
@@ -240,7 +240,7 @@ const ProductFashionWidget = withQueryClient(
                     <strong
                       className={
                         typeof material === 'string'
-                          ? 'border-b border-dashed border-button-danger-light dark:border-button-danger-dark'
+                          ? 'border-b border-dashed border-button-danger dark:border-button-danger-dark'
                           : undefined
                       }
                     >
@@ -281,12 +281,12 @@ const ProductFashionWidget = withQueryClient(
                           <AddColorDrawer materialId={material.id} name={color}>
                             <IconButton
                               variant="transparent"
-                              className="w-10 h-10 bg-grayscale-20 border-2 border-dashed border-button-danger-light dark:border-button-danger-dark rounded-full"
+                              className="w-10 h-10 bg-grayscale-20 border-2 border-dashed border-button-danger dark:border-button-danger-dark rounded-full"
                             >
                               <PlusMini />
                             </IconButton>
                           </AddColorDrawer>
-                          {/* <div className="w-10 h-10 bg-grayscale-20 border-2 border-dashed border-button-danger-light dark:border-button-danger-dark rounded-full" /> */}
+                          {/* <div className="w-10 h-10 bg-grayscale-20 border-2 border-dashed border-button-danger dark:border-button-danger-dark rounded-full" /> */}
                           <Text>{color}</Text>
                         </div>
                       ))}

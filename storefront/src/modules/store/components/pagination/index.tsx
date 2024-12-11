@@ -35,13 +35,10 @@ export function Pagination({
   ) => (
     <button
       key={p}
-      className={clx(
-        "txt-xlarge-plus text-fg-muted-light dark:text-fg-muted-dark",
-        {
-          "text-fg-base-light dark:text-fg-base-dark hover:text-fg-subtle-light dark:hover:text-fg-subtle-dark":
-            isCurrent,
-        }
-      )}
+      className={clx("txt-xlarge-plus text-fg-muted dark:text-fg-muted-dark", {
+        "text-fg-base dark:text-fg-base-dark hover:text-fg-subtle dark:hover:text-fg-subtle-dark":
+          isCurrent,
+      })}
       disabled={isCurrent}
       onClick={() => handlePageChange(p)}
     >
@@ -53,7 +50,7 @@ export function Pagination({
   const renderEllipsis = (key: string) => (
     <span
       key={key}
-      className="txt-xlarge-plus text-fg-muted-light dark:text-fg-muted-dark items-center cursor-default"
+      className="txt-xlarge-plus text-fg-muted dark:text-fg-muted-dark items-center cursor-default"
     >
       ...
     </span>

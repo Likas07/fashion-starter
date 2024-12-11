@@ -33,40 +33,40 @@ module.exports = {
       transparent: "rgba(0,0,0,0)",
       current: "currentColor",
       "border-interactive": {
+        DEFAULT: "rgba(59, 130, 246, 1)",
         dark: "rgba(96, 165, 250, 1)",
-        light: "rgba(59, 130, 246, 1)",
       },
       "fg-subtle": {
+        DEFAULT: "rgba(82, 82, 91, 1)",
         dark: "rgba(161, 161, 170, 1)",
-        light: "rgba(82, 82, 91, 1)",
       },
       "bg-subtle": {
+        DEFAULT: "rgba(250, 250, 250, 1)",
         dark: "rgba(24, 24, 27, 1)",
-        light: "rgba(250, 250, 250, 1)",
       },
       "fg-base": {
+        DEFAULT: "rgba(24, 24, 27, 1)",
         dark: "rgba(244, 244, 245, 1)",
-        light: "rgba(24, 24, 27, 1)",
       },
       "button-danger": {
+        DEFAULT: "rgba(225, 29, 72, 1)",
         dark: "rgba(159, 18, 57, 1)",
-        light: "rgba(225, 29, 72, 1)",
       },
       "bg-field": {
+        DEFAULT: "rgba(250, 250, 250, 1)",
         dark: "rgba(255, 255, 255, 0.04)",
-        light: "rgba(250, 250, 250, 1)",
       },
       "bg-field-hover": {
+        DEFAULT: "rgba(244, 244, 245, 1)",
         dark: "rgba(255, 255, 255, 0.08)",
-        light: "rgba(244, 244, 245, 1)",
       },
       "border-base": {
+        DEFAULT: "rgba(228, 228, 231, 1)",
         dark: "rgba(255, 255, 255, 0.08)",
-        light: "rgba(228, 228, 231, 1)",
       },
       "fg-muted": {
+        DEFAULT: "rgba(161, 161, 170, 1)",
         dark: "rgba(113, 113, 122, 1)",
-        light: "rgba(161, 161, 170, 1)",
       },
     },
     fontSize: {
