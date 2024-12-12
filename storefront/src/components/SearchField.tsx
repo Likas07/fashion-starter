@@ -19,34 +19,35 @@ import { Input } from "@/components/Forms"
 import { Icon } from "@/components/Icon"
 
 export const SearchField = () => {
-  const [isInputShown, setIsInputShown] = React.useState(true)
+  const [isInputShown, setIsInputShown] = React.useState(false)
 
   return (
     <div className="flex">
       <Button
         onPress={() => setIsInputShown(!isInputShown)}
         variant="ghost"
-        className="p-1 group-data-[light=true]:md:text-white group-data-[sticky=true]:md:text-black"
+        className="p-1 max-md:text-white group-data-[light=true]:md:text-white group-data-[sticky=true]:md:text-black"
       >
         <Icon name="search" className="w-5 h-5" />
       </Button>
       <ComboBox className="overflow-hidden" aria-label="Search">
         <div
           className={twJoin(
-            "overflow-hidden transition-width duration-500",
-            isInputShown ? "w-30" : "w-0"
+            "overflow-hidden transition-width duration-500 h-full max-w-40 md:max-w-30",
+            isInputShown ? "w-full md:w-30" : "md:w-0"
           )}
         >
           <Input
             variant="outline"
-            className="px-1 h-auto max-w-30 border-black rounded-none border-t-0 border-x-0 group-data-[light=true]:md:border-white group-data-[sticky=true]:md:border-black ml-1"
+            className="px-1 h-7 md:h-6 w-full max-md:border-0 border-black rounded-none border-t-0 border-x-0 group-data-[light=true]:md:border-white group-data-[sticky=true]:md:border-black ml-1"
           />
         </div>
         <Popover
           crossOffset={-228}
+          containerPadding={10}
           maxHeight={243}
-          offset={16}
-          className="max-w-95 lg:max-w-98 w-full bg-white rounded-xs border border-grayscale-200 overflow-y-scroll"
+          offset={25}
+          className="max-w-90 md:max-w-95 lg:max-w-98 w-full bg-white rounded-xs border border-grayscale-200 overflow-y-scroll"
         >
           <ListBox className="outline-none">
             <ListBoxItem
