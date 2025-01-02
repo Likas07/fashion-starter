@@ -45,6 +45,7 @@ export const RequestPasswordResetButton: React.FC = () => {
 
             setIsLoading(false)
           }}
+          className="max-sm:w-full"
         >
           Reset password
         </Button>
