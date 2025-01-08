@@ -20,6 +20,13 @@ export const GET = async (req: MedusaRequest, res: MedusaResponse) => {
 
 const colorsUpdateBodySchema = z.object({
   name: z.string().min(1),
+  hex_code: z
+    .string()
+    .min(1)
+    .transform((val) => val.toUpperCase())
+    .refine((val) => /^#([A-F0-9]{6}|[A-F0-9]{3})$/.test(val), {
+      message: 'Invalid hex code',
+    }),
 });
 
 export const POST = async (req: MedusaRequest, res: MedusaResponse) => {
@@ -30,9 +37,12 @@ export const POST = async (req: MedusaRequest, res: MedusaResponse) => {
     withDeleted: true,
   });
 
+  const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+  const validatedData = colorsUpdateBodySchema.parse(body);
+
   const color = await fashionModuleService.updateColors({
+    ...validatedData,
     id: req.params.colorId,
-    ...colorsUpdateBodySchema.parse(req.body),
   });
 
   res.status(200).json(color);

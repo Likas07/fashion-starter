@@ -4,6 +4,7 @@ import { DetailWidgetProps, AdminCollection } from '@medusajs/framework/types';
 import { Container, Heading, Button, Drawer, Text } from '@medusajs/ui';
 import { PencilSquare } from '@medusajs/icons';
 import { z } from 'zod';
+
 import { ImageField, imageFieldSchema } from '../components/Form/ImageField';
 import { Form } from '../components/Form/Form';
 import { TextareaField } from '../components/Form/TextareaField';

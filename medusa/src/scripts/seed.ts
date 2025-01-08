@@ -1,7 +1,6 @@
 import {
   createApiKeysWorkflow,
   createCollectionsWorkflow,
-  createPriceListsWorkflow,
   createProductCategoriesWorkflow,
   createProductsWorkflow,
   createProductTypesWorkflow,
@@ -16,8 +15,6 @@ import {
   updateStoresWorkflow,
   uploadFilesWorkflow,
 } from '@medusajs/medusa/core-flows';
-import { Logger } from '@medusajs/medusa';
-import { RemoteLink } from '@medusajs/framework/modules-sdk';
 import {
   ExecArgs,
   IFulfillmentModuleService,
@@ -45,10 +42,8 @@ async function getImageUrlContent(url: string) {
 }
 
 export default async function seedDemoData({ container }: ExecArgs) {
-  const logger: Logger = container.resolve(ContainerRegistrationKeys.LOGGER);
-  const remoteLink: RemoteLink = container.resolve(
-    ContainerRegistrationKeys.REMOTE_LINK,
-  );
+  const logger = container.resolve(ContainerRegistrationKeys.LOGGER);
+  const remoteLink = container.resolve(ContainerRegistrationKeys.LINK);
   const fulfillmentModuleService: IFulfillmentModuleService = container.resolve(
     Modules.FULFILLMENT,
   );

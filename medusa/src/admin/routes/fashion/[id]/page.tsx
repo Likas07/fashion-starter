@@ -23,12 +23,14 @@ import {
 } from '@medusajs/icons';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
+
 import type { MaterialModelType } from '../../../../modules/fashion/models/material';
+import { ColorModelType } from '../../../../modules/fashion/models/color';
+import { useCreateColorMutation } from '../../../hooks/fashion';
 import { Form } from '../../../components/Form/Form';
 import { InputField } from '../../../components/Form/InputField';
 import { EditMaterialDrawer } from '../../../components/EditMaterialDrawer';
-import { ColorModelType } from '../../../../modules/fashion/models/color';
-import { useCreateColorMutation } from '../../../hooks/fashion';
+import { withQueryClient } from '../../../components/QueryClientProvider';
 
 const colorFormSchema = z.object({
   name: z.string().min(1),
@@ -501,4 +503,4 @@ const MaterialPage = () => {
   );
 };
 
-export default MaterialPage;
+export default withQueryClient(MaterialPage);

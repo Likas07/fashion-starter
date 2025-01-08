@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { z } from 'zod';
 import { defineRouteConfig } from '@medusajs/admin-sdk';
 import {
   Swatch,
@@ -23,14 +22,16 @@ import {
 } from '@medusajs/ui';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSearchParams, Link } from 'react-router-dom';
+
 import { MaterialModelType } from '../../../modules/fashion/models/material';
+import { useCreateMaterialMutation } from '../../hooks/fashion';
 import { Form } from '../../components/Form/Form';
 import { InputField } from '../../components/Form/InputField';
 import {
   EditMaterialDrawer,
   materialFormSchema,
 } from '../../components/EditMaterialDrawer';
-import { useCreateMaterialMutation } from '../../hooks/fashion';
+import { withQueryClient } from '../../components/QueryClientProvider';
 
 const DeleteMaterialPrompt: React.FC<{
   id: string;
@@ -131,7 +132,6 @@ const RestoreMaterialPrompt: React.FC<{
 };
 
 const FashionPage = () => {
-  const queryClient = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
   const page = Number(searchParams.get('page')) || 1;
   const setPage = React.useCallback(
@@ -355,7 +355,7 @@ const FashionPage = () => {
   );
 };
 
-export default FashionPage;
+export default withQueryClient(FashionPage);
 
 export const config = defineRouteConfig({
   label: 'Materials & Colors',

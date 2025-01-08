@@ -1,4 +1,4 @@
-import React from "react"
+import * as React from "react"
 
 import { isManual } from "@lib/constants"
 import { UiRadio, UiRadioBox } from "@/components/ui/Radio"
@@ -7,7 +7,7 @@ import PaymentTest from "../payment-test"
 type PaymentContainerProps = {
   paymentProviderId: string
   disabled?: boolean
-  paymentInfoMap: Record<string, { title: string; icon: JSX.Element }>
+  paymentInfoMap: Record<string, { title: string; icon: React.ReactNode }>
 }
 
 const PaymentContainer: React.FC<PaymentContainerProps> = ({
