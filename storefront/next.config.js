@@ -7,6 +7,10 @@ checkEnvVariables()
  */
 const nextConfig = {
   reactStrictMode: true,
+  experimental: {
+    staticGenerationRetryCount: 3,
+    staticGenerationMaxConcurrency: 1,
+  },
   images: {
     remotePatterns: [
       {
