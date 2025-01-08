@@ -3,6 +3,7 @@ import * as React from "react"
 
 // Lib
 import { listRegions } from "@lib/data/regions"
+import { retrieveCart } from "@lib/data/cart"
 
 // Components
 import { Layout, LayoutColumn } from "@/components/Layout"
@@ -12,9 +13,11 @@ import { HeaderDrawer } from "./HeaderDrawer"
 import { RegionSwitcher } from "./RegionSwitcher"
 import { HeaderWrapper } from "./HeaderWrapper"
 import { Icon } from "./Icon"
+import { CartDrawer } from "./CartDrawer"
 
 export const Header: React.FC = async () => {
   const regions = await listRegions()
+  const cart = await retrieveCart()
 
   const countryOptions = regions
     .map((r) => {
@@ -48,12 +51,11 @@ export const Header: React.FC = async () => {
                   selectButtonClassName="bg-transparent border-0 h-auto !gap-0 !p-1 w-full"
                   selectIconClassName="text-current"
                 />
-                {/* <LocalizedButtonLink
-                  variant="ghost"
+                {/* <LocalizedLink
                   className="p-1 group-data-[light=true]:md:text-white group-data-[sticky=true]:md:text-black"
                 >
                   <Icon name="search" className="w-5 h-5" />
-                </LocalizedButtonLink> */}
+                </LocalizedLink> */}
                 <LocalizedButtonLink
                   href="/auth/login"
                   variant="ghost"
@@ -62,13 +64,9 @@ export const Header: React.FC = async () => {
                   <Icon name="user" className="w-6 h-6" />
                 </LocalizedButtonLink>
 
-                <LocalizedButtonLink
-                  href="/cart"
-                  variant="ghost"
-                  className="p-1 group-data-[light=true]:md:text-white group-data-[sticky=true]:md:text-black"
-                >
+                <CartDrawer cart={cart}>
                   <CartIcon className="w-6 h-6" />
-                </LocalizedButtonLink>
+                </CartDrawer>
               </div>
               <div className="flex items-center gap-6 md:hidden">
                 <LocalizedButtonLink
@@ -83,13 +81,9 @@ export const Header: React.FC = async () => {
                   />
                 </LocalizedButtonLink>
 
-                <LocalizedButtonLink
-                  href="/cart"
-                  variant="ghost"
-                  className="p-1 group-data-[light=true]:md:text-white"
-                >
+                <CartDrawer cart={cart}>
                   <CartIcon className="w-6 h-6" wrapperClassName="w-6 h-6" />
-                </LocalizedButtonLink>
+                </CartDrawer>
                 <HeaderDrawer countryOptions={countryOptions} />
               </div>
             </div>
