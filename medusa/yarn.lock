@@ -6369,6 +6369,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-email/render@npm:1.0.1":
+  version: 1.0.1
+  resolution: "@react-email/render@npm:1.0.1"
+  dependencies:
+    html-to-text: "npm:9.0.5"
+    js-beautify: "npm:^1.14.11"
+    react-promise-suspense: "npm:0.3.4"
+  peerDependencies:
+    react: ^18.0 || ^19.0 || ^19.0.0-rc
+    react-dom: ^18.0 || ^19.0 || ^19.0.0-rc
+  checksum: 10/0ddc28a8a523802c34f4fe0e69de93c0d495ba05357a7061bee1ea34e29a4c17a4bba82569568b920006d17a2e67689b9b1cb41b106e684b826ed7017d49b4d2
+  languageName: node
+  linkType: hard
+
 "@react-email/render@npm:1.0.2":
   version: 1.0.2
   resolution: "@react-email/render@npm:1.0.2"
@@ -13556,6 +13570,7 @@ __metadata:
     react-dom: "npm:^18.3.1"
     react-dropzone: "npm:^14.3.5"
     react-email: "npm:3.0.2"
+    resend: "npm:^4.0.1"
     ts-node: "npm:^10.9.2"
     typescript: "npm:^5.7.2"
     vite: "npm:^5.4.11"
@@ -15504,6 +15519,15 @@ __metadata:
   version: 2.0.0
   resolution: "require-main-filename@npm:2.0.0"
   checksum: 10/8604a570c06a69c9d939275becc33a65676529e1c3e5a9f42d58471674df79357872b96d70bb93a0380a62d60dc9031c98b1a9dad98c946ffdd61b7ac0c8cedd
+  languageName: node
+  linkType: hard
+
+"resend@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "resend@npm:4.0.1"
+  dependencies:
+    "@react-email/render": "npm:1.0.1"
+  checksum: 10/e68affa7f61464ddce702204c9a15d600fd2aeb49698a340b1af496a3873c41894ec339a01887572440f1ebdba03877b3735f401eb5112595fc093dfca462bb1
   languageName: node
   linkType: hard
 
