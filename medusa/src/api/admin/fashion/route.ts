@@ -41,9 +41,10 @@ export const POST = async (req: MedusaRequest, res: MedusaResponse) => {
   const fashionModuleService: FashionModuleService =
     req.scope.resolve(FASHION_MODULE);
 
-  const material = await fashionModuleService.createMaterials(
-    createMaterialBodySchema.parse(req.body),
-  );
+  const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+  const validatedData = createMaterialBodySchema.parse(body);
+
+  const material = await fashionModuleService.createMaterials(validatedData);
 
   res.status(201).json(material);
 };

@@ -23,9 +23,12 @@ export const POST = async (req: MedusaRequest, res: MedusaResponse) => {
   const fashionModuleService: FashionModuleService =
     req.scope.resolve(FASHION_MODULE);
 
+  const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+  const validatedData = updateMaterialBodySchema.parse(body);
+
   const material = await fashionModuleService.updateMaterials({
+    ...validatedData,
     id: req.params.id,
-    ...updateMaterialBodySchema.parse(req.body),
   });
 
   res.status(200).json(material);
