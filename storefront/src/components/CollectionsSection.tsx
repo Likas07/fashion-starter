@@ -20,7 +20,7 @@ export const CollectionsSection: React.FC<{ className?: string }> = async ({
 
   return (
     <Carousel
-      heading={<h3 className="text-lg md:text-2xl">Collections</h3>}
+      heading={<h3 className="text-md md:text-2xl">Collections</h3>}
       button={
         <>
           <LocalizedButtonLink
