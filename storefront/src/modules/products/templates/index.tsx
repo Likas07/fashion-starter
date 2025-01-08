@@ -64,22 +64,11 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
             )}
             <div className="sticky flex-1 top-0">
               <ProductInfo product={product} />
-              <Suspense
-                fallback={
-                  <ProductActions
-                    disabled={true}
-                    product={product}
-                    materials={materials}
-                    region={region}
-                  />
-                }
-              >
-                <ProductActionsWrapper
-                  id={product.id}
-                  materials={materials}
-                  region={region}
-                />
-              </Suspense>
+              <ProductActions
+                product={product}
+                materials={materials}
+                region={region}
+              />
             </div>
             {!hasImages && <div className="flex-1" />}
           </div>
