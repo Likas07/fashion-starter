@@ -59,7 +59,7 @@ export const Carousel: React.FC<CarouselProps> = ({
         <LayoutColumn className="relative">
           <div
             className={twJoin(
-              "mb-8 md:mb-15 flex flex-wrap justify-between items-center gap-x-10 gap-y-2"
+              "mb-8 md:mb-16 flex flex-wrap justify-between items-center gap-x-10 gap-y-2"
             )}
           >
             {heading}

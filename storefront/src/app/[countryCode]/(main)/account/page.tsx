@@ -115,7 +115,7 @@ export default async function AccountPersonalAndSecurityPage({
               address={address}
               countries={countries}
               region={region}
-              className="h-auto lg:max-w-[calc(50%-0.75rem)] lg:w-full"
+              className="h-auto lg:max-w-[calc(50%-0.75rem)] w-full"
             />
           ))}
         </UiRadioGroup>
