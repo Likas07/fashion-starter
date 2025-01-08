@@ -13,6 +13,7 @@ import { Input } from "@/components/Forms"
 import { UiCloseButton, UiDialog, UiDialogTrigger } from "@/components/Dialog"
 import { UiModal, UiModalOverlay } from "@/components/ui/Modal"
 import { Icon } from "@/components/Icon"
+import { LoginForm } from "@modules/auth/components/LoginForm"
 
 const Email = ({
   cart,
@@ -45,7 +46,7 @@ const Email = ({
               1. Email
             </p>
           </div>
-          {isOpen && (
+          {isOpen && !customer && (
             <div className="text-grayscale-500">
               <p>
                 Already have an account? No worries, just{" "}
@@ -55,28 +56,7 @@ const Email = ({
                     <UiModal className="relative max-w-108">
                       <UiDialog>
                         <p className="text-md mb-10">Log in</p>
-                        <div className="flex flex-col gap-10 mb-5">
-                          <Input
-                            type="email"
-                            placeholder="Email"
-                            required
-                            variant="outline"
-                          />
-                          <Input
-                            type="password"
-                            placeholder="Password"
-                            required
-                            variant="outline"
-                          />
-                        </div>
-                        <Button
-                          variant="link"
-                          size="sm"
-                          className="text-grayscale-500 mb-10"
-                        >
-                          Forgotten password?
-                        </Button>
-                        <Button isFullWidth>Log in</Button>
+                        <LoginForm />
                         <UiCloseButton
                           variant="ghost"
                           className="absolute top-4 right-6 p-0"
@@ -105,7 +85,6 @@ const Email = ({
       {isOpen ? (
         <form action={formAction}>
           <input type="hidden" name="country_code" value={countryCode} />
-
           <Input
             placeholder="Email"
             name="email"
