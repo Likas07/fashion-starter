@@ -29,7 +29,7 @@ export type EmailLayoutProps = {
 export default function EmailLayout(
   props: {
     children: React.ReactNode;
-  } & EmailLayoutProps,
+  } & EmailLayoutProps
 ) {
   return (
     <Html>
@@ -110,6 +110,7 @@ export default function EmailLayout(
                 grayscale: {
                   500: '#808080',
                   200: '#D1D1D1',
+                  100: '#E7E7E7',
                   50: '#F4F4F4',
                 },
               },
