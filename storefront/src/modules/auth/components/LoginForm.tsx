@@ -11,7 +11,7 @@ export const LoginForm: React.FC = () => {
   const [message, formAction] = React.useActionState(login, null)
 
   return (
-    <form action={formAction} className="flex flex-col gap-8 mb-10 md:mb-16">
+    <form action={formAction} className="flex flex-col gap-8">
       <Input
         placeholder="Email"
         name="email"
