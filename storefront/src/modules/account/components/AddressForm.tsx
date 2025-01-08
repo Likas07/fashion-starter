@@ -159,7 +159,7 @@ export const AddressForm: React.FC<{
             isAddAddressFormActionPending || isUpdateAddressFormActionPending
           }
         >
-          Save changes
+          {addressId ? "Save changes" : "Add address"}
         </SubmitButton>
         <UiCloseButton variant="outline">Cancel</UiCloseButton>
       </div>
