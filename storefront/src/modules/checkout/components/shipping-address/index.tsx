@@ -1,11 +1,32 @@
 import { HttpTypes } from "@medusajs/types"
-// import { mapKeys } from "lodash"
 import React, { useEffect, useMemo, useState } from "react"
+import { RadioGroup } from "react-aria-components"
 
+import compareAddresses from "@lib/util/compare-addresses"
+import { AddressForm } from "@modules/account/components/AddressForm"
 import { Input } from "@/components/Forms"
 import { Checkbox } from "@/components/Checkbox"
-// import AddressSelect from "../address-select"
-import CountrySelect from "../country-select"
+import { UiDialogTrigger, UiDialog, UiCloseButton } from "@/components/Dialog"
+import { UiModalOverlay, UiModal } from "@/components/ui/Modal"
+import { UiRadio, UiRadioBox, UiRadioLabel } from "@/components/ui/Radio"
+import { Icon } from "@/components/Icon"
+import { Button } from "@/components/Button"
+import CountrySelect from "@modules/checkout/components/country-select"
+
+const isShippingAddressEmpty = (formData: Record<string, any>) => {
+  return (
+    !formData["shipping_address.first_name"] &&
+    !formData["shipping_address.last_name"] &&
+    !formData["shipping_address.address_1"] &&
+    !formData["shipping_address.address_2"] &&
+    !formData["shipping_address.company"] &&
+    !formData["shipping_address.postal_code"] &&
+    !formData["shipping_address.city"] &&
+    !formData["shipping_address.country_code"] &&
+    !formData["shipping_address.province"] &&
+    !formData["shipping_address.phone"]
+  )
+}
 
 const ShippingAddress = ({
   customer,
@@ -34,13 +55,28 @@ const ShippingAddress = ({
     [customer?.addresses, countriesInRegion]
   )
 
-  const setFormAddress = (address?: HttpTypes.StoreCartAddress) => {
+  const setFormAddress = (
+    address?: Pick<
+      HttpTypes.StoreCartAddress,
+      | "first_name"
+      | "last_name"
+      | "address_1"
+      | "address_2"
+      | "company"
+      | "postal_code"
+      | "city"
+      | "country_code"
+      | "province"
+      | "phone"
+    >
+  ) => {
     address &&
       setFormData((prevState: Record<string, any>) => ({
         ...prevState,
         "shipping_address.first_name": address?.first_name || "",
         "shipping_address.last_name": address?.last_name || "",
         "shipping_address.address_1": address?.address_1 || "",
+        "shipping_address.address_2": address?.address_2 || "",
         "shipping_address.company": address?.company || "",
         "shipping_address.postal_code": address?.postal_code || "",
         "shipping_address.city": address?.city || "",
@@ -52,10 +88,36 @@ const ShippingAddress = ({
 
   useEffect(() => {
     // Ensure cart is not null and has a shipping_address before setting form data
-    if (cart && cart.shipping_address) {
-      setFormAddress(cart?.shipping_address)
+    if (cart) {
+      if (cart.shipping_address) {
+        setFormAddress(cart.shipping_address)
+      } else if (
+        // If customer has saved addresses in the region and form data is empty
+        // set the first address in the region as the form data
+        customer &&
+        addressesInRegion &&
+        addressesInRegion.length &&
+        isShippingAddressEmpty(formData)
+      ) {
+        const defaultShippingAddress =
+          addressesInRegion.find((a) => a.is_default_shipping) ||
+          addressesInRegion[0]
+
+        setFormAddress({
+          first_name: defaultShippingAddress.first_name ?? undefined,
+          last_name: defaultShippingAddress.last_name ?? undefined,
+          address_1: defaultShippingAddress.address_1 ?? undefined,
+          address_2: defaultShippingAddress.address_2 ?? undefined,
+          company: defaultShippingAddress.company ?? undefined,
+          postal_code: defaultShippingAddress.postal_code ?? undefined,
+          city: defaultShippingAddress.city ?? undefined,
+          country_code: defaultShippingAddress.country_code ?? undefined,
+          province: defaultShippingAddress.province ?? undefined,
+          phone: defaultShippingAddress.phone ?? undefined,
+        })
+      }
     }
-  }, [cart])
+  }, [cart, customer, addressesInRegion])
 
   const handleChange = (
     e:
@@ -72,119 +134,271 @@ const ShippingAddress = ({
 
   return (
     <>
-      {/* TODO: allow user to select existing address when logged in */}
-      {/* {customer && (addressesInRegion?.length || 0) > 0 && (
-        <Container className="mb-6 flex flex-col gap-y-4 p-5">
-          <p className="text-small-regular">
-            {`Hi ${customer.first_name}, do you want to use one of your saved addresses?`}
-          </p>
-          <AddressSelect
-            addresses={customer.addresses}
-            addressInput={
-              mapKeys(formData, (_, key) =>
-                key.replace("shipping_address.", "")
-              ) as HttpTypes.StoreCartAddress
-            }
-            onSelect={setFormAddress}
+      {customer &&
+      (addressesInRegion?.length || 0) > 0 &&
+      !isShippingAddressEmpty(formData) ? (
+        <div className="w-full border border-grayscale-200 rounded-xs p-4 flex flex-wrap gap-8 max-lg:flex-col mb-8">
+          <div className="flex flex-1 gap-8">
+            <Icon name="user" className="w-6 h-6 mt-2.5" />
+            <div className="flex flex-col gap-8 flex-1">
+              <div className="flex flex-wrap justify-between gap-6">
+                <div className="grow basis-0">
+                  <p className="text-xs text-grayscale-500 mb-1.5">Country</p>
+                  <p>
+                    {cart?.region?.countries?.find(
+                      (c) =>
+                        c.iso_2 === formData["shipping_address.country_code"]
+                    )?.display_name ||
+                      formData["shipping_address.country_code"]}
+                  </p>
+                </div>
+                <div className="grow basis-0">
+                  <p className="text-xs text-grayscale-500 mb-1.5">Address</p>
+                  <p>{formData["shipping_address.address_1"]}</p>
+                </div>
+              </div>
+              {formData["shipping_address.address_2"] && (
+                <div>
+                  <p className="text-xs text-grayscale-500 mb-1.5">
+                    Apartment, suite, etc. (Optional)
+                  </p>
+                  <p>{formData["shipping_address.address_2"]}</p>
+                </div>
+              )}
+              <div className="flex flex-wrap justify-between gap-6">
+                <div className="grow basis-0">
+                  <p className="text-xs text-grayscale-500 mb-1.5">
+                    Postal Code
+                  </p>
+                  <p>{formData["shipping_address.postal_code"]}</p>
+                </div>
+                <div className="grow basis-0">
+                  <p className="text-xs text-grayscale-500 mb-1.5">City</p>
+                  <p>{formData["shipping_address.city"]}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <UiDialogTrigger>
+            <Button variant="outline" size="sm" className="shrink-0">
+              Change
+            </Button>
+            <UiModalOverlay>
+              <UiModal>
+                <UiDialog>
+                  <p className="text-md mb-10">Change address</p>
+                  <RadioGroup
+                    className="flex flex-col gap-4 mb-10"
+                    aria-label="Shipping methods"
+                    onChange={(value) => {
+                      const selectedAddress = addressesInRegion?.find(
+                        (a) => a.id === value
+                      )
+                      if (selectedAddress) {
+                        setFormAddress({
+                          address_1: selectedAddress.address_1 ?? undefined,
+                          address_2: selectedAddress.address_2 ?? undefined,
+                          city: selectedAddress.city ?? undefined,
+                          company: selectedAddress.company ?? undefined,
+                          country_code:
+                            selectedAddress.country_code ?? undefined,
+                          first_name: selectedAddress.first_name ?? undefined,
+                          last_name: selectedAddress.last_name ?? undefined,
+                          phone: selectedAddress.phone ?? undefined,
+                          postal_code: selectedAddress.postal_code ?? undefined,
+                          province: selectedAddress.province ?? undefined,
+                        })
+                      }
+                    }}
+                    value={
+                      addressesInRegion?.find((a) =>
+                        compareAddresses(
+                          {
+                            first_name: a.first_name ?? undefined,
+                            last_name: a.last_name ?? undefined,
+                            address_1: a.address_1 ?? undefined,
+                            address_2: a.address_2 ?? undefined,
+                            company: a.company ?? undefined,
+                            postal_code: a.postal_code ?? undefined,
+                            city: a.city ?? undefined,
+                            country_code: a.country_code ?? undefined,
+                            province: a.province ?? undefined,
+                            phone: a.phone ?? undefined,
+                          },
+                          {
+                            first_name: formData["shipping_address.first_name"],
+                            last_name: formData["shipping_address.last_name"],
+                            address_1: formData["shipping_address.address_1"],
+                            address_2: formData["shipping_address.address_2"],
+                            company: formData["shipping_address.company"],
+                            postal_code:
+                              formData["shipping_address.postal_code"],
+                            city: formData["shipping_address.city"],
+                            country_code:
+                              formData["shipping_address.country_code"],
+                            province: formData["shipping_address.province"],
+                            phone: formData["shipping_address.phone"],
+                          }
+                        )
+                      )?.id
+                    }
+                  >
+                    {addressesInRegion?.map((address) => (
+                      <UiRadio
+                        variant="outline"
+                        value={address.id}
+                        className="gap-4"
+                        key={address.id}
+                        id={address.id}
+                      >
+                        <UiRadioBox />
+                        <UiRadioLabel className="group-data-[selected=true]:font-normal">
+                          {[address.first_name, address.last_name]
+                            .filter(Boolean)
+                            .join(" ")}
+                        </UiRadioLabel>
+                        <UiRadioLabel className="ml-auto text-grayscale-500 group-data-[selected=true]:font-normal">
+                          {[
+                            address.address_1,
+                            address.address_2,
+                            [address.postal_code, address.city]
+                              .filter(Boolean)
+                              .join(" "),
+                            cart?.region?.countries?.find(
+                              (c) => c.iso_2 === address.country_code
+                            )?.display_name || address.country_code,
+                          ]
+                            .filter(Boolean)
+                            .join(", ")}
+                        </UiRadioLabel>
+                      </UiRadio>
+                    ))}
+                  </RadioGroup>
+                  <div className="flex justify-between">
+                    <UiDialogTrigger>
+                      <Button>Add new address</Button>
+                      <UiModalOverlay>
+                        <UiModal>
+                          <UiDialog>
+                            <AddressForm region={cart?.region} />
+                          </UiDialog>
+                        </UiModal>
+                      </UiModalOverlay>
+                    </UiDialogTrigger>
+                    <UiCloseButton variant="outline">Close</UiCloseButton>
+                  </div>
+                </UiDialog>
+              </UiModal>
+            </UiModalOverlay>
+          </UiDialogTrigger>
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 gap-4 mb-8">
+          <Input
+            placeholder="First name"
+            name="shipping_address.first_name"
+            autoComplete="given-name"
+            value={formData["shipping_address.first_name"] || ""}
+            onChange={handleChange}
+            required
+            data-testid="shipping-first-name-input"
+            variant="outline"
           />
-        </Container>
-      )} */}
-      <div className="grid grid-cols-2 gap-4 mb-8">
-        <Input
-          placeholder="First name"
-          name="shipping_address.first_name"
-          autoComplete="given-name"
-          value={formData["shipping_address.first_name"] || ""}
-          onChange={handleChange}
-          required
-          data-testid="shipping-first-name-input"
-          variant="outline"
-        />
-        <Input
-          placeholder="Last name"
-          name="shipping_address.last_name"
-          autoComplete="family-name"
-          value={formData["shipping_address.last_name"] || ""}
-          onChange={handleChange}
-          required
-          data-testid="shipping-last-name-input"
-          variant="outline"
-        />
-        <Input
-          placeholder="Address"
-          name="shipping_address.address_1"
-          autoComplete="address-line1"
-          value={formData["shipping_address.address_1"] || ""}
-          onChange={handleChange}
-          required
-          data-testid="shipping-address-input"
-          variant="outline"
-        />
-        <Input
-          placeholder="Company"
-          name="shipping_address.company"
-          value={formData["shipping_address.company"] || ""}
-          onChange={handleChange}
-          autoComplete="organization"
-          data-testid="shipping-company-input"
-          variant="outline"
-        />
-        <Input
-          placeholder="Postal code"
-          name="shipping_address.postal_code"
-          autoComplete="postal-code"
-          value={formData["shipping_address.postal_code"] || ""}
-          onChange={handleChange}
-          required
-          data-testid="shipping-postal-code-input"
-          variant="outline"
-        />
-        <Input
-          placeholder="City"
-          name="shipping_address.city"
-          autoComplete="address-level2"
-          value={formData["shipping_address.city"] || ""}
-          onChange={handleChange}
-          required
-          data-testid="shipping-city-input"
-          variant="outline"
-        />
-        <CountrySelect
-          name="shipping_address.country_code"
-          autoComplete="country"
-          region={cart?.region}
-          selectedKey={formData["shipping_address.country_code"] || null}
-          onSelectionChange={(value) => {
-            handleChange({
-              target: {
-                name: "shipping_address.country_code",
-                value: `${value}`,
-              },
-            })
-          }}
-          isRequired
-          data-testid="shipping-country-select"
-        />
-        <Input
-          placeholder="State / Province"
-          name="shipping_address.province"
-          autoComplete="address-level1"
-          value={formData["shipping_address.province"] || ""}
-          onChange={handleChange}
-          required
-          data-testid="shipping-province-input"
-          variant="outline"
-        />
-        <Input
-          placeholder="Phone"
-          name="shipping_address.phone"
-          autoComplete="tel"
-          value={formData["shipping_address.phone"] || ""}
-          onChange={handleChange}
-          data-testid="shipping-phone-input"
-          variant="outline"
-        />
-      </div>
+          <Input
+            placeholder="Last name"
+            name="shipping_address.last_name"
+            autoComplete="family-name"
+            value={formData["shipping_address.last_name"] || ""}
+            onChange={handleChange}
+            required
+            data-testid="shipping-last-name-input"
+            variant="outline"
+          />
+          <Input
+            placeholder="Address"
+            name="shipping_address.address_1"
+            autoComplete="address-line1"
+            value={formData["shipping_address.address_1"] || ""}
+            onChange={handleChange}
+            required
+            data-testid="shipping-address-input"
+            variant="outline"
+          />
+          <Input
+            placeholder="Apartment, suite, etc. (Optional)"
+            name="shipping_address.address_2"
+            autoComplete="address-line2"
+            value={formData["shipping_address.address_2"] || ""}
+            onChange={handleChange}
+            data-testid="shipping-address2-input"
+            variant="outline"
+          />
+          <Input
+            placeholder="Company"
+            name="shipping_address.company"
+            value={formData["shipping_address.company"] || ""}
+            onChange={handleChange}
+            autoComplete="organization"
+            data-testid="shipping-company-input"
+            variant="outline"
+          />
+          <Input
+            placeholder="Postal code"
+            name="shipping_address.postal_code"
+            autoComplete="postal-code"
+            value={formData["shipping_address.postal_code"] || ""}
+            onChange={handleChange}
+            required
+            data-testid="shipping-postal-code-input"
+            variant="outline"
+          />
+          <Input
+            placeholder="City"
+            name="shipping_address.city"
+            autoComplete="address-level2"
+            value={formData["shipping_address.city"] || ""}
+            onChange={handleChange}
+            required
+            data-testid="shipping-city-input"
+            variant="outline"
+          />
+          <CountrySelect
+            name="shipping_address.country_code"
+            autoComplete="country"
+            region={cart?.region}
+            selectedKey={formData["shipping_address.country_code"] || null}
+            onSelectionChange={(value) => {
+              handleChange({
+                target: {
+                  name: "shipping_address.country_code",
+                  value: `${value}`,
+                },
+              })
+            }}
+            isRequired
+            data-testid="shipping-country-select"
+          />
+          <Input
+            placeholder="State / Province"
+            name="shipping_address.province"
+            autoComplete="address-level1"
+            value={formData["shipping_address.province"] || ""}
+            onChange={handleChange}
+            required
+            data-testid="shipping-province-input"
+            variant="outline"
+          />
+          <Input
+            placeholder="Phone"
+            name="shipping_address.phone"
+            autoComplete="tel"
+            value={formData["shipping_address.phone"] || ""}
+            onChange={handleChange}
+            data-testid="shipping-phone-input"
+            variant="outline"
+          />
+        </div>
+      )}
       <div className="my-4">
         <Checkbox
           label="Billing address same as shipping address"
