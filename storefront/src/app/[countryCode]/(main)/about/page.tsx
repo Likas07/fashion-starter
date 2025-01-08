@@ -44,14 +44,14 @@ export default function AboutPage() {
       <div className="pt-8 md:pt-26 pb-26 md:pb-36">
         <Layout>
           <LayoutColumn start={1} end={{ base: 13, lg: 7 }}>
-            <h3 className="text-lg max-lg:mb-6 md:text-2xl">
+            <h3 className="text-md max-lg:mb-6 md:text-2xl">
               At Sofa Society, we believe that a sofa is the heart of every
               home.
             </h3>
           </LayoutColumn>
           <LayoutColumn start={{ base: 1, lg: 8 }} end={13}>
             <div className="md:text-md lg:mt-18">
-              <p className="mb-6 lg:mb-8">
+              <p className="mb-5 lg:mb-9">
                 Welcome to Sofa Society, where we believe that comfort and style
                 should be effortlessly intertwined. Our mission is to help you
                 create beautiful, functional spaces that bring warmth and
@@ -74,14 +74,14 @@ export default function AboutPage() {
             />
           </LayoutColumn>
           <LayoutColumn start={1} end={{ base: 13, lg: 8 }}>
-            <h3 className="text-lg lg:mb-10 mb-6 md:text-2xl">
+            <h3 className="text-md lg:mb-10 mb-6 md:text-2xl">
               We are here to make your living space a true reflection of your
               personal style.
             </h3>
           </LayoutColumn>
           <LayoutColumn start={1} end={{ base: 13, lg: 6 }}>
-            <div className="mb-16 lg:mb-36">
-              <p className="mb-6">
+            <div className="mb-16 lg:mb-26">
+              <p className="mb-5 md:mb-9">
                 At the heart of our brand is a deep commitment to quality. We
                 understand that a sofa isn&apos;t just another piece of
                 furniture; it&apos;s where you unwind, gather with loved ones,
@@ -104,7 +104,7 @@ export default function AboutPage() {
               width={1200}
               height={1600}
               alt="Living room"
-              className="mb-16 lg:mb-36"
+              className="mb-16 lg:mb-46"
             />
           </LayoutColumn>
           <LayoutColumn start={{ base: 1, lg: 8 }} end={13}>
@@ -141,13 +141,13 @@ export default function AboutPage() {
         />
         <Layout>
           <LayoutColumn start={1} end={{ base: 13, lg: 7 }}>
-            <h3 className="text-lg max-lg:mb-8 md:text-2xl">
+            <h3 className="text-md max-lg:mb-6 md:text-2xl">
               Our customers are at the center of everything we do!
             </h3>
           </LayoutColumn>
           <LayoutColumn start={{ base: 1, lg: 8 }} end={13}>
             <div className="md:text-md lg:mt-18">
-              <p className="mb-6 lg:mb-8">
+              <p className="mb-5 lg:mb-9">
                 Our team is here to help guide you through the process, offering
                 personalised support to ensure that you find exactly what
                 you&apos;re looking for.
