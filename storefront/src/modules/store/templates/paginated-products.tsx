@@ -25,7 +25,7 @@ export default async function PaginatedProducts({
   productsIds?: string[]
   countryCode: string
 }) {
-  const queryParams: HttpTypes.StoreProductParams = {
+  const queryParams: HttpTypes.StoreProductListParams = {
     limit: PRODUCT_LIMIT,
   }
 

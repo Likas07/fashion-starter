@@ -20,7 +20,7 @@ export default async function RelatedProducts({
   }
 
   // edit this function to define your related products logic
-  const queryParams: HttpTypes.StoreProductParams = {
+  const queryParams: HttpTypes.StoreProductListParams = {
     limit: 3,
   }
   if (region?.id) {
