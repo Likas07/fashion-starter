@@ -168,4 +168,12 @@
       }
     }
   }
+
+  .txt-medium {
+    @apply text-[1.875rem] leading-[1.3125rem] font-normal font-inter;
+  }
+
+  .txt-xlarge-plus {
+    @apply text-[1.125rem] leading-[1.6875rem] font-medium font-inter;
+  }
 }

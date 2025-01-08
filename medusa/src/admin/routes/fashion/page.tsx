@@ -142,7 +142,7 @@ const FashionPage = () => {
         return next;
       });
     },
-    [setSearchParams],
+    [setSearchParams]
   );
   const deleted = searchParams.has('deleted');
   const toggleDeleted = React.useCallback(() => {
@@ -170,7 +170,7 @@ const FashionPage = () => {
         `/admin/fashion?page=${page}${deleted ? '&deleted=true' : ''}`,
         {
           credentials: 'include',
-        },
+        }
       ).then(
         (res) =>
           res.json() as Promise<{
@@ -178,7 +178,7 @@ const FashionPage = () => {
             count: number;
             page: number;
             last_page: number;
-          }>,
+          }>
       );
     },
   });
@@ -296,7 +296,7 @@ const FashionPage = () => {
                             variant="transparent"
                             className="flex flex-row gap-2 items-center w-full justify-start"
                           >
-                            <PencilSquare className="text-ui-fg-subtle" />
+                            <PencilSquare className="text-fg-subtle dark:text-fg-subtle-dark" />
                             Edit
                           </Button>
                         </EditMaterialDrawer>
@@ -312,7 +312,7 @@ const FashionPage = () => {
                               variant="transparent"
                               className="flex flex-row gap-2 items-center w-full justify-start"
                             >
-                              <ArrowPath className="text-ui-fg-subtle" />
+                              <ArrowPath className="text-fg-subtle dark:text-fg-subtle-dark" />
                               Restore
                             </Button>
                           </RestoreMaterialPrompt>
@@ -327,7 +327,7 @@ const FashionPage = () => {
                               variant="transparent"
                               className="flex flex-row gap-2 items-center w-full justify-start"
                             >
-                              <Trash className="text-ui-fg-subtle" />
+                              <Trash className="text-fg-subtle dark:text-fg-subtle-dark" />
                               Delete
                             </Button>
                           </DeleteMaterialPrompt>

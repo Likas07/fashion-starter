@@ -1,6 +1,5 @@
 module.exports = {
   darkMode: "class",
-  presets: [require("@medusajs/ui-preset")],
   content: [
     "./src/app/**/*.{js,ts,jsx,tsx}",
     "./src/pages/**/*.{js,ts,jsx,tsx}",
@@ -34,6 +33,42 @@ module.exports = {
       yellow: "#FFEFB7",
       transparent: "rgba(0,0,0,0)",
       current: "currentColor",
+      "border-interactive": {
+        DEFAULT: "rgba(59, 130, 246, 1)",
+        dark: "rgba(96, 165, 250, 1)",
+      },
+      "fg-subtle": {
+        DEFAULT: "rgba(82, 82, 91, 1)",
+        dark: "rgba(161, 161, 170, 1)",
+      },
+      "bg-subtle": {
+        DEFAULT: "rgba(250, 250, 250, 1)",
+        dark: "rgba(24, 24, 27, 1)",
+      },
+      "fg-base": {
+        DEFAULT: "rgba(24, 24, 27, 1)",
+        dark: "rgba(244, 244, 245, 1)",
+      },
+      "button-danger": {
+        DEFAULT: "rgba(225, 29, 72, 1)",
+        dark: "rgba(159, 18, 57, 1)",
+      },
+      "bg-field": {
+        DEFAULT: "rgba(250, 250, 250, 1)",
+        dark: "rgba(255, 255, 255, 0.04)",
+      },
+      "bg-field-hover": {
+        DEFAULT: "rgba(244, 244, 245, 1)",
+        dark: "rgba(255, 255, 255, 0.08)",
+      },
+      "border-base": {
+        DEFAULT: "rgba(228, 228, 231, 1)",
+        dark: "rgba(255, 255, 255, 0.08)",
+      },
+      "fg-muted": {
+        DEFAULT: "rgba(161, 161, 170, 1)",
+        dark: "rgba(113, 113, 122, 1)",
+      },
     },
     fontSize: {
       "3xl": ["3.5rem", 1.4],
@@ -112,8 +147,10 @@ module.exports = {
       borderWidth: {
         6: "6px",
       },
-      boxShadow: {
-        modal: "0px 0px 40px -16px rgba(0, 0, 0, 0.20)",
+      fontFamily: {
+        inter: [
+          "Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji",
+        ],
       },
       transitionProperty: {
         fontWeight: "font-weight",
@@ -131,6 +168,17 @@ module.exports = {
       },
       animation: {
         shine: "shine 1s linear infinite",
+      },
+      boxShadow: {
+        modal: "0px 0px 40px -16px rgba(0, 0, 0, 0.20)",
+        "elevation-card-rest":
+          "0px 0px 0px 1px rgba(0, 0, 0, 0.08), 0px 1px 2px -1px rgba(0, 0, 0, 0.08), 0px 2px 4px 0px rgba(0, 0, 0, 0.04)",
+        "elevation-card-rest-dark":
+          "0px -1px 0px 0px rgba(255, 255, 255, 0.06), 0px 0px 0px 1px rgba(255, 255, 255, 0.06), 0px 0px 0px 1px rgba(39, 39, 42, 1), 0px 1px 2px 0px rgba(0, 0, 0, 0.32), 0px 2px 4px 0px rgba(0, 0, 0, 0.32)",
+        "borders-interactive-with-active":
+          "0px 0px 0px 1px rgba(59, 130, 246, 1), 0px 0px 0px 4px rgba(59, 130, 246, 0.2)",
+        "borders-interactive-with-active-dark":
+          "0px 0px 0px 1px rgba(96, 165, 250, 1), 0px 0px 0px 4px rgba(59, 130, 246, 0.25)",
       },
     },
   },

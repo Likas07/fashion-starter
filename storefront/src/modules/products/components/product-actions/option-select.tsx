@@ -34,10 +34,11 @@ const OptionSelect: React.FC<OptionSelectProps> = ({
               onClick={() => updateOption(option.id, v)}
               key={v}
               className={twMerge(
-                "border-ui-border-base bg-ui-bg-subtle border text-small-regular h-10 rounded-rounded p-2 flex-1 ",
-                v === current && "border-ui-border-interactive",
+                "border-border-base dark:border-border-base-dark bg-bg-subtle dark:bg-bg-subtle-dark border text-small-regular h-10 rounded-rounded p-2 flex-1",
+                v === current &&
+                  "border-border-interactive dark:border-border-interactive-dark",
                 v !== current &&
-                  "hover:shadow-elevation-card-rest transition-shadow ease-in-out duration-150"
+                  "hover:shadow-elevation-card-rest dark:hover:shadow-elevation-card-rest-dark transition-shadow ease-in-out duration-150"
               )}
               disabled={disabled}
               data-testid="option-button"

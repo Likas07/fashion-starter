@@ -36,8 +36,9 @@ export function Pagination({
     <button
       key={p}
       className={twMerge(
-        "txt-xlarge-plus text-ui-fg-muted",
-        isCurrent && "text-ui-fg-base hover:text-ui-fg-subtle"
+        "txt-xlarge-plus text-fg-muted dark:text-fg-muted-dark",
+        isCurrent &&
+          "text-fg-base dark:text-fg-base-dark hover:text-fg-subtle dark:hover:text-fg-subtle-dark"
       )}
       disabled={isCurrent}
       onClick={() => handlePageChange(p)}
@@ -50,7 +51,7 @@ export function Pagination({
   const renderEllipsis = (key: string) => (
     <span
       key={key}
-      className="txt-xlarge-plus text-ui-fg-muted items-center cursor-default"
+      className="txt-xlarge-plus text-fg-muted dark:text-fg-muted-dark items-center cursor-default"
     >
       ...
     </span>
