@@ -27,7 +27,7 @@ export const UiCheckboxBox: React.FC<React.ComponentPropsWithoutRef<"div">> = ({
   <div
     {...props}
     className={twMerge(
-      "border border-grayscale-200 w-4 h-4 flex items-center justify-center group-data-[selected=true]:bg-black group-data-[selected=true]:border-black",
+      "border border-grayscale-200 w-4 h-4 flex items-center group-hover:border-grayscale-600 justify-center group-data-[selected=true]:bg-black group-data-[selected=true]:border-black group-hover:group-data-[selected=true]:border-grayscale-600 group-hover:group-data-[selected=true]:bg-grayscale-600 transition-colors",
       className
     )}
   />
