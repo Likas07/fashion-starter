@@ -48,7 +48,7 @@ export const RegionSwitcher: React.FC<{
       className={className}
       aria-label="Select country"
     >
-      <UiSelectButton className={selectButtonClassName}>
+      <UiSelectButton variant="ghost" className={selectButtonClassName}>
         <UiSelectValue>
           {(item) =>
             typeof item.selectedItem === "object" &&

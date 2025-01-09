@@ -45,7 +45,7 @@ export const Header: React.FC = async () => {
                 <RegionSwitcher
                   countryOptions={countryOptions}
                   className="w-16"
-                  selectButtonClassName="bg-transparent border-0 h-auto !gap-0 !p-1 w-full"
+                  selectButtonClassName="h-auto !gap-0 !p-1 transition-none"
                   selectIconClassName="text-current"
                 />
                 {/* <LocalizedButtonLink
