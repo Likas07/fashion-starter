@@ -73,9 +73,9 @@ const RefinementList = ({
   )
 
   return (
-    <Layout className="mb-4 md:mb-6">
+    <Layout className="mb-6 md:mb-8">
       <LayoutColumn>
-        <h2 className="text-lg md:text-2xl mb-6" id="products">
+        <h2 className="text-md md:text-2xl mb-6 md:mb-7" id="products">
           {title}
         </h2>
         <div className="flex justify-between gap-10">
@@ -89,7 +89,7 @@ const RefinementList = ({
             setMultipleQueryParams={setMultipleQueryParams}
           />
           <MobileSort sortBy={sortBy} setQueryParams={setQueryParams} />
-          <div className="flex justify-between gap-6 max-md:hidden">
+          <div className="flex justify-between gap-4 max-md:hidden">
             {typeof collections !== "undefined" && (
               <CollectionFilter
                 collections={collections}
