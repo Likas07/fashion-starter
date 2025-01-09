@@ -41,7 +41,7 @@ const Item = ({ item }: ItemProps) => {
   const maxQuantity = item.variant ? getVariantItemsInStock(item.variant) : 0
 
   return (
-    <div className="border-b border-grayscale-100 py-8 last:pb-0 last:border-b-0">
+    <div className="border-b border-grayscale-100 py-8 lg:last:pb-0 lg:last:border-b-0">
       <div className="flex gap-6">
         <LocalizedLink href={`/products/${handle}`}>
           <Thumbnail
@@ -58,9 +58,10 @@ const Item = ({ item }: ItemProps) => {
                 {item.product_title}
               </LocalizedLink>
             </h2>
-            <p className="text-grayscale-500 text-xs sm:text-base">
+            <p className="text-grayscale-500 text-xs sm:text-base max-sm:mb-4">
               {item.variant?.title}
             </p>
+            <LineItemUnitPrice item={item} className="sm:hidden" />
           </div>
           <NumberField
             size="sm"
@@ -74,7 +75,7 @@ const Item = ({ item }: ItemProps) => {
           />
         </div>
         <div className="flex flex-col justify-between items-end text-right">
-          <LineItemUnitPrice item={item} />
+          <LineItemUnitPrice item={item} className="max-sm:hidden" />
           <DeleteButton id={item.id} data-testid="product-delete-button" />
         </div>
       </div>

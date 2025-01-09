@@ -19,8 +19,9 @@ const DeleteButton = ({ id }: { id: string }) => {
       type="button"
       onClick={() => handleDelete(id)}
       disabled={isDeleting}
+      className="p-1"
     >
-      <Icon name="trash" className="w-6 h-6" />
+      <Icon name="trash" className="w-4 h-4 sm:w-6 sm:h-6" />
     </button>
   )
 }

@@ -3,9 +3,10 @@ import { HttpTypes } from "@medusajs/types"
 
 type LineItemUnitPriceProps = {
   item: HttpTypes.StoreCartLineItem | HttpTypes.StoreOrderLineItem
+  className?: string
 }
 
-const LineItemUnitPrice = ({ item }: LineItemUnitPriceProps) => {
+const LineItemUnitPrice = ({ item, className }: LineItemUnitPriceProps) => {
   const {
     original_price,
     calculated_price,
@@ -15,7 +16,7 @@ const LineItemUnitPrice = ({ item }: LineItemUnitPriceProps) => {
   const hasReducedPrice = calculated_price_number < original_price_number
 
   return (
-    <div>
+    <div className={className}>
       {hasReducedPrice ? (
         <>
           <p className="text-base sm:text-sm font-semibold text-red-primary">
@@ -24,7 +25,7 @@ const LineItemUnitPrice = ({ item }: LineItemUnitPriceProps) => {
           <p className="text-grayscale-500 line-through">{original_price}</p>
         </>
       ) : (
-        <p className="text-base sm:text-sm font-semibold">{calculated_price}</p>
+        <p className="text-xs sm:text-sm font-semibold">{calculated_price}</p>
       )}
     </div>
   )
