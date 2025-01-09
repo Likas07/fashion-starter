@@ -119,7 +119,6 @@ export const Input = React.forwardRef<
   ) => (
     <div className={twMerge("relative", wrapperClassName)}>
       <Aria.Input
-        disabled
         {...rest}
         ref={ref}
         className={twMerge(
