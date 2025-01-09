@@ -19,9 +19,12 @@ export const getFormFieldClassNames = ({
     // Base
     "peer block w-full rounded-xs transition-all outline-none bg-white px-4 placeholder:invisible",
 
+    // Disabled
+    "disabled:pointer-events-none disabled:bg-grayscale-50",
+
     // Variant
     variant === "outline" &&
-      "border border-grayscale-200 hover:border-grayscale-500 focus:border-grayscale-500 bg-transparent",
+      "border border-grayscale-200 enabled:hover:border-grayscale-500 focus:border-grayscale-500 bg-transparent",
 
     // Size
     uiSize === "sm" &&
@@ -29,9 +32,8 @@ export const getFormFieldClassNames = ({
     uiSize === "md" && "h-12 focus:pt-3 [&:not(:placeholder-shown)]:pt-3",
     uiSize === "lg" && "h-14 focus:pt-4 [&:not(:placeholder-shown)]:pt-4",
 
-    // Disabled
-    isVisuallyDisabled &&
-      "cursor-not-allowed bg-grayscale-50 text-grayscale-400",
+    // isVisuallyDisabled
+    isVisuallyDisabled && "pointer-events-none bg-grayscale-50",
 
     // Success
     isSuccess && "border-green-500 pr-7",
@@ -117,6 +119,7 @@ export const Input = React.forwardRef<
   ) => (
     <div className={twMerge("relative", wrapperClassName)}>
       <Aria.Input
+        disabled
         {...rest}
         ref={ref}
         className={twMerge(
