@@ -50,12 +50,12 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
 
   return (
     <div
-      className="pt-18 md:pt-26 lg:pt-37 pb-23 md:pb-36"
+      className="pt-18 md:pt-26 lg:pt-37 pb-26 md:pb-36"
       data-testid="product-container"
     >
       <ImageGallery className="md:hidden" images={images} />
       <Layout>
-        <LayoutColumn className="mb-26 md:mb-36">
+        <LayoutColumn className="mb-26 md:mb-52">
           <div className="flex max-lg:flex-col gap-8 xl:gap-27">
             {hasImages && (
               <div className="lg:w-1/2 flex flex-1 flex-col gap-8">
@@ -95,7 +95,7 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
               {typeof collectionDetails.data.product_page_heading ===
                 "string" &&
                 collectionDetails.data.product_page_heading.length > 0 && (
-                  <h2 className="text-lg md:text-2xl mb-8 md:mb-6">
+                  <h2 className="text-md md:text-2xl mb-8">
                     {collectionDetails.data.product_page_heading}
                   </h2>
                 )}
