@@ -33,27 +33,21 @@ export const getButtonClassNames = ({
   variant,
 }: ButtonOwnProps): string => {
   return twJoin(
-    "inline-flex items-center focus-visible:outline-none rounded-xs justify-center transition-colors",
+    "inline-flex items-center focus-visible:outline-none rounded-xs justify-center transition-colors disabled:pointer-events-none",
 
     // isFullWidth
     Boolean(isFullWidth) && "w-full",
 
-    // iconPosition
+    // iconPosition,
     // spinnerPosition
     (iconPosition === "end" || spinnerPosition === "end") && "flex-row-reverse",
 
-    // Disabled
-    (isVisuallyDisabled || isLoading) && "cursor-not-allowed",
-    isVisuallyDisabled &&
-      (variant === "ghost" || variant === "link" || variant == "unstyled") &&
-      "text-grayscale-200",
-    isVisuallyDisabled &&
-      variant === "outline" &&
-      "border-grayscale-200 text-grayscale-200",
-    isVisuallyDisabled && variant === "solid" && "!bg-grayscale-200",
-
     // isLoading
+    isLoading && "cursor-not-allowed",
+
     // iconName
+    // isLoading
+    // loadingText
     ((Boolean(isLoading) && Boolean(loadingText)) || Boolean(iconName)) &&
       "gap-2",
 
@@ -62,12 +56,24 @@ export const getButtonClassNames = ({
     size === "md" && "px-6 h-12",
 
     // variant
-    ((variant === "ghost" || variant == "unstyled") && "text-black h-auto") ||
+    ((variant === "ghost" || variant == "unstyled") &&
+      "text-black h-auto disabled:text-grayscale-200") ||
       (variant === "outline" &&
-        "text-black hover:text-grayscale-500 hover:border-grayscale-500 border border-black") ||
-      (variant === "solid" && "bg-black hover:bg-grayscale-500 text-white") ||
+        "text-black hover:text-grayscale-500 hover:border-grayscale-500 border border-black disabled:text-grayscale-200 disabled:border-grayscale-200") ||
+      (variant === "solid" &&
+        "bg-black hover:bg-grayscale-500 text-white disabled:bg-grayscale-200") ||
       (variant === "link" &&
-        "text-black h-auto border-b border-current px-0 rounded-none")
+        "text-black h-auto border-b border-current px-0 rounded-none disabled:text-grayscale-200"),
+
+    // isVisuallyDisabled
+    isVisuallyDisabled && "pointer-events-none",
+    isVisuallyDisabled &&
+      (variant === "ghost" || variant === "link" || variant == "unstyled") &&
+      "text-grayscale-200",
+    isVisuallyDisabled &&
+      variant === "outline" &&
+      "border-grayscale-200 text-grayscale-200",
+    isVisuallyDisabled && variant === "solid" && "bg-grayscale-200"
   )
 }
 
