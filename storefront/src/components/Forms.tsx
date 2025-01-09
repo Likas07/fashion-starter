@@ -17,7 +17,7 @@ export const getFormFieldClassNames = ({
 }: InputOwnProps): string => {
   return twJoin(
     // Base
-    "peer block w-full rounded-xs transition-colors transition-padding focus-within:outline-none bg-white px-4 placeholder:invisible",
+    "peer block w-full rounded-xs transition-all outline-none bg-white px-4 placeholder:invisible",
 
     // Variant
     variant === "outline" &&
