@@ -70,7 +70,7 @@ export const Header: React.FC = async () => {
                   <CartIcon className="w-6 h-6" />
                 </LocalizedButtonLink>
               </div>
-              <div className="flex items-center gap-6 md:hidden">
+              <div className="flex items-center gap-4 md:hidden">
                 <LocalizedButtonLink
                   href="/auth/login"
                   variant="ghost"
