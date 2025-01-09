@@ -1,4 +1,4 @@
-// External components
+// External packages
 import * as React from "react"
 
 // Lib

@@ -1,4 +1,4 @@
-// External components
+// External packages
 import { Metadata } from "next"
 
 // Components

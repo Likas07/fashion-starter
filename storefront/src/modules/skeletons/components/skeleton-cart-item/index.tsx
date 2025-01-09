@@ -1,4 +1,4 @@
-// External components
+// External packages
 import { Skeleton } from "@/components/ui/Skeleton"
 
 const SkeletonCartItem = () => {

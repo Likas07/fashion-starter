@@ -1,6 +1,6 @@
 "use client"
 
-// External components
+// External packages
 import { useParams, usePathname } from "next/navigation"
 import { twMerge } from "tailwind-merge"
 

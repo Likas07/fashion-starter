@@ -1,4 +1,4 @@
-// External components
+// External packages
 import Image from "next/image"
 import { StoreRegion } from "@medusajs/types"
 
