@@ -63,7 +63,7 @@ export const getButtonClassNames = ({
       (variant === "solid" &&
         "bg-black hover:bg-grayscale-500 text-white disabled:bg-grayscale-200") ||
       (variant === "link" &&
-        "text-black h-auto border-b border-current px-0 rounded-none disabled:text-grayscale-200"),
+        "text-black h-auto border-b border-current px-0 rounded-none disabled:text-grayscale-200 hover:border-transparent"),
 
     // isVisuallyDisabled
     isVisuallyDisabled && "pointer-events-none",

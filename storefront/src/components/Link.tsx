@@ -13,7 +13,8 @@ export const getLinkClassNames = ({ variant }: LinkOwnProps): string =>
     (variant === "underline" || variant === "hover:underline") &&
       "border-b border-current pb-0.5 md:pb-1",
     variant === "hover:underline" &&
-      "border-transparent hover:border-current transition-colors"
+      "border-transparent hover:border-current transition-colors",
+    variant === "underline" && "hover:border-transparent"
   )
 
 export const Link = <RouteInferType extends any>({
