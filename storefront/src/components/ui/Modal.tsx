@@ -31,7 +31,7 @@ export const UiModal: React.FC<UiModalOwnProps & ModalOverlayProps> = ({
   <Modal
     {...props}
     className={twMerge(
-      "bg-white p-6 rounded-2xs max-h-full overflow-y-scroll w-full shadow-modal data-[entering]:animate-in data-[entering]:ease-out data-[entering]:duration-200 data-[exiting]:animate-out data-[exiting]:ease-in data-[exiting]:duration-100",
+      "bg-white p-6 rounded-2xs max-h-full overflow-y-scroll max-w-154 w-full shadow-modal data-[entering]:animate-in data-[entering]:ease-out data-[entering]:duration-200 data-[exiting]:animate-out data-[exiting]:ease-in data-[exiting]:duration-100",
       animateFromBottom
         ? "data-[entering]:slide-in-from-bottom-10 data-[exiting]:slide-out-to-bottom-10 bottom-0"
         : "data-[entering]:zoom-in-95 data-[exiting]:zoom-out-95",

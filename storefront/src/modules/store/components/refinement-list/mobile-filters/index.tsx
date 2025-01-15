@@ -46,7 +46,7 @@ export const MobileFilters: React.FC<{
       <UiModalOverlay className="p-0">
         <UiModal
           animateFromBottom
-          className="absolute top-36 left-0 w-full pb-21"
+          className="absolute top-36 left-0 w-full pb-21 max-w-full"
         >
           <Dialog className="focus-visible:outline-none">
             {({ close }) => (
