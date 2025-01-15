@@ -24,7 +24,7 @@ export const getFormFieldClassNames = ({
 
     // Variant
     variant === "outline" &&
-      "border border-grayscale-200 enabled:hover:border-grayscale-500 focus:border-grayscale-500 bg-transparent",
+      "border border-grayscale-200 hover:border-grayscale-500 focus:border-grayscale-500 bg-transparent",
 
     // Size
     uiSize === "sm" &&
