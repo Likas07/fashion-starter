@@ -27,7 +27,7 @@ export const UiRadio: React.FC<UiRadioOwnProps & RadioProps> = ({
     className={twMerge(
       "flex gap-2 group cursor-pointer items-center",
       variant === "outline" &&
-        "p-4 gap-4 border border-grayscale-200 hover:border-grayscale-600 transition-colors",
+        "p-4 gap-4 border border-grayscale-200 hover:border-grayscale-500 transition-colors",
       className as string
     )}
   />

@@ -30,7 +30,7 @@ export const UiSelectButton: React.FC<ButtonProps & UiSelectButtonOwnProps> = ({
   <Button
     {...props}
     className={twMerge(
-      "w-full gap-1 md:gap-2 flex items-center max-md:text-xs justify-between h-8 md:h-10 px-3 md:pl-4 md:pr-3 focus-visible:outline-none transition-colors",
+      "w-full gap-1 md:gap-2 flex items-center focus:border-grayscale-500 max-md:text-xs justify-between h-8 md:h-10 px-3 md:pl-4 md:pr-3 focus-visible:outline-none transition-colors",
       variant === "outline" &&
         "border border-grayscale-200 rounded-xs hover:border-grayscale-500 hover:text-grayscale-500",
       className as string
