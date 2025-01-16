@@ -64,7 +64,7 @@ const MobileCheckoutSummary = ({
           height: "0px",
         }}
       >
-        <div className="pt-4 pb-8">
+        <div className="py-8">
           <CheckoutSummary cart={cart} />
         </div>
       </div>

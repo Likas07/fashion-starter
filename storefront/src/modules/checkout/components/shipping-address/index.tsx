@@ -185,7 +185,7 @@ const ShippingAddress = ({
           variant="outline"
         />
       </div>
-      <div className="my-4">
+      <div>
         <Checkbox
           label="Billing address same as shipping address"
           name="same_as_billing"

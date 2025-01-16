@@ -24,7 +24,7 @@ const CartTotals: React.FC<CartTotalsProps> = ({ cart }) => {
 
   return (
     <div>
-      <div className="flex flex-col gap-2 lg:gap-1 mb-6">
+      <div className="flex flex-col gap-2 lg:gap-1 mb-8">
         <div className="flex justify-between max-lg:text-xs">
           <div>
             <p>Subtotal</p>

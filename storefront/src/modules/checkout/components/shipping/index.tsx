@@ -56,7 +56,7 @@ const Shipping: React.FC<ShippingProps> = ({
 
   return (
     <>
-      <div className="flex justify-between mb-8 border-t border-grayscale-200 pt-8 mt-8">
+      <div className="flex justify-between mb-6 md:mb-8 border-t border-grayscale-200 pt-8 mt-8">
         <div>
           <p
             className={twJoin(
@@ -92,7 +92,7 @@ const Shipping: React.FC<ShippingProps> = ({
         ) : (
           <div>
             <RadioGroup
-              className="flex flex-col gap-2 mb-8"
+              className="flex flex-col gap-4 mb-8"
               value={selectedShippingMethod?.id}
               onChange={set}
               aria-label="Shipping methods"
@@ -132,9 +132,9 @@ const Shipping: React.FC<ShippingProps> = ({
       ) : cart &&
         (cart.shipping_methods?.length ?? 0) > 0 &&
         selectedShippingMethod ? (
-        <ul className="flex gap-10">
+        <ul className="flex max-sm:flex-col flex-wrap gap-y-2 gap-x-28">
           <li className="text-grayscale-500">Shipping</li>
-          <li>{selectedShippingMethod.name}</li>
+          <li className="text-grayscale-600">{selectedShippingMethod.name}</li>
         </ul>
       ) : null}
     </>
