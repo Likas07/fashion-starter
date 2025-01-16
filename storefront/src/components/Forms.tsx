@@ -28,9 +28,11 @@ export const getFormFieldClassNames = ({
 
     // Size
     uiSize === "sm" &&
-      "h-9 text-xs focus:pt-3.5 [&:not(:placeholder-shown)]:pt-3.5",
-    uiSize === "md" && "h-12 focus:pt-3 [&:not(:placeholder-shown)]:pt-3",
-    uiSize === "lg" && "h-14 focus:pt-4 [&:not(:placeholder-shown)]:pt-4",
+      "h-9 text-xs focus:pt-3.5 [&:not(:placeholder-shown)]:pt-3.5 [&:autofill]:pt-3.5",
+    uiSize === "md" &&
+      "h-12 focus:pt-3 [&:not(:placeholder-shown)]:pt-3 [&:autofill]:pt-3",
+    uiSize === "lg" &&
+      "h-14 focus:pt-4 [&:not(:placeholder-shown)]:pt-4 [&:autofill]:pt-4",
 
     // isVisuallyDisabled
     isVisuallyDisabled && "pointer-events-none bg-grayscale-50",
@@ -136,13 +138,13 @@ export const Input = React.forwardRef<
       {placeholder && (
         <span
           className={twJoin(
-            "absolute -translate-y-1/2 peer-placeholder-shown:top-1/2 left-4 peer-focus:text-xs peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:translate-y-0 peer-focus:translate-y-0 text-grayscale-500 pointer-events-none transition-all",
+            "absolute -translate-y-1/2 peer-placeholder-shown:top-1/2 left-4 peer-focus:text-xs peer-[:not(:placeholder-shown)]:text-xs peer-[:autofill]:text-xs peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:autofill]:translate-y-0 peer-focus:translate-y-0 text-grayscale-500 pointer-events-none transition-all",
             uiSize === "lg" &&
-              "peer-focus:top-2.5 peer-[:not(:placeholder-shown)]:top-2.5",
+              "peer-focus:top-2.5 peer-[:not(:placeholder-shown)]:top-2.5 peer-[:autofill]:top-2.5",
             uiSize === "md" &&
-              "peer-focus:top-1 peer-[:not(:placeholder-shown)]:top-1",
+              "peer-focus:top-1 peer-[:not(:placeholder-shown)]:top-1 peer-[:autofill]:top-1",
             uiSize === "sm" &&
-              "peer-focus:top-1 peer-[:not(:placeholder-shown)]:top-1 text-xs peer-focus:text-[10px] peer-[:not(:placeholder-shown)]:text-[10px]"
+              "peer-focus:top-1 peer-[:not(:placeholder-shown)]:top-1 peer-[:autofill]:top-1 text-xs peer-focus:text-[10px] peer-[:not(:placeholder-shown)]:text-[10px] peer-[:autofill]:text-[10px]"
           )}
         >
           {placeholder}
