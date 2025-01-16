@@ -12,22 +12,35 @@ export const getFormFieldClassNames = ({
   variant,
   uiSize,
   isVisuallyDisabled,
+  placeholder,
   isSuccess,
   hasError,
-}: InputOwnProps): string => {
+}: InputOwnProps & { placeholder?: string }): string => {
   return twJoin(
     // Base
-    "peer block w-full rounded-xs transition-colors transition-padding focus-within:outline-none bg-white px-4 placeholder:invisible",
+    "peer block w-full rounded-xs transition-colors transition-padding focus-within:outline-none bg-white px-4",
 
     // Variant
     variant === "outline" &&
       "border border-grayscale-200 hover:border-grayscale-500 focus:border-grayscale-500 bg-transparent",
 
     // Size
+    uiSize === "sm" && "h-9 text-xs",
+    uiSize === "md" && "h-12",
+    uiSize === "lg" && "h-14",
+
+    // Placeholder
+    placeholder && "placeholder:invisible",
+
     uiSize === "sm" &&
-      "h-9 text-xs focus:pt-3.5 [&:not(:placeholder-shown)]:pt-3.5",
-    uiSize === "md" && "h-12 focus:pt-3 [&:not(:placeholder-shown)]:pt-3",
-    uiSize === "lg" && "h-14 focus:pt-4 [&:not(:placeholder-shown)]:pt-4",
+      placeholder &&
+      "focus:pt-3.5 [&:not(:placeholder-shown)]:pt-3.5",
+    uiSize === "md" &&
+      placeholder &&
+      "focus:pt-3 [&:not(:placeholder-shown)]:pt-3",
+    uiSize === "lg" &&
+      placeholder &&
+      "focus:pt-4 [&:not(:placeholder-shown)]:pt-4",
 
     // Disabled
     isVisuallyDisabled &&
@@ -124,6 +137,7 @@ export const Input = React.forwardRef<
             variant,
             uiSize,
             isVisuallyDisabled,
+            placeholder,
             isSuccess,
             hasError,
           }),

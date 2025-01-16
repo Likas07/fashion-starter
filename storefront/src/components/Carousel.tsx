@@ -57,14 +57,10 @@ export const Carousel: React.FC<CarouselProps> = ({
     <div className={twMerge("overflow-hidden", className)}>
       <Layout>
         <LayoutColumn className="relative">
-          <div
-            className={twJoin(
-              "mb-8 md:mb-16 flex flex-wrap justify-between items-center gap-x-10 gap-y-2"
-            )}
-          >
+          <div className="mb-8 md:mb-15 flex max-sm:flex-col justify-between sm:items-center gap-x-10 gap-y-6">
             {heading}
             {(arrows || button) && (
-              <div className={twJoin("flex md:gap-6")}>
+              <div className="flex md:gap-6 shrink-0">
                 {button}
                 {arrows && (
                   <div className="flex gap-2">
@@ -106,9 +102,7 @@ export const Carousel: React.FC<CarouselProps> = ({
             )}
           </div>
           <div ref={emblaRef}>
-            <div className={twJoin("flex touch-pan-y gap-4 md:gap-10")}>
-              {children}
-            </div>
+            <div className="flex touch-pan-y gap-4 md:gap-10">{children}</div>
           </div>
         </LayoutColumn>
       </Layout>

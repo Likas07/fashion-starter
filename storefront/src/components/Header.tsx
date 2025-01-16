@@ -14,6 +14,7 @@ import { RegionSwitcher } from "./RegionSwitcher"
 import { HeaderWrapper } from "./HeaderWrapper"
 import { Icon } from "./Icon"
 import { CartDrawer } from "./CartDrawer"
+import { SearchField } from "./SearchField"
 
 export const Header: React.FC = async () => {
   const regions = await listRegions()
@@ -51,11 +52,7 @@ export const Header: React.FC = async () => {
                   selectButtonClassName="bg-transparent border-0 h-auto !gap-0 !p-1 w-full"
                   selectIconClassName="text-current"
                 />
-                {/* <LocalizedLink
-                  className="p-1 group-data-[light=true]:md:text-white group-data-[sticky=true]:md:text-black"
-                >
-                  <Icon name="search" className="w-5 h-5" />
-                </LocalizedLink> */}
+                <SearchField />
                 <LocalizedButtonLink
                   href="/auth/login"
                   variant="ghost"
