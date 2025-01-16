@@ -1,16 +1,14 @@
+// External packages
 import * as React from "react"
-import {
-  Dialog,
-  DialogTrigger,
-  Label,
-  Modal,
-  ModalOverlay,
-  RadioGroup,
-} from "react-aria-components"
+import { Dialog, DialogTrigger, Label, RadioGroup } from "react-aria-components"
 
-import { Button } from "@/components/Button"
-import { UiRadio, UiRadioBox, UiRadioLabel } from "@/components/ui/Radio"
+// Types
 import type { SortOptions } from "../sort-products"
+
+// Components
+import { UiRadio, UiRadioBox, UiRadioLabel } from "@/components/ui/Radio"
+import { UiModal, UiModalOverlay } from "@/components/ui/Modal"
+import { Button } from "@/components/Button"
 
 export const MobileSort: React.FC<{
   sortBy: SortOptions | undefined
@@ -19,18 +17,19 @@ export const MobileSort: React.FC<{
   return (
     <DialogTrigger>
       <Button
+        size="sm"
         variant="outline"
         iconName="chevron-down"
         iconPosition="end"
-        className="bg-white md:hidden border px-4 hover:bg-white border-grayscale-200 h-8 text-black text-xs"
+        className="md:hidden border-grayscale-200"
       >
         Sort by
       </Button>
-      <ModalOverlay
-        isDismissable
-        className="fixed top-0 left-0 w-full h-full bg-black-10%"
-      >
-        <Modal className="bg-white absolute bottom-0 left-0 w-full max-h-full overflow-y-scroll p-6 pb-21">
+      <UiModalOverlay className="p-0">
+        <UiModal
+          animateFromBottom
+          className="absolute left-0 w-full rounded-none max-w-full shadow-none pb-21"
+        >
           <Dialog className="focus-visible:outline-none">
             {({ close }) => (
               <form
@@ -74,8 +73,8 @@ export const MobileSort: React.FC<{
               </form>
             )}
           </Dialog>
-        </Modal>
-      </ModalOverlay>
+        </UiModal>
+      </UiModalOverlay>
     </DialogTrigger>
   )
 }

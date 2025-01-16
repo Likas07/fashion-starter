@@ -59,7 +59,7 @@ export default async function Checkout({
       </div>
       <Layout>
         <LayoutColumn className="flex max-lg:flex-col-reverse lg:justify-between relative">
-          <div className="flex-1 pt-7 lg:max-w-125 xl:max-w-150 pb-9 lg:pb-40">
+          <div className="flex-1 pt-8 lg:max-w-125 xl:max-w-150 pb-9 lg:pb-40">
             <LocalizedLink
               href="/"
               className="text-md font-medium mb-16 inline-block max-lg:hidden"

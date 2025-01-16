@@ -1,4 +1,4 @@
-// External components
+// External packages
 import Image from "next/image"
 import { StoreRegion } from "@medusajs/types"
 
@@ -43,7 +43,7 @@ export default function InspirationPage() {
       <div className="pb-26 md:pb-36">
         <Layout>
           <LayoutColumn start={1} end={{ base: 13, md: 8 }}>
-            <h3 className="text-lg mb-6 md:mb-16 md:text-2xl">
+            <h3 className="text-md mb-6 md:mb-16 md:text-2xl">
               The Astrid Curve sofa is a masterpiece of minimalism and luxury.
             </h3>
             <div className="md:text-md max-md:mb-16 max-w-135">
@@ -86,7 +86,7 @@ export default function InspirationPage() {
             />
           </LayoutColumn>
           <LayoutColumn start={1} end={{ base: 13, md: 8 }}>
-            <h3 className="text-lg mb-6 md:mb-16 md:text-2xl">
+            <h3 className="text-md mb-6 md:mb-16 md:text-2xl">
               Haven Sofas have minimalistic designs, neutral colors, and
               high-quality textures.
             </h3>
@@ -153,7 +153,7 @@ export default function InspirationPage() {
         />
         <Layout>
           <LayoutColumn start={1} end={{ base: 13, md: 8 }}>
-            <h3 className="text-lg mb-6 md:mb-16 md:text-2xl">
+            <h3 className="text-md mb-6 md:mb-16 md:text-2xl">
               Oslo Drift is infused with playful textures and vibrant patterns
               with eclectic vibes.
             </h3>

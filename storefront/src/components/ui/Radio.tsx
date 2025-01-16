@@ -27,7 +27,7 @@ export const UiRadio: React.FC<UiRadioOwnProps & RadioProps> = ({
     className={twMerge(
       "flex gap-2 group cursor-pointer items-center",
       variant === "outline" &&
-        "p-4 gap-4 border border-grayscale-200 hover:border-grayscale-400 transition-colors",
+        "p-4 gap-4 border border-grayscale-200 hover:border-grayscale-500 transition-colors",
       className as string
     )}
   />
@@ -40,7 +40,7 @@ export const UiRadioBox: React.FC<React.ComponentPropsWithoutRef<"span">> = ({
   <span
     {...props}
     className={twMerge(
-      "border border-grayscale-200 w-4 h-4 block transition-colors rounded-full group-hover:border-grayscale-400 group-data-[selected]:border-black group-data-[selected]:border-[6px] group-hover:group-data-[selected]:border-grayscale-600",
+      "border border-grayscale-200 w-4 h-4 block transition-colors rounded-full group-hover:border-grayscale-600 group-data-[selected]:border-black group-data-[selected]:border-6 group-hover:group-data-[selected]:border-grayscale-600",
       className
     )}
   />

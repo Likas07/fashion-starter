@@ -72,7 +72,7 @@ export default async function PaginatedProducts({
 
   return (
     <>
-      <Layout className="gap-y-10 md:gap-y-16 mb-16 md:mb-20">
+      <Layout className="gap-y-10 md:gap-y-16 mb-16">
         {products.map((p) => {
           return (
             <LayoutColumn key={p.id} className="md:!col-span-4 !col-span-6">

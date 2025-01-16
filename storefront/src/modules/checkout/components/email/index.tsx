@@ -34,8 +34,8 @@ const Email = ({
 
   return (
     <>
-      <div className="flex justify-between mb-8">
-        <div className="flex justify-between flex-1">
+      <div className="flex justify-between mb-6 md:mb-8">
+        <div className="flex justify-between flex-wrap gap-5 flex-1">
           <div>
             <p
               className={twJoin(
@@ -96,13 +96,13 @@ const Email = ({
             data-testid="shipping-email-input"
             variant="outline"
           />
-          <SubmitButton className="mt-6">Next</SubmitButton>
+          <SubmitButton className="mt-8">Next</SubmitButton>
           <ErrorMessage error={state} />
         </form>
       ) : cart?.email ? (
-        <ul className="flex gap-16">
+        <ul className="flex max-sm:flex-col flex-wrap gap-y-2 gap-x-34">
           <li className="text-grayscale-500">Email</li>
-          <li>{cart.email}</li>
+          <li className="text-grayscale-600 break-all">{cart.email}</li>
         </ul>
       ) : null}
     </>

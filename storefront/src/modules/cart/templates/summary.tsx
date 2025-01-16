@@ -39,7 +39,7 @@ const Summary = ({ cart }: SummaryProps) => {
       <LocalizedButtonLink
         href={"/checkout?step=" + step}
         isFullWidth
-        className="mt-10 mb-8"
+        className="mt-6"
       >
         Proceed to checkout
       </LocalizedButtonLink>

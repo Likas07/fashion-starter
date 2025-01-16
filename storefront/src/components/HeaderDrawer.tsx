@@ -1,6 +1,6 @@
 "use client"
 
-// External components
+// External packages
 import * as React from "react"
 
 // Components
@@ -55,7 +55,7 @@ export const HeaderDrawer: React.FC<{
           <RegionSwitcher
             countryOptions={countryOptions}
             className="mt-auto ml-8 mb-8"
-            selectButtonClassName="bg-transparent border-0 max-md:text-base gap-2 p-1 w-auto"
+            selectButtonClassName="max-md:text-base gap-2 p-1 w-auto"
             selectIconClassName="text-current w-6 h-6"
           />
         </div>

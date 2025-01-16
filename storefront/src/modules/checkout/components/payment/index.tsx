@@ -54,14 +54,15 @@ const Payment = ({
       style: {
         base: {
           fontFamily: "Inter, sans-serif",
-          color: "#424270",
+          color: "#050505",
           "::placeholder": {
-            color: "rgb(107 114 128)",
+            color: "#808080",
           },
+          fontSize: "16px",
         },
       },
       classes: {
-        base: "pt-3 pb-1 block w-full h-11 px-4 mt-0 bg-bg-field dark:bg-bg-field-dark border rounded-md appearance-none focus:outline-none focus:ring-0 focus:shadow-borders-interactive-with-active dark:focus:shadow-borders-interactive-with-active-dark border-border-base dark:border-border-base-dark hover:bg-bg-field-hover dark:hover:bg-bg-field-hover-dark transition-all duration-300 ease-in-out",
+        base: "pt-4.5 pb-1 block w-full h-14.5 px-4 mt-0 border rounded-xs appearance-none focus:outline-none focus:ring-0 border-grayscale-200 hover:border-grayscale-500 focus:border-grayscale-500 transition-all ease-in-out",
       },
     }
   }, [])
@@ -113,7 +114,7 @@ const Payment = ({
 
   return (
     <>
-      <div className="flex justify-between mb-8 border-t border-grayscale-200 pt-8 mt-8">
+      <div className="flex justify-between mb-6 md:mb-8 border-t border-grayscale-200 pt-8 mt-8">
         <div>
           <p
             className={twJoin(
@@ -154,8 +155,6 @@ const Payment = ({
             </RadioGroup>
             {isStripe && stripeReady && (
               <div className="mt-5">
-                <p className=" mb-1">Enter your card details:</p>
-
                 <CardElement
                   options={useOptions as StripeCardElementOptions}
                   onChange={(e) => {
@@ -203,17 +202,17 @@ const Payment = ({
       <div className={isOpen ? "hidden" : "block"}>
         {cart && paymentReady && activeSession ? (
           <div className="flex flex-col gap-4">
-            <div className="flex gap-10">
+            <div className="flex max-sm:flex-col flex-wrap gap-y-2 gap-x-12">
               <div className="text-grayscale-500">Payment method</div>
-              <div>
+              <div className="text-grayscale-600">
                 {paymentInfoMap[selectedPaymentMethod]?.title ||
                   selectedPaymentMethod}
               </div>
             </div>
-            <div className="flex gap-10">
+            <div className="flex max-sm:flex-col flex-wrap gap-y-2 gap-x-14.5">
               <div className="text-grayscale-500">Payment details</div>
               {isStripeFunc(selectedPaymentMethod) && cardBrand ? (
-                <div className="flex items-center gap-2">
+                <div className="text-grayscale-600 flex items-center gap-2">
                   {paymentInfoMap[selectedPaymentMethod]?.icon || (
                     <CreditCard />
                   )}

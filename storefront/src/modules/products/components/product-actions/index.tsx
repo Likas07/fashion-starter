@@ -173,7 +173,7 @@ export default function ProductActions({
         <p>{product.description}</p>
       </div>
       {hasMultipleVariants && (
-        <div className="flex flex-col gap-8 md:gap-6 mb-10 md:mb-26">
+        <div className="flex flex-col gap-8 md:gap-6 mb-4 md:mb-26">
           {materialOption && colorOption && (
             <>
               <div>
@@ -214,7 +214,7 @@ export default function ProductActions({
                 </Select>
               </div>
               {selectedMaterial && (
-                <div>
+                <div className="mb-6">
                   <p className="mb-4">
                     Colors
                     <span className="text-grayscale-500 ml-6">
@@ -290,7 +290,7 @@ export default function ProductActions({
             })}
         </div>
       )}
-      <div className="flex max-sm:flex-col gap-4 mb-4">
+      <div className="flex max-sm:flex-col gap-4">
         <NumberField
           value={quantity}
           onChange={setQuantity}

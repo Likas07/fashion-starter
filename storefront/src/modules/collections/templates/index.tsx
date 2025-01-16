@@ -37,7 +37,7 @@ export default async function CollectionTemplate({
 
   return (
     <>
-      <div className="max-md:pt-18 relative aspect-[2/1] md:h-screen w-full max-w-full mb-8 md:mb-16">
+      <div className="max-md:mt-18 relative aspect-[2/1] md:h-screen w-full max-w-full mb-8 md:mb-19">
         <Image
           src={
             collectionDetails.data?.collection_page_image?.url ||
@@ -56,14 +56,14 @@ export default async function CollectionTemplate({
           <Layout className="mb-26 md:mb-36">
             {collectionDetails.data.collection_page_heading && (
               <LayoutColumn start={1} end={{ base: 13, lg: 7 }}>
-                <h3 className="text-lg max-md:mb-6 md:text-2xl">
+                <h3 className="text-md max-md:mb-6 md:text-2xl">
                   {collectionDetails.data.collection_page_heading}
                 </h3>
               </LayoutColumn>
             )}
             {collectionDetails.data.collection_page_content && (
               <LayoutColumn start={{ base: 1, lg: 8 }} end={13}>
-                <div className="md:text-md md:mt-18 flex flex-col gap-6 md:gap-8">
+                <div className="md:text-md md:mt-18 flex flex-col gap-5 md:gap-9">
                   {collectionDetails.data.collection_page_content
                     .split("\n")
                     .map((p) => p.trim())
@@ -110,7 +110,7 @@ export default async function CollectionTemplate({
           }
         />
       </Suspense>
-      <div className="pb-26 md:pb-36" />
+      <div className="pb-10 md:pb-20" />
     </>
   )
 }

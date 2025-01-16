@@ -325,15 +325,6 @@ const ShippingAddress = ({
             variant="outline"
           />
           <Input
-            placeholder="Apartment, suite, etc. (Optional)"
-            name="shipping_address.address_2"
-            autoComplete="address-line2"
-            value={formData["shipping_address.address_2"] || ""}
-            onChange={handleChange}
-            data-testid="shipping-address2-input"
-            variant="outline"
-          />
-          <Input
             placeholder="Company"
             name="shipping_address.company"
             value={formData["shipping_address.company"] || ""}
@@ -399,7 +390,7 @@ const ShippingAddress = ({
           />
         </div>
       )}
-      <div className="my-4">
+      <div>
         <Checkbox
           label="Billing address same as shipping address"
           name="same_as_billing"

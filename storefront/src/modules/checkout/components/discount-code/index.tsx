@@ -32,7 +32,7 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
   }
 
   return (
-    <div className="flex max-sm:flex-col gap-x-8 gap-y-4 mb-8">
+    <div className="flex max-sm:flex-col gap-x-6 gap-y-4 mb-8">
       <Input
         name="code"
         autoFocus={false}

@@ -1,4 +1,4 @@
-// External components
+// External packages
 import { twMerge } from "tailwind-merge"
 
 // Components

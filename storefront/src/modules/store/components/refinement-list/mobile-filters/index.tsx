@@ -1,19 +1,19 @@
-import { Button } from "@/components/Button"
-import {
-  UiCheckbox,
-  UiCheckboxBox,
-  UiCheckboxIcon,
-  UiCheckboxLabel,
-} from "@/components/ui/Checkbox"
 import * as React from "react"
 import {
   CheckboxGroup,
   Dialog,
   DialogTrigger,
   Label,
-  Modal,
-  ModalOverlay,
 } from "react-aria-components"
+
+import {
+  UiCheckbox,
+  UiCheckboxBox,
+  UiCheckboxIcon,
+  UiCheckboxLabel,
+} from "@/components/ui/Checkbox"
+import { Button } from "@/components/Button"
+import { UiModal, UiModalOverlay } from "@/components/ui/Modal"
 
 export const MobileFilters: React.FC<{
   collections?: Record<string, string>
@@ -35,17 +35,19 @@ export const MobileFilters: React.FC<{
   return (
     <DialogTrigger>
       <Button
+        size="sm"
+        variant="outline"
         iconName="plus"
         iconPosition="end"
-        className="bg-white md:hidden border px-4 hover:bg-white border-grayscale-200 h-8 text-black text-xs"
+        className="md:hidden border-grayscale-200"
       >
         Filter
       </Button>
-      <ModalOverlay
-        isDismissable
-        className="fixed top-0 left-0 w-full h-full bg-black-10%"
-      >
-        <Modal className="bg-white absolute bottom-0 left-0 w-full max-h-full overflow-y-scroll p-6 pb-21">
+      <UiModalOverlay className="p-0">
+        <UiModal
+          animateFromBottom
+          className="absolute top-36 left-0 w-full pb-21 max-w-full"
+        >
           <Dialog className="focus-visible:outline-none">
             {({ close }) => (
               <form
@@ -158,8 +160,8 @@ export const MobileFilters: React.FC<{
               </form>
             )}
           </Dialog>
-        </Modal>
-      </ModalOverlay>
+        </UiModal>
+      </UiModalOverlay>
     </DialogTrigger>
   )
 }

@@ -82,7 +82,7 @@ const CheckoutSummary = ({
                   </div>
                   <ItemPrice item={item} />
                 </div>
-                <div className="flex flex-col max-lg:gap-1.5 max-lg:text-xs">
+                <div className="flex flex-col gap-1.5 max-lg:text-xs">
                   {item.variant?.title && (
                     <p>
                       Variant:{" "}

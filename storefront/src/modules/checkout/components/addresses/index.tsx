@@ -40,7 +40,7 @@ const Addresses = ({
 
   return (
     <>
-      <div className="flex justify-between mb-8 border-t border-grayscale-200 pt-8 mt-8">
+      <div className="flex justify-between mb-6 md:mb-8 border-t border-grayscale-200 pt-8 mt-8">
         <div>
           <p
             className={twJoin(
@@ -74,14 +74,14 @@ const Addresses = ({
 
           {!sameAsBilling && <BillingAddress cart={cart} />}
 
-          <SubmitButton>Next</SubmitButton>
+          <SubmitButton className="mt-8">Next</SubmitButton>
           <ErrorMessage error={message} />
         </form>
       ) : cart?.shipping_address ? (
         <div className="flex flex-col gap-4">
-          <div className="flex flex-row gap-16">
+          <div className="flex max-sm:flex-col flex-wrap gap-y-2 gap-x-12">
             <div className="text-grayscale-500">Shipping address</div>
-            <div>
+            <div className="text-grayscale-600">
               {[
                 cart.shipping_address.first_name,
                 cart.shipping_address.last_name,
@@ -106,9 +106,9 @@ const Addresses = ({
             </div>
           </div>
           {sameAsBilling || cart.billing_address ? (
-            <div className="flex flex-row gap-16">
+            <div className="flex max-sm:flex-col flex-wrap gap-y-2 gap-x-17">
               <div className="text-grayscale-500">Billing address</div>
-              <div>
+              <div className="text-grayscale-600">
                 {sameAsBilling ? (
                   "Same as shipping address"
                 ) : (

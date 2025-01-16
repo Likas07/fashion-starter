@@ -51,7 +51,7 @@ export default async function RelatedProducts({
     <>
       <Layout>
         <LayoutColumn className="mt-26 md:mt-36">
-          <h4 className="text-lg md:text-2xl mb-8 md:mb-16">
+          <h4 className="text-md md:text-2xl mb-8 md:mb-16">
             Related products
           </h4>
         </LayoutColumn>
