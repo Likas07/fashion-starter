@@ -14,7 +14,9 @@ export const ForgotPasswordForm: React.FC = () => {
   if (formState.state === "success") {
     return (
       <>
-        <h1 className="text-2xl mb-8">Your password is waiting for you!</h1>
+        <h1 className="text-xl md:text-2xl mb-8">
+          Your password is waiting for you!
+        </h1>
         <div className="mb-8">
           <p>
             We&apos;ve sent you an email with further instructions on retrieving
@@ -30,7 +32,7 @@ export const ForgotPasswordForm: React.FC = () => {
 
   return (
     <form action={formAction}>
-      <h1 className="text-2xl mb-8">Forgot password?</h1>
+      <h1 className="text-xl md:text-2xl mb-8">Forgot password?</h1>
       <div className="mb-8">
         <p>
           Enter your email address below and we will send you instructions on
