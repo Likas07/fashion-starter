@@ -40,11 +40,13 @@ export default async function AccountPersonalAndSecurityPage({
 
   return (
     <>
-      <h1 className="text-lg mb-8 md:mb-16">Personal &amp; security</h1>
+      <h1 className="text-md md:text-lg mb-8 md:mb-16 max-md:font-semibold">
+        Personal &amp; security
+      </h1>
       <h2 className="text-md font-normal mb-6">Personal information</h2>
       <div className="w-full border border-grayscale-200 rounded-xs p-4 flex flex-wrap gap-8 max-sm:flex-col sm:items-center md:flex-col md:items-stretch lg:items-center lg:flex-row mb-16">
         <div className="flex gap-8 flex-1">
-          <Icon name="user" className="w-6 h-6 mt-2.5" />
+          <Icon name="user" className="w-6 h-6 sm:mt-2.5" />
           <div className="flex max-sm:flex-col sm:flex-wrap gap-6 sm:gap-x-16">
             <div>
               <p className="text-xs text-grayscale-500 mb-1.5">Name</p>
@@ -88,7 +90,9 @@ export default async function AccountPersonalAndSecurityPage({
       <p className="text-xs text-grayscale-500 mb-16">
         If you want to change your email please contact us via customer support.
       </p>
-      <h2 className="text-md font-normal mb-6">Addresses</h2>
+      <h2 className="text-md font-normal mb-6">
+        {customer.addresses.length > 1 ? "Addresses" : "Address"}
+      </h2>
       {customer.addresses.length === 0 && (
         <p className="text-grayscale-500 mb-6">
           You don&apos;t have any addresses saved yet.
@@ -106,7 +110,7 @@ export default async function AccountPersonalAndSecurityPage({
         ))}
       {customer.addresses.length > 1 && (
         <UiRadioGroup
-          className="flex flex-col sm:flex-row md:flex-col lg:flex-row lg:flex-wrap gap-6 mb-6"
+          className="flex flex-col sm:flex-row md:flex-col lg:flex-row sm:flex-wrap gap-x-6 gap-y-8 mb-6"
           aria-label="address"
         >
           {customer.addresses.map((address) => (
@@ -115,21 +119,27 @@ export default async function AccountPersonalAndSecurityPage({
               address={address}
               countries={countries}
               region={region}
-              className="h-auto lg:max-w-[calc(50%-0.75rem)] w-full"
+              className="h-auto sm:max-w-[calc(50%-0.75rem)] md:max-w-full lg:max-w-[calc(50%-0.75rem)] w-full"
             />
           ))}
         </UiRadioGroup>
       )}
-      <UiCheckbox className="mb-8">
-        <UiCheckboxBox>
-          <UiCheckboxIcon />
-        </UiCheckboxBox>
-        <UiCheckboxLabel className="group-data-[selected=true]:font-normal">
-          My shipping information is the same as my billing information
-        </UiCheckboxLabel>
-      </UiCheckbox>
+      {customer.addresses.length > 0 && (
+        <UiCheckbox className="mb-6">
+          <UiCheckboxBox>
+            <UiCheckboxIcon />
+          </UiCheckboxBox>
+          <UiCheckboxLabel className="group-data-[selected=true]:font-normal">
+            My shipping information is the same as my billing information
+          </UiCheckboxLabel>
+        </UiCheckbox>
+      )}
       <UiDialogTrigger>
-        <Button className="mb-16 max-sm:w-full">Add another address</Button>
+        {customer.addresses.length > 0 ? (
+          <Button className="mb-16 max-sm:w-full">Add another address</Button>
+        ) : (
+          <Button className="mb-16 max-sm:w-full">Add address</Button>
+        )}
         <UiModalOverlay>
           <UiModal>
             <UiDialog>
@@ -143,8 +153,8 @@ export default async function AccountPersonalAndSecurityPage({
           </UiModal>
         </UiModalOverlay>
       </UiDialogTrigger>
-      <h2 className="text-md font-normal mb-4">Change password</h2>
-      <p className="text-grayscale-500 mb-6">
+      <h2 className="text-md font-normal mb-6 md:mb-4">Change password</h2>
+      <p className="max-md:text-xs text-grayscale-500 mb-6">
         To change your password, we&apos;ll send you an email. Just click on the
         reset button below.
       </p>

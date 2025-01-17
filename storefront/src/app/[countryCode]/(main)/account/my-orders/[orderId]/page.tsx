@@ -87,7 +87,9 @@ export default async function AccountOrderPage({
 
   return (
     <>
-      <h1 className="text-lg mb-16">Order: {order.display_id}</h1>
+      <h1 className="text-md md:text-lg mb-8 md:mb-16">
+        Order: {order.display_id}
+      </h1>
       <div className="flex flex-col gap-6">
         <div className="rounded-xs border border-grayscale-200 flex flex-wrap justify-between p-4">
           <div className="flex gap-4 items-center">
@@ -183,12 +185,12 @@ export default async function AccountOrderPage({
           {order.items?.map((item) => (
             <div
               key={item.id}
-              className="flex gap-x-8 gap-y-6 max-sm:flex-col pb-6 border-b border-grayscale-100 last:border-0 last:pb-0"
+              className="flex gap-x-4 sm:gap-x-8 gap-y-6 pb-6 border-b border-grayscale-100 last:border-0 last:pb-0"
             >
               {item.thumbnail && (
                 <LocalizedLink
                   href={`/products/${item.product?.handle}`}
-                  className="w-37 aspect-[3/4] max-sm:w-full relative overflow-hidden"
+                  className="max-w-25 sm:max-w-37 aspect-[3/4] w-full relative overflow-hidden"
                 >
                   <Image
                     src={item.thumbnail}
@@ -199,7 +201,7 @@ export default async function AccountOrderPage({
                 </LocalizedLink>
               )}
               <div className="flex flex-col flex-1">
-                <p className="mb-2 text-md">{item.title}</p>
+                <p className="mb-2 sm:text-md">{item.title}</p>
                 <div className="text-xs flex flex-col flex-1">
                   <div>
                     {item.variant?.options?.map((option) => (
@@ -211,8 +213,8 @@ export default async function AccountOrderPage({
                       </p>
                     ))}
                   </div>
-                  <div className="mt-auto flex gap-x-10 gap-y-6 items-center justify-between relative">
-                    <div className="self-end sm:mb-1">
+                  <div className="mt-auto flex max-xs:flex-col gap-x-10 gap-y-6 xs:items-center justify-between relative">
+                    <div className="xs:self-end sm:mb-1">
                       <p>
                         <span className="text-grayscale-400 mr-2">
                           Quantity:
@@ -220,7 +222,7 @@ export default async function AccountOrderPage({
                         {item.quantity}
                       </p>
                     </div>
-                    <div className="text-md max-sm:absolute max-sm:right-0">
+                    <div className="sm:text-md">
                       <p>
                         {convertToLocale({
                           currency_code: order.currency_code,

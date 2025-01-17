@@ -37,7 +37,7 @@ const CountrySelect: React.FC<CountrySelectProps> = ({
   return (
     <Select aria-label="Select country" {...props} placeholder={placeholder}>
       <UiSelectButton className="!h-14">
-        <UiSelectValue />
+        <UiSelectValue className="text-base" />
         <UiSelectIcon />
       </UiSelectButton>
       <Popover className="w-[--trigger-width]">

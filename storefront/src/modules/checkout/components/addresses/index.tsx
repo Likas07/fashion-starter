@@ -78,13 +78,13 @@ const Addresses = ({
                 <Icon name="user" className="w-6 h-6 mt-2.5" />
                 <div className="flex flex-col gap-8 flex-1">
                   <div className="flex flex-wrap justify-between gap-6">
-                    <div className="grow basis-0">
+                    <div className="sm:grow sm:basis-0">
                       <p className="text-xs text-grayscale-500 mb-1.5">
                         Country
                       </p>
                       <p>Croatia</p>
                     </div>
-                    <div className="grow basis-0">
+                    <div className="sm:grow sm:basis-0">
                       <p className="text-xs text-grayscale-500 mb-1.5">
                         Address
                       </p>
@@ -98,13 +98,13 @@ const Addresses = ({
                     <p>2nd floor</p>
                   </div>
                   <div className="flex flex-wrap justify-between gap-6">
-                    <div className="grow basis-0">
+                    <div className="sm:grow sm:basis-0">
                       <p className="text-xs text-grayscale-500 mb-1.5">
                         Postal Code
                       </p>
                       <p>10000</p>
                     </div>
-                    <div className="grow basis-0">
+                    <div className="sm:grow sm:basis-0">
                       <p className="text-xs text-grayscale-500 mb-1.5">City</p>
                       <p>Zagreb</p>
                     </div>
