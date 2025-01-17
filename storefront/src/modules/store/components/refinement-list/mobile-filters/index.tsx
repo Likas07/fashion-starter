@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/Checkbox"
 import { Button } from "@/components/Button"
 import { UiModal, UiModalOverlay } from "@/components/ui/Modal"
+import { UiDialog, UiDialogTrigger } from "@/components/Dialog"
 
 export const MobileFilters: React.FC<{
   collections?: Record<string, string>
@@ -28,7 +29,7 @@ export const MobileFilters: React.FC<{
   setMultipleQueryParams,
 }) => {
   return (
-    <ReactAria.DialogTrigger>
+    <UiDialogTrigger>
       <Button
         size="sm"
         variant="outline"
@@ -43,7 +44,7 @@ export const MobileFilters: React.FC<{
           animateFromBottom
           className="absolute top-36 left-0 w-full pb-21 max-w-full"
         >
-          <ReactAria.Dialog className="focus-visible:outline-none">
+          <UiDialog>
             {({ close }) => (
               <form
                 onSubmit={(event) => {
@@ -154,9 +155,9 @@ export const MobileFilters: React.FC<{
                 </footer>
               </form>
             )}
-          </ReactAria.Dialog>
+          </UiDialog>
         </UiModal>
       </UiModalOverlay>
-    </ReactAria.DialogTrigger>
+    </UiDialogTrigger>
   )
 }

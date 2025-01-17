@@ -1,16 +1,22 @@
 import * as React from "react"
 import * as ReactAria from "react-aria-components"
 import type { SortOptions } from "../sort-products"
-import { UiRadio, UiRadioBox, UiRadioLabel } from "@/components/ui/Radio"
+import {
+  UiRadio,
+  UiRadioBox,
+  UiRadioGroup,
+  UiRadioLabel,
+} from "@/components/ui/Radio"
 import { UiModal, UiModalOverlay } from "@/components/ui/Modal"
 import { Button } from "@/components/Button"
+import { UiDialog, UiDialogTrigger } from "@/components/Dialog"
 
 export const MobileSort: React.FC<{
   sortBy: SortOptions | undefined
   setQueryParams: (name: string, value: SortOptions) => void
 }> = ({ sortBy, setQueryParams }) => {
   return (
-    <ReactAria.DialogTrigger>
+    <UiDialogTrigger>
       <Button
         size="sm"
         variant="outline"
@@ -25,7 +31,7 @@ export const MobileSort: React.FC<{
           animateFromBottom
           className="absolute left-0 w-full rounded-none max-w-full shadow-none pb-21"
         >
-          <ReactAria.Dialog className="focus-visible:outline-none">
+          <UiDialog>
             {({ close }) => (
               <form
                 onSubmit={(event) => {
@@ -38,7 +44,7 @@ export const MobileSort: React.FC<{
                   close()
                 }}
               >
-                <ReactAria.RadioGroup
+                <UiRadioGroup
                   className="flex flex-col mb-5"
                   name="sortBy"
                   defaultValue={sortBy}
@@ -59,7 +65,7 @@ export const MobileSort: React.FC<{
                     <UiRadioLabel>Highest price</UiRadioLabel>
                     <UiRadioBox />
                   </UiRadio>
-                </ReactAria.RadioGroup>
+                </UiRadioGroup>
                 <footer className="flex items-center h-21 fixed bottom-0 left-0 w-full bg-white px-6 border-t border-grayscale-100">
                   <Button type="submit" isFullWidth>
                     Show results
@@ -67,9 +73,9 @@ export const MobileSort: React.FC<{
                 </footer>
               </form>
             )}
-          </ReactAria.Dialog>
+          </UiDialog>
         </UiModal>
       </UiModalOverlay>
-    </ReactAria.DialogTrigger>
+    </UiDialogTrigger>
   )
 }

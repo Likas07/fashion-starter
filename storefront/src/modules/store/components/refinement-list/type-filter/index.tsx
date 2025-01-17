@@ -12,13 +12,14 @@ import {
   UiCheckboxIcon,
   UiCheckboxLabel,
 } from "@/components/ui/Checkbox"
+import { UiDialogTrigger } from "@/components/Dialog"
 
 export const TypeFilter: React.FC<{
   types: Record<string, string>
   type?: string[]
   setQueryParams: (name: string, value: string[]) => void
 }> = ({ type, types, setQueryParams }) => (
-  <ReactAria.DialogTrigger>
+  <UiDialogTrigger>
     <UiSelectButton className="w-35">
       <span>Type</span>
       <UiSelectIcon />
@@ -42,5 +43,5 @@ export const TypeFilter: React.FC<{
         </ReactAria.CheckboxGroup>
       </UiSelectDialog>
     </ReactAria.Popover>
-  </ReactAria.DialogTrigger>
+  </UiDialogTrigger>
 )

@@ -4,7 +4,6 @@ import { isEqual } from "lodash"
 import { useEffect, useMemo, useState } from "react"
 import { HttpTypes } from "@medusajs/types"
 import * as ReactAria from "react-aria-components"
-
 import { addToCart } from "@lib/data/cart"
 import { getVariantItemsInStock } from "@lib/util/inventory"
 import { Button } from "@/components/Button"
@@ -18,6 +17,7 @@ import {
 } from "@/components/ui/Select"
 import { useCountryCode } from "hooks/country-code"
 import ProductPrice from "../product-price"
+import { UiRadioGroup } from "@/components/ui/Radio"
 
 type ProductActionsProps = {
   product: HttpTypes.StoreProduct
@@ -221,7 +221,7 @@ export default function ProductActions({
                       {options[colorOption.id]}
                     </span>
                   </p>
-                  <ReactAria.RadioGroup
+                  <UiRadioGroup
                     value={options[colorOption.id] ?? null}
                     onChange={(value) => {
                       setOptionValue(colorOption.id, value)
@@ -239,7 +239,7 @@ export default function ProductActions({
                         style={{ background: color.hex_code }}
                       />
                     ))}
-                  </ReactAria.RadioGroup>
+                  </UiRadioGroup>
                 </div>
               )}
             </>

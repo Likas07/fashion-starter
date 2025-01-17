@@ -4,7 +4,6 @@ import * as React from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { twJoin } from "tailwind-merge"
 import { HttpTypes } from "@medusajs/types"
-
 import { setAddresses } from "@lib/data/cart"
 import compareAddresses from "@lib/util/compare-addresses"
 import { SubmitButton } from "@modules/common/components/submit-button"
@@ -14,8 +13,12 @@ import ShippingAddress from "@modules/checkout/components/shipping-address"
 import { Button } from "@/components/Button"
 import { UiDialogTrigger, UiDialog, UiCloseButton } from "@/components/Dialog"
 import { UiModalOverlay, UiModal } from "@/components/ui/Modal"
-import * as ReactAria from "react-aria-components"
-import { UiRadio, UiRadioBox, UiRadioLabel } from "@/components/ui/Radio"
+import {
+  UiRadio,
+  UiRadioBox,
+  UiRadioGroup,
+  UiRadioLabel,
+} from "@/components/ui/Radio"
 import CountrySelect from "../country-select"
 import { Input } from "@/components/Forms"
 import { Icon } from "@/components/Icon"
@@ -119,7 +122,7 @@ const Addresses = ({
                   <UiModal>
                     <UiDialog>
                       <p className="text-md mb-10">Change address</p>
-                      <ReactAria.RadioGroup
+                      <UiRadioGroup
                         className="flex flex-col gap-4 mb-10"
                         aria-label="Shipping methods"
                       >
@@ -162,7 +165,7 @@ const Addresses = ({
                             Duvanjska 3, Zagreb, 10000, Croatia
                           </UiRadioLabel>
                         </UiRadio>
-                      </ReactAria.RadioGroup>
+                      </UiRadioGroup>
                       <div className="flex justify-between">
                         <UiDialogTrigger>
                           <Button>Add new address</Button>

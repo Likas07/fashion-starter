@@ -12,13 +12,14 @@ import {
   UiCheckboxIcon,
   UiCheckboxLabel,
 } from "@/components/ui/Checkbox"
+import { UiDialogTrigger } from "@/components/Dialog"
 
 export const CollectionFilter: React.FC<{
   collections: Record<string, string>
   collection?: string[]
   setQueryParams: (name: string, value: string[]) => void
 }> = ({ collection, collections, setQueryParams }) => (
-  <ReactAria.DialogTrigger>
+  <UiDialogTrigger>
     <UiSelectButton className="w-35">
       <span>Collection</span>
       <UiSelectIcon />
@@ -42,5 +43,5 @@ export const CollectionFilter: React.FC<{
         </ReactAria.CheckboxGroup>
       </UiSelectDialog>
     </ReactAria.Popover>
-  </ReactAria.DialogTrigger>
+  </UiDialogTrigger>
 )
