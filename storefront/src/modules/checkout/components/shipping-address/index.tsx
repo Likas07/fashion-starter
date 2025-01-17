@@ -6,6 +6,12 @@ import { Input } from "@/components/Forms"
 import { Checkbox } from "@/components/Checkbox"
 // import AddressSelect from "../address-select"
 import CountrySelect from "../country-select"
+import {
+  UiCheckbox,
+  UiCheckboxBox,
+  UiCheckboxIcon,
+  UiCheckboxLabel,
+} from "@/components/ui/Checkbox"
 
 const ShippingAddress = ({
   customer,
@@ -186,13 +192,19 @@ const ShippingAddress = ({
         />
       </div>
       <div>
-        <Checkbox
-          label="Billing address same as shipping address"
+        <UiCheckbox
           name="same_as_billing"
           isSelected={checked}
           onChange={onChange}
           data-testid="billing-address-checkbox"
-        />
+        >
+          <UiCheckboxBox>
+            <UiCheckboxIcon />
+          </UiCheckboxBox>
+          <UiCheckboxLabel className="group-data-[selected=true]:font-normal">
+            Billing address same as shipping address
+          </UiCheckboxLabel>
+        </UiCheckbox>
       </div>
     </>
   )
