@@ -6,12 +6,14 @@ import { deleteCustomerAddress } from "@lib/data/customer"
 
 export const DeleteAddressButton: React.FC<{
   addressId: string
+  className?: string
   children: React.ReactNode
-}> = ({ addressId, children }) => {
+}> = ({ addressId, children, ...rest }) => {
   const [isLoading, setIsLoading] = React.useState(false)
 
   return (
     <UiConfirmButton
+      {...rest}
       onConfirm={async () => {
         setIsLoading(true)
         await deleteCustomerAddress(addressId).catch((error) => {
