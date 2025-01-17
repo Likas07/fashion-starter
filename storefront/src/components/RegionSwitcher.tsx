@@ -1,11 +1,8 @@
 "use client"
 
-// External packages
 import * as React from "react"
 import { usePathname } from "next/navigation"
 import { Popover, Select } from "react-aria-components"
-
-// Components
 import {
   UiSelectButton,
   UiSelectIcon,

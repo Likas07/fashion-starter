@@ -1,9 +1,6 @@
 "use client"
 
-// External packages
 import { Popover, Select } from "react-aria-components"
-
-// Components
 import {
   UiSelectButton,
   UiSelectIcon,

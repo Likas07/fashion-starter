@@ -1,6 +1,5 @@
 "use client"
 
-// External packages
 import { Modal, ModalOverlay, ModalOverlayProps } from "react-aria-components"
 import { twMerge } from "tailwind-merge"
 

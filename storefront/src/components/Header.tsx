@@ -1,10 +1,5 @@
-// External packages
 import * as React from "react"
-
-// Lib
 import { listRegions } from "@lib/data/regions"
-
-// Components
 import { Layout, LayoutColumn } from "@/components/Layout"
 import { LocalizedButtonLink, LocalizedLink } from "@/components/LocalizedLink"
 import { CartIcon } from "./CartIcon"

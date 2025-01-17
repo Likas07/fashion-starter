@@ -1,8 +1,6 @@
 import repeat from "@lib/util/repeat"
 import SkeletonCartItem from "@modules/skeletons/components/skeleton-cart-item"
 import SkeletonOrderSummary from "@modules/skeletons/components/skeleton-order-summary"
-
-// Components
 import { Layout, LayoutColumn } from "@/components/Layout"
 import { Skeleton } from "@/components/ui/Skeleton"
 

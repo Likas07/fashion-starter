@@ -1,5 +1,4 @@
 import Image from "next/image"
-
 import { getCollectionsList } from "@lib/data/collections"
 import { Carousel } from "@/components/Carousel"
 import { LocalizedButtonLink, LocalizedLink } from "@/components/LocalizedLink"

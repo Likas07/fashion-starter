@@ -1,11 +1,6 @@
 "use client"
 
-// External packages
 import * as React from "react"
-import { twMerge } from "tailwind-merge"
-
-// Components
-import { Button, ButtonProps } from "@/components/Button"
 import {
   Dialog,
   DialogProps,
@@ -14,6 +9,8 @@ import {
   OverlayTriggerStateContext,
   PressEvent,
 } from "react-aria-components"
+import { twMerge } from "tailwind-merge"
+import { Button, ButtonProps } from "@/components/Button"
 
 export const UiDialogTrigger: React.FC<DialogTriggerProps> = ({
   children,

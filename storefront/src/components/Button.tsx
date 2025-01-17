@@ -1,12 +1,9 @@
 "use client"
 
-// External packages
 import * as React from "react"
 import { twJoin, twMerge } from "tailwind-merge"
 import * as ReactAria from "react-aria-components"
 import Link, { LinkProps } from "next/link"
-
-// Components
 import { Icon, IconNames } from "@/components/Icon"
 
 export type ButtonOwnProps = {

@@ -1,6 +1,5 @@
 "use client"
 
-// External packages
 import {
   Radio,
   RadioGroup,

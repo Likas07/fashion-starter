@@ -1,4 +1,3 @@
-// External packages
 import {
   SliderOutput,
   SliderOutputProps,

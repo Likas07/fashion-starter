@@ -1,7 +1,5 @@
-// External packages
 import Image from "next/image"
 import { StoreRegion } from "@medusajs/types"
-
 import { listRegions } from "@lib/data/regions"
 import { Layout, LayoutColumn } from "@/components/Layout"
 import { LocalizedLink } from "@/components/LocalizedLink"

@@ -1,9 +1,6 @@
 "use client"
 
-// External packages
 import * as React from "react"
-
-// Components
 import { Button } from "@/components/Button"
 import { Icon } from "@/components/Icon"
 import { Drawer } from "@/components/Drawer"

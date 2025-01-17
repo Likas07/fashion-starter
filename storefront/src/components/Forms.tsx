@@ -1,11 +1,8 @@
 "use client"
 
-// External packages
 import * as React from "react"
 import { twJoin, twMerge } from "tailwind-merge"
 import * as Aria from "react-aria-components"
-
-// Components
 import { Icon } from "@/components/Icon"
 
 export const getFormFieldClassNames = ({

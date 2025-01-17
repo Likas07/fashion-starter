@@ -1,8 +1,5 @@
-// External packages
 import Image from "next/image"
-
 import { HttpTypes } from "@medusajs/types"
-
 import PaymentDetails from "@modules/order/components/payment-details"
 import { Layout, LayoutColumn } from "@/components/Layout"
 import { LocalizedButtonLink, LocalizedLink } from "@/components/LocalizedLink"

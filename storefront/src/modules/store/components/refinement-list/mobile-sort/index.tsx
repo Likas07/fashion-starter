@@ -1,11 +1,6 @@
-// External packages
 import * as React from "react"
 import { Dialog, DialogTrigger, Label, RadioGroup } from "react-aria-components"
-
-// Types
 import type { SortOptions } from "../sort-products"
-
-// Components
 import { UiRadio, UiRadioBox, UiRadioLabel } from "@/components/ui/Radio"
 import { UiModal, UiModalOverlay } from "@/components/ui/Modal"
 import { Button } from "@/components/Button"

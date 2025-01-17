@@ -1,10 +1,7 @@
 "use client"
 
-// External packages
 import { Checkbox, CheckboxProps } from "react-aria-components"
 import { twMerge } from "tailwind-merge"
-
-// Components
 import { Icon, IconNames, IconProps } from "@/components/Icon"
 
 export const UiCheckbox: React.FC<CheckboxProps> = ({

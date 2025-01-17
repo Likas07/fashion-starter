@@ -1,6 +1,5 @@
 "use client"
 
-// External packages
 import {
   Button,
   ButtonProps,
@@ -14,8 +13,6 @@ import {
   SelectValueProps,
 } from "react-aria-components"
 import { twMerge } from "tailwind-merge"
-
-// Components
 import { Icon, IconNames, IconProps } from "@/components/Icon"
 
 type UiSelectButtonOwnProps = {

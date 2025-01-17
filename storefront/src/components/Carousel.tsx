@@ -1,12 +1,9 @@
 "use client"
 
-// External packages
 import * as React from "react"
 import { twJoin, twMerge } from "tailwind-merge"
 import { EmblaCarouselType } from "embla-carousel"
 import useEmblaCarousel from "embla-carousel-react"
-
-// Components
 import { Icon } from "@/components/Icon"
 import { IconCircle } from "@/components/IconCircle"
 import { Layout, LayoutColumn } from "@/components/Layout"

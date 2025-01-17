@@ -1,8 +1,5 @@
-// External packages
 import * as React from "react"
 import { twJoin, twMerge } from "tailwind-merge"
-
-// Icons
 import { ArrowLeft } from "@/components/icons/ArrowLeft"
 import { ArrowRight } from "@/components/icons/ArrowRight"
 import { ArrowUpRight } from "@/components/icons/ArrowUpRight"

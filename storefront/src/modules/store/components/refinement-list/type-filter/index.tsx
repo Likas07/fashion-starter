@@ -1,9 +1,6 @@
 "use client"
 
-// External packages
 import { CheckboxGroup, DialogTrigger, Popover } from "react-aria-components"
-
-// Components
 import {
   UiSelectButton,
   UiSelectDialog,

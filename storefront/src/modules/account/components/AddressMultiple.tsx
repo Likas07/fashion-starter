@@ -1,11 +1,6 @@
-// External packages
 import { twMerge } from "tailwind-merge"
-
-// Types
 import { BaseRegionCountry } from "@medusajs/types/dist/http/region/common"
 import { StoreCustomerAddress, StoreRegion } from "@medusajs/types"
-
-// Component
 import { UiCloseButton, UiDialog, UiDialogTrigger } from "@/components/Dialog"
 import { UiModal, UiModalOverlay } from "@/components/ui/Modal"
 import { DeleteAddressButton } from "./DeleteAddressButton"

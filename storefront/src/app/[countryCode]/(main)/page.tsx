@@ -1,7 +1,5 @@
-// External
 import { Metadata } from "next"
 import Image from "next/image"
-
 import { getRegion } from "@lib/data/regions"
 import { getProductTypesList } from "@lib/data/product-types"
 import { Layout, LayoutColumn } from "@/components/Layout"

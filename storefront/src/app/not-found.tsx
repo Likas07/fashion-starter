@@ -1,7 +1,4 @@
-// External packages
 import { Metadata } from "next"
-
-// Components
 import { Layout, LayoutColumn } from "@/components/Layout"
 import { LocalizedButtonLink } from "@/components/LocalizedLink"
 import { Footer } from "@/components/Footer"

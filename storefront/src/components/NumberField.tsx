@@ -1,9 +1,7 @@
 "use client"
 
-// External packages
 import * as ReactAria from "react-aria-components"
 import { twJoin, twMerge } from "tailwind-merge"
-
 import { Icon } from "@/components/Icon"
 
 export const NumberField: React.FC<

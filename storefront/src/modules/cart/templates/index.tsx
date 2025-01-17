@@ -2,8 +2,6 @@ import ItemsTemplate from "./items"
 import Summary from "./summary"
 import EmptyCartMessage from "../components/empty-cart-message"
 import { HttpTypes } from "@medusajs/types"
-
-// Components
 import { Layout, LayoutColumn } from "@/components/Layout"
 
 // TODO: Ask customer if they want to sign in or continue as guest
