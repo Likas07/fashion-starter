@@ -42,7 +42,7 @@ export default function OrderCompletedTemplate({
           <div className="flex-1 overflow-hidden rounded-xs border border-grayscale-200 p-4">
             <div className="flex gap-4 items-center mb-8">
               <Icon name="map-pin" />
-              <p className="text-grayscale-400">Delivery address</p>
+              <p className="text-grayscale-500">Delivery address</p>
             </div>
             <div>
               <p>Jovana Jerimic</p>
@@ -53,7 +53,7 @@ export default function OrderCompletedTemplate({
           <div className="flex-1 overflow-hidden rounded-xs border border-grayscale-200 p-4">
             <div className="flex gap-4 items-center mb-8">
               <Icon name="receipt" />
-              <p className="text-grayscale-400">Billing address</p>
+              <p className="text-grayscale-500">Billing address</p>
             </div>
             <div>
               <p>Jovana Jerimic</p>
@@ -78,17 +78,17 @@ export default function OrderCompletedTemplate({
               <div className="text-xs flex flex-col flex-1">
                 <div>
                   <p className="mb-1">
-                    <span className="text-grayscale-400 mr-2">Material:</span>
+                    <span className="text-grayscale-500 mr-2">Material:</span>
                     Linen
                   </p>
                   <p className="mb-1">
-                    <span className="text-grayscale-400 mr-2">Color:</span>Gray
+                    <span className="text-grayscale-500 mr-2">Color:</span>Gray
                   </p>
                 </div>
                 <div className="sm:mt-auto flex max-sm:flex-col gap-x-10 gap-y-6 max-sm:h-full sm:items-center justify-between relative">
                   <div className="sm:self-end sm:mb-1">
                     <p>
-                      <span className="text-grayscale-400 mr-2">Quantity:</span>
+                      <span className="text-grayscale-500 mr-2">Quantity:</span>
                       1
                     </p>
                   </div>
@@ -114,17 +114,17 @@ export default function OrderCompletedTemplate({
               <div className="text-xs flex flex-col flex-1">
                 <div>
                   <p className="mb-1">
-                    <span className="text-grayscale-400 mr-2">Material:</span>
+                    <span className="text-grayscale-500 mr-2">Material:</span>
                     Linen
                   </p>
                   <p className="mb-1">
-                    <span className="text-grayscale-400 mr-2">Color:</span>Gray
+                    <span className="text-grayscale-500 mr-2">Color:</span>Gray
                   </p>
                 </div>
                 <div className="sm:mt-auto flex max-sm:flex-col gap-x-10 gap-y-6 max-sm:h-full sm:items-center justify-between relative">
                   <div className="sm:self-end sm:mb-1">
                     <p>
-                      <span className="text-grayscale-400 mr-2">Quantity:</span>
+                      <span className="text-grayscale-500 mr-2">Quantity:</span>
                       1
                     </p>
                   </div>
@@ -150,17 +150,17 @@ export default function OrderCompletedTemplate({
               <div className="text-xs flex flex-col flex-1">
                 <div>
                   <p className="mb-1">
-                    <span className="text-grayscale-400 mr-2">Material:</span>
+                    <span className="text-grayscale-500 mr-2">Material:</span>
                     Linen
                   </p>
                   <p className="mb-1">
-                    <span className="text-grayscale-400 mr-2">Color:</span>Gray
+                    <span className="text-grayscale-500 mr-2">Color:</span>Gray
                   </p>
                 </div>
                 <div className="sm:mt-auto flex max-sm:flex-col gap-x-10 gap-y-6 max-sm:h-full sm:items-center justify-between relative">
                   <div className="sm:self-end sm:mb-1">
                     <p>
-                      <span className="text-grayscale-400 mr-2">Quantity:</span>
+                      <span className="text-grayscale-500 mr-2">Quantity:</span>
                       1
                     </p>
                   </div>
@@ -186,17 +186,17 @@ export default function OrderCompletedTemplate({
               <div className="text-xs flex flex-col flex-1">
                 <div>
                   <p className="mb-1">
-                    <span className="text-grayscale-400 mr-2">Material:</span>
+                    <span className="text-grayscale-500 mr-2">Material:</span>
                     Linen
                   </p>
                   <p className="mb-1">
-                    <span className="text-grayscale-400 mr-2">Color:</span>Gray
+                    <span className="text-grayscale-500 mr-2">Color:</span>Gray
                   </p>
                 </div>
                 <div className="sm:mt-auto flex max-sm:flex-col gap-x-10 gap-y-6 max-sm:h-full sm:items-center justify-between relative">
                   <div className="sm:self-end sm:mb-1">
                     <p>
-                      <span className="text-grayscale-400 mr-2">Quantity:</span>
+                      <span className="text-grayscale-500 mr-2">Quantity:</span>
                       1
                     </p>
                   </div>

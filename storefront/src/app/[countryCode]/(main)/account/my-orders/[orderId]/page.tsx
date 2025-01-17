@@ -94,7 +94,7 @@ export default async function AccountOrderPage({
         <div className="rounded-xs border border-grayscale-200 flex flex-wrap justify-between p-4">
           <div className="flex gap-4 items-center">
             <Icon name="calendar" />
-            <p className="text-grayscale-400">Order date</p>
+            <p className="text-grayscale-500">Order date</p>
           </div>
           <div>
             <p>{new Date(order.created_at).toLocaleDateString()}</p>
@@ -109,7 +109,7 @@ export default async function AccountOrderPage({
           <div className="flex-1 overflow-hidden rounded-xs border border-grayscale-200 p-4">
             <div className="flex gap-4 items-center mb-8">
               <Icon name="map-pin" />
-              <p className="text-grayscale-400">Delivery address</p>
+              <p className="text-grayscale-500">Delivery address</p>
             </div>
             <div>
               <p>
@@ -146,7 +146,7 @@ export default async function AccountOrderPage({
           <div className="flex-1 overflow-hidden rounded-xs border border-grayscale-200 p-4">
             <div className="flex gap-4 items-center mb-8">
               <Icon name="receipt" />
-              <p className="text-grayscale-400">Billing address</p>
+              <p className="text-grayscale-500">Billing address</p>
             </div>
             <div>
               <p>
@@ -206,7 +206,7 @@ export default async function AccountOrderPage({
                   <div>
                     {item.variant?.options?.map((option) => (
                       <p className="mb-1" key={option.id}>
-                        <span className="text-grayscale-400 mr-2">
+                        <span className="text-grayscale-500 mr-2">
                           {option.option?.title}:
                         </span>
                         {option.value}
@@ -216,7 +216,7 @@ export default async function AccountOrderPage({
                   <div className="mt-auto flex max-xs:flex-col gap-x-10 gap-y-6 xs:items-center justify-between relative">
                     <div className="xs:self-end sm:mb-1">
                       <p>
-                        <span className="text-grayscale-400 mr-2">
+                        <span className="text-grayscale-500 mr-2">
                           Quantity:
                         </span>
                         {item.quantity}
