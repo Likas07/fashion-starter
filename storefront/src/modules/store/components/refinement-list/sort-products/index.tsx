@@ -1,6 +1,6 @@
 "use client"
 
-import { Popover, Select } from "react-aria-components"
+import * as ReactAria from "react-aria-components"
 import {
   UiSelectButton,
   UiSelectIcon,
@@ -22,7 +22,7 @@ const SortProducts = ({ sortBy, setQueryParams }: SortProductsProps) => {
   }
 
   return (
-    <Select
+    <ReactAria.Select
       placeholder="Sort by"
       selectedKey={sortBy || "sortBy"}
       onSelectionChange={(key) => {
@@ -35,7 +35,7 @@ const SortProducts = ({ sortBy, setQueryParams }: SortProductsProps) => {
         <UiSelectValue />
         <UiSelectIcon />
       </UiSelectButton>
-      <Popover className="w-60" crossOffset={-126}>
+      <ReactAria.Popover className="w-60" crossOffset={-126}>
         <UiSelectListBox>
           <UiSelectListBoxItem id="created_at">
             Latest Arrivals
@@ -45,8 +45,8 @@ const SortProducts = ({ sortBy, setQueryParams }: SortProductsProps) => {
             Highest price
           </UiSelectListBoxItem>
         </UiSelectListBox>
-      </Popover>
-    </Select>
+      </ReactAria.Popover>
+    </ReactAria.Select>
   )
 }
 

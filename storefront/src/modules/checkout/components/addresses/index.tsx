@@ -14,7 +14,7 @@ import ShippingAddress from "@modules/checkout/components/shipping-address"
 import { Button } from "@/components/Button"
 import { UiDialogTrigger, UiDialog, UiCloseButton } from "@/components/Dialog"
 import { UiModalOverlay, UiModal } from "@/components/ui/Modal"
-import { RadioGroup } from "react-aria-components"
+import * as ReactAria from "react-aria-components"
 import { UiRadio, UiRadioBox, UiRadioLabel } from "@/components/ui/Radio"
 import CountrySelect from "../country-select"
 import { Input } from "@/components/Forms"
@@ -119,7 +119,7 @@ const Addresses = ({
                   <UiModal>
                     <UiDialog>
                       <p className="text-md mb-10">Change address</p>
-                      <RadioGroup
+                      <ReactAria.RadioGroup
                         className="flex flex-col gap-4 mb-10"
                         aria-label="Shipping methods"
                       >
@@ -162,7 +162,7 @@ const Addresses = ({
                             Duvanjska 3, Zagreb, 10000, Croatia
                           </UiRadioLabel>
                         </UiRadio>
-                      </RadioGroup>
+                      </ReactAria.RadioGroup>
                       <div className="flex justify-between">
                         <UiDialogTrigger>
                           <Button>Add new address</Button>

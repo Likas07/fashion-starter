@@ -6,7 +6,7 @@ import ErrorMessage from "@modules/checkout/components/error-message"
 import { CreditCard } from "@medusajs/icons"
 import { CardElement } from "@stripe/react-stripe-js"
 import { StripeCardElementOptions } from "@stripe/stripe-js"
-import { RadioGroup } from "react-aria-components"
+import * as ReactAria from "react-aria-components"
 import { twJoin } from "tailwind-merge"
 
 import { isStripe as isStripeFunc, paymentInfoMap } from "@lib/constants"
@@ -134,7 +134,7 @@ const Payment = ({
       <div className={isOpen ? "block" : "hidden"}>
         {!paidByGiftcard && availablePaymentMethods?.length && (
           <>
-            <RadioGroup
+            <ReactAria.RadioGroup
               value={selectedPaymentMethod}
               onChange={setSelectedPaymentMethod}
               aria-label="Payment methods"
@@ -152,7 +152,7 @@ const Payment = ({
                     />
                   )
                 })}
-            </RadioGroup>
+            </ReactAria.RadioGroup>
             {isStripe && stripeReady && (
               <div className="mt-5">
                 <CardElement

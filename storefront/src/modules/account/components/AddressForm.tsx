@@ -9,7 +9,7 @@ import CountrySelect, {
 import { SubmitButton } from "@modules/common/components/submit-button"
 import { Input } from "@/components/Forms"
 import { UiCloseButton } from "@/components/Dialog"
-import { OverlayTriggerStateContext } from "react-aria-components"
+import * as ReactAria from "react-aria-components"
 
 export const AddressForm: React.FC<{
   addressId?: string
@@ -41,7 +41,7 @@ export const AddressForm: React.FC<{
     success: false,
     error: undefined,
   })
-  const { close } = React.useContext(OverlayTriggerStateContext)!
+  const { close } = React.useContext(ReactAria.OverlayTriggerStateContext)!
 
   React.useEffect(() => {
     if (addAddressFormMessage?.success || updateAddressFormMessage?.success) {

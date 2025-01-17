@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { useRouter, useSearchParams, usePathname } from "next/navigation"
 import { HttpTypes } from "@medusajs/types"
 import { twJoin } from "tailwind-merge"
-import { RadioGroup } from "react-aria-components"
+import * as ReactAria from "react-aria-components"
 
 import { setShippingMethod } from "@lib/data/cart"
 import { convertToLocale } from "@lib/util/money"
@@ -91,7 +91,7 @@ const Shipping: React.FC<ShippingProps> = ({
           </div>
         ) : (
           <div>
-            <RadioGroup
+            <ReactAria.RadioGroup
               className="flex flex-col gap-4 mb-8"
               value={selectedShippingMethod?.id}
               onChange={set}
@@ -116,7 +116,7 @@ const Shipping: React.FC<ShippingProps> = ({
                   </UiRadioLabel>
                 </UiRadio>
               ))}
-            </RadioGroup>
+            </ReactAria.RadioGroup>
 
             <ErrorMessage error={error} />
 

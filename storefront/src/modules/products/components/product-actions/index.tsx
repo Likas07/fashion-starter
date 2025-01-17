@@ -3,7 +3,7 @@
 import { isEqual } from "lodash"
 import { useEffect, useMemo, useState } from "react"
 import { HttpTypes } from "@medusajs/types"
-import { Popover, Radio, RadioGroup, Select } from "react-aria-components"
+import * as ReactAria from "react-aria-components"
 
 import { addToCart } from "@lib/data/cart"
 import { getVariantItemsInStock } from "@lib/util/inventory"
@@ -185,7 +185,7 @@ export default function ProductActions({
                     </span>
                   )}
                 </p>
-                <Select
+                <ReactAria.Select
                   selectedKey={options[materialOption.id] ?? null}
                   onSelectionChange={(value) => {
                     setOptionValue(materialOption.id, `${value}`)
@@ -199,7 +199,7 @@ export default function ProductActions({
                     <UiSelectValue />
                     <UiSelectIcon className="h-6 w-6" />
                   </UiSelectButton>
-                  <Popover className="w-[--trigger-width]">
+                  <ReactAria.Popover className="w-[--trigger-width]">
                     <UiSelectListBox>
                       {materials.map((material) => (
                         <UiSelectListBoxItem
@@ -210,8 +210,8 @@ export default function ProductActions({
                         </UiSelectListBoxItem>
                       ))}
                     </UiSelectListBox>
-                  </Popover>
-                </Select>
+                  </ReactAria.Popover>
+                </ReactAria.Select>
               </div>
               {selectedMaterial && (
                 <div className="mb-6">
@@ -221,7 +221,7 @@ export default function ProductActions({
                       {options[colorOption.id]}
                     </span>
                   </p>
-                  <RadioGroup
+                  <ReactAria.RadioGroup
                     value={options[colorOption.id] ?? null}
                     onChange={(value) => {
                       setOptionValue(colorOption.id, value)
@@ -231,7 +231,7 @@ export default function ProductActions({
                     isDisabled={!!disabled || isAdding}
                   >
                     {selectedMaterial.colors.map((color) => (
-                      <Radio
+                      <ReactAria.Radio
                         key={color.id}
                         value={color.name}
                         aria-label={color.name}
@@ -239,7 +239,7 @@ export default function ProductActions({
                         style={{ background: color.hex_code }}
                       />
                     ))}
-                  </RadioGroup>
+                  </ReactAria.RadioGroup>
                 </div>
               )}
             </>
@@ -256,7 +256,7 @@ export default function ProductActions({
                       </span>
                     )}
                   </p>
-                  <Select
+                  <ReactAria.Select
                     selectedKey={options[option.id] ?? null}
                     onSelectionChange={(value) => {
                       setOptionValue(option.id, `${value}`)
@@ -270,7 +270,7 @@ export default function ProductActions({
                       <UiSelectValue />
                       <UiSelectIcon className="h-6 w-6" />
                     </UiSelectButton>
-                    <Popover className="w-[--trigger-width]">
+                    <ReactAria.Popover className="w-[--trigger-width]">
                       <UiSelectListBox>
                         {(option.values ?? [])
                           .filter((value) => Boolean(value.value))
@@ -283,8 +283,8 @@ export default function ProductActions({
                             </UiSelectListBoxItem>
                           ))}
                       </UiSelectListBox>
-                    </Popover>
-                  </Select>
+                    </ReactAria.Popover>
+                  </ReactAria.Select>
                 </div>
               )
             })}

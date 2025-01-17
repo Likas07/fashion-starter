@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { twJoin, twMerge } from "tailwind-merge"
-import * as Aria from "react-aria-components"
+import * as ReactAria from "react-aria-components"
 import { Icon } from "@/components/Icon"
 
 export const getFormFieldClassNames = ({
@@ -52,13 +52,13 @@ type InputLabelOwnProps = {
 export const InputLabel: React.FC<
   React.ComponentPropsWithRef<"label"> & InputLabelOwnProps
 > = ({ isRequired, children, className, ...rest }) => (
-  <Aria.Label
+  <ReactAria.Label
     {...rest}
     className={twMerge("mb-1 block font-semibold", className)}
   >
     {children}
     {isRequired && <span className="ml-0.5 text-orange-700">*</span>}
-  </Aria.Label>
+  </ReactAria.Label>
 )
 
 /**
@@ -71,7 +71,7 @@ type InputSubLabelOwnProps = {
 export const InputSubLabel: React.FC<
   React.ComponentPropsWithRef<"p"> & InputSubLabelOwnProps
 > = ({ type, children, className, ...rest }) => (
-  <Aria.Text
+  <ReactAria.Text
     {...rest}
     className={twMerge(
       "mt-2 text-xs",
@@ -81,7 +81,7 @@ export const InputSubLabel: React.FC<
     )}
   >
     {children}
-  </Aria.Text>
+  </ReactAria.Text>
 )
 
 /**
@@ -117,7 +117,7 @@ export const Input = React.forwardRef<
     ref
   ) => (
     <div className={twMerge("relative", wrapperClassName)}>
-      <Aria.Input
+      <ReactAria.Input
         {...rest}
         ref={ref}
         className={twMerge(

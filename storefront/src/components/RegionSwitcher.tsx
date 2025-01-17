@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { usePathname } from "next/navigation"
-import { Popover, Select } from "react-aria-components"
+import * as ReactAria from "react-aria-components"
 import {
   UiSelectButton,
   UiSelectIcon,
@@ -37,7 +37,7 @@ export const RegionSwitcher: React.FC<{
   }
 
   return (
-    <Select
+    <ReactAria.Select
       selectedKey={`${countryCode}`}
       onSelectionChange={(key) => {
         updateRegion(`${key}`, currentPath)
@@ -58,7 +58,7 @@ export const RegionSwitcher: React.FC<{
         </UiSelectValue>
         <UiSelectIcon className={selectIconClassName} />
       </UiSelectButton>
-      <Popover className="max-w-61 w-full">
+      <ReactAria.Popover className="max-w-61 w-full">
         <UiSelectListBox>
           {countryOptions.map((country) => (
             <UiSelectListBoxItem
@@ -70,7 +70,7 @@ export const RegionSwitcher: React.FC<{
             </UiSelectListBoxItem>
           ))}
         </UiSelectListBox>
-      </Popover>
-    </Select>
+      </ReactAria.Popover>
+    </ReactAria.Select>
   )
 }
