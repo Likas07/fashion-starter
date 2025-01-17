@@ -44,6 +44,7 @@ module.exports = {
       sm: ["1.125rem", 1.4],
       base: ["1rem", 1.4],
       xs: ["0.75rem", 1.4],
+      "2xs": ["0.625rem", 1.4],
     },
     borderRadius: {
       "2xs": "2px",

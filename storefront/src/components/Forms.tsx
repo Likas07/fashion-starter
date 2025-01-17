@@ -141,7 +141,7 @@ export const Input = React.forwardRef<
             uiSize === "md" &&
               "peer-focus:top-1 peer-[:not(:placeholder-shown)]:top-1 peer-[:autofill]:top-1",
             uiSize === "sm" &&
-              "peer-focus:top-1 peer-[:not(:placeholder-shown)]:top-1 peer-[:autofill]:top-1 text-xs peer-focus:text-[10px] peer-[:not(:placeholder-shown)]:text-[10px] peer-[:autofill]:text-[10px]"
+              "peer-focus:top-1 peer-[:not(:placeholder-shown)]:top-1 peer-[:autofill]:top-1 text-xs peer-focus:text-2xs peer-[:not(:placeholder-shown)]:text-2xs peer-[:autofill]:text-2xs"
           )}
         >
           {placeholder}
