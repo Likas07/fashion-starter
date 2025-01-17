@@ -27,50 +27,45 @@ export const getButtonClassNames = ({
   loadingText,
   size,
   spinnerPosition,
-  variant,
+  variant = "solid",
 }: ButtonOwnProps): string => {
+  const variantClasses = {
+    ghost: "text-black h-auto disabled:text-grayscale-200",
+    unstyled: "text-black h-auto disabled:text-grayscale-200",
+    outline:
+      "text-black hover:text-grayscale-500 hover:border-grayscale-500 border border-black disabled:text-grayscale-200 disabled:border-grayscale-200",
+    solid:
+      "bg-black hover:bg-grayscale-500 text-white disabled:bg-grayscale-200",
+    link: "text-black h-auto border-b border-current px-0 rounded-none disabled:text-grayscale-200 hover:border-transparent",
+  }
+
+  const visuallyDisabledClasses = isVisuallyDisabled
+    ? {
+        ghost: "pointer-events-none text-grayscale-200",
+        link: "pointer-events-none text-grayscale-200",
+        unstyled: "pointer-events-none text-grayscale-200",
+        outline: "pointer-events-none border-grayscale-200 text-grayscale-200",
+        solid: "pointer-events-none bg-grayscale-200",
+      }[variant]
+    : ""
+
+  const flexDirection =
+    iconPosition === "end" || spinnerPosition === "end"
+      ? "flex-row-reverse"
+      : ""
+  const hasGap = (isLoading && loadingText) || iconName
+  const sizeClasses =
+    size === "sm" ? "px-4 h-8 text-xs" : size === "md" ? "px-6 h-12" : ""
+
   return twJoin(
     "inline-flex items-center focus-visible:outline-none rounded-xs justify-center transition-colors disabled:pointer-events-none",
-
-    // isFullWidth
-    Boolean(isFullWidth) && "w-full",
-
-    // iconPosition,
-    // spinnerPosition
-    (iconPosition === "end" || spinnerPosition === "end") && "flex-row-reverse",
-
-    // isLoading
+    isFullWidth && "w-full",
+    flexDirection,
     isLoading && "cursor-not-allowed",
-
-    // iconName
-    // isLoading
-    // loadingText
-    ((Boolean(isLoading) && Boolean(loadingText)) || Boolean(iconName)) &&
-      "gap-2",
-
-    // size
-    size === "sm" && "px-4 h-8 text-xs",
-    size === "md" && "px-6 h-12",
-
-    // variant
-    ((variant === "ghost" || variant == "unstyled") &&
-      "text-black h-auto disabled:text-grayscale-200") ||
-      (variant === "outline" &&
-        "text-black hover:text-grayscale-500 hover:border-grayscale-500 border border-black disabled:text-grayscale-200 disabled:border-grayscale-200") ||
-      (variant === "solid" &&
-        "bg-black hover:bg-grayscale-500 text-white disabled:bg-grayscale-200") ||
-      (variant === "link" &&
-        "text-black h-auto border-b border-current px-0 rounded-none disabled:text-grayscale-200 hover:border-transparent"),
-
-    // isVisuallyDisabled
-    isVisuallyDisabled && "pointer-events-none",
-    isVisuallyDisabled &&
-      (variant === "ghost" || variant === "link" || variant == "unstyled") &&
-      "text-grayscale-200",
-    isVisuallyDisabled &&
-      variant === "outline" &&
-      "border-grayscale-200 text-grayscale-200",
-    isVisuallyDisabled && variant === "solid" && "bg-grayscale-200"
+    hasGap && "gap-2",
+    sizeClasses,
+    variantClasses[variant],
+    visuallyDisabledClasses
   )
 }
 
