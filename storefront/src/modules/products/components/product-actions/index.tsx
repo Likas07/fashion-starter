@@ -292,6 +292,9 @@ export default function ProductActions({
       )}
       <div className="flex max-sm:flex-col gap-4">
         <NumberField
+          isDisabled={
+            !itemsInStock || !selectedVariant || !!disabled || isAdding
+          }
           value={quantity}
           onChange={setQuantity}
           minValue={1}
