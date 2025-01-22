@@ -155,7 +155,7 @@ export const AddressForm: React.FC<{
           isLoading={
             isAddAddressFormActionPending || isUpdateAddressFormActionPending
           }
-          disabled={
+          isDisabled={
             isAddAddressFormActionPending || isUpdateAddressFormActionPending
           }
         >

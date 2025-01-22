@@ -186,7 +186,7 @@ const Payment = ({
           className="mt-6"
           onPress={handleSubmit}
           isLoading={isLoading}
-          disabled={
+          isDisabled={
             (isStripe && !cardComplete) ||
             (!selectedPaymentMethod && !paidByGiftcard)
           }

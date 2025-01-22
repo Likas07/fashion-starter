@@ -22,7 +22,7 @@ export const DeleteAddressButton: React.FC<{
         setIsLoading(false)
       }}
       isLoading={isLoading}
-      disabled={isLoading}
+      isDisabled={isLoading}
     >
       {children}
     </UiConfirmButton>

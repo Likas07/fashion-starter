@@ -65,7 +65,7 @@ export const PersonalInfoForm: React.FC<{
         )}
       </div>
       <div className="flex gap-6 justify-between">
-        <SubmitButton isLoading={isPending} disabled={isPending}>
+        <SubmitButton isLoading={isPending} isDisabled={isPending}>
           Save changes
         </SubmitButton>
         <UiCloseButton variant="outline">Cancel</UiCloseButton>

@@ -126,7 +126,7 @@ const Shipping: React.FC<ShippingProps> = ({
             <Button
               onPress={handleSubmit}
               isLoading={isLoading}
-              disabled={!cart.shipping_methods?.[0]}
+              isDisabled={!cart.shipping_methods?.[0]}
             >
               Next
             </Button>
