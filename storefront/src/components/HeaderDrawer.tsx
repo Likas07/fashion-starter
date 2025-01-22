@@ -5,7 +5,7 @@ import { Button } from "@/components/Button"
 import { Icon } from "@/components/Icon"
 import { Drawer } from "@/components/Drawer"
 import { LocalizedLink } from "@/components/LocalizedLink"
-import { RegionSwitcher } from "./RegionSwitcher"
+import { RegionSwitcher } from "@/components/RegionSwitcher"
 
 export const HeaderDrawer: React.FC<{
   countryOptions: {

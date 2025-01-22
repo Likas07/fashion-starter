@@ -3,8 +3,8 @@
 import * as React from "react"
 import { LinkProps } from "next/link"
 import { useCountryCode } from "hooks/country-code"
-import { Link, LinkOwnProps } from "./Link"
-import { ButtonLink, ButtonOwnProps } from "./Button"
+import { Link, LinkOwnProps } from "@/components/Link"
+import { ButtonLink, ButtonOwnProps } from "@/components/Button"
 
 export const LocalizedLink = <RouteInferType extends any>({
   children,

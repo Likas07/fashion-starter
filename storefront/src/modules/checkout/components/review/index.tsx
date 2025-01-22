@@ -4,7 +4,7 @@ import { twJoin } from "tailwind-merge"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 
 import { Button } from "@/components/Button"
-import PaymentButton from "../payment-button"
+import PaymentButton from "@modules/checkout/components/payment-button"
 
 const Review = ({ cart }: { cart: any }) => {
   const searchParams = useSearchParams()

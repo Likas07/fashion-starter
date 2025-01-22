@@ -2,7 +2,7 @@ import React from "react"
 
 import { isManual } from "@lib/constants"
 import { UiRadio, UiRadioBox } from "@/components/ui/Radio"
-import PaymentTest from "../payment-test"
+import PaymentTest from "@modules/checkout/components/payment-test"
 
 type PaymentContainerProps = {
   paymentProviderId: string

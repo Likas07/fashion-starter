@@ -1,6 +1,6 @@
-import ItemsTemplate from "./items"
-import Summary from "./summary"
-import EmptyCartMessage from "../components/empty-cart-message"
+import EmptyCartMessage from "@modules/cart/components/empty-cart-message"
+import ItemsTemplate from "@modules/cart/templates/items"
+import Summary from "@modules/cart/templates/summary"
 import { HttpTypes } from "@medusajs/types"
 import { Layout, LayoutColumn } from "@/components/Layout"
 

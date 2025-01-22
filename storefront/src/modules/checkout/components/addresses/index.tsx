@@ -19,7 +19,7 @@ import {
   UiRadioGroup,
   UiRadioLabel,
 } from "@/components/ui/Radio"
-import CountrySelect from "../country-select"
+import CountrySelect from "@modules/checkout/components/country-select"
 import { Input } from "@/components/Forms"
 import { Icon } from "@/components/Icon"
 

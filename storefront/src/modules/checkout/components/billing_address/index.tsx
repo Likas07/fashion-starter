@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import CountrySelect from "../country-select"
+import CountrySelect from "@modules/checkout/components/country-select"
 import { HttpTypes } from "@medusajs/types"
 import { Input } from "@/components/Forms"
 

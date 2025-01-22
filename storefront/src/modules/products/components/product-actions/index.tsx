@@ -16,7 +16,7 @@ import {
   UiSelectValue,
 } from "@/components/ui/Select"
 import { useCountryCode } from "hooks/country-code"
-import ProductPrice from "../product-price"
+import ProductPrice from "@modules/products/components/product-price"
 import { UiRadioGroup } from "@/components/ui/Radio"
 
 type ProductActionsProps = {

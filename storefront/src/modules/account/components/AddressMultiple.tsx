@@ -3,9 +3,9 @@ import { BaseRegionCountry } from "@medusajs/types/dist/http/region/common"
 import { StoreCustomerAddress, StoreRegion } from "@medusajs/types"
 import { UiCloseButton, UiDialog, UiDialogTrigger } from "@/components/Dialog"
 import { UiModal, UiModalOverlay } from "@/components/ui/Modal"
-import { DeleteAddressButton } from "./DeleteAddressButton"
+import { DeleteAddressButton } from "@modules/account/components/DeleteAddressButton"
 import { Button } from "@/components/Button"
-import { AddressForm } from "./AddressForm"
+import { AddressForm } from "@modules/account/components/AddressForm"
 import { UiRadio, UiRadioBox } from "@/components/ui/Radio"
 
 export const AddressMultiple: React.FC<{

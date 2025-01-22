@@ -5,8 +5,8 @@ import { Button } from "@/components/Button"
 import { UiCloseButton, UiDialog, UiDialogTrigger } from "@/components/Dialog"
 import { Icon } from "@/components/Icon"
 import { UiModal, UiModalOverlay } from "@/components/ui/Modal"
-import { DeleteAddressButton } from "./DeleteAddressButton"
-import { AddressForm } from "./AddressForm"
+import { DeleteAddressButton } from "@modules/account/components/DeleteAddressButton"
+import { AddressForm } from "@modules/account/components/AddressForm"
 
 export const AddressSingle: React.FC<{
   address: StoreCustomerAddress

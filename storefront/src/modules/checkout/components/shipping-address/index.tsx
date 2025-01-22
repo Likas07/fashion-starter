@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from "react"
 
 import { Input } from "@/components/Forms"
 // import AddressSelect from "../address-select"
-import CountrySelect from "../country-select"
+import CountrySelect from "@modules/checkout/components/country-select"
 import {
   UiCheckbox,
   UiCheckboxBox,

@@ -8,8 +8,13 @@ import { z } from "zod"
 import { sdk } from "@lib/config"
 import medusaError from "@lib/util/medusa-error"
 import { enrichLineItems } from "@lib/util/enrich-line-items"
-import { getAuthHeaders, getCartId, removeCartId, setCartId } from "./cookies"
-import { getRegion } from "./regions"
+import {
+  getCartId,
+  getAuthHeaders,
+  setCartId,
+  removeCartId,
+} from "@lib/data/cookies"
+import { getRegion } from "@lib/data/regions"
 
 export async function retrieveCart() {
   const cartId = await getCartId()

@@ -1,6 +1,6 @@
 import * as React from "react"
 import * as ReactAria from "react-aria-components"
-import type { SortOptions } from "../sort-products"
+import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 import {
   UiRadio,
   UiRadioBox,

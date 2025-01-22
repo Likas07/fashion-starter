@@ -10,7 +10,7 @@ import { getCategoriesList } from "@lib/data/categories"
 import { getProductTypesList } from "@lib/data/product-types"
 import { LocalizedLink } from "@/components/LocalizedLink"
 import { Carousel } from "@/components/Carousel"
-import PaginatedProducts from "./paginated-products"
+import PaginatedProducts from "@modules/store/templates/paginated-products"
 
 const CollectionsSlider = async () => {
   const collections = await getCollectionsList(0, 20, [
