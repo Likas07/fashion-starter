@@ -60,7 +60,6 @@ export const AddressForm: React.FC<{
             placeholder="First name"
             name="first_name"
             required
-            variant="outline"
             wrapperClassName="flex-1"
             autoComplete="given-name"
             defaultValue={defaultValues?.first_name}
@@ -69,7 +68,6 @@ export const AddressForm: React.FC<{
             placeholder="Last name"
             name="last_name"
             required
-            variant="outline"
             wrapperClassName="flex-1"
             autoComplete="family-name"
             defaultValue={defaultValues?.last_name}
@@ -78,7 +76,6 @@ export const AddressForm: React.FC<{
         <Input
           placeholder="Company (Optional)"
           name="company"
-          variant="outline"
           autoComplete="organization"
           defaultValue={defaultValues?.company}
         />
@@ -86,21 +83,18 @@ export const AddressForm: React.FC<{
           placeholder="Address"
           name="address_1"
           required
-          variant="outline"
           autoComplete="address-line1"
           defaultValue={defaultValues?.address_1}
         />
         <Input
           placeholder="Apartment, suite, etc. (Optional)"
           name="address_2"
-          variant="outline"
           autoComplete="address-line2"
           defaultValue={defaultValues?.address_2}
         />
         <Input
           placeholder="Phone (Optional)"
           name="phone"
-          variant="outline"
           type="tel"
           autoComplete="tel"
           defaultValue={defaultValues?.phone}
@@ -110,7 +104,6 @@ export const AddressForm: React.FC<{
             placeholder="Postal code"
             name="postal_code"
             required
-            variant="outline"
             wrapperClassName="flex-1"
             autoComplete="postal-code"
             defaultValue={defaultValues?.postal_code}
@@ -119,7 +112,6 @@ export const AddressForm: React.FC<{
             placeholder="City"
             name="city"
             required
-            variant="outline"
             wrapperClassName="flex-1"
             defaultValue={defaultValues?.city}
           />
@@ -128,7 +120,6 @@ export const AddressForm: React.FC<{
           <Input
             placeholder="Province (Optional)"
             name="province"
-            variant="outline"
             wrapperClassName="flex-1"
             defaultValue={defaultValues?.province}
           />

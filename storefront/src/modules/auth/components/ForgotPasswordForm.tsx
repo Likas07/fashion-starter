@@ -43,7 +43,6 @@ export const ForgotPasswordForm: React.FC = () => {
         placeholder="Email"
         name="email"
         required
-        variant="outline"
         wrapperClassName="flex-1 mb-8"
         type="email"
       />

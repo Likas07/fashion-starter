@@ -38,7 +38,6 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
         autoFocus={false}
         value={promotionCode}
         onChange={(e) => setPromotionCode(e.target.value)}
-        variant="outline"
         placeholder="Discount code"
         wrapperClassName="flex-1"
         className="max-lg:h-12"

@@ -19,7 +19,6 @@ export const SignUpForm: React.FC = () => {
           placeholder="First name"
           name="first_name"
           required
-          variant="outline"
           wrapperClassName="flex-1"
           minLength={1}
         />
@@ -27,7 +26,6 @@ export const SignUpForm: React.FC = () => {
           placeholder="Last name"
           name="last_name"
           required
-          variant="outline"
           wrapperClassName="flex-1"
           minLength={1}
         />
@@ -36,14 +34,12 @@ export const SignUpForm: React.FC = () => {
         placeholder="Email"
         name="email"
         required
-        variant="outline"
         wrapperClassName="flex-1"
         type="email"
       />
       <Input
         placeholder="Phone"
         name="phone"
-        variant="outline"
         wrapperClassName="flex-1"
         type="tel"
       />
@@ -52,7 +48,6 @@ export const SignUpForm: React.FC = () => {
         name="password"
         type="password"
         required
-        variant="outline"
         wrapperClassName="flex-1"
         autoComplete="new-password"
         minLength={6}
@@ -62,7 +57,6 @@ export const SignUpForm: React.FC = () => {
         name="confirm_password"
         type="password"
         required
-        variant="outline"
         wrapperClassName="flex-1"
         autoComplete="new-password"
         minLength={6}

@@ -177,27 +177,20 @@ const Addresses = ({
                                 </p>
                                 <div className="flex flex-col gap-4 md:gap-8 mb-8 md:mb-10">
                                   <CountrySelect />
-                                  <Input
-                                    placeholder="Adress"
-                                    required
-                                    variant="outline"
-                                  />
+                                  <Input placeholder="Adress" required />
                                   <Input
                                     placeholder="Apartment, suite, etc. (Optional)"
                                     required
-                                    variant="outline"
                                   />
                                   <div className="flex max-xs:flex-col gap-4 md:gap-6">
                                     <Input
                                       placeholder="Postal code"
                                       required
-                                      variant="outline"
                                       wrapperClassName="flex-1"
                                     />
                                     <Input
                                       placeholder="City"
                                       required
-                                      variant="outline"
                                       wrapperClassName="flex-1"
                                     />
                                   </div>

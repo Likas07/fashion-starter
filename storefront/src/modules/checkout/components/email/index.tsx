@@ -56,17 +56,11 @@ const Email = ({
                       <UiDialog>
                         <p className="text-md mb-10">Log in</p>
                         <div className="flex flex-col gap-10 mb-5">
-                          <Input
-                            type="email"
-                            placeholder="Email"
-                            required
-                            variant="outline"
-                          />
+                          <Input type="email" placeholder="Email" required />
                           <Input
                             type="password"
                             placeholder="Password"
                             required
-                            variant="outline"
                           />
                         </div>
                         <Button
@@ -115,7 +109,6 @@ const Email = ({
             defaultValue={cart?.email || customer?.email}
             required
             data-testid="shipping-email-input"
-            variant="outline"
           />
           <SubmitButton className="mt-8">Next</SubmitButton>
           <ErrorMessage error={state} />

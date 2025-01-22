@@ -3,7 +3,6 @@ import { HttpTypes } from "@medusajs/types"
 import React, { useEffect, useMemo, useState } from "react"
 
 import { Input } from "@/components/Forms"
-import { Checkbox } from "@/components/Checkbox"
 // import AddressSelect from "../address-select"
 import CountrySelect from "../country-select"
 import {
@@ -104,7 +103,6 @@ const ShippingAddress = ({
           onChange={handleChange}
           required
           data-testid="shipping-first-name-input"
-          variant="outline"
         />
         <Input
           placeholder="Last name"
@@ -114,7 +112,6 @@ const ShippingAddress = ({
           onChange={handleChange}
           required
           data-testid="shipping-last-name-input"
-          variant="outline"
         />
         <Input
           placeholder="Address"
@@ -124,7 +121,6 @@ const ShippingAddress = ({
           onChange={handleChange}
           required
           data-testid="shipping-address-input"
-          variant="outline"
         />
         <Input
           placeholder="Company"
@@ -133,7 +129,6 @@ const ShippingAddress = ({
           onChange={handleChange}
           autoComplete="organization"
           data-testid="shipping-company-input"
-          variant="outline"
         />
         <Input
           placeholder="Postal code"
@@ -143,7 +138,6 @@ const ShippingAddress = ({
           onChange={handleChange}
           required
           data-testid="shipping-postal-code-input"
-          variant="outline"
         />
         <Input
           placeholder="City"
@@ -153,7 +147,6 @@ const ShippingAddress = ({
           onChange={handleChange}
           required
           data-testid="shipping-city-input"
-          variant="outline"
         />
         <CountrySelect
           name="shipping_address.country_code"
@@ -179,7 +172,6 @@ const ShippingAddress = ({
           onChange={handleChange}
           required
           data-testid="shipping-province-input"
-          variant="outline"
         />
         <Input
           placeholder="Phone"
@@ -188,7 +180,6 @@ const ShippingAddress = ({
           value={formData["shipping_address.phone"] || ""}
           onChange={handleChange}
           data-testid="shipping-phone-input"
-          variant="outline"
         />
       </div>
       <div>

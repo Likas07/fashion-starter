@@ -45,7 +45,6 @@ const BillingAddress = ({ cart }: { cart: HttpTypes.StoreCart | null }) => {
         onChange={handleChange}
         required
         data-testid="billing-first-name-input"
-        variant="outline"
       />
       <Input
         placeholder="Last name"
@@ -55,7 +54,6 @@ const BillingAddress = ({ cart }: { cart: HttpTypes.StoreCart | null }) => {
         onChange={handleChange}
         required
         data-testid="billing-last-name-input"
-        variant="outline"
       />
       <Input
         placeholder="Address"
@@ -65,7 +63,6 @@ const BillingAddress = ({ cart }: { cart: HttpTypes.StoreCart | null }) => {
         onChange={handleChange}
         required
         data-testid="billing-address-input"
-        variant="outline"
       />
       <Input
         placeholder="Company"
@@ -74,7 +71,6 @@ const BillingAddress = ({ cart }: { cart: HttpTypes.StoreCart | null }) => {
         onChange={handleChange}
         autoComplete="organization"
         data-testid="billing-company-input"
-        variant="outline"
       />
       <Input
         placeholder="Postal code"
@@ -84,7 +80,6 @@ const BillingAddress = ({ cart }: { cart: HttpTypes.StoreCart | null }) => {
         onChange={handleChange}
         required
         data-testid="billing-postal-input"
-        variant="outline"
       />
       <Input
         placeholder="City"
@@ -94,7 +89,6 @@ const BillingAddress = ({ cart }: { cart: HttpTypes.StoreCart | null }) => {
         onChange={handleChange}
         required
         data-testid="billing-city-input"
-        variant="outline"
       />
       <CountrySelect
         name="billing_address.country_code"
@@ -120,7 +114,6 @@ const BillingAddress = ({ cart }: { cart: HttpTypes.StoreCart | null }) => {
         onChange={handleChange}
         required
         data-testid="billing-province-input"
-        variant="outline"
       />
       <Input
         placeholder="Phone"
@@ -129,7 +122,6 @@ const BillingAddress = ({ cart }: { cart: HttpTypes.StoreCart | null }) => {
         value={formData["billing_address.phone"] || ""}
         onChange={handleChange}
         data-testid="billing-phone-input"
-        variant="outline"
       />
     </div>
   )

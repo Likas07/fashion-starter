@@ -36,7 +36,6 @@ export const PersonalInfoForm: React.FC<{
             placeholder="First name"
             name="first_name"
             required
-            variant="outline"
             wrapperClassName="flex-1"
             autoComplete="given-name"
             defaultValue={defaultValues?.first_name}
@@ -45,7 +44,6 @@ export const PersonalInfoForm: React.FC<{
             placeholder="Last name"
             name="last_name"
             required
-            variant="outline"
             wrapperClassName="flex-1"
             autoComplete="family-name"
             defaultValue={defaultValues?.last_name}
@@ -55,7 +53,6 @@ export const PersonalInfoForm: React.FC<{
           placeholder="Phone"
           name="phone"
           required
-          variant="outline"
           wrapperClassName="flex-1 mb-8 sm:mb-10"
           type="tel"
           defaultValue={defaultValues?.phone}

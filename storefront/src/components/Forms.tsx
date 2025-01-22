@@ -6,39 +6,48 @@ import * as ReactAria from "react-aria-components"
 import { Icon } from "@/components/Icon"
 
 export const getFormFieldClassNames = ({
-  variant,
-  uiSize,
+  uiSize = "lg",
   isVisuallyDisabled,
   isSuccess,
   hasError,
 }: InputOwnProps): string => {
+  const sizeClasses = {
+    sm: "h-9 text-xs focus:pt-3.5 [&:not(:placeholder-shown)]:pt-3.5 [&:autofill]:pt-3.5",
+    md: "h-12 focus:pt-3 [&:not(:placeholder-shown)]:pt-3 [&:autofill]:pt-3",
+    lg: "h-14 focus:pt-4 [&:not(:placeholder-shown)]:pt-4 [&:autofill]:pt-4",
+  }
+
+  const visuallyDisabledClasses = isVisuallyDisabled
+    ? "pointer-events-none bg-grayscale-50"
+    : ""
+
+  const successClasses = isSuccess ? "border-green-500 pr-7" : ""
+
+  const errorClasses = hasError
+    ? "border-red-primary focus:border-red-900 hover:border-red-900"
+    : ""
+
   return twJoin(
-    // Base
-    "peer block w-full rounded-xs transition-all outline-none bg-white px-4 placeholder:invisible",
+    "peer block w-full rounded-xs transition-all outline-none bg-white px-4 placeholder:invisible border border-grayscale-200 hover:border-grayscale-500 focus:border-grayscale-500 bg-transparent disabled:pointer-events-none disabled:bg-grayscale-50",
+    sizeClasses[uiSize],
+    visuallyDisabledClasses,
+    successClasses,
+    errorClasses
+  )
+}
 
-    // Disabled
-    "disabled:pointer-events-none disabled:bg-grayscale-50",
+export const getPlaceholderClassNames = ({
+  uiSize = "lg",
+}: Pick<InputOwnProps, "uiSize">): string => {
+  const sizeClasses = {
+    lg: "peer-focus:top-2.5 peer-[:not(:placeholder-shown)]:top-2.5 peer-[:autofill]:top-2.5 peer-focus:text-xs peer-[:not(:placeholder-shown)]:text-xs peer-[:autofill]:text-xs",
+    md: "peer-focus:top-1 peer-[:not(:placeholder-shown)]:top-1 peer-[:autofill]:top-1 peer-focus:text-xs peer-[:not(:placeholder-shown)]:text-xs peer-[:autofill]:text-xs",
+    sm: "peer-focus:top-1 peer-[:not(:placeholder-shown)]:top-1 peer-[:autofill]:top-1 text-xs peer-focus:text-2xs peer-[:not(:placeholder-shown)]:text-2xs peer-[:autofill]:text-2xs",
+  }
 
-    // Variant
-    variant === "outline" &&
-      "border border-grayscale-200 hover:border-grayscale-500 focus:border-grayscale-500 bg-transparent",
-
-    // Size
-    uiSize === "sm" &&
-      "h-9 text-xs focus:pt-3.5 [&:not(:placeholder-shown)]:pt-3.5 [&:autofill]:pt-3.5",
-    uiSize === "md" &&
-      "h-12 focus:pt-3 [&:not(:placeholder-shown)]:pt-3 [&:autofill]:pt-3",
-    uiSize === "lg" &&
-      "h-14 focus:pt-4 [&:not(:placeholder-shown)]:pt-4 [&:autofill]:pt-4",
-
-    // isVisuallyDisabled
-    isVisuallyDisabled && "pointer-events-none bg-grayscale-50",
-
-    // Success
-    isSuccess && "border-green-500 pr-7",
-
-    // Error
-    hasError && "border-red-primary focus:border-red-900 hover:border-red-900"
+  return twJoin(
+    "absolute -translate-y-1/2 peer-placeholder-shown:top-1/2 left-4 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:autofill]:translate-y-0 peer-focus:translate-y-0 text-grayscale-500 pointer-events-none transition-all",
+    sizeClasses[uiSize]
   )
 }
 
@@ -88,7 +97,6 @@ export const InputSubLabel: React.FC<
  * Input
  */
 export type InputOwnProps = {
-  variant?: "solid" | "outline"
   uiSize?: "sm" | "md" | "lg"
   isVisuallyDisabled?: boolean
   isSuccess?: boolean
@@ -103,7 +111,6 @@ export const Input = React.forwardRef<
 >(
   (
     {
-      variant,
       uiSize = "lg",
       isVisuallyDisabled,
       isSuccess,
@@ -122,7 +129,6 @@ export const Input = React.forwardRef<
         ref={ref}
         className={twMerge(
           getFormFieldClassNames({
-            variant,
             uiSize,
             isVisuallyDisabled,
             isSuccess,
@@ -133,17 +139,7 @@ export const Input = React.forwardRef<
         placeholder={placeholder}
       />
       {placeholder && (
-        <span
-          className={twJoin(
-            "absolute -translate-y-1/2 peer-placeholder-shown:top-1/2 left-4 peer-focus:text-xs peer-[:not(:placeholder-shown)]:text-xs peer-[:autofill]:text-xs peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:autofill]:translate-y-0 peer-focus:translate-y-0 text-grayscale-500 pointer-events-none transition-all",
-            uiSize === "lg" &&
-              "peer-focus:top-2.5 peer-[:not(:placeholder-shown)]:top-2.5 peer-[:autofill]:top-2.5",
-            uiSize === "md" &&
-              "peer-focus:top-1 peer-[:not(:placeholder-shown)]:top-1 peer-[:autofill]:top-1",
-            uiSize === "sm" &&
-              "peer-focus:top-1 peer-[:not(:placeholder-shown)]:top-1 peer-[:autofill]:top-1 text-xs peer-focus:text-2xs peer-[:not(:placeholder-shown)]:text-2xs peer-[:autofill]:text-2xs"
-          )}
-        >
+        <span className={getPlaceholderClassNames({ uiSize })}>
           {placeholder}
         </span>
       )}

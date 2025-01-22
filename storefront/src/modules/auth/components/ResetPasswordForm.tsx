@@ -30,7 +30,6 @@ export const ChangePasswordForm: React.FC<{ email: string; token: string }> = ({
           type="password"
           placeholder="Current password"
           required
-          variant="outline"
           name="current_password"
           autoComplete="current-password"
           minLength={6}
@@ -39,7 +38,6 @@ export const ChangePasswordForm: React.FC<{ email: string; token: string }> = ({
           type="password"
           placeholder="New password"
           required
-          variant="outline"
           name="new_password"
           autoComplete="new-password"
           minLength={6}
@@ -48,7 +46,6 @@ export const ChangePasswordForm: React.FC<{ email: string; token: string }> = ({
           type="password"
           placeholder="Confirm new password"
           required
-          variant="outline"
           name="confirm_new_password"
           autoComplete="new-password"
           minLength={6}
