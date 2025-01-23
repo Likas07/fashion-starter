@@ -146,9 +146,6 @@ export const AddressForm: React.FC<{
           isLoading={
             isAddAddressFormActionPending || isUpdateAddressFormActionPending
           }
-          isDisabled={
-            isAddAddressFormActionPending || isUpdateAddressFormActionPending
-          }
         >
           Save changes
         </SubmitButton>

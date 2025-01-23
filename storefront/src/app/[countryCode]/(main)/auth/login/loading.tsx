@@ -43,9 +43,7 @@ export default async function LoginLoadingPage() {
           >
             Forgot password?
           </LocalizedLink>
-          <Button isLoading isDisabled>
-            Log in
-          </Button>
+          <Button isLoading>Log in</Button>
         </form>
         <p className="text-grayscale-500">
           Don&apos;t have an account yet? You can{" "}

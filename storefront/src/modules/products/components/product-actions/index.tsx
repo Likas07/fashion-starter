@@ -304,9 +304,7 @@ export default function ProductActions({
         />
         <Button
           onPress={handleAddToCart}
-          isDisabled={
-            !itemsInStock || !selectedVariant || !!disabled || isAdding
-          }
+          isDisabled={!itemsInStock || !selectedVariant || !!disabled}
           isLoading={isAdding}
           className="sm:flex-1"
         >

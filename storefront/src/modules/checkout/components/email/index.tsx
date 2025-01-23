@@ -115,11 +115,7 @@ const Email = ({
             required
             data-testid="shipping-email-input"
           />
-          <SubmitButton
-            className="mt-8"
-            isLoading={isPending}
-            isDisabled={isPending}
-          >
+          <SubmitButton className="mt-8" isLoading={isPending}>
             Next
           </SubmitButton>
           <ErrorMessage error={state} />

@@ -28,7 +28,6 @@ export const RequestPasswordResetButton: React.FC = () => {
       >
         <Button
           isLoading={isLoading}
-          isDisabled={isLoading}
           onPress={async () => {
             setIsLoading(true)
             const result = await requestPasswordReset().catch((error) => {

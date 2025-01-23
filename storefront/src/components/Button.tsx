@@ -61,7 +61,6 @@ export const getButtonClassNames = ({
     "inline-flex items-center focus-visible:outline-none rounded-xs justify-center transition-colors disabled:pointer-events-none",
     isFullWidth && "w-full",
     flexDirection,
-    isLoading && "cursor-not-allowed",
     hasGap && "gap-2",
     sizeClasses,
     variantClasses[variant],
@@ -91,6 +90,7 @@ export const Button: React.FC<ButtonProps> = ({
   <ReactAria.Button
     {...rest}
     type={type}
+    isPending={isLoading}
     className={twMerge(
       getButtonClassNames({
         isFullWidth,

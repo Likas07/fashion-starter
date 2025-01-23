@@ -54,9 +54,7 @@ export const ChangePasswordForm: React.FC<{ email: string; token: string }> = ({
       {formState.state === "error" && (
         <div className="text-sm text-red-primary">{formState.error}</div>
       )}
-      <SubmitButton isLoading={isPending} isDisabled={isPending}>
-        Reset password
-      </SubmitButton>
+      <SubmitButton isLoading={isPending}>Reset password</SubmitButton>
     </form>
   )
 }
