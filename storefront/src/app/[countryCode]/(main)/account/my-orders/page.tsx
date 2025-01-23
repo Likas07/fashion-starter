@@ -91,25 +91,30 @@ export default async function AccountMyOrdersPage({ searchParams }: PageProps) {
                 key={order.id}
                 className="rounded-xs border border-grayscale-200 flex flex-col gap-6 sm:gap-8 md:gap-6 lg:gap-8 p-4"
               >
-                <div className="flex max-sm:flex-col-reverse md:flex-col-reverse lg:flex-row gap-y-6 gap-x-10 justify-between lg:flex-wrap">
+                <div className="flex max-sm:flex-col-reverse md:flex-col-reverse lg:flex-row gap-y-6 gap-x-10 justify-between">
                   <div className="flex-shrink-0">
                     <OrderStatus order={order} className="sm:hidden mb-6" />
-                    <p className="text-md mb-2">
-                      <span className="font-semibold">Order:</span>{" "}
-                      {order.display_id}
-                    </p>
+                    <div className="mb-2">
+                      <LocalizedLink
+                        href={`/account/my-orders/${order.id}`}
+                        className="text-md"
+                      >
+                        <span className="font-semibold">Order:</span>{" "}
+                        {order.display_id}
+                      </LocalizedLink>
+                    </div>
                     <p className="text-grayscale-500">
                       Order date:{" "}
                       {new Date(order.created_at).toLocaleDateString()}
                     </p>
                   </div>
-                  <div className="flex gap-4 max-lg:overflow-x-auto">
+                  <div className="flex gap-3 overflow-x-auto sm:max-w-91 md:max-w-full lg:max-w-91">
                     {order.items
                       ?.filter((item) => item.thumbnail)
                       .map((item) => (
                         <LocalizedLink
                           key={item.id}
-                          href={`/account/my-orders/${order.id}`}
+                          href={`/products/${item.product_handle}`}
                           className="shrink-0 w-19 aspect-[3/4] rounded-2xs relative overflow-hidden"
                         >
                           <Image
