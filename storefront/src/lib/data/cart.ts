@@ -302,7 +302,7 @@ export async function setEmail(currentState: unknown, formData: FormData) {
 
   await updateCart({ email: email.data })
 
-  redirect(`/${countryCode.data}/checkout?step=delivery`)
+  // redirect(`/${countryCode.data}/checkout?step=delivery`)
 }
 
 const addressesFormSchema = z
