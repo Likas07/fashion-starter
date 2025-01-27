@@ -33,8 +33,10 @@ const Email = ({
   const [state, formAction, isPending] = useActionState(setEmail, null)
 
   React.useEffect(() => {
-    isPending === false && router.push(pathname + "?step=delivery")
-  }, [isPending === true])
+    if (isOpen && state?.success) {
+      router.push(pathname + "?step=delivery", { scroll: false })
+    }
+  }, [state])
 
   return (
     <>
@@ -118,7 +120,7 @@ const Email = ({
           <SubmitButton className="mt-8" isLoading={isPending}>
             Next
           </SubmitButton>
-          <ErrorMessage error={state} />
+          <ErrorMessage error={state?.error} />
         </form>
       ) : cart?.email ? (
         <ul className="flex max-sm:flex-col flex-wrap gap-y-2 gap-x-34">

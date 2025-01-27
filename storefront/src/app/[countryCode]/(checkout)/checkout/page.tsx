@@ -7,7 +7,6 @@ import { retrieveCart } from "@lib/data/cart"
 import { getCustomer } from "@lib/data/customer"
 import Wrapper from "@modules/checkout/components/payment-wrapper"
 import CheckoutForm from "@modules/checkout/templates/checkout-form"
-import { Icon } from "@/components/Icon"
 
 export const metadata: Metadata = {
   title: "Checkout",
@@ -35,18 +34,8 @@ export default async function Checkout({
   const customer = await getCustomer()
 
   return (
-    <React.Suspense
-      fallback={
-        <Icon name="loader" className="animate-spin text-primary-500 w-20" />
-      }
-    >
-      <Wrapper cart={cart}>
-        <CheckoutForm
-          cart={cart}
-          customer={customer}
-          countryCode={countryCode}
-        />
-      </Wrapper>
-    </React.Suspense>
+    <Wrapper cart={cart}>
+      <CheckoutForm cart={cart} customer={customer} countryCode={countryCode} />
+    </Wrapper>
   )
 }

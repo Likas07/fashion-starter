@@ -46,7 +46,16 @@ const Addresses = ({
     setSameAsBilling((prev) => !prev)
   }, [setSameAsBilling])
 
-  const [message, formAction] = React.useActionState(setAddresses, null)
+  const [state, formAction, isPending] = React.useActionState(
+    setAddresses,
+    null
+  )
+
+  React.useEffect(() => {
+    if (isOpen && state?.success) {
+      router.push(pathname + "?step=shipping", { scroll: false })
+    }
+  }, [state])
 
   return (
     <>
@@ -223,8 +232,10 @@ const Addresses = ({
 
           {!sameAsBilling && <BillingAddress cart={cart} />}
 
-          <SubmitButton className="mt-8">Next</SubmitButton>
-          <ErrorMessage error={message} />
+          <SubmitButton className="mt-8" isLoading={isPending}>
+            Next
+          </SubmitButton>
+          <ErrorMessage error={state?.error} />
         </form>
       ) : cart?.shipping_address ? (
         <div className="flex flex-col gap-4">
