@@ -213,7 +213,7 @@ export default async function AccountOrderPage({
                       </p>
                     ))}
                   </div>
-                  <div className="mt-auto flex max-xs:flex-col gap-x-10 gap-y-6 xs:items-center justify-between relative">
+                  <div className="mt-auto flex max-xs:flex-col gap-x-10 gap-y-6.5 xs:items-center justify-between relative">
                     <div className="xs:self-end sm:mb-1">
                       <p>
                         <span className="text-grayscale-500 mr-2">
