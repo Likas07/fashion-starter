@@ -28,7 +28,7 @@ export const getFormFieldClassNames = ({
     : ""
 
   return twJoin(
-    "peer block w-full rounded-xs transition-all outline-none px-4 placeholder:invisible border border-grayscale-200 hover:border-grayscale-500 focus:border-grayscale-500 bg-transparent disabled:pointer-events-none disabled:bg-grayscale-50",
+    "peer block w-full rounded-xs transition-all outline-none px-4 placeholder:invisible border border-grayscale-200 hover:border-grayscale-500 focus:border-grayscale-500 bg-transparent disabled:pointer-events-none disabled:bg-grayscale-50 [&:autofill]:bg-clip-text",
     sizeClasses[uiSize],
     visuallyDisabledClasses,
     successClasses,
