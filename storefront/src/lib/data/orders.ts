@@ -44,7 +44,7 @@ export const listOrders = async function (
 
   return sdk.store.order
     .list(
-      { limit, offset },
+      { limit, offset, order: "-created_at" },
       { next: { tags: ["orders"] }, ...(await getAuthHeaders()) }
     )
     .catch((err) => medusaError(err))
