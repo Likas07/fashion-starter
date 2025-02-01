@@ -5,6 +5,7 @@ import { HttpTypes } from "@medusajs/types"
 import { LocalizedButtonLink, LocalizedLink } from "@/components/LocalizedLink"
 import CartTotals from "@modules/cart/components/cart-totals"
 import DiscountCode from "@modules/cart/components/discount-code"
+import { getCheckoutStep } from "@modules/cart/utils/getCheckoutStep"
 import { Icon } from "@/components/Icon"
 
 type SummaryProps = {
@@ -13,28 +14,12 @@ type SummaryProps = {
   }
 }
 
-function getCheckoutStep(cart: HttpTypes.StoreCart) {
-  if (!cart.email) {
-    return "email"
-  }
-
-  if (!cart?.shipping_address?.address_1) {
-    return "delivery"
-  }
-
-  if (cart?.shipping_methods?.length === 0) {
-    return "shipping"
-  }
-
-  return "payment"
-}
-
 const Summary = ({ cart }: SummaryProps) => {
   const step = getCheckoutStep(cart)
 
   return (
     <>
-      <CartTotals cart={cart} />
+      <CartTotals cart={cart} className="lg:pt-8" />
       <DiscountCode cart={cart} />
       <LocalizedButtonLink
         href={"/checkout?step=" + step}

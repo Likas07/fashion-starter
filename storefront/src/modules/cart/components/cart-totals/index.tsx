@@ -6,12 +6,11 @@ import React from "react"
 import { convertToLocale } from "@lib/util/money"
 
 type CartTotalsProps = {
-  cart: HttpTypes.StoreCart & {
-    promotions: HttpTypes.StorePromotion[]
-  }
+  cart: HttpTypes.StoreCart
+  className?: string
 }
 
-const CartTotals: React.FC<CartTotalsProps> = ({ cart }) => {
+const CartTotals: React.FC<CartTotalsProps> = ({ cart, className }) => {
   const {
     currency_code,
     total,
@@ -23,7 +22,7 @@ const CartTotals: React.FC<CartTotalsProps> = ({ cart }) => {
   } = cart
 
   return (
-    <div className="lg:pt-8">
+    <div className={className}>
       <div className="flex flex-col gap-4">
         <div className="flex justify-between">
           <p className="text-grayscale-500">Subtotal:</p>

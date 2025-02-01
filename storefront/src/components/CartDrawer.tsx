@@ -7,13 +7,20 @@ import * as React from "react"
 import { HttpTypes } from "@medusajs/types"
 
 // Components
-import { LocalizedButtonLink, LocalizedLink } from "@/components/LocalizedLink"
 import Item from "@modules/cart/components/item"
+import CartTotals from "@modules/cart/components/cart-totals"
+import { LocalizedButtonLink, LocalizedLink } from "@/components/LocalizedLink"
 import { Drawer } from "@/components/Drawer"
 import { Button } from "@/components/Button"
+import DiscountCode from "@modules/cart/components/discount-code"
 
+// TODO: move cart loading to client side
 export const CartDrawer: React.FC<{
-  cart?: HttpTypes.StoreCart | null
+  cart?:
+    | (HttpTypes.StoreCart & {
+        promotions: HttpTypes.StorePromotion[]
+      })
+    | null
   children: React.ReactNode
 }> = ({ cart, children }) => {
   const [isCartDrawerOpen, setIsCartDrawerOpen] = React.useState(false)
@@ -47,11 +54,13 @@ export const CartDrawer: React.FC<{
                 return <Item key={item.id} item={item} />
               })}
             <div className="sticky left-0 bg-white bottom-0 pt-6 pb-12 border-t border-grayscale-200">
-              <div className="flex justify-between text-md font-semibold mb-8">
-                <p>Total:</p>
-                <p>€225</p>
-              </div>
-              <LocalizedButtonLink href="/checkout" isFullWidth>
+              <CartTotals cart={cart} />
+              <DiscountCode cart={cart} />
+              <LocalizedButtonLink
+                href="/checkout"
+                isFullWidth
+                className="mt-8"
+              >
                 Proceed to checkout
               </LocalizedButtonLink>
             </div>
@@ -63,7 +72,14 @@ export const CartDrawer: React.FC<{
               use the link below to start browsing our products.
             </p>
             <div>
-              <LocalizedLink href="/store">Explore products</LocalizedLink>
+              <LocalizedLink
+                href="/store"
+                onClick={() => {
+                  setIsCartDrawerOpen(false)
+                }}
+              >
+                Explore products
+              </LocalizedLink>
             </div>
           </>
         )}
