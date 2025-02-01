@@ -52,7 +52,7 @@ export const Header: React.FC = async () => {
                   selectButtonClassName="h-auto !gap-0 !p-1 transition-none"
                   selectIconClassName="text-current"
                 />
-                <SearchField />
+                <SearchField countryOptions={countryOptions} />
                 <LocalizedButtonLink
                   href="/auth/login"
                   variant="ghost"

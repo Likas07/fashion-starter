@@ -36,7 +36,7 @@ export const HeaderDrawer: React.FC<{
       >
         <div className="flex flex-col text-white h-full">
           <div className="flex items-center pb-6 mb-8 pt-5 w-full border-b border-white px-8">
-            <SearchField />
+            <SearchField countryOptions={countryOptions} />
           </div>
           <div className="text-lg flex flex-col gap-8 font-medium px-8">
             <LocalizedLink href="/about" onClick={() => setIsMenuOpen(false)}>

@@ -14,8 +14,9 @@ const ItemPrice: React.FC<{
     calculated_price,
     original_price_number,
     calculated_price_number,
-  } = getPricesForVariant(item.variant) ?? {}
-  const hasReducedPrice = calculated_price_number < original_price_number
+  } = item.variant ? (getPricesForVariant(item.variant) ?? {}) : {}
+  const hasReducedPrice =
+    (calculated_price_number ?? 0) < (original_price_number ?? 0)
 
   return (
     <div>
