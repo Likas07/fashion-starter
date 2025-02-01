@@ -1,15 +1,15 @@
 import { Metadata } from "next"
-import { notFound } from "next/navigation"
-import { HttpTypes } from "@medusajs/types"
+import { notFound, redirect } from "next/navigation"
 
 import { retrieveCart } from "@lib/data/cart"
 import { getCustomer } from "@lib/data/customer"
 import Wrapper from "@modules/checkout/components/payment-wrapper"
 import CheckoutForm from "@modules/checkout/templates/checkout-form"
 import CheckoutSummary from "@modules/checkout/templates/checkout-summary"
+import MobileCheckoutSummary from "@modules/checkout/templates/mobile-checkout-summary"
+import { getCheckoutStep } from "@modules/cart/utils/getCheckoutStep"
 import { Layout, LayoutColumn } from "@/components/Layout"
 import { LocalizedLink } from "@/components/LocalizedLink"
-import MobileCheckoutSummary from "@modules/checkout/templates/mobile-checkout-summary"
 
 export const metadata: Metadata = {
   title: "Checkout",
@@ -26,15 +26,21 @@ const fetchCart = async () => {
 
 export default async function Checkout({
   params,
+  searchParams,
 }: {
   params: Promise<{ countryCode: string }>
+  searchParams: Promise<{ step?: string }>
 }) {
   const { countryCode } = await params
+  const { step } = await searchParams
 
-  const cart = (await fetchCart()) as HttpTypes.StoreCart & {
-    promotions: HttpTypes.StorePromotion[]
-  }
+  const cart = await fetchCart()
   const customer = await getCustomer()
+  const checkoutStep = getCheckoutStep(cart)
+
+  if (!step) {
+    redirect(`/${countryCode}/checkout?step=${checkoutStep}`)
+  }
 
   return (
     <>
