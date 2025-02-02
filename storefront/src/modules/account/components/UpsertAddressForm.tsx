@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { OverlayTriggerStateContext } from "react-aria-components"
 
 import { addCustomerAddress, updateCustomerAddress } from "@lib/data/customer"
 import CountrySelect, {
@@ -9,9 +10,8 @@ import CountrySelect, {
 import { SubmitButton } from "@modules/common/components/submit-button"
 import { Input } from "@/components/Forms"
 import { UiCloseButton } from "@/components/Dialog"
-import { OverlayTriggerStateContext } from "react-aria-components"
 
-export const AddressForm: React.FC<{
+export const UpsertAddressForm: React.FC<{
   addressId?: string
   region?: CountrySelectProps["region"]
   defaultValues?: {
@@ -47,7 +47,7 @@ export const AddressForm: React.FC<{
     if (addAddressFormMessage?.success || updateAddressFormMessage?.success) {
       close()
     }
-  }, [addAddressFormMessage, updateAddressFormMessage, close])
+  }, [addAddressFormMessage, updateAddressFormMessage])
 
   return (
     <form action={addressId ? updateAddressFormAction : addAddressFormAction}>
@@ -155,7 +155,7 @@ export const AddressForm: React.FC<{
           isLoading={
             isAddAddressFormActionPending || isUpdateAddressFormActionPending
           }
-          disabled={
+          isDisabled={
             isAddAddressFormActionPending || isUpdateAddressFormActionPending
           }
         >

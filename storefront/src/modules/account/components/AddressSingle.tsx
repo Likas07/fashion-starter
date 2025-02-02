@@ -11,7 +11,7 @@ import { UiCloseButton, UiDialog, UiDialogTrigger } from "@/components/Dialog"
 import { Icon } from "@/components/Icon"
 import { UiModal, UiModalOverlay } from "@/components/ui/Modal"
 import { DeleteAddressButton } from "./DeleteAddressButton"
-import { AddressForm } from "./AddressForm"
+import { UpsertAddressForm } from "./UpsertAddressForm"
 
 export const AddressSingle: React.FC<{
   address: StoreCustomerAddress
@@ -94,7 +94,7 @@ export const AddressSingle: React.FC<{
           <UiModalOverlay>
             <UiModal>
               <UiDialog>
-                <AddressForm
+                <UpsertAddressForm
                   region={region ?? undefined}
                   addressId={address.id}
                   defaultValues={{

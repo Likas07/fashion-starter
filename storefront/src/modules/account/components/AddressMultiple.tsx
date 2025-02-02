@@ -10,7 +10,7 @@ import { UiCloseButton, UiDialog, UiDialogTrigger } from "@/components/Dialog"
 import { UiModal, UiModalOverlay } from "@/components/ui/Modal"
 import { DeleteAddressButton } from "./DeleteAddressButton"
 import { Button } from "@/components/Button"
-import { AddressForm } from "./AddressForm"
+import { UpsertAddressForm } from "./UpsertAddressForm"
 import { UiRadio, UiRadioBox } from "@/components/ui/Radio"
 
 export const AddressMultiple: React.FC<{
@@ -92,7 +92,7 @@ export const AddressMultiple: React.FC<{
           <UiModalOverlay>
             <UiModal>
               <UiDialog>
-                <AddressForm
+                <UpsertAddressForm
                   region={region ?? undefined}
                   addressId={address.id}
                   defaultValues={{

@@ -2,7 +2,7 @@ import { redirect } from "next/navigation"
 
 import { getCustomer } from "@lib/data/customer"
 import { getRegion, listRegions } from "@lib/data/regions"
-import { AddressForm } from "@modules/account/components/AddressForm"
+import { UpsertAddressForm } from "@modules/account/components/UpsertAddressForm"
 import { PersonalInfoForm } from "@modules/account/components/PersonalInfoForm"
 import { SignOutButton } from "@modules/account/components/SignOutButton"
 import { Icon } from "@/components/Icon"
@@ -133,7 +133,7 @@ export default async function AccountPersonalAndSecurityPage({
         <UiModalOverlay>
           <UiModal>
             <UiDialog>
-              <AddressForm
+              <UpsertAddressForm
                 region={region ?? undefined}
                 defaultValues={{
                   country_code: countryCode,
