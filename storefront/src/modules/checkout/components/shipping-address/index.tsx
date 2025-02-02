@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from "react"
 import { RadioGroup } from "react-aria-components"
 
 import compareAddresses from "@lib/util/compare-addresses"
-import { AddressForm } from "@modules/account/components/AddressForm"
+import { UpsertAddressForm } from "@modules/account/components/UpsertAddressForm"
 import { Input } from "@/components/Forms"
 import { Checkbox } from "@/components/Checkbox"
 import { UiDialogTrigger, UiDialog, UiCloseButton } from "@/components/Dialog"
@@ -12,6 +12,7 @@ import { UiRadio, UiRadioBox, UiRadioLabel } from "@/components/ui/Radio"
 import { Icon } from "@/components/Icon"
 import { Button } from "@/components/Button"
 import CountrySelect from "@modules/checkout/components/country-select"
+import { useCountryCode } from "hooks/country-code"
 
 const isShippingAddressEmpty = (formData: Record<string, any>) => {
   return (
@@ -39,6 +40,7 @@ const ShippingAddress = ({
   checked: boolean
   onChange: () => void
 }) => {
+  const countryCode = useCountryCode()
   const [formData, setFormData] = useState<Record<string, any>>({})
 
   const countriesInRegion = useMemo(
@@ -214,16 +216,16 @@ const ShippingAddress = ({
                       addressesInRegion?.find((a) =>
                         compareAddresses(
                           {
-                            first_name: a.first_name ?? undefined,
-                            last_name: a.last_name ?? undefined,
-                            address_1: a.address_1 ?? undefined,
-                            address_2: a.address_2 ?? undefined,
-                            company: a.company ?? undefined,
-                            postal_code: a.postal_code ?? undefined,
-                            city: a.city ?? undefined,
-                            country_code: a.country_code ?? undefined,
-                            province: a.province ?? undefined,
-                            phone: a.phone ?? undefined,
+                            first_name: a.first_name ?? "",
+                            last_name: a.last_name ?? "",
+                            address_1: a.address_1 ?? "",
+                            address_2: a.address_2 ?? "",
+                            company: a.company ?? "",
+                            postal_code: a.postal_code ?? "",
+                            city: a.city ?? "",
+                            country_code: a.country_code ?? "",
+                            province: a.province ?? "",
+                            phone: a.phone ?? "",
                           },
                           {
                             first_name: formData["shipping_address.first_name"],
@@ -280,7 +282,10 @@ const ShippingAddress = ({
                       <UiModalOverlay>
                         <UiModal>
                           <UiDialog>
-                            <AddressForm region={cart?.region} />
+                            <UpsertAddressForm
+                              region={cart?.region}
+                              defaultValues={{ country_code: countryCode }}
+                            />
                           </UiDialog>
                         </UiModal>
                       </UiModalOverlay>
