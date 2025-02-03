@@ -1,9 +1,6 @@
 "use client"
 
-// External packages
 import * as React from "react"
-
-// Components
 import { Button } from "@/components/Button"
 import { Input } from "@/components/Forms"
 import { LocalizedLink } from "@/components/LocalizedLink"

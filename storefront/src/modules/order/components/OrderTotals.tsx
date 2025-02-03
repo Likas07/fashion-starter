@@ -68,7 +68,7 @@ export const OrderTotals: React.FC<{
           </div>
         </div>
       )}
-      <div className="flex justify-between gap-4 text-md mt-4">
+      <div className="flex justify-between gap-4 text-md mb-1 mt-6">
         <div>
           <p>Total</p>
         </div>

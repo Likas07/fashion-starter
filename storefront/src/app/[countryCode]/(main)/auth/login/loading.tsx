@@ -23,7 +23,6 @@ export default async function LoginLoadingPage() {
             placeholder="Email"
             name="email"
             required
-            variant="outline"
             wrapperClassName="flex-1"
             autoComplete="email"
             disabled
@@ -33,7 +32,6 @@ export default async function LoginLoadingPage() {
             name="password"
             type="password"
             required
-            variant="outline"
             wrapperClassName="flex-1"
             autoComplete="current-password"
             disabled
@@ -45,9 +43,7 @@ export default async function LoginLoadingPage() {
           >
             Forgot password?
           </LocalizedLink>
-          <Button isLoading isDisabled>
-            Log in
-          </Button>
+          <Button isLoading>Log in</Button>
         </form>
         <p className="text-grayscale-500">
           Don&apos;t have an account yet? You can{" "}

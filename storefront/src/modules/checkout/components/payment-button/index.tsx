@@ -10,7 +10,7 @@ import Spinner from "@modules/common/icons/spinner"
 import { placeOrder } from "@lib/data/cart"
 import { isManual, isPaypal, isStripe } from "@lib/constants"
 import { Button } from "@/components/Button"
-import ErrorMessage from "../error-message"
+import ErrorMessage from "@modules/checkout/components/error-message"
 
 type PaymentButtonProps = {
   cart: HttpTypes.StoreCart
@@ -163,7 +163,7 @@ const StripePaymentButton = ({
   return (
     <>
       <Button
-        disabled={disabled || notReady}
+        isDisabled={disabled || notReady}
         onPress={handlePayment}
         isLoading={submitting}
         className="w-full"
@@ -262,7 +262,7 @@ const ManualTestPaymentButton = ({ notReady }: { notReady: boolean }) => {
   return (
     <>
       <Button
-        disabled={notReady}
+        isDisabled={notReady}
         isLoading={submitting}
         onPress={handlePayment}
         className="w-full"

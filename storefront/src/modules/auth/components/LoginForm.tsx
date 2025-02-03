@@ -19,7 +19,6 @@ export const LoginForm: React.FC = () => {
         placeholder="Email"
         name="email"
         required
-        variant="outline"
         wrapperClassName="flex-1"
         autoComplete="email"
       />
@@ -28,7 +27,6 @@ export const LoginForm: React.FC = () => {
         name="password"
         type="password"
         required
-        variant="outline"
         wrapperClassName="flex-1"
         autoComplete="current-password"
       />

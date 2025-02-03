@@ -1,5 +1,6 @@
 "use client"
 
+import React from "react"
 import { useActionState } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { twJoin } from "tailwind-merge"
@@ -30,7 +31,13 @@ const Email = ({
 
   const isOpen = searchParams.get("step") === "email"
 
-  const [state, formAction] = useActionState(setEmail, null)
+  const [state, formAction, isPending] = useActionState(setEmail, null)
+
+  React.useEffect(() => {
+    if (isOpen && state?.success) {
+      router.push(pathname + "?step=delivery", { scroll: false })
+    }
+  }, [state])
 
   return (
     <>
@@ -94,10 +101,11 @@ const Email = ({
             defaultValue={cart?.email || customer?.email}
             required
             data-testid="shipping-email-input"
-            variant="outline"
           />
-          <SubmitButton className="mt-8">Next</SubmitButton>
-          <ErrorMessage error={state} />
+          <SubmitButton className="mt-8" isLoading={isPending}>
+            Next
+          </SubmitButton>
+          <ErrorMessage error={state?.error} />
         </form>
       ) : cart?.email ? (
         <ul className="flex max-sm:flex-col flex-wrap gap-y-2 gap-x-34">

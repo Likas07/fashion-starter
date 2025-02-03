@@ -5,7 +5,11 @@ import { redirect } from "next/navigation"
 import { revalidateTag } from "next/cache"
 
 import { sdk } from "@lib/config"
-import { getAuthHeaders, removeAuthToken, setAuthToken } from "./cookies"
+import {
+  getAuthHeaders,
+  setAuthToken,
+  removeAuthToken,
+} from "@lib/data/cookies"
 
 export const getCustomer = async function () {
   return sdk.store.customer

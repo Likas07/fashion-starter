@@ -1,7 +1,4 @@
-// Utilities
 import repeat from "@lib/util/repeat"
-
-// Components
 import SkeletonProductPreview from "@modules/skeletons/components/skeleton-product-preview"
 import { Layout, LayoutColumn } from "@/components/Layout"
 

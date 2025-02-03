@@ -8,7 +8,6 @@ import { ButtonProps } from "@/components/Button"
 
 export const SignOutButton: React.FC<Omit<ButtonProps, "type">> = ({
   isLoading,
-  isDisabled,
   ...rest
 }) => {
   const countryCode = useCountryCode()
@@ -19,11 +18,7 @@ export const SignOutButton: React.FC<Omit<ButtonProps, "type">> = ({
 
   return (
     <form action={formAction}>
-      <SubmitButton
-        {...rest}
-        isLoading={isPending || isLoading}
-        isDisabled={isPending || isDisabled}
-      >
+      <SubmitButton {...rest} isLoading={isPending || isLoading}>
         Log out
       </SubmitButton>
     </form>

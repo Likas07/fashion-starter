@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { OverlayTriggerStateContext } from "react-aria-components"
+import * as ReactAria from "react-aria-components"
 
 import { UiCloseButton } from "@/components/Dialog"
 import { Input } from "@/components/Forms"
@@ -19,7 +19,7 @@ export const PersonalInfoForm: React.FC<{
     updateCustomer,
     { state: "initial" }
   )
-  const { close } = React.useContext(OverlayTriggerStateContext)!
+  const { close } = React.useContext(ReactAria.OverlayTriggerStateContext)!
 
   React.useEffect(() => {
     if (formState.state === "success") {
@@ -36,7 +36,6 @@ export const PersonalInfoForm: React.FC<{
             placeholder="First name"
             name="first_name"
             required
-            variant="outline"
             wrapperClassName="flex-1"
             autoComplete="given-name"
             defaultValue={defaultValues?.first_name}
@@ -45,7 +44,6 @@ export const PersonalInfoForm: React.FC<{
             placeholder="Last name"
             name="last_name"
             required
-            variant="outline"
             wrapperClassName="flex-1"
             autoComplete="family-name"
             defaultValue={defaultValues?.last_name}
@@ -55,7 +53,6 @@ export const PersonalInfoForm: React.FC<{
           placeholder="Phone"
           name="phone"
           required
-          variant="outline"
           wrapperClassName="flex-1 mb-8 sm:mb-10"
           type="tel"
           defaultValue={defaultValues?.phone}
@@ -65,9 +62,7 @@ export const PersonalInfoForm: React.FC<{
         )}
       </div>
       <div className="flex gap-6 justify-between">
-        <SubmitButton isLoading={isPending} disabled={isPending}>
-          Save changes
-        </SubmitButton>
+        <SubmitButton isLoading={isPending}>Save changes</SubmitButton>
         <UiCloseButton variant="outline">Cancel</UiCloseButton>
       </div>
     </form>

@@ -1,11 +1,6 @@
-// External packages
 import Image from "next/image"
 import { StoreRegion } from "@medusajs/types"
-
-// Lib
 import { listRegions } from "@lib/data/regions"
-
-// Components
 import { Layout, LayoutColumn } from "@/components/Layout"
 
 export async function generateStaticParams() {

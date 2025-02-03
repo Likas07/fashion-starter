@@ -1,15 +1,14 @@
 "use client"
 
-// External packages
-import { Modal, ModalOverlay, ModalOverlayProps } from "react-aria-components"
+import * as ReactAria from "react-aria-components"
 import { twMerge } from "tailwind-merge"
 
-export const UiModalOverlay: React.FC<ModalOverlayProps> = ({
+export const UiModalOverlay: React.FC<ReactAria.ModalOverlayProps> = ({
   isDismissable = true,
   className,
   ...props
 }) => (
-  <ModalOverlay
+  <ReactAria.ModalOverlay
     {...props}
     isDismissable={isDismissable}
     className={twMerge(
@@ -23,15 +22,13 @@ type UiModalOwnProps = {
   animateFromBottom?: boolean
 }
 
-export const UiModal: React.FC<UiModalOwnProps & ModalOverlayProps> = ({
-  animateFromBottom = false,
-  className,
-  ...props
-}) => (
-  <Modal
+export const UiModal: React.FC<
+  UiModalOwnProps & ReactAria.ModalOverlayProps
+> = ({ animateFromBottom = false, className, ...props }) => (
+  <ReactAria.Modal
     {...props}
     className={twMerge(
-      "bg-white p-6 rounded-2xs max-h-full overflow-y-scroll max-w-154 w-full shadow-modal data-[entering]:animate-in data-[entering]:ease-out data-[entering]:duration-200 data-[exiting]:animate-out data-[exiting]:ease-in data-[exiting]:duration-100",
+      "bg-white max-sm:px-4 p-6 rounded-xs max-h-full overflow-y-scroll max-w-154 w-full shadow-modal data-[entering]:animate-in data-[entering]:ease-out data-[entering]:duration-200 data-[exiting]:animate-out data-[exiting]:ease-in data-[exiting]:duration-100",
       animateFromBottom
         ? "data-[entering]:slide-in-from-bottom-10 data-[exiting]:slide-out-to-bottom-10 bottom-0"
         : "data-[entering]:zoom-in-95 data-[exiting]:zoom-out-95",

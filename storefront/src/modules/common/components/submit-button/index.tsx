@@ -9,11 +9,6 @@ export function SubmitButton(props: Omit<ButtonProps, "type">) {
   const { pending } = useFormStatus()
 
   return (
-    <Button
-      {...props}
-      type="submit"
-      isLoading={pending || props.isLoading}
-      isDisabled={pending || props.isDisabled}
-    />
+    <Button {...props} type="submit" isLoading={pending || props.isLoading} />
   )
 }

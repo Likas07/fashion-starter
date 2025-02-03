@@ -1,4 +1,3 @@
-// Components
 import { twMerge } from "tailwind-merge"
 
 export const UiTagList: React.FC<React.ComponentPropsWithoutRef<"ul">> = ({

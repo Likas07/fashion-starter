@@ -1,15 +1,12 @@
 "use client"
 
-// External packages
 import * as React from "react"
-
-// Components
 import { Button } from "@/components/Button"
 import { Icon } from "@/components/Icon"
 import { Drawer } from "@/components/Drawer"
 import { LocalizedLink } from "@/components/LocalizedLink"
-import { RegionSwitcher } from "./RegionSwitcher"
-import { SearchField } from "./SearchField"
+import { RegionSwitcher } from "@/components/RegionSwitcher"
+import { SearchField } from "@/components/SearchField"
 
 export const HeaderDrawer: React.FC<{
   countryOptions: {

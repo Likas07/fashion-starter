@@ -4,7 +4,7 @@ import { cache } from "react"
 import { sdk } from "@lib/config"
 import medusaError from "@lib/util/medusa-error"
 import { enrichLineItems } from "@lib/util/enrich-line-items"
-import { getAuthHeaders } from "./cookies"
+import { getAuthHeaders } from "@lib/data/cookies"
 
 export const retrieveOrder = cache(async function (id: unknown) {
   if (typeof id !== "string") {
@@ -44,7 +44,7 @@ export const listOrders = async function (
 
   return sdk.store.order
     .list(
-      { limit, offset },
+      { limit, offset, order: "-created_at" },
       { next: { tags: ["orders"] }, ...(await getAuthHeaders()) }
     )
     .catch((err) => medusaError(err))

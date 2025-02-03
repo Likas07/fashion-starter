@@ -4,12 +4,14 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { useCallback } from "react"
 
 import { Layout, LayoutColumn } from "@/components/Layout"
-import SortProducts, { SortOptions } from "./sort-products"
-import { CollectionFilter } from "./collection-filter"
-import { CategoryFilter } from "./category-filter"
-import { TypeFilter } from "./type-filter"
-import { MobileFilters } from "./mobile-filters"
-import { MobileSort } from "./mobile-sort"
+import { CategoryFilter } from "@modules/store/components/refinement-list/category-filter"
+import { CollectionFilter } from "@modules/store/components/refinement-list/collection-filter"
+import { MobileFilters } from "@modules/store/components/refinement-list/mobile-filters"
+import { MobileSort } from "@modules/store/components/refinement-list/mobile-sort"
+import SortProducts, {
+  SortOptions,
+} from "@modules/store/components/refinement-list/sort-products"
+import { TypeFilter } from "@modules/store/components/refinement-list/type-filter"
 
 type RefinementListProps = {
   title?: string

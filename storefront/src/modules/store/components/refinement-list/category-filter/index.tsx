@@ -1,9 +1,6 @@
 "use client"
 
-// External packages
-import { CheckboxGroup, DialogTrigger, Popover } from "react-aria-components"
-
-// Components
+import * as ReactAria from "react-aria-components"
 import {
   UiSelectButton,
   UiSelectDialog,
@@ -15,20 +12,21 @@ import {
   UiCheckboxIcon,
   UiCheckboxLabel,
 } from "@/components/ui/Checkbox"
+import { UiDialogTrigger } from "@/components/Dialog"
 
 export const CategoryFilter: React.FC<{
   categories: Record<string, string>
   category?: string[]
   setQueryParams: (name: string, value: string[]) => void
 }> = ({ category, categories, setQueryParams }) => (
-  <DialogTrigger>
+  <UiDialogTrigger>
     <UiSelectButton className="w-35">
       <span>Category</span>
       <UiSelectIcon />
     </UiSelectButton>
-    <Popover className="w-64" crossOffset={58}>
+    <ReactAria.Popover className="w-64" crossOffset={58}>
       <UiSelectDialog>
-        <CheckboxGroup
+        <ReactAria.CheckboxGroup
           value={category ?? []}
           onChange={(value) => {
             setQueryParams("category", value)
@@ -42,8 +40,8 @@ export const CategoryFilter: React.FC<{
               <UiCheckboxLabel>{value}</UiCheckboxLabel>
             </UiCheckbox>
           ))}
-        </CheckboxGroup>
+        </ReactAria.CheckboxGroup>
       </UiSelectDialog>
-    </Popover>
-  </DialogTrigger>
+    </ReactAria.Popover>
+  </UiDialogTrigger>
 )

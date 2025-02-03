@@ -1,8 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { OverlayTriggerStateContext } from "react-aria-components"
-
+import * as ReactAria from "react-aria-components"
 import { addCustomerAddress, updateCustomerAddress } from "@lib/data/customer"
 import CountrySelect, {
   CountrySelectProps,
@@ -41,7 +40,7 @@ export const UpsertAddressForm: React.FC<{
     success: false,
     error: undefined,
   })
-  const { close } = React.useContext(OverlayTriggerStateContext)!
+  const { close } = React.useContext(ReactAria.OverlayTriggerStateContext)!
 
   React.useEffect(() => {
     if (addAddressFormMessage?.success || updateAddressFormMessage?.success) {
@@ -60,7 +59,6 @@ export const UpsertAddressForm: React.FC<{
             placeholder="First name"
             name="first_name"
             required
-            variant="outline"
             wrapperClassName="flex-1"
             autoComplete="given-name"
             defaultValue={defaultValues?.first_name}
@@ -69,7 +67,6 @@ export const UpsertAddressForm: React.FC<{
             placeholder="Last name"
             name="last_name"
             required
-            variant="outline"
             wrapperClassName="flex-1"
             autoComplete="family-name"
             defaultValue={defaultValues?.last_name}
@@ -78,7 +75,6 @@ export const UpsertAddressForm: React.FC<{
         <Input
           placeholder="Company (Optional)"
           name="company"
-          variant="outline"
           autoComplete="organization"
           defaultValue={defaultValues?.company}
         />
@@ -86,21 +82,18 @@ export const UpsertAddressForm: React.FC<{
           placeholder="Address"
           name="address_1"
           required
-          variant="outline"
           autoComplete="address-line1"
           defaultValue={defaultValues?.address_1}
         />
         <Input
           placeholder="Apartment, suite, etc. (Optional)"
           name="address_2"
-          variant="outline"
           autoComplete="address-line2"
           defaultValue={defaultValues?.address_2}
         />
         <Input
           placeholder="Phone (Optional)"
           name="phone"
-          variant="outline"
           type="tel"
           autoComplete="tel"
           defaultValue={defaultValues?.phone}
@@ -110,7 +103,6 @@ export const UpsertAddressForm: React.FC<{
             placeholder="Postal code"
             name="postal_code"
             required
-            variant="outline"
             wrapperClassName="flex-1"
             autoComplete="postal-code"
             defaultValue={defaultValues?.postal_code}
@@ -119,7 +111,6 @@ export const UpsertAddressForm: React.FC<{
             placeholder="City"
             name="city"
             required
-            variant="outline"
             wrapperClassName="flex-1"
             defaultValue={defaultValues?.city}
           />
@@ -128,7 +119,6 @@ export const UpsertAddressForm: React.FC<{
           <Input
             placeholder="Province (Optional)"
             name="province"
-            variant="outline"
             wrapperClassName="flex-1"
             defaultValue={defaultValues?.province}
           />
@@ -153,9 +143,6 @@ export const UpsertAddressForm: React.FC<{
       <div className="flex gap-6 justify-between">
         <SubmitButton
           isLoading={
-            isAddAddressFormActionPending || isUpdateAddressFormActionPending
-          }
-          isDisabled={
             isAddAddressFormActionPending || isUpdateAddressFormActionPending
           }
         >

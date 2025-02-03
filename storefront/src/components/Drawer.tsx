@@ -1,8 +1,5 @@
-// External packages
 import * as React from "react"
 import { twJoin, twMerge } from "tailwind-merge"
-
-// Components
 import { Icon } from "@/components/Icon"
 
 export interface DrawerProps extends React.ComponentPropsWithoutRef<"div"> {

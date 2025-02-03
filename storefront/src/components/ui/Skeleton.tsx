@@ -1,4 +1,3 @@
-// External packages
 import { twMerge } from "tailwind-merge"
 
 export const Skeleton: React.FC<React.ComponentPropsWithoutRef<"div">> = ({

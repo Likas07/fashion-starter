@@ -8,7 +8,7 @@ import { CollectionsSlider } from "@modules/store/components/collections-slider"
 import { getCollectionsList } from "@lib/data/collections"
 import { getCategoriesList } from "@lib/data/categories"
 import { getProductTypesList } from "@lib/data/product-types"
-import PaginatedProducts from "./paginated-products"
+import PaginatedProducts from "@modules/store/templates/paginated-products"
 
 const StoreTemplate = async ({
   sortBy,

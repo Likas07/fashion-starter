@@ -1,17 +1,14 @@
 "use client"
 
-// External packages
-import { Checkbox, CheckboxProps } from "react-aria-components"
+import * as ReactAria from "react-aria-components"
 import { twMerge } from "tailwind-merge"
-
-// Components
 import { Icon, IconNames, IconProps } from "@/components/Icon"
 
-export const UiCheckbox: React.FC<CheckboxProps> = ({
+export const UiCheckbox: React.FC<ReactAria.CheckboxProps> = ({
   className,
   ...props
 }) => (
-  <Checkbox
+  <ReactAria.Checkbox
     {...props}
     className={twMerge(
       "flex gap-2 group cursor-pointer items-center",

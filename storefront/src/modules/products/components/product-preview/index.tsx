@@ -3,7 +3,7 @@ import { HttpTypes } from "@medusajs/types"
 import { getProductsById } from "@lib/data/products"
 import { getProductPrice } from "@lib/util/get-product-price"
 import { LocalizedLink } from "@/components/LocalizedLink"
-import Thumbnail from "../thumbnail"
+import Thumbnail from "@modules/products/components/thumbnail"
 
 export default async function ProductPreview({
   product,

@@ -8,8 +8,13 @@ import { z } from "zod"
 import { sdk } from "@lib/config"
 import medusaError from "@lib/util/medusa-error"
 import { enrichLineItems } from "@lib/util/enrich-line-items"
-import { getAuthHeaders, getCartId, removeCartId, setCartId } from "./cookies"
-import { getRegion } from "./regions"
+import {
+  getCartId,
+  getAuthHeaders,
+  setCartId,
+  removeCartId,
+} from "@lib/data/cookies"
+import { getRegion } from "@lib/data/regions"
 
 export async function retrieveCart() {
   const cartId = await getCartId()
@@ -287,24 +292,27 @@ export async function setEmail(currentState: unknown, formData: FormData) {
       throw new Error("No existing cart found when setting addresses")
     }
   } catch (e: any) {
-    return e.message
+    return {
+      success: false,
+      error: e instanceof Error ? e.message : "Could not get your cart",
+    }
   }
 
   const countryCode = z.string().min(2).safeParse(formData.get("country_code"))
 
   if (!countryCode.success) {
-    return "Invalid country code"
+    return { success: false, error: "Invalid country code" }
   }
 
   const email = z.string().min(3).email().safeParse(formData.get("email"))
 
   if (!email.success) {
-    return "Invalid email"
+    return { success: false, error: "Invalid email" }
   }
 
   await updateCart({ email: email.data })
 
-  redirect(`/${countryCode.data}/checkout?step=delivery`)
+  return { success: true, error: null }
 }
 
 const addressesFormSchema = z
@@ -387,12 +395,13 @@ export async function setAddresses(currentState: unknown, formData: FormData) {
           : validatedData.billing_address,
     })
   } catch (e: any) {
-    return e.message
+    return {
+      success: false,
+      error: e instanceof Error ? e.message : "Could not set addresses",
+    }
   }
 
-  redirect(
-    `/${formData.get("shipping_address.country_code")}/checkout?step=shipping`
-  )
+  return { success: true, error: null }
 }
 
 export async function placeOrder() {

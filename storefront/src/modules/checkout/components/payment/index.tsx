@@ -6,14 +6,13 @@ import ErrorMessage from "@modules/checkout/components/error-message"
 import { CreditCard } from "@medusajs/icons"
 import { CardElement } from "@stripe/react-stripe-js"
 import { StripeCardElementOptions } from "@stripe/stripe-js"
-import { RadioGroup } from "react-aria-components"
 import { twJoin } from "tailwind-merge"
-
 import { isStripe as isStripeFunc, paymentInfoMap } from "@lib/constants"
 import { initiatePaymentSession } from "@lib/data/cart"
 import PaymentContainer from "@modules/checkout/components/payment-container"
 import { StripeContext } from "@modules/checkout/components/payment-wrapper"
 import { Button } from "@/components/Button"
+import { UiRadioGroup } from "@/components/ui/Radio"
 
 const Payment = ({
   cart,
@@ -62,7 +61,7 @@ const Payment = ({
         },
       },
       classes: {
-        base: "pt-4.5 pb-1 block w-full h-14.5 px-4 mt-0 border rounded-xs appearance-none focus:outline-none focus:ring-0 border-grayscale-200 hover:border-grayscale-500 focus:border-grayscale-500 transition-all ease-in-out",
+        base: "pt-[18px] pb-1 block w-full h-14.5 px-4 mt-0 border rounded-xs appearance-none focus:outline-none focus:ring-0 border-grayscale-200 hover:border-grayscale-500 focus:border-grayscale-500 transition-all ease-in-out",
       },
     }
   }, [])
@@ -134,7 +133,7 @@ const Payment = ({
       <div className={isOpen ? "block" : "hidden"}>
         {!paidByGiftcard && availablePaymentMethods?.length && (
           <>
-            <RadioGroup
+            <UiRadioGroup
               value={selectedPaymentMethod}
               onChange={setSelectedPaymentMethod}
               aria-label="Payment methods"
@@ -152,7 +151,7 @@ const Payment = ({
                     />
                   )
                 })}
-            </RadioGroup>
+            </UiRadioGroup>
             {isStripe && stripeReady && (
               <div className="mt-5">
                 <CardElement
@@ -187,7 +186,7 @@ const Payment = ({
           className="mt-6"
           onPress={handleSubmit}
           isLoading={isLoading}
-          disabled={
+          isDisabled={
             (isStripe && !cardComplete) ||
             (!selectedPaymentMethod && !paidByGiftcard)
           }

@@ -1,28 +1,22 @@
 "use client"
 
-// External packages
-import {
-  Radio,
-  RadioGroup,
-  RadioGroupProps,
-  RadioProps,
-} from "react-aria-components"
+import * as ReactAria from "react-aria-components"
 import { twMerge } from "tailwind-merge"
 
 type UiRadioOwnProps = {
   variant?: "ghost" | "outline"
 }
 
-export const UiRadioGroup: React.FC<RadioGroupProps> = ({ ...props }) => (
-  <RadioGroup {...props} />
-)
+export const UiRadioGroup: React.FC<ReactAria.RadioGroupProps> = ({
+  ...props
+}) => <ReactAria.RadioGroup {...props} />
 
-export const UiRadio: React.FC<UiRadioOwnProps & RadioProps> = ({
+export const UiRadio: React.FC<UiRadioOwnProps & ReactAria.RadioProps> = ({
   variant = "ghost",
   className,
   ...props
 }) => (
-  <Radio
+  <ReactAria.Radio
     {...props}
     className={twMerge(
       "flex gap-2 group cursor-pointer items-center",

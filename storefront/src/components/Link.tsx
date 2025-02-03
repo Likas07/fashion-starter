@@ -1,4 +1,3 @@
-// External packages
 import * as React from "react"
 import NextLink, { LinkProps as NextLinkProps } from "next/link"
 import { twJoin, twMerge } from "tailwind-merge"

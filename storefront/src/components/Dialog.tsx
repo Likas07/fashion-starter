@@ -1,40 +1,30 @@
 "use client"
 
-// External packages
 import * as React from "react"
+import * as ReactAria from "react-aria-components"
 import { twMerge } from "tailwind-merge"
-
-// Components
 import { Button, ButtonProps } from "@/components/Button"
-import {
-  Dialog,
-  DialogProps,
-  DialogTrigger,
-  DialogTriggerProps,
-  OverlayTriggerStateContext,
-  PressEvent,
-} from "react-aria-components"
 
-export const UiDialogTrigger: React.FC<DialogTriggerProps> = ({
+export const UiDialogTrigger: React.FC<ReactAria.DialogTriggerProps> = ({
   children,
   ...rest
-}) => <DialogTrigger {...rest}>{children}</DialogTrigger>
+}) => <ReactAria.DialogTrigger {...rest}>{children}</ReactAria.DialogTrigger>
 
-export const UiDialog: React.FC<DialogProps> = ({
+export const UiDialog: React.FC<ReactAria.DialogProps> = ({
   children,
   className,
   ...rest
 }) => (
-  <Dialog
+  <ReactAria.Dialog
     {...rest}
     className={twMerge("focus-visible:outline-none", className)}
   >
     {children}
-  </Dialog>
+  </ReactAria.Dialog>
 )
 
 export const UiCloseButton: React.FC<ButtonProps> = (props) => {
-  const { close } = React.useContext(OverlayTriggerStateContext)!
+  const { close } = React.useContext(ReactAria.OverlayTriggerStateContext)!
 
   return <Button {...props} onPress={close} />
 }
@@ -42,9 +32,9 @@ export const UiCloseButton: React.FC<ButtonProps> = (props) => {
 export const UiConfirmButton: React.FC<
   ButtonProps & { onConfirm: () => Promise<void> }
 > = (props) => {
-  const { close } = React.useContext(OverlayTriggerStateContext)!
+  const { close } = React.useContext(ReactAria.OverlayTriggerStateContext)!
   const onPress = React.useCallback(
-    async (e: PressEvent) => {
+    async (e: ReactAria.PressEvent) => {
       await props.onConfirm()
       close()
       props.onPress?.(e)

@@ -1,20 +1,17 @@
-// External packages
 import * as React from "react"
-
-// Lib
 import { listRegions } from "@lib/data/regions"
 import { retrieveCart } from "@lib/data/cart"
 
 // Components
-import { Layout, LayoutColumn } from "@/components/Layout"
-import { LocalizedButtonLink, LocalizedLink } from "@/components/LocalizedLink"
-import { CartIcon } from "./CartIcon"
-import { HeaderDrawer } from "./HeaderDrawer"
-import { RegionSwitcher } from "./RegionSwitcher"
-import { HeaderWrapper } from "./HeaderWrapper"
-import { Icon } from "./Icon"
 import { CartDrawer } from "./CartDrawer"
 import { SearchField } from "./SearchField"
+import { Layout, LayoutColumn } from "@/components/Layout"
+import { LocalizedButtonLink, LocalizedLink } from "@/components/LocalizedLink"
+import { CartIcon } from "@/components/CartIcon"
+import { HeaderDrawer } from "@/components/HeaderDrawer"
+import { RegionSwitcher } from "@/components/RegionSwitcher"
+import { HeaderWrapper } from "@/components/HeaderWrapper"
+import { Icon } from "@/components/Icon"
 
 export const Header: React.FC = async () => {
   const regions = await listRegions()

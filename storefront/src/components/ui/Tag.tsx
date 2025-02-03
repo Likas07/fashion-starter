@@ -1,8 +1,5 @@
-// External packages
 import * as React from "react"
 import { twMerge } from "tailwind-merge"
-
-// Components
 import { Icon, IconNames } from "@/components/Icon"
 
 type UiTagOwnProps = {

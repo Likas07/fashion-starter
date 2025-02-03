@@ -1,10 +1,7 @@
 "use client"
 
-// External packages
 import { useParams, usePathname } from "next/navigation"
 import { twMerge } from "tailwind-merge"
-
-// Components
 import { Layout, LayoutColumn } from "@/components/Layout"
 import { NewsletterForm } from "@/components/NewsletterForm"
 import { LocalizedLink } from "@/components/LocalizedLink"

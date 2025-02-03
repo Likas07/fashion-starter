@@ -67,6 +67,7 @@ module.exports = {
       sm: ["1.125rem", 1.4],
       base: ["1rem", 1.4],
       xs: ["0.75rem", 1.4],
+      "2xs": ["0.625rem", 1.4],
     },
     borderRadius: {
       "2xs": "2px",
@@ -86,6 +87,7 @@ module.exports = {
     },
     extend: {
       spacing: {
+        6.5: "1.625rem",
         13: "3.25rem",
         13.5: "3.375rem",
         14.5: "3.625rem",
@@ -119,6 +121,7 @@ module.exports = {
         66: "16.5rem",
         75: "18.75rem",
         90: "22.5rem",
+        91: "22.75rem",
         93: "23.25rem",
         95: "23.75rem",
         98: "24.5rem",

@@ -1,17 +1,12 @@
-// External packages
 import { twMerge } from "tailwind-merge"
-
-// Types
 import { StoreCustomerAddress, StoreRegion } from "@medusajs/types"
 import { BaseRegionCountry } from "@medusajs/types/dist/http/region/common"
-
-// Component
 import { Button } from "@/components/Button"
 import { UiCloseButton, UiDialog, UiDialogTrigger } from "@/components/Dialog"
 import { Icon } from "@/components/Icon"
 import { UiModal, UiModalOverlay } from "@/components/ui/Modal"
-import { DeleteAddressButton } from "./DeleteAddressButton"
-import { UpsertAddressForm } from "./UpsertAddressForm"
+import { DeleteAddressButton } from "@modules/account/components/DeleteAddressButton"
+import { UpsertAddressForm } from "@modules/account/components/UpsertAddressForm"
 
 export const AddressSingle: React.FC<{
   address: StoreCustomerAddress
@@ -26,21 +21,25 @@ export const AddressSingle: React.FC<{
         className
       )}
     >
-      <div className="flex flex-1 gap-8">
-        <Icon name="user" className="w-6 h-6 mt-2.5" />
+      <div className="flex flex-1 sm:gap-3">
+        <Icon
+          name="user"
+          className="w-6 h-6"
+          wrapperClassName="max-sm:hidden"
+        />
         <div className="flex flex-col gap-8 flex-1">
           <div className="flex flex-wrap justify-between gap-6">
-            <div className="grow basis-0">
+            <div className="sm:grow sm:basis-0">
+              <p className="text-xs text-grayscale-500 mb-1.5">Address</p>
+              <p>{address.address_1}</p>
+            </div>
+            <div className="sm:grow sm:basis-0">
               <p className="text-xs text-grayscale-500 mb-1.5">Country</p>
               <p>
                 {countries.find(
                   (country) => country.iso_2 === address.country_code
                 )?.display_name || address.country_code}
               </p>
-            </div>
-            <div className="grow basis-0">
-              <p className="text-xs text-grayscale-500 mb-1.5">Address</p>
-              <p>{address.address_1}</p>
             </div>
           </div>
           {Boolean(address.address_2) && (
@@ -52,18 +51,18 @@ export const AddressSingle: React.FC<{
             </div>
           )}
           <div className="flex flex-wrap justify-between gap-6">
-            <div className="grow basis-0">
+            <div className="sm:grow sm:basis-0">
               <p className="text-xs text-grayscale-500 mb-1.5">Postal Code</p>
               <p>{address.postal_code}</p>
             </div>
-            <div className="grow basis-0">
+            <div className="sm:grow sm:basis-0">
               <p className="text-xs text-grayscale-500 mb-1.5">City</p>
               <p>{address.city}</p>
             </div>
           </div>
         </div>
       </div>
-      <div className="flex gap-4">
+      <div className="flex gap-2.5">
         <UiDialogTrigger>
           <Button
             iconName="trash"
@@ -78,17 +77,22 @@ export const AddressSingle: React.FC<{
                   Do you want to delete this address?
                 </p>
                 <div className="flex gap-6 justify-center">
-                  <DeleteAddressButton addressId={address.id}>
+                  <DeleteAddressButton
+                    addressId={address.id}
+                    className="max-w-42 w-full"
+                  >
                     Confirm
                   </DeleteAddressButton>
-                  <UiCloseButton variant="outline">Cancel</UiCloseButton>
+                  <UiCloseButton variant="outline" className="max-w-42 w-full">
+                    Cancel
+                  </UiCloseButton>
                 </div>
               </UiDialog>
             </UiModal>
           </UiModalOverlay>
         </UiDialogTrigger>
         <UiDialogTrigger>
-          <Button variant="outline" size="sm" className="shrink-0 flex-1">
+          <Button variant="outline" size="sm" className="shrink-0">
             Change
           </Button>
           <UiModalOverlay>

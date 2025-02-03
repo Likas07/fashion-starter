@@ -1,55 +1,53 @@
 "use client"
 
-// External packages
 import * as React from "react"
 import { twJoin, twMerge } from "tailwind-merge"
-import * as Aria from "react-aria-components"
-
-// Components
+import * as ReactAria from "react-aria-components"
 import { Icon } from "@/components/Icon"
 
 export const getFormFieldClassNames = ({
-  variant,
-  uiSize,
+  uiSize = "lg",
   isVisuallyDisabled,
-  placeholder,
   isSuccess,
   hasError,
-}: InputOwnProps & { placeholder?: string }): string => {
+}: InputOwnProps): string => {
+  const sizeClasses = {
+    sm: "h-9 text-xs focus:pt-3.5 [&:not(:placeholder-shown)]:pt-3.5 [&:autofill]:pt-3.5",
+    md: "h-12 focus:pt-3 [&:not(:placeholder-shown)]:pt-3 [&:autofill]:pt-3",
+    lg: "h-14 focus:pt-4 [&:not(:placeholder-shown)]:pt-4 [&:autofill]:pt-4",
+  }
+
+  const visuallyDisabledClasses = isVisuallyDisabled
+    ? "pointer-events-none bg-grayscale-50"
+    : ""
+
+  const successClasses = isSuccess ? "border-green-500 pr-7" : ""
+
+  const errorClasses = hasError
+    ? "border-red-primary focus:border-red-900 hover:border-red-900"
+    : ""
+
   return twJoin(
-    // Base
-    "peer block w-full rounded-xs transition-all outline-none bg-white px-4 placeholder:invisible",
+    "peer block w-full rounded-xs transition-all outline-none px-4 placeholder:invisible border border-grayscale-200 hover:border-grayscale-500 focus:border-grayscale-500 bg-transparent disabled:pointer-events-none disabled:bg-grayscale-50 [&:autofill]:bg-clip-text",
+    sizeClasses[uiSize],
+    visuallyDisabledClasses,
+    successClasses,
+    errorClasses
+  )
+}
 
-    // Disabled
-    "disabled:pointer-events-none disabled:bg-grayscale-50",
+export const getPlaceholderClassNames = ({
+  uiSize = "lg",
+}: Pick<InputOwnProps, "uiSize">): string => {
+  const sizeClasses = {
+    lg: "peer-focus:top-2.5 peer-[:not(:placeholder-shown)]:top-2.5 peer-[:autofill]:top-2.5 peer-focus:text-xs peer-[:not(:placeholder-shown)]:text-xs peer-[:autofill]:text-xs",
+    md: "peer-focus:top-1 peer-[:not(:placeholder-shown)]:top-1 peer-[:autofill]:top-1 peer-focus:text-xs peer-[:not(:placeholder-shown)]:text-xs peer-[:autofill]:text-xs",
+    sm: "peer-focus:top-1 peer-[:not(:placeholder-shown)]:top-1 peer-[:autofill]:top-1 text-xs peer-focus:text-2xs peer-[:not(:placeholder-shown)]:text-2xs peer-[:autofill]:text-2xs",
+  }
 
-    // Variant
-    variant === "outline" &&
-      "border border-grayscale-200 hover:border-grayscale-500 focus:border-grayscale-500 bg-transparent",
-
-    // Size
-    uiSize === "sm" && "h-9 text-xs",
-    uiSize === "md" && "h-12",
-    uiSize === "lg" && "h-14",
-
-    // Placeholder
-    placeholder && "placeholder:invisible",
-
-    uiSize === "sm" &&
-      "h-9 text-xs focus:pt-3.5 [&:not(:placeholder-shown)]:pt-3.5 [&:autofill]:pt-3.5",
-    uiSize === "md" &&
-      "h-12 focus:pt-3 [&:not(:placeholder-shown)]:pt-3 [&:autofill]:pt-3",
-    uiSize === "lg" &&
-      "h-14 focus:pt-4 [&:not(:placeholder-shown)]:pt-4 [&:autofill]:pt-4",
-
-    // isVisuallyDisabled
-    isVisuallyDisabled && "pointer-events-none bg-grayscale-50",
-
-    // Success
-    isSuccess && "border-green-500 pr-7",
-
-    // Error
-    hasError && "border-red-primary focus:border-red-900 hover:border-red-900"
+  return twJoin(
+    "absolute -translate-y-1/2 peer-placeholder-shown:top-1/2 left-4 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:autofill]:translate-y-0 peer-focus:translate-y-0 text-grayscale-500 pointer-events-none transition-all",
+    sizeClasses[uiSize]
   )
 }
 
@@ -63,13 +61,13 @@ type InputLabelOwnProps = {
 export const InputLabel: React.FC<
   React.ComponentPropsWithRef<"label"> & InputLabelOwnProps
 > = ({ isRequired, children, className, ...rest }) => (
-  <Aria.Label
+  <ReactAria.Label
     {...rest}
     className={twMerge("mb-1 block font-semibold", className)}
   >
     {children}
     {isRequired && <span className="ml-0.5 text-orange-700">*</span>}
-  </Aria.Label>
+  </ReactAria.Label>
 )
 
 /**
@@ -82,7 +80,7 @@ type InputSubLabelOwnProps = {
 export const InputSubLabel: React.FC<
   React.ComponentPropsWithRef<"p"> & InputSubLabelOwnProps
 > = ({ type, children, className, ...rest }) => (
-  <Aria.Text
+  <ReactAria.Text
     {...rest}
     className={twMerge(
       "mt-2 text-xs",
@@ -92,14 +90,13 @@ export const InputSubLabel: React.FC<
     )}
   >
     {children}
-  </Aria.Text>
+  </ReactAria.Text>
 )
 
 /**
  * Input
  */
 export type InputOwnProps = {
-  variant?: "solid" | "outline"
   uiSize?: "sm" | "md" | "lg"
   isVisuallyDisabled?: boolean
   isSuccess?: boolean
@@ -114,7 +111,6 @@ export const Input = React.forwardRef<
 >(
   (
     {
-      variant,
       uiSize = "lg",
       isVisuallyDisabled,
       isSuccess,
@@ -128,15 +124,13 @@ export const Input = React.forwardRef<
     ref
   ) => (
     <div className={twMerge("relative", wrapperClassName)}>
-      <Aria.Input
+      <ReactAria.Input
         {...rest}
         ref={ref}
         className={twMerge(
           getFormFieldClassNames({
-            variant,
             uiSize,
             isVisuallyDisabled,
-            placeholder,
             isSuccess,
             hasError,
           }),
@@ -145,17 +139,7 @@ export const Input = React.forwardRef<
         placeholder={placeholder}
       />
       {placeholder && (
-        <span
-          className={twJoin(
-            "absolute -translate-y-1/2 peer-placeholder-shown:top-1/2 left-4 peer-focus:text-xs peer-[:not(:placeholder-shown)]:text-xs peer-[:autofill]:text-xs peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:autofill]:translate-y-0 peer-focus:translate-y-0 text-grayscale-500 pointer-events-none transition-all",
-            uiSize === "lg" &&
-              "peer-focus:top-2.5 peer-[:not(:placeholder-shown)]:top-2.5 peer-[:autofill]:top-2.5",
-            uiSize === "md" &&
-              "peer-focus:top-1 peer-[:not(:placeholder-shown)]:top-1 peer-[:autofill]:top-1",
-            uiSize === "sm" &&
-              "peer-focus:top-1 peer-[:not(:placeholder-shown)]:top-1 peer-[:autofill]:top-1 text-xs peer-focus:text-[10px] peer-[:not(:placeholder-shown)]:text-[10px] peer-[:autofill]:text-[10px]"
-          )}
-        >
+        <span className={getPlaceholderClassNames({ uiSize })}>
           {placeholder}
         </span>
       )}
