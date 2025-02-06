@@ -69,8 +69,8 @@ export const Drawer: React.FC<DrawerProps> = ({
       <div
         onClick={onBackdropClick}
         className={twJoin(
-          "w-full h-full fixed top-0 right-0 z-40 bg-black duration-300",
-          isOpened ? "visible opacity-10" : "invisible opacity-0"
+          "w-full h-full fixed top-0 right-0 z-40 bg-black-10% duration-300",
+          isOpened ? "visible opacity-100" : "invisible opacity-0"
         )}
       />
     </>

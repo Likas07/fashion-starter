@@ -7,6 +7,7 @@ import { Drawer } from "@/components/Drawer"
 import { LocalizedLink } from "@/components/LocalizedLink"
 import { RegionSwitcher } from "@/components/RegionSwitcher"
 import { SearchField } from "@/components/SearchField"
+import { useSearchParams } from "next/navigation"
 
 export const HeaderDrawer: React.FC<{
   countryOptions: {
@@ -16,6 +17,13 @@ export const HeaderDrawer: React.FC<{
   }[]
 }> = ({ countryOptions }) => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false)
+
+  const searchParams = useSearchParams()
+  const searchQuery = searchParams.get("query")
+
+  React.useEffect(() => {
+    if (searchQuery) setIsMenuOpen(false)
+  }, [searchQuery])
 
   return (
     <>
@@ -33,7 +41,7 @@ export const HeaderDrawer: React.FC<{
       >
         <div className="flex flex-col text-white h-full">
           <div className="flex items-center pb-6 mb-8 pt-5 w-full border-b border-white px-8">
-            <SearchField countryOptions={countryOptions} />
+            <SearchField countryOptions={countryOptions} isInputAlwaysShown />
           </div>
           <div className="text-lg flex flex-col gap-8 font-medium px-8">
             <LocalizedLink href="/about" onClick={() => setIsMenuOpen(false)}>

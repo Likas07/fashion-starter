@@ -35,7 +35,8 @@ export const SearchField: React.FC<{
     region: string
     label: string | undefined
   }[]
-}> = ({ countryOptions }) => {
+  isInputAlwaysShown?: boolean
+}> = ({ countryOptions, isInputAlwaysShown }) => {
   const router = useRouter()
   const [isInputShown, setIsInputShown] = React.useState(false)
   const countryCode = useCountryCode()
@@ -79,19 +80,19 @@ export const SearchField: React.FC<{
       setIsInputShown(true)
     } else if (list.filterText) {
       router.push(`/${countryCode}/search?query=${list.filterText}`)
-      setIsInputShown(false)
+      if (!isInputAlwaysShown) setIsInputShown(false)
     } else {
-      setIsInputShown(false)
+      if (!isInputAlwaysShown) setIsInputShown(false)
     }
   }, [isInputShown, list.filterText, router, countryCode])
 
   const handleKeyDown = React.useCallback(
     (e: React.KeyboardEvent) => {
       if (e.key === "Escape") {
-        setIsInputShown(false)
+        if (!isInputAlwaysShown) setIsInputShown(false)
       } else if (e.key === "Enter" && list.filterText) {
         router.push(`/${countryCode}/search?query=${list.filterText}`)
-        setIsInputShown(false)
+        if (!isInputAlwaysShown) setIsInputShown(false)
       }
     },
     [list.filterText, router, countryCode]
@@ -101,7 +102,11 @@ export const SearchField: React.FC<{
     if (searchQuery && !list.filterText) {
       list.setFilterText(searchQuery)
     }
-  }, [searchQuery, list])
+  }, [searchQuery])
+
+  React.useEffect(() => {
+    if (isInputAlwaysShown) setIsInputShown(true)
+  }, [])
 
   return (
     <div className="flex">
@@ -113,13 +118,14 @@ export const SearchField: React.FC<{
         <Icon name="search" className="w-5 h-5" />
       </Button>
       <ComboBox
+        allowsCustomValue
         className="overflow-hidden"
         aria-label="Search"
         items={list.items}
         inputValue={list.filterText}
         onInputChange={list.setFilterText}
         onKeyDown={handleKeyDown}
-        isDisabled={!isInputShown}
+        isDisabled={!isInputAlwaysShown && !isInputShown}
       >
         <div
           className={twJoin(
@@ -127,13 +133,10 @@ export const SearchField: React.FC<{
             isInputShown ? "w-full md:w-30" : "md:w-0"
           )}
         >
-          <Input
-            variant="outline"
-            className="px-1 h-7 md:h-6 w-full max-md:border-0 border-black rounded-none border-t-0 border-x-0 group-data-[light=true]:md:border-white group-data-[sticky=true]:md:border-black ml-1"
-          />
+          <Input className="px-0 disabled:bg-transparent !py-0 h-7 md:h-6 max-md:border-0 border-black rounded-none border-t-0 border-x-0 group-data-[light=true]:md:border-white group-data-[sticky=true]:md:border-black ml-2 md:ml-1" />
         </div>
         <Popover
-          crossOffset={-228}
+          placement="bottom end"
           containerPadding={10}
           maxHeight={243}
           offset={25}
