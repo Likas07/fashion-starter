@@ -42,7 +42,7 @@ export const MobileFilters: React.FC<{
       <UiModalOverlay className="p-0">
         <UiModal
           animateFromBottom
-          className="absolute top-36 left-0 w-full pb-21 max-w-full"
+          className="absolute top-36 left-0 w-full pb-26 max-w-full"
         >
           <UiDialog>
             {({ close }) => (
@@ -96,7 +96,7 @@ export const MobileFilters: React.FC<{
                   Object.keys(collections).length > 0 &&
                   ((categories && Object.keys(categories).length > 0) ||
                     (types && Object.keys(types).length > 0)) && (
-                    <hr className="my-6" />
+                    <hr className="my-3 text-grayscale-200" />
                   )}
                 {categories && Object.keys(categories).length > 0 && (
                   <ReactAria.CheckboxGroup
@@ -124,7 +124,9 @@ export const MobileFilters: React.FC<{
                 {categories &&
                   Object.keys(categories).length > 0 &&
                   types &&
-                  Object.keys(types).length > 0 && <hr className="my-6" />}
+                  Object.keys(types).length > 0 && (
+                    <hr className="my-3 text-grayscale-200" />
+                  )}
                 {types && Object.keys(types).length > 0 && (
                   <ReactAria.CheckboxGroup
                     className="flex flex-col"
