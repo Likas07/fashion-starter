@@ -260,7 +260,7 @@ const ShippingAddress = ({
                         id={address.id}
                       >
                         <UiRadioBox />
-                        <UiRadioLabel className="group-data-[selected=true]:font-normal">
+                        <UiRadioLabel>
                           {[address.first_name, address.last_name]
                             .filter(Boolean)
                             .join(" ")}
@@ -403,7 +403,7 @@ const ShippingAddress = ({
           <UiCheckboxBox>
             <UiCheckboxIcon />
           </UiCheckboxBox>
-          <UiCheckboxLabel className="group-data-[selected=true]:font-normal">
+          <UiCheckboxLabel>
             Billing address same as shipping address
           </UiCheckboxLabel>
         </UiCheckbox>

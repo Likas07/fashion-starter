@@ -45,9 +45,4 @@ export const UiCheckboxIcon: React.FC<
 
 export const UiCheckboxLabel: React.FC<
   React.ComponentPropsWithoutRef<"span">
-> = ({ className, ...props }) => (
-  <span
-    {...props}
-    className={twMerge("group-data-[selected=true]:font-semibold", className)}
-  />
-)
+> = ({ className, ...props }) => <span {...props} className={className} />

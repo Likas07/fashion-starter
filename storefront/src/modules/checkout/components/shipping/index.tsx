@@ -108,9 +108,7 @@ const Shipping: React.FC<ShippingProps> = ({
                   className="gap-4"
                 >
                   <UiRadioBox />
-                  <UiRadioLabel className="group-data-[selected=true]:font-normal">
-                    {option.name}
-                  </UiRadioLabel>
+                  <UiRadioLabel>{option.name}</UiRadioLabel>
                   <UiRadioLabel className="ml-auto group-data-[selected=true]:font-normal">
                     {convertToLocale({
                       amount: option.amount!,

@@ -129,7 +129,7 @@ export default async function AccountPersonalAndSecurityPage({
           <UiCheckboxBox>
             <UiCheckboxIcon />
           </UiCheckboxBox>
-          <UiCheckboxLabel className="group-data-[selected=true]:font-normal">
+          <UiCheckboxLabel>
             My shipping information is the same as my billing information
           </UiCheckboxLabel>
         </UiCheckbox>
