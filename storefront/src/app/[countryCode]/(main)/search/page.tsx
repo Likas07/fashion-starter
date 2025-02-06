@@ -41,7 +41,10 @@ export default async function SearchPage({ params, searchParams }: Props) {
           typeId={undefined}
         />
       </Suspense>
-      <CollectionsSlider heading="Checkout our collections for more products" />
+      <CollectionsSlider
+        heading="Checkout our collections for more products"
+        className="mt-26 md:mt-36 !mb-0"
+      />
     </div>
   )
 }
