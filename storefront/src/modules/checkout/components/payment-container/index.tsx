@@ -1,7 +1,7 @@
 import * as React from "react"
 
 import { isManual } from "@lib/constants"
-import { UiRadio, UiRadioBox } from "@/components/ui/Radio"
+import { UiRadio, UiRadioBox, UiRadioLabel } from "@/components/ui/Radio"
 import PaymentTest from "@modules/checkout/components/payment-test"
 
 type PaymentContainerProps = {
@@ -26,11 +26,11 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
       className="gap-4"
     >
       <UiRadioBox />
-      <div className="group-data-[selected=true]:font-normal">
+      <UiRadioLabel>
         {paymentInfoMap[paymentProviderId]?.title || paymentProviderId}
 
         {isManual(paymentProviderId) && isDevelopment && <PaymentTest />}
-      </div>
+      </UiRadioLabel>
       <span className="ml-auto group-data-[selected=true]:font-normal">
         {paymentInfoMap[paymentProviderId]?.icon}
       </span>
