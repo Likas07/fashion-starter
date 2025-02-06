@@ -4,10 +4,12 @@ import Image from "next/image"
 import { getCollectionsList } from "@lib/data/collections"
 import { Carousel } from "@/components/Carousel"
 import { LocalizedLink } from "@/components/LocalizedLink"
+import { twMerge } from "tailwind-merge"
 
 export const CollectionsSlider: React.FC<{
   heading?: React.ReactNode
-}> = async ({ heading = "Collections" }) => {
+  className?: string
+}> = async ({ heading = "Collections", className }) => {
   const collections = await getCollectionsList(0, 20, [
     "id",
     "title",
@@ -22,7 +24,7 @@ export const CollectionsSlider: React.FC<{
   return (
     <Carousel
       heading={<h3 className="text-md md:text-2xl">{heading}</h3>}
-      className="mb-26 md:mb-36"
+      className={twMerge("mb-26 md:mb-36", className)}
     >
       {collections.collections.map((c) => (
         <div

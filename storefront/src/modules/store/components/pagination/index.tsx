@@ -36,7 +36,7 @@ export function Pagination({
     <button
       key={p}
       className={twMerge(
-        "txt-xlarge-plus text-fg-muted dark:text-fg-muted-dark",
+        "txt-xlarge-plus text-fg-muted dark:text-fg-muted-dark px-1",
         isCurrent &&
           "text-fg-base dark:text-fg-base-dark hover:text-fg-subtle dark:hover:text-fg-subtle-dark"
       )}
