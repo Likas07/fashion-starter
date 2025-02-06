@@ -3,8 +3,8 @@ import { listRegions } from "@lib/data/regions"
 import { retrieveCart } from "@lib/data/cart"
 
 // Components
-import { CartDrawer } from "./CartDrawer"
-import { SearchField } from "./SearchField"
+import { SearchField } from "@/components/SearchField"
+import { CartDrawer } from "@/components/CartDrawer"
 import { Layout, LayoutColumn } from "@/components/Layout"
 import { LocalizedButtonLink, LocalizedLink } from "@/components/LocalizedLink"
 import { CartIcon } from "@/components/CartIcon"
