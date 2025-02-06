@@ -43,9 +43,4 @@ export const UiRadioBox: React.FC<React.ComponentPropsWithoutRef<"span">> = ({
 export const UiRadioLabel: React.FC<React.ComponentPropsWithoutRef<"span">> = ({
   className,
   ...props
-}) => (
-  <span
-    {...props}
-    className={twMerge("group-data-[selected=true]:font-semibold", className)}
-  />
-)
+}) => <span {...props} className={className} />
