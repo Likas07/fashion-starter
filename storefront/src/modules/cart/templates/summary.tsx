@@ -28,7 +28,7 @@ const Summary = ({ cart }: SummaryProps) => {
       >
         Proceed to checkout
       </LocalizedButtonLink>
-      <div className="bg-grayscale-50 rounded-xs p-4 flex items-center text-grayscale-500 gap-4">
+      <div className="bg-grayscale-50 mt-8 rounded-xs p-4 flex items-center text-grayscale-500 gap-4">
         <Icon name="info" />
         <p>
           Already have an account? No worries, just{" "}
