@@ -23,7 +23,7 @@ export const Drawer: React.FC<DrawerProps> = ({
   ...rest
 }) => {
   const baseClasses =
-    "flex-col items-center top-0 z-50 fixed overflow-y-scroll justify-self-center w-full max-h-screen h-screen max-w-75"
+    "top-0 z-50 fixed overflow-y-scroll justify-self-center w-full max-h-screen h-screen max-w-75"
   const colorSchemeClasses =
     colorScheme === "light" ? "bg-white text-black" : "bg-black text-white"
   const positionClasses =

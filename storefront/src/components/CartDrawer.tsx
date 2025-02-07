@@ -35,7 +35,7 @@ export const CartDrawer: React.FC<{
         {children}
       </Button>
       <Drawer
-        className="max-w-139 px-4 xs:px-6 sm:px-12 pt-10"
+        className="max-w-139 px-4 xs:px-6 sm:px-12 pt-10 flex flex-col"
         closeButtonClassName="top-11.5"
         colorScheme="light"
         position="right"
@@ -61,7 +61,7 @@ export const CartDrawer: React.FC<{
                   )
                 })}
             </div>
-            <div className="sticky left-0 bg-white bottom-0 pt-4 pb-6 border-t border-grayscale-200">
+            <div className="sticky left-0 bg-white bottom-0 pt-4 pb-6 border-t border-grayscale-200 mt-auto">
               <CartTotals cart={cart} />
               <DiscountCode cart={cart} className="mt-6" />
               <LocalizedButtonLink
