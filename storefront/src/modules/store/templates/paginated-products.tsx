@@ -5,6 +5,7 @@ import ProductPreview from "@modules/products/components/product-preview"
 import { Pagination } from "@modules/store/components/pagination"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 import { Layout, LayoutColumn } from "@/components/Layout"
+import { NoResults } from "@modules/store/components/no-results.tsx"
 
 const PRODUCT_LIMIT = 12
 
@@ -73,13 +74,17 @@ export default async function PaginatedProducts({
   return (
     <>
       <Layout className="gap-y-10 md:gap-y-16 mb-16">
-        {products.map((p) => {
-          return (
-            <LayoutColumn key={p.id} className="md:!col-span-4 !col-span-6">
-              <ProductPreview product={p} region={region} />
-            </LayoutColumn>
-          )
-        })}
+        {products.length ? (
+          products.map((p) => {
+            return (
+              <LayoutColumn key={p.id} className="md:!col-span-4 !col-span-6">
+                <ProductPreview product={p} region={region} />
+              </LayoutColumn>
+            )
+          })
+        ) : (
+          <NoResults />
+        )}
       </Layout>
       {totalPages > 1 && (
         <Pagination
