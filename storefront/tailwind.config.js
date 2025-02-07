@@ -88,6 +88,7 @@ module.exports = {
     extend: {
       spacing: {
         6.5: "1.625rem",
+        11.5: "2.875rem",
         13: "3.25rem",
         13.5: "3.375rem",
         14.5: "3.625rem",
@@ -137,6 +138,9 @@ module.exports = {
         154: "38.5rem",
         159: "39.75rem",
         200: "50rem",
+      },
+      borderWidth: {
+        6: "6px",
       },
       fontFamily: {
         inter: [

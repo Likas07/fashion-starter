@@ -35,31 +35,39 @@ export const CartDrawer: React.FC<{
         {children}
       </Button>
       <Drawer
-        className="max-w-139 px-4 xs:px-6 sm:px-12 pt-20 md:pt-33"
-        closeButtonClassName="top-21 md:top-34"
+        className="max-w-139 px-4 xs:px-6 sm:px-12 pt-10"
+        closeButtonClassName="top-11.5"
         colorScheme="light"
         position="right"
         isOpened={isCartDrawerOpen}
         onCloseClick={() => setIsCartDrawerOpen(false)}
         onBackdropClick={() => setIsCartDrawerOpen(false)}
       >
-        <p className="text-md mb-10">Cart</p>
+        <p className="text-md mb-2">Cart</p>
         {cart?.items?.length ? (
           <>
-            {cart?.items
-              .sort((a, b) => {
-                return (a.created_at ?? "") > (b.created_at ?? "") ? -1 : 1
-              })
-              .map((item) => {
-                return <Item key={item.id} item={item} />
-              })}
-            <div className="sticky left-0 bg-white bottom-0 pt-6 pb-12 border-t border-grayscale-200">
+            <div className="pb-8">
+              {cart?.items
+                .sort((a, b) => {
+                  return (a.created_at ?? "") > (b.created_at ?? "") ? -1 : 1
+                })
+                .map((item) => {
+                  return (
+                    <Item
+                      key={item.id}
+                      item={item}
+                      className="last:pb-0 last:border-b-0"
+                    />
+                  )
+                })}
+            </div>
+            <div className="sticky left-0 bg-white bottom-0 pt-4 pb-6 border-t border-grayscale-200">
               <CartTotals cart={cart} />
-              <DiscountCode cart={cart} />
+              <DiscountCode cart={cart} className="mt-6" />
               <LocalizedButtonLink
                 href="/checkout"
                 isFullWidth
-                className="mt-8"
+                className="mt-4"
               >
                 Proceed to checkout
               </LocalizedButtonLink>
