@@ -1,23 +1,27 @@
 "use client"
 
-import { Button } from "@/components/Button"
 import { LayoutColumn } from "@/components/Layout"
-import { usePathname, useRouter } from "next/navigation"
+import { Link } from "@/components/Link"
+import { usePathname } from "next/navigation"
 
 export const NoResults = () => {
   const pathname = usePathname()
-  const router = useRouter()
 
   return (
     <LayoutColumn className="pt-28">
-      <p className="text-md text-center mb-2">No results match!</p>
-      <Button
-        onPress={() => router.push(pathname, { scroll: false })}
-        variant="link"
-        className="flex mx-auto"
-      >
-        Clear filters
-      </Button>
+      <div className="flex justify-center flex-col items-center">
+        <div>
+          <p className="text-md text-center mb-2">No results match!</p>
+        </div>
+        <Link
+          scroll={false}
+          href={pathname}
+          variant="underline"
+          className="inline-flex md:pb-0"
+        >
+          Clear filters
+        </Link>
+      </div>
     </LayoutColumn>
   )
 }
