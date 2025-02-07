@@ -35,7 +35,7 @@ const SortProducts = ({ sortBy, setQueryParams }: SortProductsProps) => {
         <UiSelectValue />
         <UiSelectIcon />
       </UiSelectButton>
-      <ReactAria.Popover className="w-60" crossOffset={-126}>
+      <ReactAria.Popover className="w-60" placement="bottom right">
         <UiSelectListBox>
           <UiSelectListBoxItem id="created_at">
             Latest Arrivals

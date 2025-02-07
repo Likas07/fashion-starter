@@ -24,7 +24,7 @@ export const CategoryFilter: React.FC<{
       <span>Category</span>
       <UiSelectIcon />
     </UiSelectButton>
-    <ReactAria.Popover className="w-64" crossOffset={58}>
+    <ReactAria.Popover className="w-64" placement="bottom left">
       <UiSelectDialog>
         <ReactAria.CheckboxGroup
           value={category ?? []}

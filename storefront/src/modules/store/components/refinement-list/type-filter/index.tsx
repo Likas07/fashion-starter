@@ -24,7 +24,7 @@ export const TypeFilter: React.FC<{
       <span>Type</span>
       <UiSelectIcon />
     </UiSelectButton>
-    <ReactAria.Popover className="w-64" crossOffset={58}>
+    <ReactAria.Popover className="w-64" placement="bottom left">
       <UiSelectDialog>
         <ReactAria.CheckboxGroup
           value={type ?? []}
