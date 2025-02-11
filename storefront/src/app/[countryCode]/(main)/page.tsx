@@ -71,10 +71,10 @@ export default async function Home({
     <>
       <div className="max-md:pt-18">
         <Image
-          src="/images/content/living-room.png"
+          src="/images/content/living-room-gray-armchair-two-seater-sofa.png"
           width={2880}
           height={1500}
-          alt="Living room"
+          alt="Living room with gray armchair and two-seater sofa"
           className="md:h-screen md:object-cover"
         />
       </div>
@@ -104,10 +104,10 @@ export default async function Home({
               About Sofa Society
             </h3>
             <Image
-              src="/images/content/sofa2.png"
+              src="/images/content/gray-sofa-against-concrete-wall.png"
               width={2496}
               height={1400}
-              alt="Sofa"
+              alt="Gray sofa against concrete wall"
               className="mb-8 md:mb-16 max-md:aspect-[3/2] max-md:object-cover"
             />
           </LayoutColumn>

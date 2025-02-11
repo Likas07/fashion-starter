@@ -31,10 +31,10 @@ export default function InspirationPage() {
     <>
       <div className="max-md:pt-18">
         <Image
-          src="/images/content/living-room9.png"
+          src="/images/content/living-room-dark-green-three-seater-sofa.png"
           width={2880}
           height={1500}
-          alt="Living room"
+          alt="Living room with dark green three-seater sofa"
           className="md:h-screen md:object-cover mb-8 md:mb-26"
         />
       </div>
@@ -55,10 +55,10 @@ export default function InspirationPage() {
           <LayoutColumn start={{ base: 1, md: 9 }} end={13}>
             <LocalizedLink href="/products/astrid-curve">
               <Image
-                src="/images/content/shop6.png"
+                src="/images/content/dark-gray-three-seater-sofa.png.png"
                 width={768}
                 height={572}
-                alt="Sofa"
+                alt="Dark gray three-seater sofa"
                 className="mb-4 md:mb-6"
               />
               <div className="flex justify-between">
@@ -76,10 +76,10 @@ export default function InspirationPage() {
           </LayoutColumn>
           <LayoutColumn>
             <Image
-              src="/images/content/living-room10.png"
+              src="/images/content/living-room-brown-armchair-gray-corner-sofa.png"
               width={2496}
               height={1404}
-              alt="Sofa"
+              alt="Living room with brown armchair and gray corner sofa"
               className="mt-26 md:mt-36 mb-8 md:mb-26"
             />
           </LayoutColumn>
@@ -102,10 +102,10 @@ export default function InspirationPage() {
               className="mb-8 md:mb-16 inline-block"
             >
               <Image
-                src="/images/content/shop1.png"
+                src="/images/content/gray-three-seater-sofa.png"
                 width={768}
                 height={572}
-                alt="Sofa"
+                alt="Gray three-seater sofa"
                 className="mb-4 md:mb-6"
               />
               <div className="flex justify-between">
@@ -122,10 +122,10 @@ export default function InspirationPage() {
             </LocalizedLink>
             <LocalizedLink href="/products/nordic-breeze">
               <Image
-                src="/images/content/shop3.png"
+                src="/images/content/gray-arm-chair.png"
                 width={768}
                 height={572}
-                alt="Sofa"
+                alt="Gray arm chair"
                 className="mb-4 md:mb-6"
               />
               <div className="flex justify-between">
@@ -143,10 +143,10 @@ export default function InspirationPage() {
           </LayoutColumn>
         </Layout>
         <Image
-          src="/images/content/living-room4.png"
+          src="/images/content/living-room-gray-two-seater-puffy-sofa.png"
           width={2880}
           height={1618}
-          alt="Living room"
+          alt="Living room with gray two-seater puffy sofa"
           className="md:h-screen md:object-cover mt-26 md:mt-36 mb-8 md:mb-26"
         />
         <Layout>
@@ -166,10 +166,10 @@ export default function InspirationPage() {
           <LayoutColumn start={{ base: 1, md: 9 }} end={13}>
             <LocalizedLink href="/products/oslo-drift">
               <Image
-                src="/images/content/shop12.png"
+                src="/images/content/white-two-seater-sofa.png"
                 width={768}
                 height={572}
-                alt="Sofa"
+                alt="White two-seater sofa"
                 className="mb-4 md:mb-6"
               />
               <div className="flex justify-between">

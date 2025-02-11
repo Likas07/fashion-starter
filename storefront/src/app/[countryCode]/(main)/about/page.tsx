@@ -29,10 +29,10 @@ export default function AboutPage() {
     <>
       <div className="max-md:pt-18">
         <Image
-          src="/images/content/living-room5.png"
+          src="/images/content/living-room-gray-three-seater-sofa.png"
           width={2880}
           height={1500}
-          alt="Living room"
+          alt="Living room with gray three-seater sofa"
           className="md:h-screen md:object-cover"
         />
       </div>
@@ -61,10 +61,10 @@ export default function AboutPage() {
           </LayoutColumn>
           <LayoutColumn>
             <Image
-              src="/images/content/living-room6.png"
+              src="/images/content/living-room-black-armchair-dark-gray-sofa.png"
               width={2496}
               height={1404}
-              alt="Living room"
+              alt="Living room with black armchair and dark gray sofa"
               className="mt-26 lg:mt-36 mb-8 lg:mb-26"
             />
           </LayoutColumn>
@@ -95,10 +95,10 @@ export default function AboutPage() {
           </LayoutColumn>
           <LayoutColumn start={{ base: 2, lg: 1 }} end={{ base: 12, lg: 7 }}>
             <Image
-              src="/images/content/living-room7.png"
+              src="/images/content/gray-one-seater-sofa-wooden-coffee-table.png"
               width={1200}
               height={1600}
-              alt="Living room"
+              alt="Gray one-seater sofa and wooden coffee table"
               className="mb-16 lg:mb-46"
             />
           </LayoutColumn>
@@ -128,10 +128,10 @@ export default function AboutPage() {
           </LayoutColumn>
         </Layout>
         <Image
-          src="/images/content/living-room8.png"
+          src="/images/content/living-room-gray-three-seater-puffy-sofa.png"
           width={2880}
           height={1618}
-          alt="Living room"
+          alt="Living room with gray three-seater puffy sofa"
           className="mb-8 lg:mb-26"
         />
         <Layout>
