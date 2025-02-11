@@ -33,14 +33,14 @@ const Item = ({ item, className }: ItemProps) => {
         </p>
         <div className="text-xs flex flex-col flex-1">
           <div>
-            <p className="mb-1">
-              <span className="text-grayscale-500 mr-2">Material:</span>
-              {item?.variant_title?.split(" / ")[0]}
-            </p>
-            <p className="mb-1">
-              <span className="text-grayscale-500 mr-2">Color:</span>
-              {item?.variant_title?.split(" / ")[1]}
-            </p>
+            {item.variant?.options?.map((option) => (
+              <p className="mb-1" key={option.id}>
+                <span className="text-grayscale-500 mr-2">
+                  {option.option?.title}:
+                </span>
+                {option.value}
+              </p>
+            ))}
           </div>
           <div className="sm:mt-auto flex max-sm:flex-col gap-x-10 gap-y-6 max-sm:h-full sm:items-center justify-between relative">
             <div className="sm:self-end sm:mb-1">
