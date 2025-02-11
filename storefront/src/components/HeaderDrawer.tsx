@@ -35,35 +35,52 @@ export const HeaderDrawer: React.FC<{
         <Icon name="menu" className="w-6 h-6" wrapperClassName="w-6 h-6" />
       </Button>
       <Drawer
-        isOpened={isMenuOpen}
-        onCloseClick={() => setIsMenuOpen(false)}
-        onBackdropClick={() => setIsMenuOpen(false)}
+        animateFrom="left"
+        isOpen={isMenuOpen}
+        onOpenChange={setIsMenuOpen}
+        className="rounded-none !p-0"
       >
-        <div className="flex flex-col text-white h-full">
-          <div className="flex items-center pb-6 mb-8 pt-5 w-full border-b border-white px-8">
-            <SearchField countryOptions={countryOptions} isInputAlwaysShown />
-          </div>
-          <div className="text-lg flex flex-col gap-8 font-medium px-8">
-            <LocalizedLink href="/about" onClick={() => setIsMenuOpen(false)}>
-              About
-            </LocalizedLink>
-            <LocalizedLink
-              href="/inspiration"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Inspiration
-            </LocalizedLink>
-            <LocalizedLink href="/store" onClick={() => setIsMenuOpen(false)}>
-              Shop
-            </LocalizedLink>
-          </div>
-          <RegionSwitcher
-            countryOptions={countryOptions}
-            className="mt-auto ml-8 mb-8"
-            selectButtonClassName="max-md:text-base gap-2 p-1 w-auto"
-            selectIconClassName="text-current w-6 h-6"
-          />
-        </div>
+        {({ close }) => (
+          <>
+            <div className="flex flex-col text-white h-full">
+              <div className="flex items-center justify-between pb-6 mb-8 pt-5 w-full border-b border-white px-8">
+                <SearchField
+                  countryOptions={countryOptions}
+                  isInputAlwaysShown
+                />
+                <button onClick={close}>
+                  <Icon name="close" className="w-6" />
+                </button>
+              </div>
+              <div className="text-lg flex flex-col gap-8 font-medium px-8">
+                <LocalizedLink
+                  href="/about"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  About
+                </LocalizedLink>
+                <LocalizedLink
+                  href="/inspiration"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Inspiration
+                </LocalizedLink>
+                <LocalizedLink
+                  href="/store"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Shop
+                </LocalizedLink>
+              </div>
+              <RegionSwitcher
+                countryOptions={countryOptions}
+                className="mt-auto ml-8 mb-8"
+                selectButtonClassName="max-md:text-base gap-2 p-1 w-auto"
+                selectIconClassName="text-current w-6 h-6"
+              />
+            </div>
+          </>
+        )}
       </Drawer>
     </>
   )

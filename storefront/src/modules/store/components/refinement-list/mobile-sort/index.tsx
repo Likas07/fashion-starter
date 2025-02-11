@@ -28,8 +28,8 @@ export const MobileSort: React.FC<{
       </Button>
       <UiModalOverlay className="p-0">
         <UiModal
-          animateFromBottom
-          className="absolute left-0 w-full rounded-none max-w-full shadow-none pb-21"
+          animateFrom="bottom"
+          className="w-full rounded-none max-w-full shadow-none pb-21"
         >
           <UiDialog>
             {({ close }) => (

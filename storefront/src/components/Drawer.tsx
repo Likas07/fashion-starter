@@ -1,78 +1,38 @@
 import * as React from "react"
-import { twJoin, twMerge } from "tailwind-merge"
-import { Icon } from "@/components/Icon"
+import { twMerge } from "tailwind-merge"
+import * as ReactAria from "react-aria-components"
+import { UiModal, UiModalOverlay, UiModalOwnProps } from "@/components/ui/Modal"
+import { UiDialog } from "@/components/Dialog"
 
-export interface DrawerProps extends React.ComponentPropsWithoutRef<"div"> {
+export interface DrawerProps
+  extends Omit<ReactAria.ModalOverlayProps, "children">,
+    UiModalOwnProps,
+    Pick<ReactAria.DialogProps, "children"> {
   colorScheme?: "light" | "dark"
-  position?: "left" | "right"
-  isOpened?: boolean
-  onCloseClick?: () => void
-  onBackdropClick?: () => void
-  closeButtonClassName?: string
+  className?: string
 }
 
 export const Drawer: React.FC<DrawerProps> = ({
   colorScheme = "dark",
-  position = "left",
-  isOpened,
-  onCloseClick,
-  onBackdropClick,
-  closeButtonClassName,
+  animateFrom,
   className,
   children,
   ...rest
 }) => {
-  const baseClasses =
-    "top-0 z-50 fixed overflow-y-scroll justify-self-center w-full max-h-screen h-screen max-w-75"
-  const colorSchemeClasses =
-    colorScheme === "light" ? "bg-white text-black" : "bg-black text-white"
-  const positionClasses =
-    position === "left"
-      ? isOpened
-        ? "opacity-100 visible translate-x-0 left-0"
-        : "opacity-0 invisible -translate-x-full left-0"
-      : isOpened
-        ? "opacity-100 visible translate-x-0 right-0"
-        : "opacity-0 invisible translate-x-full right-0"
-
   return (
-    <>
-      <div
-        {...rest}
+    <UiModalOverlay {...rest}>
+      <UiModal
+        animateFrom={animateFrom}
         className={twMerge(
-          baseClasses,
-          colorSchemeClasses,
-          positionClasses,
+          "flex justify-self-center overflow-y-scroll max-h-screen h-screen max-w-75",
+          colorScheme === "light"
+            ? "bg-white text-black"
+            : "bg-black text-white",
           className
         )}
-        style={{
-          transition: isOpened
-            ? "transform 500ms, opacity 200ms, visibility 100ms"
-            : "transform 300ms, opacity 200ms, visibility 100ms",
-        }}
       >
-        <button
-          className={twMerge("absolute top-6 right-8", closeButtonClassName)}
-          onClick={onCloseClick}
-        >
-          <Icon
-            name="close"
-            className={twJoin(
-              "w-6 text-white",
-              colorScheme === "light" && "text-black",
-              colorScheme === "dark" && "text-white"
-            )}
-          />
-        </button>
-        {children}
-      </div>
-      <div
-        onClick={onBackdropClick}
-        className={twJoin(
-          "w-full h-full fixed top-0 right-0 z-40 bg-black-10% duration-300",
-          isOpened ? "visible opacity-100" : "invisible opacity-0"
-        )}
-      />
-    </>
+        <UiDialog className="flex flex-col flex-1">{children}</UiDialog>
+      </UiModal>
+    </UiModalOverlay>
   )
 }
