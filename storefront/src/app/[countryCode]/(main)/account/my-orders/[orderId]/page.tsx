@@ -189,7 +189,7 @@ export default async function AccountOrderPage({
             >
               {item.thumbnail && (
                 <LocalizedLink
-                  href={`/products/${item.product?.handle}`}
+                  href={`/products/${item.product_handle}`}
                   className="max-w-25 sm:max-w-37 aspect-[3/4] w-full relative overflow-hidden"
                 >
                   <Image
@@ -201,7 +201,11 @@ export default async function AccountOrderPage({
                 </LocalizedLink>
               )}
               <div className="flex flex-col flex-1">
-                <p className="mb-2 sm:text-md">{item.title}</p>
+                <p className="mb-2 sm:text-md">
+                  <LocalizedLink href={`/products/${item.product_handle}`}>
+                    {item.product_title}
+                  </LocalizedLink>
+                </p>
                 <div className="text-xs flex flex-col flex-1">
                   <div>
                     {item.variant?.options?.map((option) => (
