@@ -40,11 +40,11 @@ export const CartDrawer: React.FC<{
         animateFrom="right"
         isOpen={isCartDrawerOpen}
         onOpenChange={setIsCartDrawerOpen}
-        className="max-sm:max-w-100 max-w-139 sm:px-12 pt-8"
+        className="max-sm:max-w-100 max-w-139 max-sm:px-6 px-12 pt-10"
       >
         {({ close }) => (
           <>
-            <div className="flex justify-between mt-auto mb-2">
+            <div className="flex justify-between mb-2">
               <div>
                 <p className="text-md">Cart</p>
               </div>
@@ -54,7 +54,7 @@ export const CartDrawer: React.FC<{
             </div>
             {cart?.items?.length ? (
               <>
-                <div className="pb-8">
+                <div className="pb-8 overflow-y-scroll">
                   {cart?.items
                     .sort((a, b) => {
                       return (a.created_at ?? "") > (b.created_at ?? "")
@@ -66,13 +66,13 @@ export const CartDrawer: React.FC<{
                         <Item
                           key={item.id}
                           item={item}
-                          className="last:pb-0 last:border-b-0"
+                          className="py-8 last:pb-0 last:border-b-0"
                         />
                       )
                     })}
                 </div>
                 <div className="sticky left-0 bg-white bottom-0 pt-4 border-t border-grayscale-200 mt-auto">
-                  <CartTotals cart={cart} />
+                  <CartTotals isPartOfCartDrawer cart={cart} />
                   <DiscountCode cart={cart} className="mt-6" />
                   <LocalizedButtonLink
                     href="/checkout"
@@ -85,7 +85,7 @@ export const CartDrawer: React.FC<{
               </>
             ) : (
               <>
-                <p className="max-sm:mr-10 mb-6">
+                <p className="md:text-sm max-sm:mr-10 mb-6 mt-2">
                   You don&apos;t have anything in your cart. Let&apos;s change
                   that, use the link below to start browsing our products.
                 </p>

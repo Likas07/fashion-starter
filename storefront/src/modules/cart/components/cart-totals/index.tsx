@@ -4,13 +4,19 @@ import { HttpTypes } from "@medusajs/types"
 import React from "react"
 
 import { convertToLocale } from "@lib/util/money"
+import { twJoin, twMerge } from "tailwind-merge"
 
 type CartTotalsProps = {
   cart: HttpTypes.StoreCart
+  isPartOfCartDrawer?: boolean
   className?: string
 }
 
-const CartTotals: React.FC<CartTotalsProps> = ({ cart, className }) => {
+const CartTotals: React.FC<CartTotalsProps> = ({
+  cart,
+  isPartOfCartDrawer,
+  className,
+}) => {
   const {
     currency_code,
     total,
@@ -23,7 +29,12 @@ const CartTotals: React.FC<CartTotalsProps> = ({ cart, className }) => {
 
   return (
     <div className={className}>
-      <div className="flex flex-col gap-4">
+      <div
+        className={twMerge(
+          "flex flex-col gap-4",
+          isPartOfCartDrawer && "gap-2"
+        )}
+      >
         <div className="flex justify-between">
           <p className="text-grayscale-500">Subtotal:</p>
           <p
@@ -81,7 +92,12 @@ const CartTotals: React.FC<CartTotalsProps> = ({ cart, className }) => {
           </div>
         )}
       </div>
-      <hr className="my-8 md:my-6 text-grayscale-200" />
+      <hr
+        className={twJoin(
+          "my-8 md:my-6 text-grayscale-200",
+          isPartOfCartDrawer && "my-4"
+        )}
+      />
       <div className="flex justify-between text-md font-semibold">
         <p>Total:</p>
         <p data-testid="cart-total" data-value={total || 0}>
