@@ -6,14 +6,15 @@ import { login } from "@lib/data/customer"
 import { SubmitButton } from "@modules/common/components/submit-button"
 import { Input } from "@/components/Forms"
 import { LocalizedLink } from "@/components/LocalizedLink"
+import { twMerge } from "tailwind-merge"
 
-export const LoginForm: React.FC = () => {
+export const LoginForm: React.FC<{ className?: string }> = ({ className }) => {
   const [message, formAction] = React.useActionState(login, null)
 
   return (
     <form
       action={formAction}
-      className="flex flex-col gap-6 md:gap-8 mb-8 md:mb-16"
+      className={twMerge("flex flex-col gap-6 md:gap-8", className)}
     >
       <Input
         placeholder="Email"

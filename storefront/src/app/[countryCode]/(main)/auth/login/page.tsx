@@ -29,9 +29,7 @@ export default async function LoginPage({
         <h1 className="text-xl md:text-2xl mb-10 md:mb-16">
           Welcome back to Sofa Society!
         </h1>
-        <div className="mb-10 md:mb-16">
-          <LoginForm />
-        </div>
+        <LoginForm className="mb-10 md:mb-15" />
         <p className="text-grayscale-500">
           Don&apos;t have an account yet? You can{" "}
           <LocalizedLink
