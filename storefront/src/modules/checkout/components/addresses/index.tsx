@@ -80,7 +80,7 @@ const Addresses = ({
             cart={cart}
           />
 
-          {!sameAsBilling && <BillingAddress cart={cart} />}
+          {!sameAsBilling && <BillingAddress cart={cart} customer={customer} />}
 
           <SubmitButton className="mt-8" isLoading={isPending}>
             Next
@@ -119,7 +119,11 @@ const Addresses = ({
             <div className="flex max-sm:flex-col flex-wrap gap-y-2 gap-x-17">
               <div className="text-grayscale-500">Billing address</div>
               <div className="text-grayscale-600">
-                {sameAsBilling ? (
+                {cart.billing_address &&
+                compareAddresses(
+                  cart?.shipping_address,
+                  cart?.billing_address
+                ) ? (
                   "Same as shipping address"
                 ) : (
                   <>

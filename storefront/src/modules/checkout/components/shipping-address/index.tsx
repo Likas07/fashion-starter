@@ -34,6 +34,7 @@ import {
   UiCheckboxIcon,
   UiCheckboxLabel,
 } from "@/components/ui/Checkbox"
+import { twMerge } from "tailwind-merge"
 
 const ShippingAddress = ({
   customer,
@@ -129,9 +130,7 @@ const ShippingAddress = ({
 
   const handleChange = (
     e:
-      | React.ChangeEvent<
-          HTMLInputElement | HTMLInputElement | HTMLSelectElement
-        >
+      | React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
       | { target: { name: string; value: string } }
   ) => {
     setFormData({
@@ -303,97 +302,112 @@ const ShippingAddress = ({
             </UiModalOverlay>
           </UiDialogTrigger>
         </div>
-      ) : (
-        <div className="grid grid-cols-2 gap-4 mb-8">
-          <Input
-            placeholder="First name"
-            name="shipping_address.first_name"
-            autoComplete="given-name"
-            value={formData["shipping_address.first_name"] || ""}
-            onChange={handleChange}
-            required
-            data-testid="shipping-first-name-input"
-          />
-          <Input
-            placeholder="Last name"
-            name="shipping_address.last_name"
-            autoComplete="family-name"
-            value={formData["shipping_address.last_name"] || ""}
-            onChange={handleChange}
-            required
-            data-testid="shipping-last-name-input"
-          />
-          <Input
-            placeholder="Address"
-            name="shipping_address.address_1"
-            autoComplete="address-line1"
-            value={formData["shipping_address.address_1"] || ""}
-            onChange={handleChange}
-            required
-            data-testid="shipping-address-input"
-          />
-          <Input
-            placeholder="Company"
-            name="shipping_address.company"
-            value={formData["shipping_address.company"] || ""}
-            onChange={handleChange}
-            autoComplete="organization"
-            data-testid="shipping-company-input"
-          />
-          <Input
-            placeholder="Postal code"
-            name="shipping_address.postal_code"
-            autoComplete="postal-code"
-            value={formData["shipping_address.postal_code"] || ""}
-            onChange={handleChange}
-            required
-            data-testid="shipping-postal-code-input"
-          />
-          <Input
-            placeholder="City"
-            name="shipping_address.city"
-            autoComplete="address-level2"
-            value={formData["shipping_address.city"] || ""}
-            onChange={handleChange}
-            required
-            data-testid="shipping-city-input"
-          />
-          <CountrySelect
-            name="shipping_address.country_code"
-            autoComplete="country"
-            region={cart?.region}
-            selectedKey={formData["shipping_address.country_code"] || null}
-            onSelectionChange={(value) => {
-              handleChange({
-                target: {
-                  name: "shipping_address.country_code",
-                  value: `${value}`,
-                },
-              })
-            }}
-            isRequired
-            data-testid="shipping-country-select"
-          />
-          <Input
-            placeholder="State / Province"
-            name="shipping_address.province"
-            autoComplete="address-level1"
-            value={formData["shipping_address.province"] || ""}
-            onChange={handleChange}
-            required
-            data-testid="shipping-province-input"
-          />
-          <Input
-            placeholder="Phone"
-            name="shipping_address.phone"
-            autoComplete="tel"
-            value={formData["shipping_address.phone"] || ""}
-            onChange={handleChange}
-            data-testid="shipping-phone-input"
-          />
-        </div>
-      )}
+      ) : null}
+      <div
+        className={twMerge(
+          "grid grid-cols-2 gap-4 mb-8",
+          customer &&
+            (addressesInRegion?.length || 0) > 0 &&
+            !isShippingAddressEmpty(formData)
+            ? "hidden"
+            : ""
+        )}
+      >
+        <Input
+          placeholder="First name"
+          name="shipping_address.first_name"
+          autoComplete="given-name"
+          value={formData["shipping_address.first_name"] || ""}
+          onChange={handleChange}
+          required
+          data-testid="shipping-first-name-input"
+        />
+        <Input
+          placeholder="Last name"
+          name="shipping_address.last_name"
+          autoComplete="family-name"
+          value={formData["shipping_address.last_name"] || ""}
+          onChange={handleChange}
+          required
+          data-testid="shipping-last-name-input"
+        />
+        <Input
+          placeholder="Address"
+          name="shipping_address.address_1"
+          autoComplete="address-line1"
+          value={formData["shipping_address.address_1"] || ""}
+          onChange={handleChange}
+          required
+          data-testid="shipping-address-input"
+        />
+        <Input
+          placeholder="Company"
+          name="shipping_address.company"
+          value={formData["shipping_address.company"] || ""}
+          onChange={handleChange}
+          autoComplete="organization"
+          data-testid="shipping-company-input"
+        />
+        <Input
+          placeholder="Postal code"
+          name="shipping_address.postal_code"
+          autoComplete="postal-code"
+          value={formData["shipping_address.postal_code"] || ""}
+          onChange={handleChange}
+          required
+          data-testid="shipping-postal-code-input"
+        />
+        <Input
+          placeholder="City"
+          name="shipping_address.city"
+          autoComplete="address-level2"
+          value={formData["shipping_address.city"] || ""}
+          onChange={handleChange}
+          required
+          data-testid="shipping-city-input"
+        />
+        <CountrySelect
+          name="shipping_address.country_code"
+          autoComplete="country"
+          region={cart?.region}
+          selectedKey={formData["shipping_address.country_code"] || null}
+          onSelectionChange={(value) => {
+            handleChange({
+              target: {
+                name: "shipping_address.country_code",
+                value: `${value}`,
+              },
+            })
+          }}
+          isRequired
+          data-testid="shipping-country-select"
+        />
+        {/* TODO: fix province */}
+        <Input
+          placeholder="State / Province"
+          name="shipping_address.province"
+          autoComplete="address-level1"
+          value={formData["shipping_address.province"] || ""}
+          onChange={handleChange}
+          // required
+          data-testid="shipping-province-input"
+        />
+        <Input
+          placeholder="Phone"
+          name="shipping_address.phone"
+          autoComplete="tel"
+          value={formData["shipping_address.phone"] || ""}
+          onChange={handleChange}
+          data-testid="shipping-phone-input"
+        />
+      </div>
+      {/* TODO: check this */}
       <div>
+        <input
+          type="hidden"
+          name="same_as_billing"
+          value={checked ? "on" : "off"}
+        />
         <UiCheckbox
           name="same_as_billing"
           isSelected={checked}
