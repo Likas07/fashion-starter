@@ -24,7 +24,7 @@ export const Drawer: React.FC<DrawerProps> = ({
       <UiModal
         animateFrom={animateFrom}
         className={twMerge(
-          "flex justify-self-center overflow-y-scroll max-h-screen h-screen max-w-75",
+          "flex justify-self-center overflow-y-scroll max-h-screen h-screen max-w-75 rounded-none",
           colorScheme === "light"
             ? "bg-white text-black"
             : "bg-black text-white",
