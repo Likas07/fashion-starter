@@ -1,6 +1,6 @@
 import { HttpTypes } from "@medusajs/types"
 import React, { useEffect, useMemo, useState } from "react"
-import { RadioGroup } from "react-aria-components"
+import * as ReactAria from "react-aria-components"
 
 import compareAddresses from "@lib/util/compare-addresses"
 import { UpsertAddressForm } from "@modules/account/components/UpsertAddressForm"
@@ -195,7 +195,7 @@ const ShippingAddress = ({
               <UiModal>
                 <UiDialog>
                   <p className="text-md mb-10">Change address</p>
-                  <RadioGroup
+                  <ReactAria.RadioGroup
                     className="flex flex-col gap-4 mb-10"
                     aria-label="Shipping methods"
                     onChange={(value) => {
@@ -281,7 +281,7 @@ const ShippingAddress = ({
                         </UiRadioLabel>
                       </UiRadio>
                     ))}
-                  </RadioGroup>
+                  </ReactAria.RadioGroup>
                   <div className="flex justify-between">
                     <UiDialogTrigger>
                       <Button>Add new address</Button>

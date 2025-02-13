@@ -2,7 +2,7 @@
 
 // External packages
 import * as React from "react"
-import { ComboBox, ListBox, ListBoxItem, Popover } from "react-aria-components"
+import * as ReactAria from "react-aria-components"
 import { twJoin } from "tailwind-merge"
 import { useAsyncList } from "react-stately"
 import { Hit } from "meilisearch"
@@ -117,7 +117,7 @@ export const SearchField: React.FC<{
       >
         <Icon name="search" className="w-5 h-5" />
       </Button>
-      <ComboBox
+      <ReactAria.ComboBox
         allowsCustomValue
         className="overflow-hidden"
         aria-label="Search"
@@ -135,16 +135,16 @@ export const SearchField: React.FC<{
         >
           <Input className="px-0 disabled:bg-transparent !py-0 h-7 md:h-6 max-md:border-0 border-black rounded-none border-t-0 border-x-0 group-data-[light=true]:md:border-white group-data-[sticky=true]:md:border-black ml-2 md:ml-1" />
         </div>
-        <Popover
+        <ReactAria.Popover
           placement="bottom end"
           containerPadding={10}
           maxHeight={243}
           offset={25}
           className="max-w-90 md:max-w-95 lg:max-w-98 w-full bg-white rounded-xs border border-grayscale-200 overflow-y-scroll"
         >
-          <ListBox className="outline-none">
+          <ReactAria.ListBox className="outline-none">
             {(item: ListItem) => (
-              <ListBoxItem
+              <ReactAria.ListBoxItem
                 className="relative after:absolute after:content-[''] after:h-px after:bg-grayscale-100 after:-bottom-px after:left-6 after:right-6 last:after:hidden mb-px flex gap-6 p-6 transition-colors hover:bg-grayscale-50"
                 key={item.handle}
                 id={item.handle}
@@ -164,11 +164,11 @@ export const SearchField: React.FC<{
                 <p className="text-base font-semibold ml-auto">
                   {item.price?.calculated_price}
                 </p>
-              </ListBoxItem>
+              </ReactAria.ListBoxItem>
             )}
-          </ListBox>
-        </Popover>
-      </ComboBox>
+          </ReactAria.ListBox>
+        </ReactAria.Popover>
+      </ReactAria.ComboBox>
     </div>
   )
 }
