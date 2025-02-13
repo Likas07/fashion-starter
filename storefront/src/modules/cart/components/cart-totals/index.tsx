@@ -95,7 +95,7 @@ const CartTotals: React.FC<CartTotalsProps> = ({
       <hr
         className={twJoin(
           "my-8 md:my-6 text-grayscale-200",
-          isPartOfCartDrawer && "my-4"
+          isPartOfCartDrawer && "my-4 md:my-4"
         )}
       />
       <div className="flex justify-between text-md font-semibold">
