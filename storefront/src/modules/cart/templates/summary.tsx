@@ -12,9 +12,10 @@ type SummaryProps = {
   cart: HttpTypes.StoreCart & {
     promotions: HttpTypes.StorePromotion[]
   }
+  customer: HttpTypes.StoreCustomer | null
 }
 
-const Summary = ({ cart }: SummaryProps) => {
+const Summary = ({ cart, customer }: SummaryProps) => {
   const step = getCheckoutStep(cart)
 
   return (
@@ -28,15 +29,17 @@ const Summary = ({ cart }: SummaryProps) => {
       >
         Proceed to checkout
       </LocalizedButtonLink>
-      <div className="bg-grayscale-50 mt-8 rounded-xs p-4 flex items-center text-grayscale-500 gap-4">
-        <Icon name="info" />
-        <p>
-          Already have an account? No worries, just{" "}
-          <LocalizedLink href="/" variant="underline" className="text-black">
-            log in.
-          </LocalizedLink>
-        </p>
-      </div>
+      {!customer ? (
+        <div className="bg-grayscale-50 mt-8 rounded-xs p-4 flex items-center text-grayscale-500 gap-4">
+          <Icon name="info" />
+          <p>
+            Already have an account? No worries, just{" "}
+            <LocalizedLink href="/" variant="underline" className="text-black">
+              log in.
+            </LocalizedLink>
+          </p>
+        </div>
+      ) : null}
     </>
   )
 }
