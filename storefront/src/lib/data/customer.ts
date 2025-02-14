@@ -9,6 +9,7 @@ import {
   getAuthHeaders,
   setAuthToken,
   removeAuthToken,
+  getCartId,
 } from "@lib/data/cookies"
 
 export const getCustomer = async function () {
@@ -146,6 +147,12 @@ export async function login(_currentState: unknown, formData: FormData) {
 
     await setAuthToken(token)
     revalidateTag("customer")
+
+    const cartId = await getCartId()
+    if (cartId) {
+      await sdk.store.cart.transferCart(cartId, {}, await getAuthHeaders())
+      revalidateTag("cart")
+    }
   } catch (error: any) {
     return error.toString()
   }
