@@ -70,20 +70,6 @@ const BillingAddress = ({
       }))
   }
 
-  useEffect(() => {
-    setFormData({
-      "billing_address.first_name": cart?.billing_address?.first_name || "",
-      "billing_address.last_name": cart?.billing_address?.last_name || "",
-      "billing_address.address_1": cart?.billing_address?.address_1 || "",
-      "billing_address.company": cart?.billing_address?.company || "",
-      "billing_address.postal_code": cart?.billing_address?.postal_code || "",
-      "billing_address.city": cart?.billing_address?.city || "",
-      "billing_address.country_code": cart?.billing_address?.country_code || "",
-      "billing_address.province": cart?.billing_address?.province || "",
-      "billing_address.phone": cart?.billing_address?.phone || "",
-    })
-  }, [cart?.billing_address])
-
   const handleChange = (
     e:
       | React.ChangeEvent<
@@ -160,7 +146,7 @@ const BillingAddress = ({
       {customer &&
       (addressesInRegion?.length || 0) > 0 &&
       !isBillingAddressEmpty(formData) ? (
-        <div className="w-full border border-grayscale-200 rounded-xs p-4 flex flex-wrap gap-8 max-lg:flex-col mb-8">
+        <div className="w-full border border-grayscale-200 rounded-xs p-4 flex flex-wrap gap-8 max-lg:flex-col mb-8 mt-8">
           <div className="flex flex-1 gap-8">
             <Icon name="user" className="w-6 h-6 mt-2.5" />
             <div className="flex flex-col gap-8 flex-1">
@@ -403,7 +389,7 @@ const BillingAddress = ({
           autoComplete="address-level1"
           value={formData["billing_address.province"] || ""}
           onChange={handleChange}
-          // TODO: fix 
+          // TODO: fix
           // required
           data-testid="billing-province-input"
         />
