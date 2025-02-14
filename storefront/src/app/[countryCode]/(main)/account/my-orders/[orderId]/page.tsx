@@ -9,6 +9,8 @@ import { UiTag } from "@/components/ui/Tag"
 import { UiTagList, UiTagListDivider } from "@/components/ui/TagList"
 import { Icon } from "@/components/Icon"
 import { LocalizedLink } from "@/components/LocalizedLink"
+import { getCustomer } from "@lib/data/customer"
+import { redirect } from "next/navigation"
 
 const OrderStatus: React.FC<{ order: HttpTypes.StoreOrder }> = ({ order }) => {
   if (order.fulfillment_status === "canceled") {
@@ -82,6 +84,12 @@ export default async function AccountOrderPage({
 }: {
   params: Promise<{ orderId: string }>
 }) {
+  const customer = await getCustomer().catch(() => null)
+
+  if (!customer) {
+    redirect(`/`)
+  }
+
   const { orderId } = await params
   const order = await retrieveOrder(orderId)
 
