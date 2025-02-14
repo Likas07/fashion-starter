@@ -389,8 +389,6 @@ const BillingAddress = ({
           autoComplete="address-level1"
           value={formData["billing_address.province"] || ""}
           onChange={handleChange}
-          // TODO: fix
-          // required
           data-testid="billing-province-input"
         />
         <Input

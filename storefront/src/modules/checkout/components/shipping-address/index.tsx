@@ -382,14 +382,12 @@ const ShippingAddress = ({
           isRequired
           data-testid="shipping-country-select"
         />
-        {/* TODO: fix province */}
         <Input
           placeholder="State / Province"
           name="shipping_address.province"
           autoComplete="address-level1"
           value={formData["shipping_address.province"] || ""}
           onChange={handleChange}
-          // required
           data-testid="shipping-province-input"
         />
         <Input
@@ -401,7 +399,6 @@ const ShippingAddress = ({
           data-testid="shipping-phone-input"
         />
       </div>
-      {/* TODO: check this */}
       <div>
         <input
           type="hidden"
