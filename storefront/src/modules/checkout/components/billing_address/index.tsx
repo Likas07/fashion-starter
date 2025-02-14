@@ -146,7 +146,7 @@ const BillingAddress = ({
       {customer &&
       (addressesInRegion?.length || 0) > 0 &&
       !isBillingAddressEmpty(formData) ? (
-        <div className="w-full border border-grayscale-200 rounded-xs p-4 flex flex-wrap gap-8 max-lg:flex-col mb-8 mt-8">
+        <div className="w-full border border-grayscale-200 rounded-xs p-4 flex flex-wrap gap-8 max-lg:flex-col mt-8">
           <div className="flex flex-1 gap-8">
             <Icon name="user" className="w-6 h-6 mt-2.5" />
             <div className="flex flex-col gap-8 flex-1">
@@ -306,7 +306,7 @@ const BillingAddress = ({
       ) : null}
       <div
         className={twMerge(
-          "grid grid-cols-2 gap-4 mb-8",
+          "grid grid-cols-2 gap-4 mt-8",
           customer &&
             (addressesInRegion?.length || 0) > 0 &&
             !isBillingAddressEmpty(formData)
