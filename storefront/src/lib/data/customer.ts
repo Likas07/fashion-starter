@@ -133,6 +133,8 @@ export async function login(_currentState: unknown, formData: FormData) {
     password: formData.get("password"),
   })
 
+  const redirectUrl = formData.get("redirect_url")
+
   try {
     const token = await sdk.auth.login("customer", "emailpass", {
       email: validatedData.email,
@@ -156,13 +158,14 @@ export async function login(_currentState: unknown, formData: FormData) {
   } catch (error: any) {
     return error.toString()
   }
+
+  redirect(typeof redirectUrl === "string" ? redirectUrl : "/")
 }
 
 export async function signout(countryCode: string) {
   await sdk.auth.logout()
   await removeAuthToken()
   revalidateTag("customer")
-  redirect(`/${countryCode}/account`)
   return countryCode
 }
 

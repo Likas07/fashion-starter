@@ -8,7 +8,10 @@ import { Input } from "@/components/Forms"
 import { LocalizedLink } from "@/components/LocalizedLink"
 import { twMerge } from "tailwind-merge"
 
-export const LoginForm: React.FC<{ className?: string }> = ({ className }) => {
+export const LoginForm: React.FC<{
+  className?: string
+  countryCode?: string
+}> = ({ className, countryCode }) => {
   const [message, formAction] = React.useActionState(login, null)
 
   return (
@@ -39,6 +42,11 @@ export const LoginForm: React.FC<{ className?: string }> = ({ className }) => {
         Forgot password?
       </LocalizedLink>
       {message && <p className="text-red-primary text-sm">{message}</p>}
+      <input
+        type="hidden"
+        name="redirect_url"
+        value={`/${countryCode}/account`}
+      />
       <SubmitButton>Log in</SubmitButton>
     </form>
   )

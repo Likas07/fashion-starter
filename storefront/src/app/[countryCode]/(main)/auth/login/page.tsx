@@ -10,10 +10,11 @@ export default async function LoginPage({
 }: {
   params: Promise<{ countryCode: string }>
 }) {
+  const { countryCode } = await params
   const customer = await getCustomer().catch(() => null)
 
   if (customer) {
-    redirect(`/${(await params).countryCode}/account`)
+    redirect(`/${countryCode}/account`)
   }
 
   return (
@@ -29,7 +30,7 @@ export default async function LoginPage({
         <h1 className="text-xl md:text-2xl mb-10 md:mb-16">
           Welcome back to Sofa Society!
         </h1>
-        <LoginForm className="mb-10 md:mb-15" />
+        <LoginForm className="mb-10 md:mb-15" countryCode={countryCode} />
         <p className="text-grayscale-500">
           Don&apos;t have an account yet? You can{" "}
           <LocalizedLink
