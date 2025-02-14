@@ -12,13 +12,9 @@ import { UiDialog, UiDialogTrigger } from "@/components/Dialog"
 import { RequestPasswordResetButton } from "@modules/account/components/RequestPasswordResetButton"
 import { AddressSingle } from "@modules/account/components/AddressSingle"
 import { AddressMultiple } from "@modules/account/components/AddressMultiple"
+import { DefaultShippingAddressSelect } from "@modules/account/components/DefaultShippingAddressSelect"
+import { DefaultBillingAddressSelect } from "@modules/account/components/DefaultBillingAddressSelect"
 import { UiRadioGroup } from "@/components/ui/Radio"
-import {
-  UiCheckbox,
-  UiCheckboxBox,
-  UiCheckboxIcon,
-  UiCheckboxLabel,
-} from "@/components/ui/Checkbox"
 
 export default async function AccountPersonalAndSecurityPage({
   params,
@@ -109,30 +105,36 @@ export default async function AccountPersonalAndSecurityPage({
           />
         ))}
       {customer.addresses.length > 1 && (
-        <UiRadioGroup
-          className="flex flex-col sm:flex-row md:flex-col lg:flex-row sm:flex-wrap gap-x-6 gap-y-8 mb-6"
-          aria-label="address"
-        >
-          {customer.addresses.map((address) => (
-            <AddressMultiple
-              key={address.id}
-              address={address}
-              countries={countries}
-              region={region}
-              className="h-auto sm:max-w-[calc(50%-0.75rem)] md:max-w-full lg:max-w-[calc(50%-0.75rem)] w-full"
-            />
-          ))}
-        </UiRadioGroup>
-      )}
-      {customer.addresses.length > 0 && (
-        <UiCheckbox className="mb-6">
-          <UiCheckboxBox>
-            <UiCheckboxIcon />
-          </UiCheckboxBox>
-          <UiCheckboxLabel>
-            My shipping information is the same as my billing information
-          </UiCheckboxLabel>
-        </UiCheckbox>
+        <>
+          <DefaultShippingAddressSelect
+            addresses={customer.addresses}
+            countries={countries}
+          />
+          <DefaultBillingAddressSelect
+            addresses={customer.addresses}
+            countries={countries}
+          />
+          <UiRadioGroup
+            className="flex flex-col sm:flex-row md:flex-col lg:flex-row sm:flex-wrap gap-x-6 gap-y-8 mb-6"
+            aria-label="address"
+          >
+            {customer.addresses
+              .sort(
+                (a, b) =>
+                  new Date(b.created_at).getTime() -
+                  new Date(a.created_at).getTime()
+              )
+              .map((address) => (
+                <AddressMultiple
+                  key={address.id}
+                  address={address}
+                  countries={countries}
+                  region={region}
+                  className="h-auto sm:max-w-[calc(50%-0.75rem)] md:max-w-full lg:max-w-[calc(50%-0.75rem)] w-full"
+                />
+              ))}
+          </UiRadioGroup>
+        </>
       )}
       <UiDialogTrigger>
         {customer.addresses.length > 0 ? (

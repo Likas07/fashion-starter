@@ -21,10 +21,6 @@ export const AddressMultiple: React.FC<{
         className
       )}
     >
-      <UiRadio value={address.id} className="flex items-center gap-8 py-2.5">
-        <UiRadioBox />
-        <p>Default address</p>
-      </UiRadio>
       <div className="flex flex-wrap justify-between gap-8">
         <div>
           <p className="text-xs text-grayscale-500 mb-1.5">Address</p>

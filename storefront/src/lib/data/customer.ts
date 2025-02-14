@@ -406,3 +406,51 @@ export async function forgotPassword(
       }
     })
 }
+
+export async function updateDefaultShippingAddress(addressId: string) {
+  if (!addressId) {
+    return { success: false, error: "No address id provided" }
+  }
+
+  return sdk.store.customer
+    .updateAddress(
+      addressId,
+      {
+        is_default_shipping: true,
+      },
+      {},
+      await getAuthHeaders()
+    )
+    .then(() => {
+      revalidateTag("customer")
+      return { success: true, error: null }
+    })
+    .catch((err) => {
+      revalidateTag("customer")
+      return { success: false, error: err.toString() }
+    })
+}
+
+export async function updateDefaultBillingAddress(addressId: string) {
+  if (!addressId) {
+    return { success: false, error: "No address id provided" }
+  }
+
+  return sdk.store.customer
+    .updateAddress(
+      addressId,
+      {
+        is_default_billing: true,
+      },
+      {},
+      await getAuthHeaders()
+    )
+    .then(() => {
+      revalidateTag("customer")
+      return { success: true, error: null }
+    })
+    .catch((err) => {
+      revalidateTag("customer")
+      return { success: false, error: err.toString() }
+    })
+}
