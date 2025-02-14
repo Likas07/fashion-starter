@@ -29,7 +29,7 @@ const Summary = ({ cart, customer }: SummaryProps) => {
       >
         Proceed to checkout
       </LocalizedButtonLink>
-      {!customer ? (
+      {!customer && (
         <div className="bg-grayscale-50 mt-8 rounded-xs p-4 flex items-center text-grayscale-500 gap-4">
           <Icon name="info" />
           <p>
@@ -39,7 +39,7 @@ const Summary = ({ cart, customer }: SummaryProps) => {
             </LocalizedLink>
           </p>
         </div>
-      ) : null}
+      )}
     </>
   )
 }
