@@ -1,7 +1,7 @@
 import * as React from "react"
 import { listRegions } from "@lib/data/regions"
 import { retrieveCart } from "@lib/data/cart"
-
+import { getCustomer } from "@lib/data/customer"
 // Components
 import { SearchField } from "@/components/SearchField"
 import { CartDrawer } from "@/components/CartDrawer"
@@ -16,6 +16,7 @@ import { Icon } from "@/components/Icon"
 export const Header: React.FC = async () => {
   const regions = await listRegions()
   const cart = await retrieveCart()
+  const customer = await getCustomer().catch(() => null)
 
   const countryOptions = regions
     .map((r) => {
@@ -51,7 +52,8 @@ export const Header: React.FC = async () => {
                 />
                 <SearchField countryOptions={countryOptions} />
                 <LocalizedButtonLink
-                  href="/auth/login"
+                  href={customer ? "/account" : "/auth/login"}
+                  prefetch={false}
                   variant="ghost"
                   className="p-1 group-data-[light=true]:md:text-white group-data-[sticky=true]:md:text-black"
                 >
@@ -64,7 +66,8 @@ export const Header: React.FC = async () => {
               </div>
               <div className="flex items-center gap-4 md:hidden">
                 <LocalizedButtonLink
-                  href="/auth/login"
+                  href={customer ? "/account" : "/auth/login"}
+                  prefetch={false}
                   variant="ghost"
                   className="p-1 group-data-[light=true]:md:text-white"
                 >
