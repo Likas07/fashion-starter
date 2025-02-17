@@ -1,7 +1,13 @@
+import { Metadata } from "next"
 import { notFound } from "next/navigation"
 
 import { ChangePasswordForm } from "@modules/auth/components/ResetPasswordForm"
 import { Layout, LayoutColumn } from "@/components/Layout"
+
+export const metadata: Metadata = {
+  title: "Reset password",
+  description: "Reset your password",
+}
 
 export default async function ResetPasswordPage({
   searchParams,

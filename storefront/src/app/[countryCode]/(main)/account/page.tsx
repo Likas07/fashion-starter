@@ -1,5 +1,5 @@
+import { Metadata } from "next"
 import { redirect } from "next/navigation"
-
 import { getCustomer } from "@lib/data/customer"
 import { getRegion, listRegions } from "@lib/data/regions"
 import { UpsertAddressForm } from "@modules/account/components/UpsertAddressForm"
@@ -15,6 +15,11 @@ import { AddressMultiple } from "@modules/account/components/AddressMultiple"
 import { DefaultShippingAddressSelect } from "@modules/account/components/DefaultShippingAddressSelect"
 import { DefaultBillingAddressSelect } from "@modules/account/components/DefaultBillingAddressSelect"
 import { UiRadioGroup } from "@/components/ui/Radio"
+
+export const metadata: Metadata = {
+  title: "Account - Personal & security",
+  description: "Manage your personal information and security settings",
+}
 
 export default async function AccountPersonalAndSecurityPage({
   params,

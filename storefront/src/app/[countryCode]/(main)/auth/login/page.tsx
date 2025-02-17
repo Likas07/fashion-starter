@@ -1,9 +1,15 @@
+import { Metadata } from "next"
 import Image from "next/image"
 import { redirect } from "next/navigation"
 
 import { getCustomer } from "@lib/data/customer"
 import { LoginForm } from "@modules/auth/components/LoginForm"
 import { LocalizedLink } from "@/components/LocalizedLink"
+
+export const metadata: Metadata = {
+  title: "Login",
+  description: "Login to your account",
+}
 
 export default async function LoginPage({
   params,

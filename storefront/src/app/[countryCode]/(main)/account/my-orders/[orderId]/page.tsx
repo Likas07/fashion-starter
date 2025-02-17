@@ -1,4 +1,5 @@
 import * as React from "react"
+import { Metadata } from "next"
 import Image from "next/image"
 import { HttpTypes } from "@medusajs/types"
 
@@ -11,6 +12,11 @@ import { Icon } from "@/components/Icon"
 import { LocalizedLink } from "@/components/LocalizedLink"
 import { getCustomer } from "@lib/data/customer"
 import { redirect } from "next/navigation"
+
+export const metadata: Metadata = {
+  title: "Account - Order",
+  description: "Check your order history",
+}
 
 const OrderStatus: React.FC<{ order: HttpTypes.StoreOrder }> = ({ order }) => {
   if (order.fulfillment_status === "canceled") {

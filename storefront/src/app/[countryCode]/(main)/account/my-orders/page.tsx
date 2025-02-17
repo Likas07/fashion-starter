@@ -1,4 +1,5 @@
 import * as React from "react"
+import { Metadata } from "next"
 import Image from "next/image"
 import { HttpTypes } from "@medusajs/types"
 import { twMerge } from "tailwind-merge"
@@ -10,6 +11,11 @@ import { UiTag } from "@/components/ui/Tag"
 import { LocalizedLink } from "@/components/LocalizedLink"
 import { getCustomer } from "@lib/data/customer"
 import { redirect } from "next/navigation"
+
+export const metadata: Metadata = {
+  title: "Account - Orders",
+  description: "Check your order history",
+}
 
 const OrderStatus: React.FC<{
   order: HttpTypes.StoreOrder
