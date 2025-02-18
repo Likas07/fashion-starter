@@ -1,29 +1,16 @@
-import CheckoutSummary from "@modules/checkout/templates/checkout-summary"
-import { HttpTypes } from "@medusajs/types"
+import * as React from "react"
 import { Layout, LayoutColumn } from "@/components/Layout"
 import { LocalizedLink } from "@/components/LocalizedLink"
-import MobileCheckoutSummary from "@modules/checkout/templates/mobile-checkout-summary"
-import { retrieveCart } from "@lib/data/cart"
-import { notFound } from "next/navigation"
+import MobileCheckoutSummaryWrapper from "@modules/checkout/components/mobile-checkout-summary-wrapper"
+import CheckoutSummaryWrapper from "@modules/checkout/components/checkout-summary-wrapper"
+import SkeletonCheckoutSummary from "@modules/skeletons/templates/skeleton-checkout-summary"
+import SkeletonMobileCheckoutSummaryTrigger from "@modules/skeletons/components/skeleton-mobile-summary-trigger"
 
-export const fetchCart = async () => {
-  const cart = await retrieveCart()
-  if (!cart) {
-    return notFound()
-  }
-
-  return cart
-}
-
-export default async function CheckoutLayout({
+export default function CheckoutLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const cart = (await fetchCart()) as HttpTypes.StoreCart & {
-    promotions: HttpTypes.StorePromotion[]
-  }
-
   return (
     <>
       <Layout className="lg:hidden">
@@ -41,7 +28,9 @@ export default async function CheckoutLayout({
       <div className="w-full bg-grayscale-50 lg:hidden">
         <Layout>
           <LayoutColumn>
-            <MobileCheckoutSummary cart={cart} />
+            <React.Suspense fallback={<SkeletonMobileCheckoutSummaryTrigger />}>
+              <MobileCheckoutSummaryWrapper />
+            </React.Suspense>
           </LayoutColumn>
         </Layout>
       </div>
@@ -57,7 +46,9 @@ export default async function CheckoutLayout({
             {children}
           </div>
           <div className="sticky top-0 lg:max-w-100 xl:max-w-123 flex-1 py-32 max-lg:hidden z-10 self-start">
-            <CheckoutSummary cart={cart} />
+            <React.Suspense fallback={<SkeletonCheckoutSummary />}>
+              <CheckoutSummaryWrapper />
+            </React.Suspense>
           </div>
           <div className="absolute right-0 top-0 lg:max-w-[calc((50vw-50%)+448px)] xl:max-w-[calc((50vw-50%)+540px)] -mr-[calc(50vw-50%)] bg-grayscale-50 h-full w-full max-lg:hidden" />
         </LayoutColumn>
