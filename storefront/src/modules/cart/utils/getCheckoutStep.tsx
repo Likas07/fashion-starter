@@ -1,7 +1,7 @@
 import { HttpTypes } from "@medusajs/types"
 
-export function getCheckoutStep(cart: HttpTypes.StoreCart) {
-  if (!cart.email) {
+export function getCheckoutStep(cart?: HttpTypes.StoreCart) {
+  if (!cart?.email) {
     return "email"
   }
 
@@ -13,5 +13,9 @@ export function getCheckoutStep(cart: HttpTypes.StoreCart) {
     return "shipping"
   }
 
-  return "payment"
+  if (!cart?.payment_collection) {
+    return "payment"
+  }
+
+  return "review"
 }

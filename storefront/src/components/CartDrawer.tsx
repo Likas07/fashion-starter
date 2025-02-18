@@ -9,6 +9,7 @@ import { Drawer } from "@/components/Drawer"
 import { Button } from "@/components/Button"
 import DiscountCode from "@modules/cart/components/discount-code"
 import { Icon } from "@/components/Icon"
+import { getCheckoutStep } from "@modules/cart/utils/getCheckoutStep"
 
 // TODO: move cart loading to client side
 export const CartDrawer: React.FC<{
@@ -19,6 +20,8 @@ export const CartDrawer: React.FC<{
     | null
   children: React.ReactNode
 }> = ({ cart, children }) => {
+  const step = getCheckoutStep(cart as HttpTypes.StoreCart)
+
   const [isCartDrawerOpen, setIsCartDrawerOpen] = React.useState(false)
 
   return (
@@ -70,7 +73,7 @@ export const CartDrawer: React.FC<{
                   <CartTotals isPartOfCartDrawer cart={cart} />
                   <DiscountCode cart={cart} className="mt-6" />
                   <LocalizedButtonLink
-                    href="/checkout"
+                    href={`/checkout/?step=${step}`}
                     isFullWidth
                     className="mt-4"
                   >
