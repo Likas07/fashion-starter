@@ -1,6 +1,11 @@
+import { Metadata } from "next"
 import { StoreRegion } from "@medusajs/types"
 import { Layout, LayoutColumn } from "@/components/Layout"
 import { listRegions } from "@lib/data/regions"
+
+export const metadata: Metadata = {
+  title: "Cookie Policy",
+}
 
 export async function generateStaticParams() {
   const countryCodes = await listRegions().then((regions: StoreRegion[]) =>

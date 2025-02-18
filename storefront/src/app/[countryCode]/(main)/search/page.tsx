@@ -1,4 +1,4 @@
-// Components
+import { Metadata } from "next"
 import { Layout, LayoutColumn } from "@/components/Layout"
 import { Suspense } from "react"
 import SkeletonProductGrid from "@modules/skeletons/templates/skeleton-product-grid"
@@ -9,6 +9,11 @@ import { MeiliSearchProductHit, searchClient } from "@lib/search-client"
 type Props = {
   params: Promise<{ countryCode: string }>
   searchParams: Promise<{ query: string; page: string }>
+}
+
+export const metadata: Metadata = {
+  title: "Search",
+  description: "Search for products",
 }
 
 export default async function SearchPage({ params, searchParams }: Props) {

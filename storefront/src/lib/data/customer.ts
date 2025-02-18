@@ -9,6 +9,7 @@ import {
   getAuthHeaders,
   setAuthToken,
   removeAuthToken,
+  getCartId,
 } from "@lib/data/cookies"
 
 export const getCustomer = async function () {
@@ -132,6 +133,8 @@ export async function login(_currentState: unknown, formData: FormData) {
     password: formData.get("password"),
   })
 
+  const redirectUrl = formData.get("redirect_url")
+
   try {
     const token = await sdk.auth.login("customer", "emailpass", {
       email: validatedData.email,
@@ -146,16 +149,23 @@ export async function login(_currentState: unknown, formData: FormData) {
 
     await setAuthToken(token)
     revalidateTag("customer")
+
+    const cartId = await getCartId()
+    if (cartId) {
+      await sdk.store.cart.transferCart(cartId, {}, await getAuthHeaders())
+      revalidateTag("cart")
+    }
   } catch (error: any) {
     return error.toString()
   }
+
+  redirect(typeof redirectUrl === "string" ? redirectUrl : "/")
 }
 
 export async function signout(countryCode: string) {
   await sdk.auth.logout()
   await removeAuthToken()
   revalidateTag("customer")
-  redirect(`/${countryCode}/account`)
   return countryCode
 }
 
@@ -404,5 +414,53 @@ export async function forgotPassword(
         state: "error" as const,
         error: "Failed to reset password",
       }
+    })
+}
+
+export async function updateDefaultShippingAddress(addressId: string) {
+  if (!addressId) {
+    return { success: false, error: "No address id provided" }
+  }
+
+  return sdk.store.customer
+    .updateAddress(
+      addressId,
+      {
+        is_default_shipping: true,
+      },
+      {},
+      await getAuthHeaders()
+    )
+    .then(() => {
+      revalidateTag("customer")
+      return { success: true, error: null }
+    })
+    .catch((err) => {
+      revalidateTag("customer")
+      return { success: false, error: err.toString() }
+    })
+}
+
+export async function updateDefaultBillingAddress(addressId: string) {
+  if (!addressId) {
+    return { success: false, error: "No address id provided" }
+  }
+
+  return sdk.store.customer
+    .updateAddress(
+      addressId,
+      {
+        is_default_billing: true,
+      },
+      {},
+      await getAuthHeaders()
+    )
+    .then(() => {
+      revalidateTag("customer")
+      return { success: true, error: null }
+    })
+    .catch((err) => {
+      revalidateTag("customer")
+      return { success: false, error: err.toString() }
     })
 }

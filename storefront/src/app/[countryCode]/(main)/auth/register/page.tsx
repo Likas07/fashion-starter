@@ -1,9 +1,15 @@
+import { Metadata } from "next"
 import Image from "next/image"
 import { redirect } from "next/navigation"
 
 import { getCustomer } from "@lib/data/customer"
 import { SignUpForm } from "@modules/auth/components/SignUpForm"
 import { LocalizedLink } from "@/components/LocalizedLink"
+
+export const metadata: Metadata = {
+  title: "Register",
+  description: "Create an account",
+}
 
 export default async function RegisterPage({
   params,

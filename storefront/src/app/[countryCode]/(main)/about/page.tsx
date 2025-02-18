@@ -1,7 +1,13 @@
+import { Metadata } from "next"
 import Image from "next/image"
 import { StoreRegion } from "@medusajs/types"
 import { listRegions } from "@lib/data/regions"
 import { Layout, LayoutColumn } from "@/components/Layout"
+
+export const metadata: Metadata = {
+  title: "About",
+  description: "Learn more about Sofa Society",
+}
 
 export async function generateStaticParams() {
   const countryCodes = await listRegions().then((regions: StoreRegion[]) =>

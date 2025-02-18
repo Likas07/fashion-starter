@@ -24,7 +24,9 @@ const CartTemplate = ({
             <ItemsTemplate items={cart?.items} />
           </LayoutColumn>
           <LayoutColumn start={{ base: 1, lg: 9, xl: 10 }} end={13}>
-            {cart && cart.region && <Summary cart={cart as any} />}
+            {cart && cart.region && (
+              <Summary cart={cart as any} customer={customer} />
+            )}
           </LayoutColumn>
         </>
       ) : (

@@ -25,11 +25,15 @@ const Addresses = ({
 
   const isOpen = searchParams.get("step") === "delivery"
 
-  const [sameAsBilling, setSameAsBilling] = React.useState(
-    cart?.shipping_address && cart?.billing_address
-      ? compareAddresses(cart?.shipping_address, cart?.billing_address)
-      : true
-  )
+  const [sameAsBilling, setSameAsBilling] = React.useState(true)
+
+  React.useEffect(() => {
+    if (cart?.shipping_address && cart?.billing_address) {
+      setSameAsBilling(
+        compareAddresses(cart.shipping_address, cart.billing_address)
+      )
+    }
+  }, [cart?.billing_address, cart?.shipping_address])
 
   const toggleSameAsBilling = React.useCallback(() => {
     setSameAsBilling((prev) => !prev)
@@ -80,7 +84,7 @@ const Addresses = ({
             cart={cart}
           />
 
-          {!sameAsBilling && <BillingAddress cart={cart} />}
+          {!sameAsBilling && <BillingAddress cart={cart} customer={customer} />}
 
           <SubmitButton className="mt-8" isLoading={isPending}>
             Next

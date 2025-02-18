@@ -1,5 +1,11 @@
+import { Metadata } from "next"
 import Image from "next/image"
 import { ForgotPasswordForm } from "@modules/auth/components/ForgotPasswordForm"
+
+export const metadata: Metadata = {
+  title: "Forgot password",
+  description: "Reset your password",
+}
 
 export default function ForgotPasswordPage() {
   return (
