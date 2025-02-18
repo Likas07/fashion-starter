@@ -156,7 +156,7 @@ module.exports = {
         header: "9999",
       },
       keyframes: {
-        shine: {
+        shimmer: {
           "100%": {
             transform: "translateX(100%)",
           },
