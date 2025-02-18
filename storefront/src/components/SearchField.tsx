@@ -1,13 +1,11 @@
 "use client"
 
-// External packages
 import * as React from "react"
 import * as ReactAria from "react-aria-components"
 import { twJoin } from "tailwind-merge"
 import { useAsyncList } from "react-stately"
 import { Hit } from "meilisearch"
 import { useRouter, useSearchParams } from "next/navigation"
-
 import { useCountryCode } from "hooks/country-code"
 import { MeiliSearchProductHit, searchClient } from "@lib/search-client"
 import { getProductPrice } from "@lib/util/get-product-price"

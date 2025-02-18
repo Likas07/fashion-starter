@@ -2,7 +2,6 @@ import * as React from "react"
 import { listRegions } from "@lib/data/regions"
 import { retrieveCart } from "@lib/data/cart"
 import { getCustomer } from "@lib/data/customer"
-// Components
 import { SearchField } from "@/components/SearchField"
 import { CartDrawer } from "@/components/CartDrawer"
 import { Layout, LayoutColumn } from "@/components/Layout"

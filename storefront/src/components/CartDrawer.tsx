@@ -1,12 +1,7 @@
 "use client"
 
-// External components
 import * as React from "react"
-
-// Types
 import { HttpTypes } from "@medusajs/types"
-
-// Components
 import Item from "@modules/cart/components/item"
 import CartTotals from "@modules/cart/components/cart-totals"
 import { LocalizedButtonLink, LocalizedLink } from "@/components/LocalizedLink"
