@@ -34,8 +34,7 @@ const Shipping: React.FC<ShippingProps> = ({
   const isOpen = searchParams.get("step") === "shipping"
 
   const selectedShippingMethod = availableShippingMethods?.find(
-    // TODO: remove the previously selected shipping method instead of using the last one
-    (method) => method.id === cart.shipping_methods?.at(-1)?.shipping_option_id
+    (method) => method.id === cart.shipping_methods?.[0]?.shipping_option_id
   )
 
   const handleSubmit = () => {
