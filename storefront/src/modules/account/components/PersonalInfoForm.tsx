@@ -33,7 +33,7 @@ export const PersonalInfoForm: React.FC<{
       close()
     }
   }, [formState, close])
-  const onSubmit = (values: any) => {
+  const onSubmit = (values: z.infer<typeof updateCustomerFormSchema>) => {
     React.startTransition(() => formAction(values))
   }
   return (
