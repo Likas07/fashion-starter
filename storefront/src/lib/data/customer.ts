@@ -340,17 +340,13 @@ const forgotPasswordFormSchema = z.object({
 
 export async function forgotPassword(
   _currentState: unknown,
-  formData: FormData
+  formData: z.infer<typeof forgotPasswordFormSchema>
 ): Promise<
   { state: "initial" | "success" } | { state: "error"; error: string }
 > {
-  const validatedData = forgotPasswordFormSchema.parse({
-    email: formData.get("email"),
-  })
-
   return sdk.auth
     .resetPassword("customer", "emailpass", {
-      identifier: validatedData.email,
+      identifier: formData.email,
     })
     .then(() => {
       return {

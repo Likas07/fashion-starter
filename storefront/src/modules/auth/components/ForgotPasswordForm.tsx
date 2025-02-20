@@ -1,15 +1,26 @@
 "use client"
 
 import * as React from "react"
-import { Input } from "@/components/Forms"
+import { Form, InputField } from "@/components/Forms"
 import { SubmitButton } from "@modules/common/components/submit-button"
 import { forgotPassword } from "@lib/data/customer"
 import { LocalizedButtonLink } from "@/components/LocalizedLink"
+import { z } from "zod"
+
+const forgotPasswordFormSchema = z.object({
+  email: z.string().min(3).email(),
+})
 
 export const ForgotPasswordForm: React.FC = () => {
   const [formState, formAction] = React.useActionState(forgotPassword, {
     state: "initial",
   })
+
+  const onSubmit = (values: z.infer<typeof forgotPasswordFormSchema>) => {
+    React.startTransition(() => {
+      formAction(values)
+    })
+  }
 
   if (formState.state === "success") {
     return (
@@ -31,7 +42,7 @@ export const ForgotPasswordForm: React.FC = () => {
   }
 
   return (
-    <form action={formAction}>
+    <Form onSubmit={onSubmit} schema={forgotPasswordFormSchema}>
       <h1 className="text-xl md:text-2xl mb-8">Forgot password?</h1>
       <div className="mb-8">
         <p>
@@ -39,17 +50,13 @@ export const ForgotPasswordForm: React.FC = () => {
           how to reset your password.
         </p>
       </div>
-      <Input
+      <InputField
         placeholder="Email"
         name="email"
-        required
-        wrapperClassName="flex-1 mb-8"
+        className="flex-1 mb-8"
         type="email"
       />
-      {formState.state === "error" && (
-        <p className="text-red-primary text-sm">{formState.error}</p>
-      )}
       <SubmitButton isFullWidth>Reset your password</SubmitButton>
-    </form>
+    </Form>
   )
 }
