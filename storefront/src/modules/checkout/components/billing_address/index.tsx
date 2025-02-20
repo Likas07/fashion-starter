@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useMemo } from "react"
-import CountrySelect from "@modules/checkout/components/country-select"
+import React, { useEffect, useMemo } from "react"
 import * as ReactAria from "react-aria-components"
 
 import { HttpTypes } from "@medusajs/types"
-import { Input } from "@/components/Forms"
+import { CountrySelectField, InputField } from "@/components/Forms"
 import { Icon } from "@/components/Icon"
 import { UiCloseButton, UiDialog, UiDialogTrigger } from "@/components/Dialog"
 import { Button } from "@/components/Button"
@@ -13,19 +12,20 @@ import { UiRadio, UiRadioBox, UiRadioLabel } from "@/components/ui/Radio"
 import { UpsertAddressForm } from "@modules/account/components/UpsertAddressForm"
 import { useCountryCode } from "hooks/country-code"
 import { twMerge } from "tailwind-merge"
+import { useFormContext } from "react-hook-form"
 
 const isBillingAddressEmpty = (formData: Record<string, any>) => {
   return (
-    !formData["billing_address.first_name"] &&
-    !formData["billing_address.last_name"] &&
-    !formData["billing_address.address_1"] &&
-    !formData["billing_address.address_2"] &&
-    !formData["billing_address.company"] &&
-    !formData["billing_address.postal_code"] &&
-    !formData["billing_address.city"] &&
-    !formData["billing_address.country_code"] &&
-    !formData["billing_address.province"] &&
-    !formData["billing_address.phone"]
+    !formData.billing_address?.first_name &&
+    !formData.billing_address?.last_name &&
+    !formData.billing_address?.address_1 &&
+    !formData.billing_address?.address_2 &&
+    !formData.billing_address?.company &&
+    !formData.billing_address?.postal_code &&
+    !formData.billing_address?.city &&
+    !formData.billing_address?.country_code &&
+    !formData.billing_address?.province &&
+    !formData.billing_address?.phone
   )
 }
 
@@ -36,8 +36,9 @@ const BillingAddress = ({
   cart: HttpTypes.StoreCart | null
   customer: HttpTypes.StoreCustomer | null
 }) => {
-  const [formData, setFormData] = useState<any>({})
   const countryCode = useCountryCode()
+
+  const { setValue, watch } = useFormContext()
 
   const setFormAddress = (
     address?: Pick<
@@ -54,22 +55,21 @@ const BillingAddress = ({
       | "phone"
     >
   ) => {
-    address &&
-      setFormData((prevState: Record<string, any>) => ({
-        ...prevState,
-        "billing_address.first_name": address?.first_name || "",
-        "billing_address.last_name": address?.last_name || "",
-        "billing_address.address_1": address?.address_1 || "",
-        "billing_address.address_2": address?.address_2 || "",
-        "billing_address.company": address?.company || "",
-        "billing_address.postal_code": address?.postal_code || "",
-        "billing_address.city": address?.city || "",
-        "billing_address.country_code": address?.country_code || "",
-        "billing_address.province": address?.province || "",
-        "billing_address.phone": address?.phone || "",
-      }))
+    if (address) {
+      setValue("billing_address", {
+        first_name: address?.first_name || "",
+        last_name: address?.last_name || "",
+        address_1: address?.address_1 || "",
+        company: address?.company || "",
+        postal_code: address?.postal_code || "",
+        city: address?.city || "",
+        country_code: address?.country_code || "",
+        province: address?.province || "",
+        phone: address?.phone || "",
+      })
+    }
   }
-
+  const formData = watch()
   const handleChange = (
     e:
       | React.ChangeEvent<
@@ -79,10 +79,7 @@ const BillingAddress = ({
           target: { name: string; value: string }
         }
   ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    })
+    setValue(e.target.name, e.target.value)
   }
   const countriesInRegion = useMemo(
     () => cart?.region?.countries?.map((c) => c.iso_2),
@@ -99,19 +96,7 @@ const BillingAddress = ({
     // Ensure cart is not null and has a billing_address before setting form data
     if (cart) {
       if (cart.billing_address) {
-        setFormData({
-          "billing_address.first_name": cart?.billing_address?.first_name || "",
-          "billing_address.last_name": cart?.billing_address?.last_name || "",
-          "billing_address.address_1": cart?.billing_address?.address_1 || "",
-          "billing_address.company": cart?.billing_address?.company || "",
-          "billing_address.postal_code":
-            cart?.billing_address?.postal_code || "",
-          "billing_address.city": cart?.billing_address?.city || "",
-          "billing_address.country_code":
-            cart?.billing_address?.country_code || "",
-          "billing_address.province": cart?.billing_address?.province || "",
-          "billing_address.phone": cart?.billing_address?.phone || "",
-        })
+        setFormAddress(cart.billing_address)
       } else if (
         // If customer has saved addresses in the region and form data is empty
         // set the first address in the region as the form data
@@ -155,22 +140,21 @@ const BillingAddress = ({
                   <p className="text-xs text-grayscale-500 mb-1.5">Country</p>
                   <p>
                     {cart?.region?.countries?.find(
-                      (c) =>
-                        c.iso_2 === formData["billing_address.country_code"]
-                    )?.display_name || formData["billing_address.country_code"]}
+                      (c) => c.iso_2 === formData.billing_address?.country_code
+                    )?.display_name || formData.billing_address?.country_code}
                   </p>
                 </div>
                 <div className="grow basis-0">
                   <p className="text-xs text-grayscale-500 mb-1.5">Address</p>
-                  <p>{formData["billing_address.address_1"]}</p>
+                  <p>{formData.billing_address?.address_1}</p>
                 </div>
               </div>
-              {formData["billing_address.address_2"] && (
+              {formData.billing_address?.address_2 && (
                 <div>
                   <p className="text-xs text-grayscale-500 mb-1.5">
                     Apartment, suite, etc. (Optional)
                   </p>
-                  <p>{formData["billing_address.address_2"]}</p>
+                  <p>{formData.billing_address?.address_2}</p>
                 </div>
               )}
               <div className="flex flex-wrap justify-between gap-6">
@@ -178,11 +162,11 @@ const BillingAddress = ({
                   <p className="text-xs text-grayscale-500 mb-1.5">
                     Postal Code
                   </p>
-                  <p>{formData["billing_address.postal_code"]}</p>
+                  <p>{formData.billing_address?.postal_code}</p>
                 </div>
                 <div className="grow basis-0">
                   <p className="text-xs text-grayscale-500 mb-1.5">City</p>
-                  <p>{formData["billing_address.city"]}</p>
+                  <p>{formData.billing_address?.city}</p>
                 </div>
               </div>
             </div>
@@ -234,18 +218,17 @@ const BillingAddress = ({
                             phone: a.phone ?? "",
                           },
                           {
-                            first_name: formData["billing_address.first_name"],
-                            last_name: formData["billing_address.last_name"],
-                            address_1: formData["billing_address.address_1"],
-                            address_2: formData["billing_address.address_2"],
-                            company: formData["billing_address.company"],
-                            postal_code:
-                              formData["billing_address.postal_code"],
-                            city: formData["billing_address.city"],
+                            first_name: formData.billing_address?.first_name,
+                            last_name: formData.billing_address?.last_name,
+                            address_1: formData.billing_address?.address_1,
+                            address_2: formData.billing_address?.address_2,
+                            company: formData.billing_address?.company,
+                            postal_code: formData.billing_address?.postal_code,
+                            city: formData.billing_address?.city,
                             country_code:
-                              formData["billing_address.country_code"],
-                            province: formData["billing_address.province"],
-                            phone: formData["billing_address.phone"],
+                              formData.billing_address?.country_code,
+                            province: formData.billing_address?.province,
+                            phone: formData.billing_address?.phone,
                           }
                         )
                       )?.id
@@ -303,103 +286,86 @@ const BillingAddress = ({
             </UiModalOverlay>
           </UiDialogTrigger>
         </div>
-      ) : null}
-      <div
-        className={twMerge(
-          "grid grid-cols-2 gap-4 mt-8",
-          customer &&
-            (addressesInRegion?.length || 0) > 0 &&
-            !isBillingAddressEmpty(formData)
-            ? "hidden"
-            : ""
-        )}
-      >
-        <Input
-          placeholder="First name"
-          name="billing_address.first_name"
-          autoComplete="given-name"
-          value={formData["billing_address.first_name"] || ""}
-          onChange={handleChange}
-          required
-          data-testid="billing-first-name-input"
-        />
-        <Input
-          placeholder="Last name"
-          name="billing_address.last_name"
-          autoComplete="family-name"
-          value={formData["billing_address.last_name"] || ""}
-          onChange={handleChange}
-          required
-          data-testid="billing-last-name-input"
-        />
-        <Input
-          placeholder="Address"
-          name="billing_address.address_1"
-          autoComplete="address-line1"
-          value={formData["billing_address.address_1"] || ""}
-          onChange={handleChange}
-          required
-          data-testid="billing-address-input"
-        />
-        <Input
-          placeholder="Company"
-          name="billing_address.company"
-          value={formData["billing_address.company"] || ""}
-          onChange={handleChange}
-          autoComplete="organization"
-          data-testid="billing-company-input"
-        />
-        <Input
-          placeholder="Postal code"
-          name="billing_address.postal_code"
-          autoComplete="postal-code"
-          value={formData["billing_address.postal_code"] || ""}
-          onChange={handleChange}
-          required
-          data-testid="billing-postal-input"
-        />
-        <Input
-          placeholder="City"
-          name="billing_address.city"
-          autoComplete="address-level2"
-          value={formData["billing_address.city"] || ""}
-          onChange={handleChange}
-          required
-          data-testid="billing-city-input"
-        />
-        <CountrySelect
-          name="billing_address.country_code"
-          autoComplete="country"
-          region={cart?.region}
-          selectedKey={formData["billing_address.country_code"] || null}
-          onSelectionChange={(value) =>
-            handleChange({
-              target: {
-                name: "billing_address.country_code",
-                value: `${value}`,
-              },
-            })
-          }
-          isRequired
-          data-testid="billing-country-select"
-        />
-        <Input
-          placeholder="State / Province"
-          name="billing_address.province"
-          autoComplete="address-level1"
-          value={formData["billing_address.province"] || ""}
-          onChange={handleChange}
-          data-testid="billing-province-input"
-        />
-        <Input
-          placeholder="Phone"
-          name="billing_address.phone"
-          autoComplete="tel"
-          value={formData["billing_address.phone"] || ""}
-          onChange={handleChange}
-          data-testid="billing-phone-input"
-        />
-      </div>
+      ) : (
+        <div className={twMerge("grid grid-cols-2 gap-4 mt-8")}>
+          <InputField
+            placeholder="First name"
+            name="billing_address.first_name"
+            inputProps={{
+              autoComplete: "given-name",
+            }}
+            data-testid="billing-first-name-input"
+          />
+          <InputField
+            placeholder="Last name"
+            name="billing_address.last_name"
+            inputProps={{
+              autoComplete: "family-name",
+            }}
+            data-testid="billing-last-name-input"
+          />
+          <InputField
+            placeholder="Address"
+            name="billing_address.address_1"
+            inputProps={{
+              autoComplete: "address-line1",
+            }}
+            data-testid="billing-address-input"
+          />
+          <InputField
+            placeholder="Company"
+            name="billing_address.company"
+            inputProps={{
+              autoComplete: "company",
+            }}
+            data-testid="billing-company-input"
+          />
+          <InputField
+            placeholder="Postal code"
+            name="billing_address.postal_code"
+            inputProps={{
+              autoComplete: "postal-code",
+            }}
+            data-testid="billing-postal-input"
+          />
+          <InputField
+            placeholder="City"
+            name="billing_address.city"
+            inputProps={{
+              autoComplete: "address-level2",
+            }}
+            data-testid="billing-city-input"
+          />
+          <CountrySelectField
+            name="billing_address.country_code"
+            selectProps={{
+              autoComplete: "country",
+              region: cart?.region,
+              selectedKey: formData.billing_address?.country_code || null,
+              onSelectionChange: (value: any) =>
+                handleChange({
+                  target: {
+                    name: "billing_address.country_code",
+                    value: `${value}`,
+                  },
+                }),
+            }}
+            data-testid="billing-country-select"
+          />
+          <InputField
+            placeholder="State / Province"
+            name="billing_address.province"
+            inputProps={{ autoComplete: "address-level1" }}
+            data-testid="billing-province-input"
+          />
+          <InputField
+            placeholder="Phone"
+            name="billing_address.phone"
+            inputProps={{ autoComplete: "tel" }}
+            data-testid="billing-phone-input"
+          />
+        </div>
+      )}
     </>
   )
 }

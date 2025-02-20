@@ -1,20 +1,28 @@
 "use client"
 
-import React from "react"
+import React, { startTransition } from "react"
 import { useActionState } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { twJoin } from "tailwind-merge"
 import { HttpTypes } from "@medusajs/types"
+import { z } from "zod"
 
 import { setEmail } from "@lib/data/cart"
-import ErrorMessage from "@modules/checkout/components/error-message"
 import { SubmitButton } from "@modules/common/components/submit-button"
 import { Button } from "@/components/Button"
-import { Input } from "@/components/Forms"
+import { Form, InputField } from "@/components/Forms"
 import { UiCloseButton, UiDialog, UiDialogTrigger } from "@/components/Dialog"
 import { UiModal, UiModalOverlay } from "@/components/ui/Modal"
 import { Icon } from "@/components/Icon"
 import { LoginForm } from "@modules/auth/components/LoginForm"
+
+export const emailFormSchema = z.object({
+  email: z
+    .string()
+    .min(3
+    )
+    .email("Enter a valid email address."),
+})
 
 const Email = ({
   cart,
@@ -32,6 +40,12 @@ const Email = ({
   const isOpen = searchParams.get("step") === "email"
 
   const [state, formAction, isPending] = useActionState(setEmail, null)
+
+  const onSubmit = (values: z.infer<typeof emailFormSchema>) => {
+    startTransition(() => {
+      formAction({ email: values.email, country_code: countryCode })
+    })
+  }
 
   React.useEffect(() => {
     if (isOpen && state?.success) {
@@ -90,23 +104,28 @@ const Email = ({
         )}
       </div>
       {isOpen ? (
-        <form action={formAction}>
-          <input type="hidden" name="country_code" value={countryCode} />
-          <Input
+        <Form
+          schema={emailFormSchema}
+          onSubmit={onSubmit}
+          formProps={{
+            id: `email`,
+          }}
+          defaultValues={{ email: cart?.email || "" }}
+        >
+          <InputField
             placeholder="Email"
             name="email"
             type="email"
-            title="Enter a valid email address."
-            autoComplete="email"
-            defaultValue={cart?.email || customer?.email}
-            required
+            inputProps={{
+              autoComplete: "email",
+              title: "Enter a valid email address.",
+            }}
             data-testid="shipping-email-input"
           />
           <SubmitButton className="mt-8" isLoading={isPending}>
             Next
           </SubmitButton>
-          <ErrorMessage error={state?.error} />
-        </form>
+        </Form>
       ) : cart?.email ? (
         <ul className="flex max-sm:flex-col flex-wrap gap-y-2 gap-x-34">
           <li className="text-grayscale-500">Email</li>

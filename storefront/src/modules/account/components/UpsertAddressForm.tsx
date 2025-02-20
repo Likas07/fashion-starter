@@ -3,12 +3,24 @@
 import * as React from "react"
 import * as ReactAria from "react-aria-components"
 import { addCustomerAddress, updateCustomerAddress } from "@lib/data/customer"
-import CountrySelect, {
-  CountrySelectProps,
-} from "@modules/checkout/components/country-select"
+import { CountrySelectProps } from "@modules/checkout/components/country-select"
 import { SubmitButton } from "@modules/common/components/submit-button"
-import { Input } from "@/components/Forms"
+import { CountrySelectField, Form, InputField } from "@/components/Forms"
 import { UiCloseButton } from "@/components/Dialog"
+import { z } from "zod"
+
+const customerAddressSchema = z.object({
+  first_name: z.string().min(1),
+  last_name: z.string().min(1),
+  company: z.string().optional().nullable(),
+  address_1: z.string().min(1),
+  address_2: z.string().optional().nullable(),
+  city: z.string().min(1),
+  postal_code: z.string().min(1),
+  province: z.string().optional().nullable(),
+  country_code: z.string().min(2),
+  phone: z.string().optional().nullable(),
+})
 
 export const UpsertAddressForm: React.FC<{
   addressId?: string
@@ -42,6 +54,12 @@ export const UpsertAddressForm: React.FC<{
   })
   const { close } = React.useContext(ReactAria.OverlayTriggerStateContext)!
 
+  const onSubmit = (values: z.infer<typeof customerAddressSchema>) => {
+    React.startTransition(() => {
+      addressId ? updateAddressFormAction(values) : addAddressFormAction(values)
+    })
+  }
+
   React.useEffect(() => {
     if (addAddressFormMessage?.success || updateAddressFormMessage?.success) {
       close()
@@ -49,82 +67,96 @@ export const UpsertAddressForm: React.FC<{
   }, [addAddressFormMessage, updateAddressFormMessage])
 
   return (
-    <form action={addressId ? updateAddressFormAction : addAddressFormAction}>
+    <Form
+      onSubmit={onSubmit}
+      schema={customerAddressSchema}
+      defaultValues={{
+        first_name: defaultValues?.first_name,
+        last_name: defaultValues?.last_name,
+        company: defaultValues?.company,
+        address_1: defaultValues?.address_1,
+        address_2: defaultValues?.address_2,
+        phone: defaultValues?.phone,
+        city: defaultValues?.city,
+        postal_code: defaultValues?.postal_code,
+        country_code: defaultValues?.country_code,
+        province: defaultValues?.province,
+      }}
+    >
       <p className="text-md mb-8 md:mb-10">
         {addressId ? "Change address" : "Add another address"}
       </p>
       <div className="flex flex-col gap-4 md:gap-8 mb-8 md:mb-10">
         <div className="flex max-xs:flex-col gap-4 md:gap-6">
-          <Input
+          <InputField
             placeholder="First name"
             name="first_name"
-            required
-            wrapperClassName="flex-1"
-            autoComplete="given-name"
-            defaultValue={defaultValues?.first_name}
+            className=" flex-1"
+            inputProps={{
+              autoComplete: "given-name",
+            }}
           />
-          <Input
+          <InputField
             placeholder="Last name"
             name="last_name"
-            required
-            wrapperClassName="flex-1"
-            autoComplete="family-name"
-            defaultValue={defaultValues?.last_name}
+            className=" flex-1"
+            inputProps={{
+              autoComplete: "family-name",
+            }}
           />
         </div>
-        <Input
+        <InputField
           placeholder="Company (Optional)"
           name="company"
-          autoComplete="organization"
-          defaultValue={defaultValues?.company}
+          className=" flex-1"
+          inputProps={{
+            autoComplete: "organization",
+          }}
         />
-        <Input
+        <InputField
           placeholder="Address"
           name="address_1"
-          required
-          autoComplete="address-line1"
-          defaultValue={defaultValues?.address_1}
+          inputProps={{
+            autoComplete: "address-line1",
+          }}
         />
-        <Input
+        <InputField
           placeholder="Apartment, suite, etc. (Optional)"
           name="address_2"
-          autoComplete="address-line2"
-          defaultValue={defaultValues?.address_2}
+          inputProps={{
+            autoComplete: "address-line2",
+          }}
         />
-        <Input
+        <InputField
           placeholder="Phone (Optional)"
           name="phone"
           type="tel"
-          autoComplete="tel"
-          defaultValue={defaultValues?.phone}
+          inputProps={{
+            autoComplete: "tel",
+          }}
         />
         <div className="flex max-xs:flex-col gap-4 md:gap-6">
-          <Input
+          <InputField
             placeholder="Postal code"
             name="postal_code"
-            required
-            wrapperClassName="flex-1"
-            autoComplete="postal-code"
-            defaultValue={defaultValues?.postal_code}
+            className=" flex-1"
+            inputProps={{
+              autoComplete: "postal-code",
+            }}
           />
-          <Input
-            placeholder="City"
-            name="city"
-            required
-            wrapperClassName="flex-1"
-            defaultValue={defaultValues?.city}
-          />
+          <InputField placeholder="City" name="city" className=" flex-1" />
         </div>
         <div className="flex max-xs:flex-col gap-4 md:gap-6">
-          <Input
+          <InputField
             placeholder="Province (Optional)"
             name="province"
-            wrapperClassName="flex-1"
-            defaultValue={defaultValues?.province}
+            className=" flex-1"
           />
-          <CountrySelect
-            region={region ?? undefined}
-            defaultSelectedKey={defaultValues?.country_code}
+          <CountrySelectField
+            selectProps={{
+              region: region ?? undefined,
+              defaultSelectedKey: defaultValues?.country_code,
+            }}
             name="country_code"
             className="flex-1"
           />
@@ -150,6 +182,6 @@ export const UpsertAddressForm: React.FC<{
         </SubmitButton>
         <UiCloseButton variant="outline">Cancel</UiCloseButton>
       </div>
-    </form>
+    </Form>
   )
 }

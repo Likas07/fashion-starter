@@ -26,22 +26,16 @@ const updateCustomerFormSchema = z.object({
 })
 export const updateCustomer = async function (
   _currentState: unknown,
-  formData: FormData
+  formData: z.infer<typeof updateCustomerFormSchema>
 ): Promise<
   { state: "initial" | "success" } | { state: "error"; error: string }
 > {
-  const validatedData = updateCustomerFormSchema.parse({
-    first_name: formData.get("first_name"),
-    last_name: formData.get("last_name"),
-    phone: formData.get("phone"),
-  })
-
   return sdk.store.customer
     .update(
       {
-        first_name: validatedData.first_name,
-        last_name: validatedData.last_name,
-        phone: validatedData.phone ?? undefined,
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+        phone: formData.phone ?? undefined,
       },
       {},
       await getAuthHeaders()
@@ -69,37 +63,32 @@ const signupFormSchema = z.object({
   password: z.string().min(6),
 })
 
-export async function signup(_currentState: unknown, formData: FormData) {
-  const validatedData = signupFormSchema.parse({
-    email: formData.get("email"),
-    first_name: formData.get("first_name"),
-    last_name: formData.get("last_name"),
-    phone: formData.get("phone"),
-    password: formData.get("password"),
-  })
-
+export async function signup(
+  _currentState: unknown,
+  formData: z.infer<typeof signupFormSchema>
+) {
   try {
     const token = await sdk.auth.register("customer", "emailpass", {
-      email: validatedData.email,
-      password: validatedData.password,
+      email: formData.email,
+      password: formData.password,
     })
 
     const customHeaders = { authorization: `Bearer ${token}` }
 
     const { customer: createdCustomer } = await sdk.store.customer.create(
       {
-        email: validatedData.email,
-        first_name: validatedData.first_name,
-        last_name: validatedData.last_name,
-        phone: validatedData.phone ?? undefined,
+        email: formData.email,
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+        phone: formData.phone ?? undefined,
       },
       {},
       customHeaders
     )
 
     const loginToken = await sdk.auth.login("customer", "emailpass", {
-      email: validatedData.email,
-      password: validatedData.password,
+      email: formData.email,
+      password: formData.password,
     })
 
     if (typeof loginToken === "object") {
@@ -184,34 +173,21 @@ const customerAddressSchema = z.object({
 
 export const addCustomerAddress = async (
   _currentState: unknown,
-  formData: FormData
+  formData: z.infer<typeof customerAddressSchema>
 ) => {
-  const validatedData = customerAddressSchema.parse({
-    first_name: formData.get("first_name"),
-    last_name: formData.get("last_name"),
-    company: formData.get("company"),
-    address_1: formData.get("address_1"),
-    address_2: formData.get("address_2"),
-    city: formData.get("city"),
-    postal_code: formData.get("postal_code"),
-    province: formData.get("province"),
-    country_code: formData.get("country_code"),
-    phone: formData.get("phone"),
-  })
-
   return sdk.store.customer
     .createAddress(
       {
-        first_name: validatedData.first_name,
-        last_name: validatedData.last_name,
-        company: validatedData.company ?? undefined,
-        address_1: validatedData.address_1,
-        address_2: validatedData.address_2 ?? undefined,
-        city: validatedData.city,
-        postal_code: validatedData.postal_code,
-        province: validatedData.province ?? undefined,
-        country_code: validatedData.country_code,
-        phone: validatedData.phone ?? undefined,
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+        company: formData.company ?? undefined,
+        address_1: formData.address_1,
+        address_2: formData.address_2 ?? undefined,
+        city: formData.city,
+        postal_code: formData.postal_code,
+        province: formData.province ?? undefined,
+        country_code: formData.country_code,
+        phone: formData.phone ?? undefined,
       },
       {},
       await getAuthHeaders()
@@ -250,7 +226,7 @@ export const deleteCustomerAddress = async (
 
 export const updateCustomerAddress = async (
   currentState: unknown,
-  formData: FormData
+  formData: z.infer<typeof customerAddressSchema>
 ) => {
   if (
     typeof currentState !== "object" ||
@@ -263,33 +239,20 @@ export const updateCustomerAddress = async (
 
   const addressId = currentState.addressId
 
-  const validatedData = customerAddressSchema.parse({
-    first_name: formData.get("first_name"),
-    last_name: formData.get("last_name"),
-    company: formData.get("company"),
-    address_1: formData.get("address_1"),
-    address_2: formData.get("address_2"),
-    city: formData.get("city"),
-    postal_code: formData.get("postal_code"),
-    province: formData.get("province"),
-    country_code: formData.get("country_code"),
-    phone: formData.get("phone"),
-  })
-
   return sdk.store.customer
     .updateAddress(
       currentState.addressId,
       {
-        first_name: validatedData.first_name,
-        last_name: validatedData.last_name,
-        company: validatedData.company ?? undefined,
-        address_1: validatedData.address_1,
-        address_2: validatedData.address_2 ?? undefined,
-        city: validatedData.city,
-        postal_code: validatedData.postal_code,
-        province: validatedData.province ?? undefined,
-        country_code: validatedData.country_code,
-        phone: validatedData.phone ?? undefined,
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+        company: formData.company ?? undefined,
+        address_1: formData.address_1,
+        address_2: formData.address_2 ?? undefined,
+        city: formData.city,
+        postal_code: formData.postal_code,
+        province: formData.province ?? undefined,
+        country_code: formData.country_code,
+        phone: formData.phone ?? undefined,
       },
       {},
       await getAuthHeaders()
@@ -336,31 +299,17 @@ const resetPasswordStateSchema = z.object({
 
 export async function resetPassword(
   currentState: unknown,
-  formData: FormData
+  formData: z.infer<typeof resetPasswordFormSchema>
 ): Promise<
   z.infer<typeof resetPasswordStateSchema> &
     ({ state: "initial" | "success" } | { state: "error"; error: string })
 > {
   const validatedState = resetPasswordStateSchema.parse(currentState)
 
-  const validatedData = resetPasswordFormSchema.parse({
-    current_password: formData.get("current_password"),
-    new_password: formData.get("new_password"),
-    confirm_new_password: formData.get("confirm_new_password"),
-  })
-
-  if (validatedData.new_password !== validatedData.confirm_new_password) {
-    return {
-      ...validatedState,
-      state: "error" as const,
-      error: "Passwords do not match",
-    }
-  }
-
   // check current password
   await sdk.auth.login("customer", "emailpass", {
     email: validatedState.email,
-    password: validatedData.current_password,
+    password: formData.current_password,
   })
 
   return sdk.client
@@ -368,7 +317,7 @@ export async function resetPassword(
       method: "POST",
       body: {
         email: validatedState.email,
-        password: validatedData.new_password,
+        password: formData.new_password,
       },
     })
     .then(() => {
