@@ -299,31 +299,17 @@ const resetPasswordStateSchema = z.object({
 
 export async function resetPassword(
   currentState: unknown,
-  formData: FormData
+  formData: z.infer<typeof resetPasswordFormSchema>
 ): Promise<
   z.infer<typeof resetPasswordStateSchema> &
     ({ state: "initial" | "success" } | { state: "error"; error: string })
 > {
   const validatedState = resetPasswordStateSchema.parse(currentState)
 
-  const validatedData = resetPasswordFormSchema.parse({
-    current_password: formData.get("current_password"),
-    new_password: formData.get("new_password"),
-    confirm_new_password: formData.get("confirm_new_password"),
-  })
-
-  if (validatedData.new_password !== validatedData.confirm_new_password) {
-    return {
-      ...validatedState,
-      state: "error" as const,
-      error: "Passwords do not match",
-    }
-  }
-
   // check current password
   await sdk.auth.login("customer", "emailpass", {
     email: validatedState.email,
-    password: validatedData.current_password,
+    password: formData.current_password,
   })
 
   return sdk.client
@@ -331,7 +317,7 @@ export async function resetPassword(
       method: "POST",
       body: {
         email: validatedState.email,
-        password: validatedData.new_password,
+        password: formData.new_password,
       },
     })
     .then(() => {

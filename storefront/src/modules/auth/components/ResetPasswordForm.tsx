@@ -5,7 +5,19 @@ import { redirect } from "next/navigation"
 
 import { resetPassword } from "@lib/data/customer"
 import { SubmitButton } from "@modules/common/components/submit-button"
-import { Input } from "@/components/Forms"
+import { Form, InputField } from "@/components/Forms"
+import { z } from "zod"
+
+const resetPasswordFormSchema = z
+  .object({
+    current_password: z.string().min(6),
+    new_password: z.string().min(6),
+    confirm_new_password: z.string().min(6),
+  })
+  .refine((data) => data.new_password === data.confirm_new_password, {
+    message: "Passwords must match",
+    path: ["confirm_new_password"],
+  })
 
 export const ChangePasswordForm: React.FC<{ email: string; token: string }> = ({
   email,
@@ -22,39 +34,34 @@ export const ChangePasswordForm: React.FC<{ email: string; token: string }> = ({
     }
   }, [formState])
 
+  const onSubmit = (values: z.infer<typeof resetPasswordFormSchema>) => {
+    React.startTransition(() => formAction(values))
+  }
+
   return (
-    <form action={formAction}>
+    <Form onSubmit={onSubmit} schema={resetPasswordFormSchema}>
       <h1 className="text-lg mb-6 md:mb-8">Reset password</h1>
       <div className="flex flex-col gap-4 mb-6 md:mb-8">
-        <Input
+        <InputField
           type="password"
           placeholder="Current password"
-          required
           name="current_password"
-          autoComplete="current-password"
-          minLength={6}
+          inputProps={{ autoComplete: "current-password" }}
         />
-        <Input
+        <InputField
           type="password"
           placeholder="New password"
-          required
           name="new_password"
-          autoComplete="new-password"
-          minLength={6}
+          inputProps={{ autoComplete: "new-password" }}
         />
-        <Input
+        <InputField
           type="password"
           placeholder="Confirm new password"
-          required
           name="confirm_new_password"
-          autoComplete="new-password"
-          minLength={6}
+          inputProps={{ autoComplete: "new-password" }}
         />
       </div>
-      {formState.state === "error" && (
-        <div className="text-sm text-red-primary">{formState.error}</div>
-      )}
       <SubmitButton isLoading={isPending}>Reset password</SubmitButton>
-    </form>
+    </Form>
   )
 }
