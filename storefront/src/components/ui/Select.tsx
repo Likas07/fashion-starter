@@ -63,7 +63,7 @@ export const UiSelectListBoxItem: React.FC<ReactAria.ListBoxItemProps> = ({
   <ReactAria.ListBoxItem
     {...props}
     className={twMerge(
-      "cursor-pointer px-4 py-3 focus-visible:outline-none data-[selected]:font-semibold hover:bg-grayscale-50 transition-colors",
+      "cursor-pointer p-4 focus-visible:outline-none data-[selected]:font-semibold hover:bg-grayscale-50 transition-colors",
       className as string
     )}
   />
