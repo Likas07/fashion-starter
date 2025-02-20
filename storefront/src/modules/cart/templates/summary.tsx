@@ -34,7 +34,11 @@ const Summary = ({ cart, customer }: SummaryProps) => {
           <Icon name="info" />
           <p>
             Already have an account? No worries, just{" "}
-            <LocalizedLink href="/" variant="underline" className="text-black">
+            <LocalizedLink
+              href="/auth/login"
+              variant="underline"
+              className="text-black !p-0"
+            >
               log in.
             </LocalizedLink>
           </p>
