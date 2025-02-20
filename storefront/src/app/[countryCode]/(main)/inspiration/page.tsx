@@ -61,7 +61,7 @@ export default function InspirationPage() {
           <LayoutColumn start={{ base: 1, md: 9 }} end={13}>
             <LocalizedLink href="/products/astrid-curve">
               <Image
-                src="/images/content/dark-gray-three-seater-sofa.png.png"
+                src="/images/content/dark-gray-three-seater-sofa.png"
                 width={768}
                 height={572}
                 alt="Dark gray three-seater sofa"
