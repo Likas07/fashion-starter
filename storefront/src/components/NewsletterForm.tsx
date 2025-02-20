@@ -37,6 +37,7 @@ export const NewsletterForm: React.FC<{ className?: string }> = ({
                 placeholder="Your email"
                 wrapperClassName="mb-4 flex-1"
                 className="rounded-xs"
+                required
               />
               <Button type="submit" size="sm" className="h-9 text-xs">
                 Subscribe
