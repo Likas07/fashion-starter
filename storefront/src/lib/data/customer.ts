@@ -26,22 +26,16 @@ const updateCustomerFormSchema = z.object({
 })
 export const updateCustomer = async function (
   _currentState: unknown,
-  formData: FormData
+  formData: z.infer<typeof updateCustomerFormSchema>
 ): Promise<
   { state: "initial" | "success" } | { state: "error"; error: string }
 > {
-  const validatedData = updateCustomerFormSchema.parse({
-    first_name: formData.get("first_name"),
-    last_name: formData.get("last_name"),
-    phone: formData.get("phone"),
-  })
-
   return sdk.store.customer
     .update(
       {
-        first_name: validatedData.first_name,
-        last_name: validatedData.last_name,
-        phone: validatedData.phone ?? undefined,
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+        phone: formData.phone ?? undefined,
       },
       {},
       await getAuthHeaders()
