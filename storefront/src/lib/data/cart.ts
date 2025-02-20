@@ -311,15 +311,16 @@ export async function setEmail(
 const addressesFormSchema = z
   .object({
     shipping_address: z.object({
-      first_name: z.string(),
-      last_name: z.string(),
-      address_1: z.string(),
-      company: z.string(),
-      postal_code: z.string(),
-      city: z.string(),
-      country_code: z.string(),
-      province: z.string(),
-      phone: z.string(),
+      first_name: z.string().min(1),
+      last_name: z.string().min(1),
+      company: z.string().optional(),
+      address_1: z.string().min(1),
+      address_2: z.string().optional(),
+      city: z.string().min(1),
+      postal_code: z.string().min(1),
+      province: z.string().optional(),
+      country_code: z.string().min(2),
+      phone: z.string().optional(),
     }),
   })
   .and(
@@ -330,15 +331,16 @@ const addressesFormSchema = z
       z.object({
         same_as_billing: z.literal("off").optional(),
         billing_address: z.object({
-          first_name: z.string(),
-          last_name: z.string(),
-          address_1: z.string(),
-          company: z.string(),
-          postal_code: z.string(),
-          city: z.string(),
-          country_code: z.string(),
-          province: z.string(),
-          phone: z.string(),
+          first_name: z.string().min(1),
+          last_name: z.string().min(1),
+          company: z.string().optional(),
+          address_1: z.string().min(1),
+          address_2: z.string().optional(),
+          city: z.string().min(1),
+          postal_code: z.string().min(1),
+          province: z.string().optional(),
+          country_code: z.string().min(2),
+          phone: z.string().optional(),
         }),
       }),
     ])
