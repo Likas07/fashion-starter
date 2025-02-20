@@ -282,11 +282,11 @@ export async function applyPromotions(codes: string[]) {
     .catch(medusaError)
 }
 
-export async function setEmail(currentState: unknown, formData: FormData) {
+export async function setEmail(
+  currentState: unknown,
+  { email, country_code }: { email: string; country_code: string }
+) {
   try {
-    if (!formData) {
-      throw new Error("No form data found when setting addresses")
-    }
     const cartId = await getCartId()
     if (!cartId) {
       throw new Error("No existing cart found when setting addresses")
@@ -298,19 +298,12 @@ export async function setEmail(currentState: unknown, formData: FormData) {
     }
   }
 
-  const countryCode = z.string().min(2).safeParse(formData.get("country_code"))
-
+  const countryCode = z.string().min(2).safeParse(country_code)
   if (!countryCode.success) {
     return { success: false, error: "Invalid country code" }
   }
 
-  const email = z.string().min(3).email().safeParse(formData.get("email"))
-
-  if (!email.success) {
-    return { success: false, error: "Invalid email" }
-  }
-
-  await updateCart({ email: email.data })
+  await updateCart({ email })
 
   return { success: true, error: null }
 }
