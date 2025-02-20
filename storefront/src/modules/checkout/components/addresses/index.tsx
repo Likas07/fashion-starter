@@ -11,6 +11,44 @@ import BillingAddress from "@modules/checkout/components/billing_address"
 import ErrorMessage from "@modules/checkout/components/error-message"
 import ShippingAddress from "@modules/checkout/components/shipping-address"
 import { Button } from "@/components/Button"
+import { Form } from "@/components/Forms"
+import { z } from "zod"
+
+const addressesFormSchema = z
+  .object({
+    shipping_address: z.object({
+      first_name: z.string(),
+      last_name: z.string(),
+      address_1: z.string(),
+      company: z.string(),
+      postal_code: z.string(),
+      city: z.string(),
+      country_code: z.string(),
+      province: z.string(),
+      phone: z.string(),
+    }),
+  })
+  .and(
+    z.discriminatedUnion("same_as_billing", [
+      z.object({
+        same_as_billing: z.literal("on"),
+      }),
+      z.object({
+        same_as_billing: z.literal("off").optional(),
+        billing_address: z.object({
+          first_name: z.string(),
+          last_name: z.string(),
+          address_1: z.string(),
+          company: z.string(),
+          postal_code: z.string(),
+          city: z.string(),
+          country_code: z.string(),
+          province: z.string(),
+          phone: z.string(),
+        }),
+      }),
+    ])
+  )
 
 const Addresses = ({
   cart,
@@ -44,6 +82,12 @@ const Addresses = ({
     null
   )
 
+  const onSubmit = (values: z.infer<typeof addressesFormSchema>) => {
+    React.startTransition(() => {
+      formAction(values)
+    })
+  }
+
   React.useEffect(() => {
     if (isOpen && state?.success) {
       router.push(pathname + "?step=shipping", { scroll: false })
@@ -75,8 +119,25 @@ const Addresses = ({
         )}
       </div>
       {isOpen ? (
-        // TODO: replace with react-hook-form and add validation
-        <form action={formAction}>
+        <Form
+          schema={addressesFormSchema}
+          onSubmit={onSubmit}
+          formProps={{
+            id: `email`,
+          }}
+          defaultValues={
+            sameAsBilling
+              ? {
+                  shipping_address: cart?.shipping_address,
+                  same_as_billing: "on",
+                }
+              : {
+                  shipping_address: cart?.shipping_address,
+                  same_as_billing: "off",
+                  billing_address: cart?.billing_address,
+                }
+          }
+        >
           <ShippingAddress
             customer={customer}
             checked={sameAsBilling}
@@ -90,7 +151,7 @@ const Addresses = ({
             Next
           </SubmitButton>
           <ErrorMessage error={state?.error} />
-        </form>
+        </Form>
       ) : cart?.shipping_address ? (
         <div className="flex flex-col gap-4">
           <div className="flex max-sm:flex-col flex-wrap gap-y-2 gap-x-12">

@@ -4,6 +4,69 @@ import * as React from "react"
 import { twJoin, twMerge } from "tailwind-merge"
 import * as ReactAria from "react-aria-components"
 import { Icon } from "@/components/Icon"
+import {
+  FormProvider,
+  useForm,
+  UseFormProps,
+  DefaultValues,
+  UseFormReturn,
+  useController,
+  ControllerRenderProps,
+} from "react-hook-form"
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+import CountrySelect from "@modules/checkout/components/country-select"
+
+export type FormProps<T extends z.ZodType<any, any>> = UseFormProps<
+  z.infer<T>
+> & {
+  schema: T
+  onSubmit: (
+    values: z.infer<T>,
+    form: UseFormReturn<z.infer<T>>
+  ) => void | Promise<void>
+  defaultValues?: DefaultValues<z.infer<T>>
+  children?: React.ReactNode
+  formProps?: Omit<React.ComponentProps<"form">, "onSubmit">
+}
+
+export const Form = <T extends z.ZodType<any, any>>({
+  schema,
+  onSubmit,
+  children,
+  formProps,
+  ...props
+}: FormProps<T>) => {
+  const form = useForm({
+    resolver: zodResolver(schema),
+    ...props,
+  })
+
+  const submitHandler = React.useCallback(
+    (values: z.infer<T>) => {
+      return onSubmit(values, form)
+    },
+    [onSubmit, form]
+  )
+
+  const onFormSubmit: React.FormEventHandler<HTMLFormElement> =
+    React.useCallback(
+      (event) => {
+        event.preventDefault()
+        event.stopPropagation()
+        form.handleSubmit(submitHandler, (err) => console.log(err))(event)
+      },
+      [form, submitHandler]
+    )
+
+  return (
+    <FormProvider {...form}>
+      <form {...formProps} onSubmit={onFormSubmit}>
+        <fieldset disabled={form.formState.isSubmitting}>{children}</fieldset>
+      </form>
+    </FormProvider>
+  )
+}
 
 export const getFormFieldClassNames = ({
   uiSize = "lg",
@@ -157,3 +220,87 @@ export const Input = React.forwardRef<
 )
 
 Input.displayName = "Input"
+
+export interface InputFieldProps {
+  className?: string
+  name: string
+  placeholder?: string
+  type?: React.ComponentProps<typeof Input>["type"]
+  inputProps?: Omit<
+    React.ComponentProps<typeof Input>,
+    "name" | "id" | "type" | keyof ControllerRenderProps
+  >
+}
+
+export const InputField: React.FC<InputFieldProps> = ({
+  className,
+  name,
+  type,
+  inputProps,
+  placeholder,
+}) => {
+  const { field, fieldState } = useController<{ __name__: string }, "__name__">(
+    { name: name as "__name__" }
+  )
+
+  return (
+    <div className={className}>
+      <Input
+        placeholder={placeholder}
+        {...inputProps}
+        {...field}
+        value={field.value ?? ""}
+        id={name}
+        type={type}
+        aria-invalid={Boolean(fieldState.error)}
+        className={className}
+      />
+      {fieldState.error && (
+        <div className="pt-2 text-red-900 text-small-regular">
+          <span>{fieldState.error.message}</span>
+        </div>
+      )}
+    </div>
+  )
+}
+
+export interface CountrySelectFieldProps {
+  className?: string
+  name: string
+  label?: string
+  selectProps?: Omit<
+    React.ComponentProps<typeof CountrySelect>,
+    "name" | "id" | keyof ControllerRenderProps
+  >
+  isRequired?: boolean
+  children?: React.ReactNode
+}
+
+export const CountrySelectField: React.FC<CountrySelectFieldProps> = ({
+  className,
+  name,
+  selectProps,
+  children,
+}) => {
+  const { field, fieldState } = useController<{ __name__: string }, "__name__">(
+    { name: name as "__name__" }
+  )
+
+  return (
+    <div className={className}>
+      <CountrySelect
+        {...selectProps}
+        {...field}
+        selectedKey={field.value ?? ""}
+        name={name}
+      >
+        {children}
+      </CountrySelect>
+      {fieldState.error && (
+        <div className="pt-2 text-red-900 text-small-regular">
+          <span>{fieldState.error.message}</span>
+        </div>
+      )}
+    </div>
+  )
+}
