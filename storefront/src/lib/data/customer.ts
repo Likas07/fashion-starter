@@ -69,37 +69,32 @@ const signupFormSchema = z.object({
   password: z.string().min(6),
 })
 
-export async function signup(_currentState: unknown, formData: FormData) {
-  const validatedData = signupFormSchema.parse({
-    email: formData.get("email"),
-    first_name: formData.get("first_name"),
-    last_name: formData.get("last_name"),
-    phone: formData.get("phone"),
-    password: formData.get("password"),
-  })
-
+export async function signup(
+  _currentState: unknown,
+  formData: z.infer<typeof signupFormSchema>
+) {
   try {
     const token = await sdk.auth.register("customer", "emailpass", {
-      email: validatedData.email,
-      password: validatedData.password,
+      email: formData.email,
+      password: formData.password,
     })
 
     const customHeaders = { authorization: `Bearer ${token}` }
 
     const { customer: createdCustomer } = await sdk.store.customer.create(
       {
-        email: validatedData.email,
-        first_name: validatedData.first_name,
-        last_name: validatedData.last_name,
-        phone: validatedData.phone ?? undefined,
+        email: formData.email,
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+        phone: formData.phone ?? undefined,
       },
       {},
       customHeaders
     )
 
     const loginToken = await sdk.auth.login("customer", "emailpass", {
-      email: validatedData.email,
-      password: validatedData.password,
+      email: formData.email,
+      password: formData.password,
     })
 
     if (typeof loginToken === "object") {
