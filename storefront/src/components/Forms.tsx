@@ -253,7 +253,6 @@ export const InputField: React.FC<InputFieldProps> = ({
         id={name}
         type={type}
         aria-invalid={Boolean(fieldState.error)}
-        className={className}
       />
       {fieldState.error && (
         <div className="pt-2 text-red-900 text-small-regular">
