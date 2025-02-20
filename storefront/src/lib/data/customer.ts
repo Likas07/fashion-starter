@@ -114,20 +114,19 @@ export async function signup(
 const loginFormSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
+  redirect_url: z.string().optional().nullable(),
 })
 
-export async function login(_currentState: unknown, formData: FormData) {
-  const validatedData = loginFormSchema.parse({
-    email: formData.get("email"),
-    password: formData.get("password"),
-  })
-
-  const redirectUrl = formData.get("redirect_url")
+export async function login(
+  _currentState: unknown,
+  formData: z.infer<typeof loginFormSchema>
+) {
+  const redirectUrl = formData.redirect_url
 
   try {
     const token = await sdk.auth.login("customer", "emailpass", {
-      email: validatedData.email,
-      password: validatedData.password,
+      email: formData.email,
+      password: formData.password,
     })
 
     if (typeof token === "object") {
