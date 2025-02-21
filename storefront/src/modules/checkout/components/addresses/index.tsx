@@ -130,13 +130,46 @@ const Addresses = ({
           defaultValues={
             sameAsBilling
               ? {
-                  shipping_address: cart?.shipping_address,
+                  shipping_address: cart?.shipping_address || {
+                    first_name: "",
+                    last_name: "",
+                    company: "",
+                    province: "",
+                    city: "",
+                    postal_code: "",
+                    country_code: "",
+                    address_1: "",
+                    address_2: "",
+                    phone: "",
+                  },
                   same_as_billing: "on",
                 }
               : {
-                  shipping_address: cart?.shipping_address,
+                  shipping_address: cart?.shipping_address || {
+                    first_name: "",
+                    last_name: "",
+                    company: "",
+                    province: "",
+                    city: "",
+                    postal_code: "",
+                    country_code: "",
+                    address_1: "",
+                    address_2: "",
+                    phone: "",
+                  },
                   same_as_billing: "off",
-                  billing_address: cart?.billing_address,
+                  billing_address: cart?.billing_address || {
+                    first_name: "",
+                    last_name: "",
+                    company: "",
+                    province: "",
+                    city: "",
+                    postal_code: "",
+                    country_code: "",
+                    address_1: "",
+                    address_2: "",
+                    phone: "",
+                  },
                 }
           }
         >

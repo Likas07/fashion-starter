@@ -16,16 +16,16 @@ import { useFormContext } from "react-hook-form"
 
 const isBillingAddressEmpty = (formData: Record<string, any>) => {
   return (
-    !formData.billing_address?.first_name &&
-    !formData.billing_address?.last_name &&
-    !formData.billing_address?.address_1 &&
-    !formData.billing_address?.address_2 &&
-    !formData.billing_address?.company &&
-    !formData.billing_address?.postal_code &&
-    !formData.billing_address?.city &&
-    !formData.billing_address?.country_code &&
-    !formData.billing_address?.province &&
-    !formData.billing_address?.phone
+    !formData?.billing_address?.first_name &&
+    !formData?.billing_address?.last_name &&
+    !formData?.billing_address?.address_1 &&
+    !formData?.billing_address?.address_2 &&
+    !formData?.billing_address?.company &&
+    !formData?.billing_address?.postal_code &&
+    !formData?.billing_address?.city &&
+    !formData?.billing_address?.country_code &&
+    !formData?.billing_address?.province &&
+    !formData?.billing_address?.phone
   )
 }
 

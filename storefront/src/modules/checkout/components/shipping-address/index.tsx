@@ -17,21 +17,20 @@ import {
   UiCheckboxIcon,
   UiCheckboxLabel,
 } from "@/components/ui/Checkbox"
-import { twMerge } from "tailwind-merge"
 import { useFormContext } from "react-hook-form"
 
 const isShippingAddressEmpty = (formData: Record<string, any>) => {
   return (
-    !formData.shipping_address.first_name &&
-    !formData.shipping_address.last_name &&
-    !formData.shipping_address.address_1 &&
-    !formData.shipping_address.address_2 &&
-    !formData.shipping_address.company &&
-    !formData.shipping_address.postal_code &&
-    !formData.shipping_address.city &&
-    !formData.shipping_address.country_code &&
-    !formData.shipping_address.province &&
-    !formData.shipping_address.phone
+    !formData?.shipping_address?.first_name &&
+    !formData?.shipping_address?.last_name &&
+    !formData?.shipping_address?.address_1 &&
+    !formData?.shipping_address?.address_2 &&
+    !formData?.shipping_address?.company &&
+    !formData?.shipping_address?.postal_code &&
+    !formData?.shipping_address?.city &&
+    !formData?.shipping_address?.country_code &&
+    !formData?.shipping_address?.province &&
+    !formData?.shipping_address?.phone
   )
 }
 // import AddressSelect from "../address-select"
