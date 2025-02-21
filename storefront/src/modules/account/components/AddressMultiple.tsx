@@ -6,7 +6,6 @@ import { UiModal, UiModalOverlay } from "@/components/ui/Modal"
 import { DeleteAddressButton } from "@modules/account/components/DeleteAddressButton"
 import { Button } from "@/components/Button"
 import { UpsertAddressForm } from "@modules/account/components/UpsertAddressForm"
-import { UiRadio, UiRadioBox } from "@/components/ui/Radio"
 
 export const AddressMultiple: React.FC<{
   address: StoreCustomerAddress

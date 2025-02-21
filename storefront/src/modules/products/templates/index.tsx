@@ -11,7 +11,6 @@ import ProductInfo from "@modules/products/templates/product-info"
 import SkeletonRelatedProducts from "@modules/skeletons/templates/skeleton-related-products"
 import { LocalizedLink } from "@/components/LocalizedLink"
 import { Layout, LayoutColumn } from "@/components/Layout"
-import ProductActionsWrapper from "@modules/products/templates/product-actions-wrapper"
 
 type ProductTemplateProps = {
   product: HttpTypes.StoreProduct
