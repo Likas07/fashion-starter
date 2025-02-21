@@ -68,11 +68,10 @@ export const Form = <T extends z.ZodType<any, any>>({
   )
 }
 
-export const getFormFieldClassNames = ({
+export const getInputClassNames = ({
   uiSize = "lg",
   isVisuallyDisabled,
   isSuccess,
-  hasError,
 }: InputOwnProps): string => {
   const sizeClasses = {
     sm: "h-9 text-xs focus:pt-3.5 [&:not(:placeholder-shown)]:pt-3.5 [&:autofill]:pt-3.5",
@@ -86,16 +85,11 @@ export const getFormFieldClassNames = ({
 
   const successClasses = isSuccess ? "border-green-500 pr-7" : ""
 
-  const errorClasses = hasError
-    ? "border-red-primary focus:border-red-900 hover:border-red-900"
-    : ""
-
   return twJoin(
-    "peer block w-full rounded-xs transition-all outline-none px-4 placeholder:invisible border border-grayscale-200 hover:border-grayscale-500 focus:border-grayscale-500 bg-transparent disabled:pointer-events-none disabled:bg-grayscale-50 [&:autofill]:bg-clip-text",
+    "peer block w-full rounded-xs transition-all outline-none px-4 placeholder:invisible border border-grayscale-200 hover:border-grayscale-500 focus:border-grayscale-500 bg-transparent disabled:pointer-events-none disabled:bg-grayscale-50 [&:autofill]:bg-clip-text aria-[invalid=true]:border-red-primary aria-[invalid=true]:focus:border-red-900 aria-[invalid=true]:hover:border-red-900",
     sizeClasses[uiSize],
     visuallyDisabledClasses,
-    successClasses,
-    errorClasses
+    successClasses
   )
 }
 
@@ -163,7 +157,6 @@ export type InputOwnProps = {
   uiSize?: "sm" | "md" | "lg"
   isVisuallyDisabled?: boolean
   isSuccess?: boolean
-  hasError?: boolean
   errorMessage?: string
   wrapperClassName?: string
 }
@@ -177,7 +170,6 @@ export const Input = React.forwardRef<
       uiSize = "lg",
       isVisuallyDisabled,
       isSuccess,
-      hasError,
       errorMessage,
       wrapperClassName,
       placeholder,
@@ -191,11 +183,10 @@ export const Input = React.forwardRef<
         {...rest}
         ref={ref}
         className={twMerge(
-          getFormFieldClassNames({
+          getInputClassNames({
             uiSize,
             isVisuallyDisabled,
             isSuccess,
-            hasError,
           }),
           className
         )}
@@ -212,8 +203,13 @@ export const Input = React.forwardRef<
           className="absolute right-0 top-1/2 mr-4 -translate-y-1/2 text-green-500 w-6 h-auto"
         />
       )}
-      {hasError && errorMessage && (
-        <InputSubLabel type="error">{errorMessage}</InputSubLabel>
+      {errorMessage && (
+        <InputSubLabel
+          type="error"
+          className="hidden aria-[invalid=true]:block"
+        >
+          {errorMessage}
+        </InputSubLabel>
       )}
     </div>
   )
