@@ -264,18 +264,12 @@ export async function initiatePaymentSession(provider_id: unknown) {
 }
 
 export async function applyPromotions(codes: string[]) {
-  const validatedData = z.array(z.string()).safeParse(codes)
-
-  if (validatedData.success === false) {
-    throw new Error("Invalid promo codes")
-  }
-
   const cartId = await getCartId()
   if (!cartId) {
     throw new Error("No existing cart found")
   }
 
-  await updateCart({ promo_codes: validatedData.data })
+  await updateCart({ promo_codes: codes })
     .then(() => {
       revalidateTag("cart")
     })
