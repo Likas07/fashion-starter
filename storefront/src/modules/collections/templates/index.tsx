@@ -10,6 +10,7 @@ import PaginatedProducts from "@modules/store/templates/paginated-products"
 import { Layout, LayoutColumn } from "@/components/Layout"
 import { getCategoriesList } from "@lib/data/categories"
 import { getProductTypesList } from "@lib/data/product-types"
+import { getRegion } from "@lib/data/regions"
 
 export default async function CollectionTemplate({
   sortBy,
@@ -34,6 +35,7 @@ export default async function CollectionTemplate({
   const collectionDetails = collectionMetadataCustomFieldsSchema.safeParse(
     collection.metadata ?? {}
   )
+  const region = await getRegion(countryCode)
 
   return (
     <>
@@ -89,26 +91,29 @@ export default async function CollectionTemplate({
         type={type}
       />
       <Suspense fallback={<SkeletonProductGrid />}>
-        <PaginatedProducts
-          sortBy={sortBy}
-          page={pageNumber}
-          collectionId={collection.id}
-          countryCode={countryCode}
-          categoryId={
-            !category
-              ? undefined
-              : categories.product_categories
-                  .filter((c) => category.includes(c.handle))
-                  .map((c) => c.id)
-          }
-          typeId={
-            !type
-              ? undefined
-              : types.productTypes
-                  .filter((t) => type.includes(t.value))
-                  .map((t) => t.id)
-          }
-        />
+        {region && (
+          <PaginatedProducts
+            sortBy={sortBy}
+            page={pageNumber}
+            collectionId={collection.id}
+            countryCode={countryCode}
+            categoryId={
+              !category
+                ? undefined
+                : categories.product_categories
+                    .filter((c) => category.includes(c.handle))
+                    .map((c) => c.id)
+            }
+            typeId={
+              !type
+                ? undefined
+                : types.productTypes
+                    .filter((t) => type.includes(t.value))
+                    .map((t) => t.id)
+            }
+            region={region}
+          />
+        )}
       </Suspense>
       <div className="pb-10 md:pb-20" />
     </>

@@ -5,6 +5,7 @@ import SkeletonProductGrid from "@modules/skeletons/templates/skeleton-product-g
 import PaginatedProducts from "@modules/store/templates/paginated-products"
 import { CollectionsSlider } from "@modules/store/components/collections-slider"
 import { MeiliSearchProductHit, searchClient } from "@lib/search-client"
+import { getRegion } from "@lib/data/regions"
 
 type Props = {
   params: Promise<{ countryCode: string }>
@@ -25,6 +26,7 @@ export default async function SearchPage({ params, searchParams }: Props) {
   const results = await searchClient
     .index("products")
     .search<MeiliSearchProductHit>(query)
+  const region = await getRegion(countryCode)
 
   return (
     <div className="md:pt-47 py-26 md:pb-36">
@@ -36,15 +38,18 @@ export default async function SearchPage({ params, searchParams }: Props) {
         </LayoutColumn>
       </Layout>
       <Suspense fallback={<SkeletonProductGrid />}>
-        <PaginatedProducts
-          sortBy="created_at"
-          page={pageNumber}
-          countryCode={countryCode}
-          collectionId={undefined}
-          categoryId={undefined}
-          productsIds={results.hits.map((h) => h.id)}
-          typeId={undefined}
-        />
+        {region && (
+          <PaginatedProducts
+            sortBy="created_at"
+            page={pageNumber}
+            countryCode={countryCode}
+            collectionId={undefined}
+            categoryId={undefined}
+            productsIds={results.hits.map((h) => h.id)}
+            typeId={undefined}
+            region={region}
+          />
+        )}
       </Suspense>
       <CollectionsSlider
         heading="Checkout our collections for more products"

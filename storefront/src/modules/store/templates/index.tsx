@@ -9,6 +9,7 @@ import { getCollectionsList } from "@lib/data/collections"
 import { getCategoriesList } from "@lib/data/categories"
 import { getProductTypesList } from "@lib/data/product-types"
 import PaginatedProducts from "@modules/store/templates/paginated-products"
+import { getRegion } from "@lib/data/regions"
 
 const StoreTemplate = async ({
   sortBy,
@@ -34,6 +35,8 @@ const StoreTemplate = async ({
   const categories = await getCategoriesList(0, 100, ["id", "name", "handle"])
   const types = await getProductTypesList(0, 100, ["id", "value"])
 
+  const region = await getRegion(countryCode)
+
   return (
     <div className="md:pt-47 py-26 md:pb-36">
       <CollectionsSlider />
@@ -53,32 +56,35 @@ const StoreTemplate = async ({
         sortBy={sortBy}
       />
       <Suspense fallback={<SkeletonProductGrid />}>
-        <PaginatedProducts
-          sortBy={sortBy}
-          page={pageNumber}
-          countryCode={countryCode}
-          collectionId={
-            !collection
-              ? undefined
-              : collections.collections
-                  .filter((c) => collection.includes(c.handle))
-                  .map((c) => c.id)
-          }
-          categoryId={
-            !category
-              ? undefined
-              : categories.product_categories
-                  .filter((c) => category.includes(c.handle))
-                  .map((c) => c.id)
-          }
-          typeId={
-            !type
-              ? undefined
-              : types.productTypes
-                  .filter((t) => type.includes(t.value))
-                  .map((t) => t.id)
-          }
-        />
+        {region && (
+          <PaginatedProducts
+            sortBy={sortBy}
+            page={pageNumber}
+            countryCode={countryCode}
+            collectionId={
+              !collection
+                ? undefined
+                : collections.collections
+                    .filter((c) => collection.includes(c.handle))
+                    .map((c) => c.id)
+            }
+            categoryId={
+              !category
+                ? undefined
+                : categories.product_categories
+                    .filter((c) => category.includes(c.handle))
+                    .map((c) => c.id)
+            }
+            typeId={
+              !type
+                ? undefined
+                : types.productTypes
+                    .filter((t) => type.includes(t.value))
+                    .map((t) => t.id)
+            }
+            region={region}
+          />
+        )}
       </Suspense>
     </div>
   )
