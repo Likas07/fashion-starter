@@ -50,7 +50,7 @@ export const UiSelectListBox = <T extends object>({
   <ReactAria.ListBox
     {...props}
     className={twMerge(
-      "border border-grayscale-200 bg-white rounded-xs focus-visible:outline-none overflow-hidden",
+      "border border-grayscale-200 bg-white rounded-xs focus-visible:outline-none max-h-50 overflow-scroll",
       className as string
     )}
   />

@@ -59,7 +59,7 @@ export const RegionSwitcher: React.FC<{
         <UiSelectIcon className={selectIconClassName} />
       </UiSelectButton>
       <ReactAria.Popover placement="bottom right" className="max-w-61 w-full">
-        <UiSelectListBox className="max-h-50 overflow-scroll">
+        <UiSelectListBox>
           {countryOptions.map((country) => (
             <UiSelectListBoxItem
               key={country.country}
