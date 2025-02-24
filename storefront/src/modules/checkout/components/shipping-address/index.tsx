@@ -17,7 +17,7 @@ import {
   UiCheckboxIcon,
   UiCheckboxLabel,
 } from "@/components/ui/Checkbox"
-import { useFormContext } from "react-hook-form"
+import { useFormContext, useWatch } from "react-hook-form"
 
 const isShippingAddressEmpty = (formData: Record<string, any>) => {
   return (
@@ -48,9 +48,9 @@ const ShippingAddress = ({
 }) => {
   const countryCode = useCountryCode()
 
-  const { setValue, watch } = useFormContext()
+  const { setValue, control } = useFormContext()
 
-  const formData = watch()
+  const formData = useWatch({ control })
 
   const countriesInRegion = useMemo(
     () => cart?.region?.countries?.map((c) => c.iso_2),
