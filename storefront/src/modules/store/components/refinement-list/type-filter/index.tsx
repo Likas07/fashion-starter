@@ -31,9 +31,10 @@ export const TypeFilter: React.FC<{
           onChange={(value) => {
             setQueryParams("type", value)
           }}
+          className="max-h-50 overflow-scroll"
         >
           {Object.entries(types).map(([key, value]) => (
-            <UiCheckbox value={key} className="py-3 px-4" key={key}>
+            <UiCheckbox value={key} className="p-4" key={key}>
               <UiCheckboxBox>
                 <UiCheckboxIcon />
               </UiCheckboxBox>
