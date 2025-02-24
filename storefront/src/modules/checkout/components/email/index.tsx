@@ -15,13 +15,10 @@ import { UiCloseButton, UiDialog, UiDialogTrigger } from "@/components/Dialog"
 import { UiModal, UiModalOverlay } from "@/components/ui/Modal"
 import { Icon } from "@/components/Icon"
 import { LoginForm } from "@modules/auth/components/LoginForm"
+import ErrorMessage from "@modules/checkout/components/error-message"
 
 export const emailFormSchema = z.object({
-  email: z
-    .string()
-    .min(3
-    )
-    .email("Enter a valid email address."),
+  email: z.string().min(3).email("Enter a valid email address."),
 })
 
 const Email = ({
@@ -125,6 +122,7 @@ const Email = ({
           <SubmitButton className="mt-8" isLoading={isPending}>
             Next
           </SubmitButton>
+          <ErrorMessage error={state?.error} />
         </Form>
       ) : cart?.email ? (
         <ul className="flex max-sm:flex-col flex-wrap gap-y-2 gap-x-34">

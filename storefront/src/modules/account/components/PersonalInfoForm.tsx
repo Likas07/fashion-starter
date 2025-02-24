@@ -64,6 +64,9 @@ export const PersonalInfoForm: React.FC<{
           className="flex-1 mb-8 sm:mb-10"
           type="tel"
         />
+        {formState.state === "error" && (
+          <div className="text-sm text-red-primary">{formState.error}</div>
+        )}
       </div>
       <div className="flex gap-6 justify-between">
         <SubmitButton isLoading={isPending}>Save changes</SubmitButton>
