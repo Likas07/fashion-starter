@@ -4,9 +4,10 @@ import React from "react"
 import { HttpTypes } from "@medusajs/types"
 
 import { applyPromotions } from "@lib/data/cart"
-import { Input } from "@/components/Forms"
-import { Button } from "@/components/Button"
+import { Form, InputField } from "@/components/Forms"
 import { twMerge } from "tailwind-merge"
+import { SubmitButton } from "@modules/common/components/submit-button"
+import { z } from "zod"
 
 type DiscountCodeProps = {
   cart: HttpTypes.StoreCart & {
@@ -15,37 +16,36 @@ type DiscountCodeProps = {
   className?: string
 }
 
+export const codeFormSchema = z.object({
+  code: z.string().min(1),
+})
+
 const DiscountCode: React.FC<DiscountCodeProps> = ({ cart, className }) => {
   const { promotions = [] } = cart
-  const [promotionCode, setPromotionCode] = React.useState<string>("")
-
-  const addPromotionCode = async () => {
-    if (!promotionCode) {
+  const addPromotionCode = async (values: { code: string }) => {
+    if (!values.code) {
       return
     }
     const codes = promotions
       .filter((p) => p.code === undefined)
       .map((p) => p.code!)
-    codes.push(promotionCode)
+    codes.push(values.code)
 
     await applyPromotions(codes)
-
-    setPromotionCode("")
   }
 
   return (
-    <div className={twMerge("flex gap-2 mt-10", className)}>
-      <Input
-        name="code"
-        autoFocus={false}
-        value={promotionCode}
-        onChange={(e) => setPromotionCode(e.target.value)}
-        uiSize="md"
-        placeholder="Discount code"
-        wrapperClassName="flex flex-1"
-      />
-      <Button onPress={addPromotionCode}>Apply</Button>
-    </div>
+    <Form onSubmit={addPromotionCode} schema={codeFormSchema}>
+      <div className={twMerge("flex gap-2 mt-10", className)}>
+        <InputField
+          name="code"
+          inputProps={{ autoFocus: false, uiSize: "md" }}
+          placeholder="Discount code"
+          className="flex flex-1 flex-col"
+        />
+        <SubmitButton>Apply</SubmitButton>
+      </div>
+    </Form>
   )
 }
 
