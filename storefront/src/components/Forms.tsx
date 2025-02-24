@@ -26,7 +26,10 @@ export type FormProps<T extends z.ZodType<any, any>> = UseFormProps<
     form: UseFormReturn<z.infer<T>>
   ) => void | Promise<void>
   defaultValues?: DefaultValues<z.infer<T>>
-  children?: React.ReactNode
+  children?:
+    | React.ReactNode
+    | ((form: UseFormReturn<z.infer<T>>) => React.ReactNode)
+
   formProps?: Omit<React.ComponentProps<"form">, "onSubmit">
 }
 
@@ -62,7 +65,9 @@ export const Form = <T extends z.ZodType<any, any>>({
   return (
     <FormProvider {...form}>
       <form {...formProps} onSubmit={onFormSubmit}>
-        <fieldset disabled={form.formState.isSubmitting}>{children}</fieldset>
+        <fieldset disabled={form.formState.isSubmitting}>
+          {typeof children === "function" ? children(form) : children}
+        </fieldset>
       </form>
     </FormProvider>
   )
