@@ -63,6 +63,7 @@ export const PersonalInfoForm: React.FC<{
           name="phone"
           className="flex-1 mb-8 sm:mb-10"
           type="tel"
+          inputProps={{ autoComplete: "tel" }}
         />
         {formState.state === "error" && (
           <div className="text-sm text-red-primary">{formState.error}</div>

@@ -35,7 +35,11 @@ export const NewsletterForm: React.FC<{ className?: string }> = ({
           >
             <div className="flex gap-2">
               <InputField
-                inputProps={{ uiSize: "sm", className: "rounded-xs" }}
+                inputProps={{
+                  uiSize: "sm",
+                  className: "rounded-xs",
+                  autoComplete: "email",
+                }}
                 name="email"
                 type="email"
                 placeholder="Your email"

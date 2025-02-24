@@ -35,11 +35,13 @@ export const SignUpForm: React.FC = () => {
             placeholder="First name"
             name="first_name"
             className=" flex-1"
+            inputProps={{ autoComplete: "given-name" }}
           />
           <InputField
             placeholder="Last name"
             name="last_name"
             className=" flex-1"
+            inputProps={{ autoComplete: "family-name" }}
           />
         </div>
         <InputField
@@ -47,12 +49,14 @@ export const SignUpForm: React.FC = () => {
           name="email"
           className=" flex-1"
           type="email"
+          inputProps={{ autoComplete: "email" }}
         />
         <InputField
           placeholder="Phone"
           name="phone"
           className=" flex-1"
           type="tel"
+          inputProps={{ autoComplete: "tel" }}
         />
         <InputField
           placeholder="Password"

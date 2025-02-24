@@ -144,18 +144,25 @@ export const UpsertAddressForm: React.FC<{
               autoComplete: "postal-code",
             }}
           />
-          <InputField placeholder="City" name="city" className=" flex-1" />
+          <InputField
+            placeholder="City"
+            name="city"
+            className=" flex-1"
+            inputProps={{ autoComplete: "address-level2" }}
+          />
         </div>
         <div className="flex max-xs:flex-col gap-4 md:gap-6">
           <InputField
             placeholder="Province (Optional)"
             name="province"
             className=" flex-1"
+            inputProps={{ autoComplete: "address-level1" }}
           />
           <CountrySelectField
             selectProps={{
               region: region ?? undefined,
               defaultSelectedKey: defaultValues?.country_code,
+              autoComplete: "country",
             }}
             name="country_code"
             className="flex-1"
