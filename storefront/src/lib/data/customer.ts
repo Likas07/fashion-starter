@@ -304,13 +304,18 @@ export async function resetPassword(
     ({ state: "initial" | "success" } | { state: "error"; error: string })
 > {
   const validatedState = resetPasswordStateSchema.parse(currentState)
-
-  // check current password
-  await sdk.auth.login("customer", "emailpass", {
-    email: validatedState.email,
-    password: formData.current_password,
-  })
-
+  try {
+    await sdk.auth.login("customer", "emailpass", {
+      email: validatedState.email,
+      password: formData.current_password,
+    })
+  } catch (err) {
+    return {
+      ...validatedState,
+      state: "error" as const,
+      error: "Wrong password",
+    }
+  }
   return sdk.client
     .fetch(`/auth/customer/emailpass/update?token=${validatedState.token}`, {
       method: "POST",

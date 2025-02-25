@@ -80,6 +80,9 @@ export const ChangePasswordForm: React.FC<{ email: string; token: string }> = ({
             inputProps={{ autoComplete: "new-password" }}
           />
         </div>
+        {formState.state === "error" && (
+          <p className="text-red-primary text-sm mb-6">{formState.error}</p>
+        )}
         <SubmitButton isLoading={isPending} isFullWidth>
           Reset password
         </SubmitButton>
