@@ -162,9 +162,6 @@ module.exports = {
           },
         },
       },
-      animation: {
-        shine: "shine 1s linear infinite",
-      },
       boxShadow: {
         modal: "0px 0px 40px -16px rgba(0, 0, 0, 0.20)",
         "borders-interactive-with-active":
