@@ -30,6 +30,7 @@ export const CartDrawer: React.FC<{
         onPress={() => setIsCartDrawerOpen(true)}
         variant="ghost"
         className="p-1 group-data-[light=true]:md:text-white group-data-[sticky=true]:md:text-black"
+        aria-label="Open cart"
       >
         {children}
       </Button>
@@ -46,7 +47,7 @@ export const CartDrawer: React.FC<{
               <div>
                 <p className="text-md">Cart</p>
               </div>
-              <button onClick={close}>
+              <button onClick={close} aria-label="Close cart">
                 <Icon name="close" className="w-6" />
               </button>
             </div>

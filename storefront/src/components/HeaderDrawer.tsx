@@ -31,6 +31,7 @@ export const HeaderDrawer: React.FC<{
         variant="ghost"
         className="p-1 group-data-[light=true]:md:text-white"
         onPress={() => setIsMenuOpen(true)}
+        aria-label="Open menu"
       >
         <Icon name="menu" className="w-6 h-6" wrapperClassName="w-6 h-6" />
       </Button>
@@ -48,7 +49,7 @@ export const HeaderDrawer: React.FC<{
                   countryOptions={countryOptions}
                   isInputAlwaysShown
                 />
-                <button onClick={close}>
+                <button onClick={close} aria-label="Close menu">
                   <Icon name="close" className="w-6" />
                 </button>
               </div>

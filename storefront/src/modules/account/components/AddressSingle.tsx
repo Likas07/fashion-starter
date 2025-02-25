@@ -69,6 +69,7 @@ export const AddressSingle: React.FC<{
             size="sm"
             variant="outline"
             className="w-8 px-0 shrink-0"
+            aria-label="Delete address"
           />
           <UiModalOverlay>
             <UiModal>

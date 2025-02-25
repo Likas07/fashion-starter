@@ -20,6 +20,7 @@ const DeleteButton = ({ id }: { id: string }) => {
       onClick={() => handleDelete(id)}
       disabled={isDeleting}
       className="p-1"
+      aria-label="Delete"
     >
       <Icon name="trash" className="w-4 h-4 sm:w-6 sm:h-6" />
     </button>
