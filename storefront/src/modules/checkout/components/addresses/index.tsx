@@ -173,19 +173,35 @@ const Addresses = ({
                 }
           }
         >
-          <ShippingAddress
-            customer={customer}
-            checked={sameAsBilling}
-            onChange={toggleSameAsBilling}
-            cart={cart}
-          />
+          {({ watch }) => {
+            const shippingData = watch("shipping_address")
+            const isDisabled = !Object.values(shippingData).some(
+              (value) => value
+            )
+            return (
+              <>
+                <ShippingAddress
+                  customer={customer}
+                  checked={sameAsBilling}
+                  onChange={toggleSameAsBilling}
+                  cart={cart}
+                />
 
-          {!sameAsBilling && <BillingAddress cart={cart} customer={customer} />}
+                {!sameAsBilling && (
+                  <BillingAddress cart={cart} customer={customer} />
+                )}
 
-          <SubmitButton className="mt-8" isLoading={isPending}>
-            Next
-          </SubmitButton>
-          <ErrorMessage error={state?.error} />
+                <SubmitButton
+                  className="mt-8"
+                  isLoading={isPending}
+                  isDisabled={isDisabled}
+                >
+                  Next
+                </SubmitButton>
+                <ErrorMessage error={state?.error} />
+              </>
+            )
+          }}
         </Form>
       ) : cart?.shipping_address ? (
         <div className="flex flex-col gap-4">

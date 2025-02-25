@@ -42,37 +42,49 @@ export const PersonalInfoForm: React.FC<{
       schema={updateCustomerFormSchema}
       defaultValues={defaultValues}
     >
-      <p className="text-md mb-8 sm:mb-10">Personal information</p>
-      <div className="flex flex-col gap-4 sm:gap-8">
-        <div className="flex max-xs:flex-col gap-y-4 gap-x-6">
-          <InputField
-            placeholder="First name"
-            name="first_name"
-            className=" flex-1"
-            inputProps={{ autoComplete: "given-name" }}
-          />
-          <InputField
-            placeholder="Last name"
-            name="last_name"
-            className="flex-1"
-            inputProps={{ autoComplete: "family-name" }}
-          />
-        </div>
-        <InputField
-          placeholder="Phone"
-          name="phone"
-          className="flex-1 mb-8 sm:mb-10"
-          type="tel"
-          inputProps={{ autoComplete: "tel" }}
-        />
-        {formState.state === "error" && (
-          <div className="text-sm text-red-primary">{formState.error}</div>
-        )}
-      </div>
-      <div className="flex gap-6 justify-between">
-        <SubmitButton isLoading={isPending}>Save changes</SubmitButton>
-        <UiCloseButton variant="outline">Cancel</UiCloseButton>
-      </div>
+      {({ watch }) => {
+        const formData = watch()
+        const isDisabled = !Object.values(formData).some((value) => value)
+        return (
+          <>
+            <p className="text-md mb-8 sm:mb-10">Personal information</p>
+            <div className="flex flex-col gap-4 sm:gap-8">
+              <div className="flex max-xs:flex-col gap-y-4 gap-x-6">
+                <InputField
+                  placeholder="First name"
+                  name="first_name"
+                  className=" flex-1"
+                  inputProps={{ autoComplete: "given-name" }}
+                />
+                <InputField
+                  placeholder="Last name"
+                  name="last_name"
+                  className="flex-1"
+                  inputProps={{ autoComplete: "family-name" }}
+                />
+              </div>
+              <InputField
+                placeholder="Phone"
+                name="phone"
+                className="flex-1 mb-8 sm:mb-10"
+                type="tel"
+                inputProps={{ autoComplete: "tel" }}
+              />
+              {formState.state === "error" && (
+                <div className="text-sm text-red-primary">
+                  {formState.error}
+                </div>
+              )}
+            </div>
+            <div className="flex gap-6 justify-between">
+              <SubmitButton isLoading={isPending} isDisabled={isDisabled}>
+                Save changes
+              </SubmitButton>
+              <UiCloseButton variant="outline">Cancel</UiCloseButton>
+            </div>
+          </>
+        )
+      }}
     </Form>
   )
 }

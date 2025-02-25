@@ -83,123 +83,135 @@ export const UpsertAddressForm: React.FC<{
         province: defaultValues?.province,
       }}
     >
-      {({ setValue }) => (
-        <>
-          <p className="text-md mb-8 md:mb-10">
-            {addressId ? "Change address" : "Add another address"}
-          </p>
-          <div className="flex flex-col gap-4 md:gap-8 mb-8 md:mb-10">
-            <div className="flex max-xs:flex-col gap-4 md:gap-6">
+      {({ setValue, watch }) => {
+        const watchedValues = watch()
+        const isDisabled =
+          !Object.values(watchedValues).some((value) => value) ||
+          (defaultValues
+            ? !Object.entries(watchedValues).some(
+                ([key, value]) =>
+                  defaultValues[key as keyof typeof defaultValues] !== value
+              )
+            : false)
+        return (
+          <>
+            <p className="text-md mb-8 md:mb-10">
+              {addressId ? "Change address" : "Add another address"}
+            </p>
+            <div className="flex flex-col gap-4 md:gap-8 mb-8 md:mb-10">
+              <div className="flex max-xs:flex-col gap-4 md:gap-6">
+                <InputField
+                  placeholder="First name"
+                  name="first_name"
+                  className=" flex-1"
+                  inputProps={{
+                    autoComplete: "given-name",
+                  }}
+                />
+                <InputField
+                  placeholder="Last name"
+                  name="last_name"
+                  className=" flex-1"
+                  inputProps={{
+                    autoComplete: "family-name",
+                  }}
+                />
+              </div>
               <InputField
-                placeholder="First name"
-                name="first_name"
+                placeholder="Company (Optional)"
+                name="company"
                 className=" flex-1"
                 inputProps={{
-                  autoComplete: "given-name",
+                  autoComplete: "organization",
                 }}
               />
               <InputField
-                placeholder="Last name"
-                name="last_name"
-                className=" flex-1"
+                placeholder="Address"
+                name="address_1"
                 inputProps={{
-                  autoComplete: "family-name",
+                  autoComplete: "address-line1",
                 }}
               />
-            </div>
-            <InputField
-              placeholder="Company (Optional)"
-              name="company"
-              className=" flex-1"
-              inputProps={{
-                autoComplete: "organization",
-              }}
-            />
-            <InputField
-              placeholder="Address"
-              name="address_1"
-              inputProps={{
-                autoComplete: "address-line1",
-              }}
-            />
-            <InputField
-              placeholder="Apartment, suite, etc. (Optional)"
-              name="address_2"
-              inputProps={{
-                autoComplete: "address-line2",
-              }}
-            />
-            <InputField
-              placeholder="Phone (Optional)"
-              name="phone"
-              type="tel"
-              inputProps={{
-                autoComplete: "tel",
-              }}
-            />
-            <div className="flex max-xs:flex-col gap-4 md:gap-6">
               <InputField
-                placeholder="Postal code"
-                name="postal_code"
-                className=" flex-1"
+                placeholder="Apartment, suite, etc. (Optional)"
+                name="address_2"
                 inputProps={{
-                  autoComplete: "postal-code",
+                  autoComplete: "address-line2",
                 }}
               />
               <InputField
-                placeholder="City"
-                name="city"
-                className=" flex-1"
-                inputProps={{ autoComplete: "address-level2" }}
-              />
-            </div>
-            <div className="flex max-xs:flex-col gap-4 md:gap-6">
-              <InputField
-                placeholder="Province (Optional)"
-                name="province"
-                className=" flex-1"
-                inputProps={{ autoComplete: "address-level1" }}
-              />
-              <CountrySelectField
-                selectProps={{
-                  region: region ?? undefined,
-                  defaultSelectedKey: defaultValues?.country_code,
-                  autoComplete: "country",
-                  onSelectionChange: (value: any) =>
-                    setValue("country_code", value),
+                placeholder="Phone (Optional)"
+                name="phone"
+                type="tel"
+                inputProps={{
+                  autoComplete: "tel",
                 }}
-                name="country_code"
-                className="flex-1"
               />
+              <div className="flex max-xs:flex-col gap-4 md:gap-6">
+                <InputField
+                  placeholder="Postal code"
+                  name="postal_code"
+                  className=" flex-1"
+                  inputProps={{
+                    autoComplete: "postal-code",
+                  }}
+                />
+                <InputField
+                  placeholder="City"
+                  name="city"
+                  className=" flex-1"
+                  inputProps={{ autoComplete: "address-level2" }}
+                />
+              </div>
+              <div className="flex max-xs:flex-col gap-4 md:gap-6">
+                <InputField
+                  placeholder="Province (Optional)"
+                  name="province"
+                  className=" flex-1"
+                  inputProps={{ autoComplete: "address-level1" }}
+                />
+                <CountrySelectField
+                  selectProps={{
+                    region: region ?? undefined,
+                    defaultSelectedKey: defaultValues?.country_code,
+                    autoComplete: "country",
+                    onSelectionChange: (value: any) =>
+                      setValue("country_code", value),
+                  }}
+                  name="country_code"
+                  className="flex-1"
+                />
+              </div>
+              {!addressId &&
+                addAddressFormMessage &&
+                !addAddressFormMessage.success && (
+                  <p className="text-red-primary">
+                    {addAddressFormMessage.error}
+                  </p>
+                )}
+              {addressId &&
+                updateAddressFormMessage &&
+                !updateAddressFormMessage.success && (
+                  <p className="text-red-primary">
+                    {updateAddressFormMessage.error}
+                  </p>
+                )}
             </div>
-            {!addressId &&
-              addAddressFormMessage &&
-              !addAddressFormMessage.success && (
-                <p className="text-red-primary">
-                  {addAddressFormMessage.error}
-                </p>
-              )}
-            {addressId &&
-              updateAddressFormMessage &&
-              !updateAddressFormMessage.success && (
-                <p className="text-red-primary">
-                  {updateAddressFormMessage.error}
-                </p>
-              )}
-          </div>
-          <div className="flex gap-6 justify-between">
-            <SubmitButton
-              isLoading={
-                isAddAddressFormActionPending ||
-                isUpdateAddressFormActionPending
-              }
-            >
-              {addressId ? "Save changes" : "Add address"}
-            </SubmitButton>
-            <UiCloseButton variant="outline">Cancel</UiCloseButton>
-          </div>
-        </>
-      )}
+            <div className="flex gap-6 justify-between">
+              <SubmitButton
+                isLoading={
+                  isAddAddressFormActionPending ||
+                  isUpdateAddressFormActionPending
+                }
+                isDisabled={isDisabled}
+              >
+                {addressId ? "Save changes" : "Add address"}
+              </SubmitButton>
+              <UiCloseButton variant="outline">Cancel</UiCloseButton>
+            </div>
+          </>
+        )
+      }}
     </Form>
   )
 }

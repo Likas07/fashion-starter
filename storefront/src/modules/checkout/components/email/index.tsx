@@ -109,20 +109,30 @@ const Email = ({
           }}
           defaultValues={{ email: cart?.email || "" }}
         >
-          <InputField
-            placeholder="Email"
-            name="email"
-            type="email"
-            inputProps={{
-              autoComplete: "email",
-              title: "Enter a valid email address.",
-            }}
-            data-testid="shipping-email-input"
-          />
-          <SubmitButton className="mt-8" isLoading={isPending}>
-            Next
-          </SubmitButton>
-          <ErrorMessage error={state?.error} />
+          {({ watch }) => {
+            const formValue = watch("email")
+            return (
+              <>
+                <InputField
+                  placeholder="Email"
+                  name="email"
+                  inputProps={{
+                    autoComplete: "email",
+                    title: "Enter a valid email address.",
+                  }}
+                  data-testid="shipping-email-input"
+                />
+                <SubmitButton
+                  className="mt-8"
+                  isLoading={isPending}
+                  isDisabled={!formValue}
+                >
+                  Next
+                </SubmitButton>
+                <ErrorMessage error={state?.error} />
+              </>
+            )
+          }}
         </Form>
       ) : cart?.email ? (
         <ul className="flex max-sm:flex-col flex-wrap gap-y-2 gap-x-34">
