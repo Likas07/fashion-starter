@@ -108,7 +108,7 @@ export const getPlaceholderClassNames = ({
   }
 
   return twJoin(
-    "absolute -translate-y-1/2 peer-placeholder-shown:top-1/2 left-4 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:autofill]:translate-y-0 peer-focus:translate-y-0 text-grayscale-500 pointer-events-none transition-all",
+    "absolute -translate-y-1/2 peer-placeholder-shown:top-1/2 left-4 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:autofill]:translate-y-0 peer-focus:translate-y-0 text-grayscale-400 pointer-events-none transition-all",
     sizeClasses[uiSize]
   )
 }
