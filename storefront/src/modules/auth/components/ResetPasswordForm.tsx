@@ -17,9 +17,22 @@ const resetPasswordFormSchema = z
     new_password: z.string().min(6),
     confirm_new_password: z.string().min(6),
   })
-  .refine((data) => data.new_password === data.confirm_new_password, {
-    message: "Passwords must match",
-    path: ["confirm_new_password"],
+  .superRefine((data, ctx) => {
+    if (data.new_password !== data.confirm_new_password) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Passwords must match",
+        path: ["confirm_new_password"],
+      })
+    }
+
+    if (data.current_password === data.new_password) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "New password must be different from the current password",
+        path: ["new_password"],
+      })
+    }
   })
 
 export const ChangePasswordForm: React.FC<{ email: string; token: string }> = ({
