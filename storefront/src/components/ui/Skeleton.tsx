@@ -1,19 +1,20 @@
 import { twMerge } from "tailwind-merge"
 
 type SkeletonProps = {
-  colorScheme?: "light" | "transparent"
+  colorScheme?: "white" | "grayscale"
 } & React.ComponentPropsWithoutRef<"div">
 
 export const Skeleton: React.FC<SkeletonProps> = ({
-  colorScheme = "transparent",
+  colorScheme = "grayscale",
   className,
   ...rest
 }) => (
   <div
     {...rest}
     className={twMerge(
-      "relative overflow-hidden shrink-0 rounded-2xs before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/60 before:to-transparent",
-      colorScheme === "light" && "bg-white/60 before:via-grayscale-50",
+      "relative overflow-hidden shrink-0 rounded-2xs before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:to-transparent",
+      colorScheme === "grayscale" && "bg-grayscale-50 before:via-white",
+      colorScheme === "white" && "bg-white before:via-grayscale-50",
       className
     )}
   ></div>
