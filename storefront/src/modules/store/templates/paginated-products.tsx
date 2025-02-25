@@ -7,7 +7,6 @@ import { NoResults } from "@modules/store/components/no-results.tsx"
 import { withReactQueryProvider } from "@lib/util/react-query"
 import * as React from "react"
 import { useStoreProducts } from "hooks/store"
-import { debounce } from "lodash"
 
 const PRODUCT_LIMIT = 12
 function PaginatedProducts({
@@ -63,45 +62,45 @@ function PaginatedProducts({
     sortBy,
     countryCode,
   })
-  const scrollRef = React.useRef<HTMLDivElement>(null)
+  const loadMoreRef = React.useRef<HTMLDivElement>(null)
 
   React.useEffect(() => {
-    const handleScroll = debounce(() => {
-      if (productsQuery.isFetchingNextPage || !productsQuery.hasNextPage) {
-        return
-      }
-
-      if (scrollRef.current) {
-        const rect = scrollRef?.current?.getBoundingClientRect()
-        const isBottomVisible =
-          rect.top + rect.height <= window.innerHeight && rect.bottom >= 0
-
-        if (isBottomVisible) {
+    if (!loadMoreRef.current) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && productsQuery.hasNextPage) {
           productsQuery.fetchNextPage()
         }
-      }
-    }, 200)
+      },
+      { rootMargin: "100px" }
+    )
 
-    window.addEventListener("scroll", handleScroll)
-    return () => {
-      window.removeEventListener("scroll", handleScroll)
-    }
-  }, [productsQuery])
+    observer.observe(loadMoreRef.current)
+    return () => observer.disconnect()
+  }, [productsQuery, loadMoreRef])
 
   return (
     <>
-      <Layout className="gap-y-10 md:gap-y-16 mb-16" ref={scrollRef}>
+      <Layout className="gap-y-10 md:gap-y-16 mb-16">
         {productsQuery?.data?.pages[0]?.response?.products?.length ? (
           productsQuery?.data?.pages.flatMap((page) => {
-            return page?.response?.products.map((p: StoreProduct) => (
-              <LayoutColumn key={p.id} className="md:!col-span-4 !col-span-6">
-                <ProductPreview product={p} region={region} />
-              </LayoutColumn>
-            ))
+            return page?.response?.products.map(
+              (p: StoreProduct, i: number) => {
+                return (
+                  <LayoutColumn
+                    key={p.id}
+                    className="md:!col-span-4 !col-span-6"
+                  >
+                    <ProductPreview product={p} region={region} />
+                  </LayoutColumn>
+                )
+              }
+            )
           })
         ) : (
           <NoResults />
         )}
+        {productsQuery.hasNextPage && <div ref={loadMoreRef} />}
       </Layout>
     </>
   )
