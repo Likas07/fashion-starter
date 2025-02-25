@@ -53,7 +53,7 @@ export const CartDrawer: React.FC<{
             </div>
             {cart?.items?.length ? (
               <>
-                <div className="pb-8 overflow-y-scroll">
+                <div className="pb-8 pr-3 sm:pr-4 overflow-y-scroll">
                   {cart?.items
                     .sort((a, b) => {
                       return (a.created_at ?? "") > (b.created_at ?? "")
