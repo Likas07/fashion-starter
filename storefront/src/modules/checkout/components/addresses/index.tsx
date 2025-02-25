@@ -175,9 +175,9 @@ const Addresses = ({
         >
           {({ watch }) => {
             const shippingData = watch("shipping_address")
-            const isDisabled = !Object.values(shippingData).some(
-              (value) => value
-            )
+            const isDisabled =
+              !customer?.addresses?.length &&
+              !Object.values(shippingData).some((value) => value)
             return (
               <>
                 <ShippingAddress
