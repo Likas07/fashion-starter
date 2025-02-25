@@ -7,6 +7,9 @@ import { resetPassword } from "@lib/data/customer"
 import { SubmitButton } from "@modules/common/components/submit-button"
 import { Form, InputField } from "@/components/Forms"
 import { z } from "zod"
+import { UiModal, UiModalOverlay } from "@/components/ui/Modal"
+import { UiCloseButton, UiDialog } from "@/components/Dialog"
+import { Icon } from "@/components/Icon"
 
 const resetPasswordFormSchema = z
   .object({
@@ -28,9 +31,11 @@ export const ChangePasswordForm: React.FC<{ email: string; token: string }> = ({
     { email, token, state: "initial" }
   )
 
+  const [isModalOpen, setIsModalOpen] = React.useState(false)
+
   React.useEffect(() => {
     if (formState.state === "success") {
-      redirect("/auth/login")
+      setIsModalOpen(true)
     }
   }, [formState])
 
@@ -39,29 +44,55 @@ export const ChangePasswordForm: React.FC<{ email: string; token: string }> = ({
   }
 
   return (
-    <Form onSubmit={onSubmit} schema={resetPasswordFormSchema}>
-      <h1 className="text-lg mb-6 md:mb-8">Reset password</h1>
-      <div className="flex flex-col gap-4 mb-6 md:mb-8">
-        <InputField
-          type="password"
-          placeholder="Current password"
-          name="current_password"
-          inputProps={{ autoComplete: "current-password" }}
-        />
-        <InputField
-          type="password"
-          placeholder="New password"
-          name="new_password"
-          inputProps={{ autoComplete: "new-password" }}
-        />
-        <InputField
-          type="password"
-          placeholder="Confirm new password"
-          name="confirm_new_password"
-          inputProps={{ autoComplete: "new-password" }}
-        />
-      </div>
-      <SubmitButton isLoading={isPending}>Reset password</SubmitButton>
-    </Form>
+    <>
+      <Form onSubmit={onSubmit} schema={resetPasswordFormSchema}>
+        <h1 className="text-lg mb-6 md:mb-8">Reset password</h1>
+        <div className="flex flex-col gap-4 mb-6 md:mb-8">
+          <InputField
+            type="password"
+            placeholder="Current password"
+            name="current_password"
+            inputProps={{ autoComplete: "current-password" }}
+          />
+          <InputField
+            type="password"
+            placeholder="New password"
+            name="new_password"
+            inputProps={{ autoComplete: "new-password" }}
+          />
+          <InputField
+            type="password"
+            placeholder="Confirm new password"
+            name="confirm_new_password"
+            inputProps={{ autoComplete: "new-password" }}
+          />
+        </div>
+        <SubmitButton isLoading={isPending} isFullWidth>
+          Reset password
+        </SubmitButton>
+      </Form>
+      <UiModalOverlay
+        isOpen={isModalOpen}
+        isDismissable={false}
+        onOpenChange={(isOpen) => !isOpen && redirect("/auth/login")}
+        className="bg-transparent"
+      >
+        <UiModal className="relative">
+          <UiDialog>
+            <p className="text-md mb-12">Password reset successful!</p>
+            <p className="text-grayscale-500">
+              Your password has been successfully reset. You may now use your
+              new password to log in.
+            </p>
+            <UiCloseButton
+              variant="ghost"
+              className="absolute top-4 right-6 p-0"
+            >
+              <Icon name="close" className="w-6 h-6" />
+            </UiCloseButton>
+          </UiDialog>
+        </UiModal>
+      </UiModalOverlay>
+    </>
   )
 }
