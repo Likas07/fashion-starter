@@ -16,7 +16,7 @@ export const useStoreProducts = ({
 }) => {
   return useInfiniteQuery({
     initialPageParam: page,
-    queryKey: ["products", queryParams, sortBy],
+    queryKey: ["products", queryParams, sortBy, countryCode],
     queryFn: async ({ pageParam }) => {
       return getProductsListWithSort({
         page: pageParam,

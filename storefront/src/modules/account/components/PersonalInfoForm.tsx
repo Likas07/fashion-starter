@@ -44,7 +44,14 @@ export const PersonalInfoForm: React.FC<{
     >
       {({ watch }) => {
         const formData = watch()
-        const isDisabled = !Object.values(formData).some((value) => value)
+        const isDisabled =
+          !Object.values(formData).some((value) => value) ||
+          (defaultValues
+            ? !Object.entries(formData).some(
+                ([key, value]) =>
+                  defaultValues[key as keyof typeof defaultValues] !== value
+              )
+            : false)
         return (
           <>
             <p className="text-md mb-8 sm:mb-10">Personal information</p>
