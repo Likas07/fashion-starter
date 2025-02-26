@@ -188,7 +188,7 @@ export default function ProductActions({
                 <ReactAria.Select
                   selectedKey={options[materialOption.id] ?? null}
                   onSelectionChange={(value) => {
-                    setOptionValue(materialOption.id, `${value}`)
+                    setOptions({ [materialOption.id]: `${value}` })
                   }}
                   placeholder="Choose material"
                   className="w-full md:w-60"
