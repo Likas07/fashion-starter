@@ -11,34 +11,47 @@ import { UiModal, UiModalOverlay } from "@/components/ui/Modal"
 import { UiCloseButton, UiDialog } from "@/components/Dialog"
 import { Icon } from "@/components/Icon"
 
-const resetPasswordFormSchema = z
-  .object({
-    current_password: z.string().min(6),
-    new_password: z.string().min(6),
-    confirm_new_password: z.string().min(6),
-  })
-  .superRefine((data, ctx) => {
-    if (data.new_password !== data.confirm_new_password) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Passwords must match",
-        path: ["confirm_new_password"],
-      })
-    }
+const resetPasswordSchema = z.object({
+  type: z.literal("reset"),
+  current_password: z.string().min(6),
+  new_password: z.string().min(6),
+  confirm_new_password: z.string().min(6),
+})
 
-    if (data.current_password === data.new_password) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "New password must be different from the current password",
-        path: ["new_password"],
-      })
-    }
-  })
+const forgotPasswordSchema = z.object({
+  type: z.literal("forgot"),
+  new_password: z.string().min(6),
+  confirm_new_password: z.string().min(6),
+})
 
-export const ChangePasswordForm: React.FC<{ email: string; token: string }> = ({
-  email,
-  token,
-}) => {
+const baseSchema = z.discriminatedUnion("type", [
+  resetPasswordSchema,
+  forgotPasswordSchema,
+])
+
+const resetPasswordFormSchema = baseSchema.superRefine((data, ctx) => {
+  if (data.new_password !== data.confirm_new_password) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Passwords must match",
+      path: ["confirm_new_password"],
+    })
+  }
+
+  if (data.type === "reset" && data.current_password === data.new_password) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "New password must be different from the current password",
+      path: ["new_password"],
+    })
+  }
+})
+
+export const ChangePasswordForm: React.FC<{
+  email: string
+  token: string
+  customer?: boolean
+}> = ({ email, token, customer }) => {
   const [formState, formAction, isPending] = React.useActionState(
     resetPassword,
     { email, token, state: "initial" }
@@ -58,15 +71,21 @@ export const ChangePasswordForm: React.FC<{ email: string; token: string }> = ({
 
   return (
     <>
-      <Form onSubmit={onSubmit} schema={resetPasswordFormSchema}>
+      <Form
+        onSubmit={onSubmit}
+        schema={resetPasswordFormSchema}
+        defaultValues={customer ? { type: "reset" } : { type: "forgot" }}
+      >
         <h1 className="text-lg mb-6 md:mb-8">Reset password</h1>
         <div className="flex flex-col gap-4 mb-6 md:mb-8">
-          <InputField
-            type="password"
-            placeholder="Current password"
-            name="current_password"
-            inputProps={{ autoComplete: "current-password" }}
-          />
+          {customer && (
+            <InputField
+              type="password"
+              placeholder="Current password"
+              name="current_password"
+              inputProps={{ autoComplete: "current-password" }}
+            />
+          )}
           <InputField
             type="password"
             placeholder="New password"

@@ -275,8 +275,7 @@ export async function requestPasswordReset() {
       error: "No customer found",
     }
   }
-
-  await sdk.auth.resetPassword("customer", "emailpass", {
+  await sdk.auth.resetPassword("logged-in-customer", "emailpass", {
     identifier: customer.email,
   })
 
@@ -285,45 +284,60 @@ export async function requestPasswordReset() {
   }
 }
 
-const resetPasswordFormSchema = z.object({
-  current_password: z.string().min(6),
-  new_password: z.string().min(6),
-  confirm_new_password: z.string().min(6),
-})
-
 const resetPasswordStateSchema = z.object({
   email: z.string().email(),
   token: z.string(),
 })
 
+const resetPasswordFormSchema = z.object({
+  type: z.literal("reset"),
+  current_password: z.string().min(6),
+  new_password: z.string().min(6),
+  confirm_new_password: z.string().min(6),
+})
+
+const forgotPasswordSchema = z.object({
+  type: z.literal("forgot"),
+  new_password: z.string().min(6),
+  confirm_new_password: z.string().min(6),
+})
+const baseSchema = z.discriminatedUnion("type", [
+  resetPasswordFormSchema,
+  forgotPasswordSchema,
+])
+
 export async function resetPassword(
   currentState: unknown,
-  formData: z.infer<typeof resetPasswordFormSchema>
+  formData: z.infer<typeof baseSchema>
 ): Promise<
   z.infer<typeof resetPasswordStateSchema> &
     ({ state: "initial" | "success" } | { state: "error"; error: string })
 > {
   const validatedState = resetPasswordStateSchema.parse(currentState)
-  try {
-    await sdk.auth.login("customer", "emailpass", {
-      email: validatedState.email,
-      password: formData.current_password,
-    })
-  } catch (err) {
-    return {
-      ...validatedState,
-      state: "error" as const,
-      error: "Wrong password",
+  if (formData.type === "reset") {
+    try {
+      await sdk.auth.login("customer", "emailpass", {
+        email: validatedState.email,
+        password: formData.current_password,
+      })
+    } catch (err) {
+      return {
+        ...validatedState,
+        state: "error" as const,
+        error: "Wrong password",
+      }
     }
   }
-  return sdk.client
-    .fetch(`/auth/customer/emailpass/update?token=${validatedState.token}`, {
-      method: "POST",
-      body: {
+  return sdk.auth
+    .updateProvider(
+      formData.type === "reset" ? "logged-in-customer" : "customer",
+      "emailpass",
+      {
         email: validatedState.email,
         password: formData.new_password,
       },
-    })
+      validatedState.token
+    )
     .then(() => {
       return {
         ...validatedState,

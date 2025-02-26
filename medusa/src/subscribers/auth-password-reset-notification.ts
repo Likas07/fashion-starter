@@ -5,7 +5,7 @@ import type { CustomerDTO } from "@medusajs/framework/types";
 export default async function sendPasswordResetNotification({
   event: { data },
   container,
-}: SubscriberArgs<{ entity_id: string; token: string }>) {
+}: SubscriberArgs<{ entity_id: string; token: string; actor_type: string }>) {
   const query = container.resolve(ContainerRegistrationKeys.QUERY);
   const notificationModuleService = container.resolve(Modules.NOTIFICATION);
 
@@ -26,7 +26,10 @@ export default async function sendPasswordResetNotification({
   await notificationModuleService.createNotifications({
     to: customer.email,
     channel: "email",
-    template: "auth-password-reset",
+    template:
+      data.actor_type === "logged-in-customer"
+        ? "auth-password-reset"
+        : "auth-forgot-password",
     data: { customer, token: data.token },
   });
 }

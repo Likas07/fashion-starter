@@ -31,7 +31,7 @@ export default async function ResetPasswordPage({
         start={{ base: 1, sm: 3, lg: 4, xl: 5 }}
         end={{ base: 13, sm: 11, lg: 10, xl: 9 }}
       >
-        <ChangePasswordForm email={email} token={token} customer={true} />
+        <ChangePasswordForm email={email} token={token} />
       </LayoutColumn>
     </Layout>
   )
