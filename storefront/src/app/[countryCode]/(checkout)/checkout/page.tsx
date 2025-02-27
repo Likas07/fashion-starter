@@ -12,15 +12,6 @@ export const metadata: Metadata = {
   title: "Checkout",
 }
 
-const fetchCart = async () => {
-  const cart = await retrieveCart()
-  if (!cart) {
-    return notFound()
-  }
-
-  return cart
-}
-
 export default async function Checkout({
   params,
   searchParams,
@@ -28,10 +19,13 @@ export default async function Checkout({
   params: Promise<{ countryCode: string }>
   searchParams: Promise<{ step?: string }>
 }) {
+  const cart = await retrieveCart()
+  if (!cart) {
+    return notFound()
+  }
+
   const { countryCode } = await params
   const { step } = await searchParams
-
-  const cart = await fetchCart()
   const customer = await getCustomer()
   const checkoutStep = getCheckoutStep(cart)
 
