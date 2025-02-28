@@ -152,25 +152,26 @@ const Payment = ({
             </UiRadioGroup>
             {isStripe && stripeReady && (
               <div className="mt-5">
-                {paymentMethod?.card?.brand ? (
-                  <Input
-                    value={"**** **** **** " + paymentMethod?.card.last4}
-                    placeholder="Card number"
-                    disabled={true}
-                  />
-                ) : (
-                  <CardElement
-                    options={useOptions as StripeCardElementOptions}
-                    onChange={(e) => {
-                      setCardBrand(
-                        e.brand &&
-                          e.brand.charAt(0).toUpperCase() + e.brand.slice(1)
-                      )
-                      setError(e.error?.message || null)
-                      setCardComplete(e.complete)
-                    }}
-                  />
-                )}
+                {isStripeFunc(selectedPaymentMethod) &&
+                  (paymentMethod?.card?.brand ? (
+                    <Input
+                      value={"**** **** **** " + paymentMethod?.card.last4}
+                      placeholder="Card number"
+                      disabled={true}
+                    />
+                  ) : (
+                    <CardElement
+                      options={useOptions as StripeCardElementOptions}
+                      onChange={(e) => {
+                        setCardBrand(
+                          e.brand &&
+                            e.brand.charAt(0).toUpperCase() + e.brand.slice(1)
+                        )
+                        setError(e.error?.message || null)
+                        setCardComplete(e.complete)
+                      }}
+                    />
+                  ))}
               </div>
             )}
           </>
@@ -186,7 +187,7 @@ const Payment = ({
           error={error}
           data-testid="payment-method-error-message"
         />
-        {paymentMethod && (
+        {paymentMethod && isStripeFunc(selectedPaymentMethod) && (
           <Button
             className="mt-6 mr-6"
             onPress={handleRemoveCard}
