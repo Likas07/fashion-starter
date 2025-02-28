@@ -2,24 +2,30 @@
 
 import { useCallback, useContext, useEffect, useMemo, useState } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import ErrorMessage from "@modules/checkout/components/error-message"
 import { CreditCard } from "@medusajs/icons"
 import { CardElement } from "@stripe/react-stripe-js"
-import { StripeCardElementOptions } from "@stripe/stripe-js"
+import { PaymentMethod, StripeCardElementOptions } from "@stripe/stripe-js"
 import { twJoin } from "tailwind-merge"
 import { isStripe as isStripeFunc, paymentInfoMap } from "@lib/constants"
-import { initiatePaymentSession } from "@lib/data/cart"
 import PaymentContainer from "@modules/checkout/components/payment-container"
 import { StripeContext } from "@modules/checkout/components/payment-wrapper"
 import { Button } from "@/components/Button"
 import { UiRadioGroup } from "@/components/ui/Radio"
 
+import ErrorMessage from "@modules/checkout/components/error-message"
+import { capitalize } from "lodash"
+import PaymentCardButton from "@modules/checkout/components/payment-card-button"
+import { Input } from "@/components/Forms"
+import { setPaymentMethod } from "@lib/data/cart"
+
 const Payment = ({
   cart,
   availablePaymentMethods,
+  paymentMethod,
 }: {
   cart: any
   availablePaymentMethods: any[]
+  paymentMethod: PaymentMethod | null
 }) => {
   const activeSession = cart.payment_collection?.payment_sessions?.find(
     (paymentSession: any) => paymentSession.status === "pending"
@@ -82,34 +88,26 @@ const Payment = ({
     })
   }
 
-  const handleSubmit = async () => {
-    setIsLoading(true)
-    try {
-      const shouldInputCard =
-        isStripeFunc(selectedPaymentMethod) && !activeSession
-
-      if (!activeSession) {
-        await initiatePaymentSession(selectedPaymentMethod)
-      }
-
-      if (!shouldInputCard) {
-        return router.push(
-          pathname + "?" + createQueryString("step", "review"),
-          {
-            scroll: false,
-          }
-        )
-      }
-    } catch (err: any) {
-      setError(err.message)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
   useEffect(() => {
     setError(null)
   }, [isOpen])
+
+  const handleRemoveCard = useCallback(async () => {
+    try {
+      await setPaymentMethod(activeSession?.id, null)
+      setCardBrand(null)
+      setCardComplete(false)
+    } catch (err) {
+      setError("Failed to remove card")
+    }
+  }, [activeSession?.id])
+
+  useEffect(() => {
+    if (paymentMethod) {
+      setCardBrand(capitalize(paymentMethod?.card?.brand))
+      setCardComplete(true)
+    }
+  }, [paymentMethod])
 
   return (
     <>
@@ -154,17 +152,25 @@ const Payment = ({
             </UiRadioGroup>
             {isStripe && stripeReady && (
               <div className="mt-5">
-                <CardElement
-                  options={useOptions as StripeCardElementOptions}
-                  onChange={(e) => {
-                    setCardBrand(
-                      e.brand &&
-                        e.brand.charAt(0).toUpperCase() + e.brand.slice(1)
-                    )
-                    setError(e.error?.message || null)
-                    setCardComplete(e.complete)
-                  }}
-                />
+                {paymentMethod?.card?.brand ? (
+                  <Input
+                    value={"**** **** **** " + paymentMethod?.card.last4}
+                    placeholder="Card number"
+                    disabled={true}
+                  />
+                ) : (
+                  <CardElement
+                    options={useOptions as StripeCardElementOptions}
+                    onChange={(e) => {
+                      setCardBrand(
+                        e.brand &&
+                          e.brand.charAt(0).toUpperCase() + e.brand.slice(1)
+                      )
+                      setError(e.error?.message || null)
+                      setCardComplete(e.complete)
+                    }}
+                  />
+                )}
               </div>
             )}
           </>
@@ -176,26 +182,30 @@ const Payment = ({
             <div>Gift card</div>
           </div>
         )}
-
         <ErrorMessage
           error={error}
           data-testid="payment-method-error-message"
         />
-
-        <Button
-          className="mt-6"
-          onPress={handleSubmit}
+        {paymentMethod && (
+          <Button
+            className="mt-6 mr-6"
+            onPress={handleRemoveCard}
+            isLoading={isLoading}
+            isDisabled={!cardComplete}
+            data-testid="submit-payment-button"
+          >
+            Change card
+          </Button>
+        )}
+        <PaymentCardButton
+          setError={setError}
           isLoading={isLoading}
-          isDisabled={
-            (isStripe && !cardComplete) ||
-            (!selectedPaymentMethod && !paidByGiftcard)
-          }
-          data-testid="submit-payment-button"
-        >
-          {!activeSession && isStripeFunc(selectedPaymentMethod)
-            ? " Enter card details"
-            : "Continue to review"}
-        </Button>
+          setIsLoading={setIsLoading}
+          selectedPaymentMethod={selectedPaymentMethod}
+          createQueryString={createQueryString}
+          cart={cart}
+          cardComplete={cardComplete}
+        />
       </div>
 
       <div className={isOpen ? "hidden" : "block"}>
