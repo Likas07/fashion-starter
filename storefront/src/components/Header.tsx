@@ -1,21 +1,19 @@
 import * as React from "react"
 import { listRegions } from "@lib/data/regions"
 import { retrieveCart } from "@lib/data/cart"
-import { getCustomer } from "@lib/data/customer"
 import { SearchField } from "@/components/SearchField"
 import { CartDrawer } from "@/components/CartDrawer"
 import { Layout, LayoutColumn } from "@/components/Layout"
-import { LocalizedButtonLink, LocalizedLink } from "@/components/LocalizedLink"
+import { LocalizedLink } from "@/components/LocalizedLink"
 import { CartIcon } from "@/components/CartIcon"
 import { HeaderDrawer } from "@/components/HeaderDrawer"
 import { RegionSwitcher } from "@/components/RegionSwitcher"
 import { HeaderWrapper } from "@/components/HeaderWrapper"
-import { Icon } from "@/components/Icon"
+import LoginLink from "@modules/header/components/LoginLink"
 
 export const Header: React.FC = async () => {
   const regions = await listRegions()
   const cart = await retrieveCart()
-  const customer = await getCustomer().catch(() => null)
 
   const countryOptions = regions
     .map((r) => {
@@ -50,34 +48,13 @@ export const Header: React.FC = async () => {
                   selectIconClassName="text-current"
                 />
                 <SearchField countryOptions={countryOptions} />
-                <LocalizedButtonLink
-                  href={customer ? "/account" : "/auth/login"}
-                  prefetch={false}
-                  variant="ghost"
-                  className="p-1 group-data-[light=true]:md:text-white group-data-[sticky=true]:md:text-black"
-                  aria-label="Open account"
-                >
-                  <Icon name="user" className="w-6 h-6" />
-                </LocalizedButtonLink>
-
+                <LoginLink className="p-1 group-data-[light=true]:md:text-white group-data-[sticky=true]:md:text-black" />
                 <CartDrawer cart={cart}>
                   <CartIcon className="w-6 h-6" />
                 </CartDrawer>
               </div>
               <div className="flex items-center gap-4 md:hidden">
-                <LocalizedButtonLink
-                  href={customer ? "/account" : "/auth/login"}
-                  prefetch={false}
-                  variant="ghost"
-                  className="p-1 group-data-[light=true]:md:text-white"
-                  aria-label="Open account"
-                >
-                  <Icon
-                    name="user"
-                    className="w-6 h-6"
-                    wrapperClassName="w-6 h-6"
-                  />
-                </LocalizedButtonLink>
+                <LoginLink className="p-1 group-data-[light=true]:md:text-white" />
 
                 <CartDrawer cart={cart}>
                   <CartIcon className="w-6 h-6" wrapperClassName="w-6 h-6" />
