@@ -11,7 +11,12 @@ import {
   removeAuthToken,
   getCartId,
 } from "@lib/data/cookies"
-import { customerAddressSchema, loginFormSchema } from "hooks/customer"
+import {
+  customerAddressSchema,
+  loginFormSchema,
+  signupFormSchema,
+  updateCustomerFormSchema,
+} from "hooks/customer"
 
 export const getCustomer = async function () {
   return sdk.store.customer
@@ -20,11 +25,6 @@ export const getCustomer = async function () {
     .catch(() => null)
 }
 
-const updateCustomerFormSchema = z.object({
-  first_name: z.string().min(1),
-  last_name: z.string().min(1),
-  phone: z.string().optional().nullable(),
-})
 export const updateCustomer = async function (
   formData: z.infer<typeof updateCustomerFormSchema>
 ): Promise<
@@ -55,18 +55,7 @@ export const updateCustomer = async function (
     })
 }
 
-const signupFormSchema = z.object({
-  email: z.string().email(),
-  first_name: z.string().min(1),
-  last_name: z.string().min(1),
-  phone: z.string().optional().nullable(),
-  password: z.string().min(6),
-})
-
-export async function signup(
-  _currentState: unknown,
-  formData: z.infer<typeof signupFormSchema>
-) {
+export async function signup(formData: z.infer<typeof signupFormSchema>) {
   try {
     const token = await sdk.auth.register("customer", "emailpass", {
       email: formData.email,
@@ -94,7 +83,7 @@ export async function signup(
     if (typeof loginToken === "object") {
       redirect(loginToken.location)
 
-      return
+      return { success: true, customer: createdCustomer }
     }
 
     await setAuthToken(loginToken)
@@ -105,9 +94,16 @@ export async function signup(
     })
 
     revalidateTag("customer")
-    return createdCustomer
+
+    const cartId = await getCartId()
+    if (cartId) {
+      await sdk.store.cart.transferCart(cartId, {}, await getAuthHeaders())
+      revalidateTag("cart")
+    }
+
+    return { success: true, customer: createdCustomer }
   } catch (error: any) {
-    return error.toString()
+    return { success: false, error: error.toString() }
   }
 }
 

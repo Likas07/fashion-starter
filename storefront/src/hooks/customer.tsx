@@ -5,6 +5,7 @@ import {
   getCustomer,
   login,
   signout,
+  signup,
   updateCustomer,
   updateCustomerAddress,
 } from "@lib/data/customer"
@@ -113,6 +114,27 @@ export const useDeleteCustomerAddress = () => {
   return useMutation({
     mutationFn: async (addressId: string) => {
       return deleteCustomerAddress(addressId)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["customer"] })
+    },
+  })
+}
+
+export const signupFormSchema = z.object({
+  email: z.string().email(),
+  first_name: z.string().min(1),
+  last_name: z.string().min(1),
+  phone: z.string().optional().nullable(),
+  password: z.string().min(6),
+})
+
+export const useSignup = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (values: z.infer<typeof signupFormSchema>) => {
+      return signup(values)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["customer"] })
