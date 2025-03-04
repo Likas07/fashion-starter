@@ -1,29 +1,27 @@
 "use client"
 
 import * as React from "react"
-
-import { login } from "@lib/data/customer"
 import { SubmitButton } from "@modules/common/components/submit-button"
 import { Form, InputField } from "@/components/Forms"
 import { LocalizedLink } from "@/components/LocalizedLink"
 import { twMerge } from "tailwind-merge"
 import { z } from "zod"
+import { useLogin } from "hooks/customer"
+import { withReactQueryProvider } from "@lib/util/react-query"
 
 const loginFormSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
 })
 
-export const LoginForm: React.FC<{
+export const LoginForm = withReactQueryProvider<{
   className?: string
-  countryCode?: string
-}> = ({ className, countryCode }) => {
-  const [message, formAction] = React.useActionState(login, null)
+  redirectUrl?: string
+}>(({ className, redirectUrl }) => {
+  const { isPending, data, mutateAsync } = useLogin()
 
-  const onSubmit = (values: z.infer<typeof loginFormSchema>) => {
-    React.startTransition(() =>
-      formAction({ ...values, redirect_url: `/${countryCode}/account` })
-    )
+  const onSubmit = async (values: z.infer<typeof loginFormSchema>) => {
+    await mutateAsync({ ...values, redirect_url: redirectUrl })
   }
   return (
     <Form onSubmit={onSubmit} schema={loginFormSchema}>
@@ -48,9 +46,11 @@ export const LoginForm: React.FC<{
         >
           Forgot password?
         </LocalizedLink>
-        {message && <p className="text-red-primary text-sm">{message}</p>}
-        <SubmitButton>Log in</SubmitButton>
+        {!data?.success && (
+          <p className="text-red-primary text-sm">{data?.message}</p>
+        )}
+        <SubmitButton isLoading={isPending}>Log in</SubmitButton>
       </div>
     </Form>
   )
-}
+})

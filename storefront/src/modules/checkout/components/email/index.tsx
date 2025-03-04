@@ -76,7 +76,9 @@ const Email = ({
                     <UiModal className="relative max-w-108">
                       <UiDialog>
                         <p className="text-md mb-10">Log in</p>
-                        <LoginForm countryCode={countryCode} />
+                        <LoginForm
+                          redirectUrl={`/${countryCode}/checkout?step=delivery`}
+                        />
                         <UiCloseButton
                           variant="ghost"
                           className="absolute top-4 right-6 p-0"

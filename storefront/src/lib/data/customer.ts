@@ -117,10 +117,7 @@ const loginFormSchema = z.object({
   redirect_url: z.string().optional().nullable(),
 })
 
-export async function login(
-  _currentState: unknown,
-  formData: z.infer<typeof loginFormSchema>
-) {
+export async function login(formData: z.infer<typeof loginFormSchema>) {
   const redirectUrl = formData.redirect_url
 
   try {
@@ -130,9 +127,7 @@ export async function login(
     })
 
     if (typeof token === "object") {
-      redirect(token.location)
-
-      return
+      return { success: true, redirectUrl: token.location }
     }
 
     await setAuthToken(token)
@@ -143,11 +138,10 @@ export async function login(
       await sdk.store.cart.transferCart(cartId, {}, await getAuthHeaders())
       revalidateTag("cart")
     }
+    return { success: true, redirectUrl: redirectUrl || "/" }
   } catch (error: any) {
-    return error.toString()
+    return { success: false, message: error.message }
   }
-
-  redirect(typeof redirectUrl === "string" ? redirectUrl : "/")
 }
 
 export async function signout(countryCode: string) {
