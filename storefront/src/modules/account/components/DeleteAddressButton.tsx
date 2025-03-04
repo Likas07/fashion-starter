@@ -1,29 +1,27 @@
 "use client"
 
-import * as React from "react"
 import { UiConfirmButton } from "@/components/Dialog"
-import { deleteCustomerAddress } from "@lib/data/customer"
+import { useDeleteCustomerAddress } from "hooks/customer"
+import { withReactQueryProvider } from "@lib/util/react-query"
 
-export const DeleteAddressButton: React.FC<{
+export const DeleteAddressButton = withReactQueryProvider<{
   addressId: string
   className?: string
   children: React.ReactNode
-}> = ({ addressId, children, ...rest }) => {
-  const [isLoading, setIsLoading] = React.useState(false)
+}>(({ addressId, children, ...rest }) => {
+  const { mutateAsync, isPending } = useDeleteCustomerAddress()
 
   return (
     <UiConfirmButton
       {...rest}
       onConfirm={async () => {
-        setIsLoading(true)
-        await deleteCustomerAddress(addressId).catch((error) => {
+        await mutateAsync(addressId).catch((error) => {
           console.error(error)
         })
-        setIsLoading(false)
       }}
-      isLoading={isLoading}
+      isLoading={isPending}
     >
       {children}
     </UiConfirmButton>
   )
-}
+})

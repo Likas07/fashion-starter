@@ -11,6 +11,7 @@ import {
   removeAuthToken,
   getCartId,
 } from "@lib/data/cookies"
+import { customerAddressSchema, loginFormSchema } from "hooks/customer"
 
 export const getCustomer = async function () {
   return sdk.store.customer
@@ -25,7 +26,6 @@ const updateCustomerFormSchema = z.object({
   phone: z.string().optional().nullable(),
 })
 export const updateCustomer = async function (
-  _currentState: unknown,
   formData: z.infer<typeof updateCustomerFormSchema>
 ): Promise<
   { state: "initial" | "success" } | { state: "error"; error: string }
@@ -111,12 +111,6 @@ export async function signup(
   }
 }
 
-const loginFormSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6),
-  redirect_url: z.string().optional().nullable(),
-})
-
 export async function login(formData: z.infer<typeof loginFormSchema>) {
   const redirectUrl = formData.redirect_url
 
@@ -151,21 +145,7 @@ export async function signout(countryCode: string) {
   return countryCode
 }
 
-const customerAddressSchema = z.object({
-  first_name: z.string().min(1),
-  last_name: z.string().min(1),
-  company: z.string().optional().nullable(),
-  address_1: z.string().min(1),
-  address_2: z.string().optional().nullable(),
-  city: z.string().min(1),
-  postal_code: z.string().min(1),
-  province: z.string().optional().nullable(),
-  country_code: z.string().min(2),
-  phone: z.string().optional().nullable(),
-})
-
 export const addCustomerAddress = async (
-  _currentState: unknown,
   formData: z.infer<typeof customerAddressSchema>
 ) => {
   return sdk.store.customer
@@ -218,23 +198,16 @@ export const deleteCustomerAddress = async (
 }
 
 export const updateCustomerAddress = async (
-  currentState: unknown,
+  addressId: string,
   formData: z.infer<typeof customerAddressSchema>
 ) => {
-  if (
-    typeof currentState !== "object" ||
-    !currentState ||
-    !("addressId" in currentState) ||
-    typeof currentState.addressId !== "string"
-  ) {
+  if (!addressId) {
     throw new Error("Invalid input data")
   }
 
-  const addressId = currentState.addressId
-
   return sdk.store.customer
     .updateAddress(
-      currentState.addressId,
+      addressId,
       {
         first_name: formData.first_name,
         last_name: formData.last_name,
