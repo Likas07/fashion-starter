@@ -13,6 +13,8 @@ import ShippingAddress from "@modules/checkout/components/shipping-address"
 import { Button } from "@/components/Button"
 import { Form } from "@/components/Forms"
 import { z } from "zod"
+import { useCustomer } from "hooks/customer"
+import { withReactQueryProvider } from "@lib/util/react-query"
 
 const addressesFormSchema = z
   .object({
@@ -52,13 +54,7 @@ const addressesFormSchema = z
     ])
   )
 
-const Addresses = ({
-  cart,
-  customer,
-}: {
-  cart: HttpTypes.StoreCart | null
-  customer: HttpTypes.StoreCustomer | null
-}) => {
+const Addresses = ({ cart }: { cart: HttpTypes.StoreCart | null }) => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
@@ -66,6 +62,8 @@ const Addresses = ({
   const isOpen = searchParams.get("step") === "delivery"
 
   const [sameAsBilling, setSameAsBilling] = React.useState(true)
+
+  const { data: customer } = useCustomer()
 
   React.useEffect(() => {
     if (cart?.shipping_address && cart?.billing_address) {
@@ -181,14 +179,14 @@ const Addresses = ({
             return (
               <>
                 <ShippingAddress
-                  customer={customer}
+                  customer={customer || null}
                   checked={sameAsBilling}
                   onChange={toggleSameAsBilling}
                   cart={cart}
                 />
 
                 {!sameAsBilling && (
-                  <BillingAddress cart={cart} customer={customer} />
+                  <BillingAddress cart={cart} customer={customer || null} />
                 )}
 
                 <SubmitButton
@@ -272,4 +270,4 @@ const Addresses = ({
   )
 }
 
-export default Addresses
+export default withReactQueryProvider(Addresses)
