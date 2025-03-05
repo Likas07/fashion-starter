@@ -8,6 +8,7 @@ import { twMerge } from "tailwind-merge"
 import { z } from "zod"
 import { useLogin } from "hooks/customer"
 import { withReactQueryProvider } from "@lib/util/react-query"
+import { useRouter } from "next/navigation"
 
 const loginFormSchema = z.object({
   email: z.string().email(),
@@ -18,10 +19,21 @@ export const LoginForm = withReactQueryProvider<{
   className?: string
   redirectUrl?: string
 }>(({ className, redirectUrl }) => {
-  const { isPending, data, mutateAsync } = useLogin()
+  const { isPending, data, mutate } = useLogin()
+
+  const router = useRouter()
 
   const onSubmit = async (values: z.infer<typeof loginFormSchema>) => {
-    await mutateAsync({ ...values, redirect_url: redirectUrl })
+    mutate(
+      { ...values, redirect_url: redirectUrl },
+      {
+        onSuccess: (data) => {
+          if (data.success) {
+            router.push(data.redirectUrl || "/")
+          }
+        },
+      }
+    )
   }
   return (
     <Form onSubmit={onSubmit} schema={loginFormSchema}>

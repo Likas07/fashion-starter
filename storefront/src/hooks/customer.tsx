@@ -1,4 +1,9 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import {
+  useMutation,
+  UseMutationOptions,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query"
 import {
   addCustomerAddress,
   deleteCustomerAddress,
@@ -10,7 +15,7 @@ import {
   updateCustomerAddress,
 } from "@lib/data/customer"
 import { z } from "zod"
-import { useRouter } from "next/navigation"
+import { StoreCustomer } from "@medusajs/types"
 
 export const useCustomer = () => {
   return useQuery({
@@ -29,35 +34,43 @@ export const loginFormSchema = z.object({
   redirect_url: z.string().optional().nullable(),
 })
 
-export const useLogin = () => {
+export const useLogin = (
+  options?: UseMutationOptions<
+    { success: boolean; redirectUrl?: string; message?: string },
+    Error,
+    z.infer<typeof loginFormSchema>
+  >
+) => {
   const queryClient = useQueryClient()
-  const router = useRouter()
 
   return useMutation({
+    mutationKey: ["login"],
     mutationFn: async (values: z.infer<typeof loginFormSchema>) => {
       return login({ ...values })
     },
-    onSuccess: (data) => {
-      if (data.success) {
-        queryClient.invalidateQueries({ queryKey: ["customer"] })
-        if (data.redirectUrl) {
-          router.push(data.redirectUrl)
-        }
-      }
+    onSuccess: async (...args) => {
+      await queryClient.invalidateQueries({ queryKey: ["customer"] })
+      await options?.onSuccess?.(...args)
     },
+    ...options,
   })
 }
 
-export const useSignout = () => {
+export const useSignout = (
+  options?: UseMutationOptions<string, Error, string>
+) => {
   const queryClient = useQueryClient()
 
   return useMutation({
+    mutationKey: ["signout"],
     mutationFn: async (countryCode: string) => {
       return signout(countryCode)
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["customer"] })
+    onSuccess: async (...args) => {
+      await queryClient.invalidateQueries({ queryKey: ["customer"] })
+      await options?.onSuccess?.(...args)
     },
+    ...options,
   })
 }
 
@@ -67,16 +80,25 @@ export const updateCustomerFormSchema = z.object({
   phone: z.string().optional().nullable(),
 })
 
-export const useUpdateCustomer = () => {
+export const useUpdateCustomer = (
+  options?: UseMutationOptions<
+    { state: "error" | "success" | "initial"; error?: string },
+    Error,
+    z.infer<typeof updateCustomerFormSchema>
+  >
+) => {
   const queryClient = useQueryClient()
 
   return useMutation({
+    mutationKey: ["update-customer"],
     mutationFn: async (values: z.infer<typeof updateCustomerFormSchema>) => {
       return updateCustomer(values)
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["customer"] })
+    onSuccess: async (...args) => {
+      await queryClient.invalidateQueries({ queryKey: ["customer"] })
+      await options?.onSuccess?.(...args)
     },
+    ...options,
   })
 }
 
@@ -93,31 +115,46 @@ export const customerAddressSchema = z.object({
   phone: z.string().optional().nullable(),
 })
 
-export const useAddressMutation = (addressId?: string) => {
+export const useAddressMutation = (
+  addressId?: string,
+  options?: UseMutationOptions<
+    { addressId: string; success: boolean; error: any },
+    Error,
+    z.infer<typeof customerAddressSchema>
+  >
+) => {
   const queryClient = useQueryClient()
 
   return useMutation({
+    mutationKey: ["add-address", "update-address"],
     mutationFn: async (values: z.infer<typeof customerAddressSchema>) => {
       return addressId
         ? updateCustomerAddress(addressId, values)
         : addCustomerAddress(values)
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["customer"] })
+    onSuccess: async (...args) => {
+      await queryClient.invalidateQueries({ queryKey: ["customer"] })
+      await options?.onSuccess?.(...args)
     },
+    ...options,
   })
 }
 
-export const useDeleteCustomerAddress = () => {
+export const useDeleteCustomerAddress = (
+  options?: UseMutationOptions<void, Error, string>
+) => {
   const queryClient = useQueryClient()
 
   return useMutation({
+    mutationKey: ["delete-address"],
     mutationFn: async (addressId: string) => {
       return deleteCustomerAddress(addressId)
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["customer"] })
+    onSuccess: async (...args) => {
+      await queryClient.invalidateQueries({ queryKey: ["customer"] })
+      await options?.onSuccess?.(...args)
     },
+    ...options,
   })
 }
 
@@ -129,15 +166,24 @@ export const signupFormSchema = z.object({
   password: z.string().min(6),
 })
 
-export const useSignup = () => {
+export const useSignup = (
+  options?: UseMutationOptions<
+    { success: boolean; error?: any; customer?: StoreCustomer },
+    Error,
+    z.infer<typeof signupFormSchema>
+  >
+) => {
   const queryClient = useQueryClient()
 
   return useMutation({
+    mutationKey: ["signup"],
     mutationFn: async (values: z.infer<typeof signupFormSchema>) => {
       return signup(values)
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["customer"] })
+    onSuccess: async (...args) => {
+      await queryClient.invalidateQueries({ queryKey: ["customer"] })
+      await options?.onSuccess?.(...args)
     },
+    ...options,
   })
 }
