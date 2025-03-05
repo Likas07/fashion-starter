@@ -17,14 +17,17 @@ export const PersonalInfoForm = withReactQueryProvider<{
     phone?: string
   }
 }>(({ defaultValues }) => {
-  const { mutateAsync, isPending, data } = useUpdateCustomer()
+  const { mutate, isPending, data } = useUpdateCustomer()
 
   const { close } = React.useContext(ReactAria.OverlayTriggerStateContext)!
-  const onSubmit = async (values: z.infer<typeof updateCustomerFormSchema>) => {
-    const response = await mutateAsync(values)
-    if (response.state === "success") {
-      close()
-    }
+  const onSubmit = (values: z.infer<typeof updateCustomerFormSchema>) => {
+    mutate(values, {
+      onSuccess: (res) => {
+        if (res.state === "success") {
+          close()
+        }
+      },
+    })
   }
   return (
     <Form

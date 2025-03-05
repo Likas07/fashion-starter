@@ -23,13 +23,13 @@ export const LoginForm = withReactQueryProvider<{
 
   const router = useRouter()
 
-  const onSubmit = async (values: z.infer<typeof loginFormSchema>) => {
+  const onSubmit = (values: z.infer<typeof loginFormSchema>) => {
     mutate(
       { ...values, redirect_url: redirectUrl },
       {
-        onSuccess: (data) => {
-          if (data.success) {
-            router.push(data.redirectUrl || "/")
+        onSuccess: (res) => {
+          if (res.success) {
+            router.push(res.redirectUrl || "/")
           }
         },
       }

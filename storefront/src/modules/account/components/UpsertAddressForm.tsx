@@ -27,13 +27,16 @@ export const UpsertAddressForm = withReactQueryProvider<{
   }
 }>(({ addressId, region, defaultValues }) => {
   const { close } = React.useContext(ReactAria.OverlayTriggerStateContext)!
-  const { mutateAsync, isPending, data } = useAddressMutation(addressId)
+  const { mutate, isPending, data } = useAddressMutation(addressId)
 
-  const onSubmit = async (values: z.infer<typeof customerAddressSchema>) => {
-    const response = await mutateAsync(values)
-    if (response.success) {
-      close()
-    }
+  const onSubmit = (values: z.infer<typeof customerAddressSchema>) => {
+    mutate(values, {
+      onSuccess: (res) => {
+        if (res.success) {
+          close()
+        }
+      },
+    })
   }
 
   return (
