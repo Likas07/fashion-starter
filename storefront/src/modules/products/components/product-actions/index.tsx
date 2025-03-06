@@ -4,7 +4,6 @@ import { isEqual } from "lodash"
 import { useEffect, useMemo, useState } from "react"
 import { HttpTypes } from "@medusajs/types"
 import * as ReactAria from "react-aria-components"
-import { addToCart } from "@lib/data/cart"
 import { getVariantItemsInStock } from "@lib/util/inventory"
 import { Button } from "@/components/Button"
 import { NumberField } from "@/components/NumberField"
@@ -18,6 +17,8 @@ import {
 import { useCountryCode } from "hooks/country-code"
 import ProductPrice from "@modules/products/components/product-price"
 import { UiRadioGroup } from "@/components/ui/Radio"
+import { withReactQueryProvider } from "@lib/util/react-query"
+import { useAddLineItem } from "hooks/cart"
 
 type ProductActionsProps = {
   product: HttpTypes.StoreProduct
@@ -71,17 +72,14 @@ const getInitialOptions = (product: ProductActionsProps["product"]) => {
   return null
 }
 
-export default function ProductActions({
-  product,
-  materials,
-  disabled,
-}: ProductActionsProps) {
+function ProductActions({ product, materials, disabled }: ProductActionsProps) {
   const [options, setOptions] = useState<Record<string, string | undefined>>(
     getInitialOptions(product) ?? {}
   )
   const [quantity, setQuantity] = useState(1)
-  const [isAdding, setIsAdding] = useState(false)
   const countryCode = useCountryCode()
+
+  const { mutate, isPending } = useAddLineItem()
 
   // If there is only 1 variant, preselect the options
   useEffect(() => {
@@ -116,18 +114,14 @@ export default function ProductActions({
     : 0
 
   // add the selected variant to the cart
-  const handleAddToCart = async () => {
+  const handleAddToCart = () => {
     if (!selectedVariant?.id) return null
 
-    setIsAdding(true)
-
-    await addToCart({
+    mutate({
       variantId: selectedVariant.id,
       quantity,
       countryCode,
     })
-
-    setIsAdding(false)
   }
 
   const hasMultipleVariants = (product.variants?.length ?? 0) > 1
@@ -192,7 +186,7 @@ export default function ProductActions({
                   }}
                   placeholder="Choose material"
                   className="w-full md:w-60"
-                  isDisabled={!!disabled || isAdding}
+                  isDisabled={!!disabled || isPending}
                   aria-label="Material"
                 >
                   <UiSelectButton className="!h-12 px-4 gap-2 max-md:text-base">
@@ -228,7 +222,7 @@ export default function ProductActions({
                     }}
                     aria-label="Color"
                     className="flex gap-6"
-                    isDisabled={!!disabled || isAdding}
+                    isDisabled={!!disabled || isPending}
                   >
                     {selectedMaterial.colors.map((color) => (
                       <ReactAria.Radio
@@ -263,7 +257,7 @@ export default function ProductActions({
                     }}
                     placeholder={`Choose ${option.title.toLowerCase()}`}
                     className="w-full md:w-60"
-                    isDisabled={!!disabled || isAdding}
+                    isDisabled={!!disabled || isPending}
                     aria-label={option.title}
                   >
                     <UiSelectButton className="!h-12 px-4 gap-2 max-md:text-base">
@@ -293,7 +287,7 @@ export default function ProductActions({
       <div className="flex max-sm:flex-col gap-4">
         <NumberField
           isDisabled={
-            !itemsInStock || !selectedVariant || !!disabled || isAdding
+            !itemsInStock || !selectedVariant || !!disabled || isPending
           }
           value={quantity}
           onChange={setQuantity}
@@ -305,7 +299,7 @@ export default function ProductActions({
         <Button
           onPress={handleAddToCart}
           isDisabled={!itemsInStock || !selectedVariant || !!disabled}
-          isLoading={isAdding}
+          isLoading={isPending}
           className="sm:flex-1"
         >
           {!selectedVariant
@@ -318,3 +312,5 @@ export default function ProductActions({
     </>
   )
 }
+
+export default withReactQueryProvider(ProductActions)

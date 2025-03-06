@@ -1,4 +1,9 @@
-import { deleteLineItem, retrieveCart, updateLineItem } from "@lib/data/cart"
+import {
+  addToCart,
+  deleteLineItem,
+  retrieveCart,
+  updateLineItem,
+} from "@lib/data/cart"
 import {
   useMutation,
   UseMutationOptions,
@@ -56,6 +61,39 @@ export const useDeleteLineItem = (
     mutationKey: ["cart-delete-line-item"],
     mutationFn: async (payload: { lineId: string }) => {
       const response = await deleteLineItem(payload.lineId)
+
+      return response
+    },
+    onSuccess: async function (...args) {
+      await queryClient.invalidateQueries({
+        exact: false,
+        queryKey: ["cart"],
+      })
+
+      await options?.onSuccess?.(...args)
+    },
+    ...options,
+  })
+}
+
+export const useAddLineItem = (
+  options?: UseMutationOptions<
+    void,
+    Error,
+    { variantId: string; quantity: number; countryCode: string | undefined },
+    unknown
+  >
+) => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationKey: ["cart-add-line-item"],
+    mutationFn: async (payload: {
+      variantId: string
+      quantity: number
+      countryCode: string | undefined
+    }) => {
+      const response = await addToCart({ ...payload })
 
       return response
     },
