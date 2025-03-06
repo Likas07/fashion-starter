@@ -1,24 +1,16 @@
 "use client"
-
-import { useState } from "react"
-import { deleteLineItem } from "@lib/data/cart"
 import { Icon } from "@/components/Icon"
+import { withReactQueryProvider } from "@lib/util/react-query"
+import { useDeleteLineItem } from "hooks/cart"
 
 const DeleteButton = ({ id }: { id: string }) => {
-  const [isDeleting, setIsDeleting] = useState(false)
-
-  const handleDelete = async (id: string) => {
-    setIsDeleting(true)
-    await deleteLineItem(id).catch((err) => {
-      setIsDeleting(false)
-    })
-  }
+  const { mutate, isPending } = useDeleteLineItem()
 
   return (
     <button
       type="button"
-      onClick={() => handleDelete(id)}
-      disabled={isDeleting}
+      onClick={() => mutate({ lineId: id })}
+      disabled={isPending}
       className="p-1"
       aria-label="Delete"
     >
@@ -27,4 +19,4 @@ const DeleteButton = ({ id }: { id: string }) => {
   )
 }
 
-export default DeleteButton
+export default withReactQueryProvider(DeleteButton)
