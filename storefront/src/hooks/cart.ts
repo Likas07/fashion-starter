@@ -2,6 +2,7 @@ import {
   addToCart,
   deleteLineItem,
   retrieveCart,
+  setShippingMethod,
   updateLineItem,
 } from "@lib/data/cart"
 import {
@@ -94,6 +95,38 @@ export const useAddLineItem = (
       countryCode: string | undefined
     }) => {
       const response = await addToCart({ ...payload })
+
+      return response
+    },
+    onSuccess: async function (...args) {
+      await queryClient.invalidateQueries({
+        exact: false,
+        queryKey: ["cart"],
+      })
+
+      await options?.onSuccess?.(...args)
+    },
+    ...options,
+  })
+}
+
+export const useSetShippingMethod = (
+  { cartId }: { cartId: string },
+  options?: UseMutationOptions<
+    void,
+    Error,
+    { shippingMethodId: string },
+    unknown
+  >
+) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationKey: ["shipping-update", cartId],
+    mutationFn: async ({ shippingMethodId }) => {
+      const response = await setShippingMethod({
+        cartId,
+        shippingMethodId,
+      })
 
       return response
     },
