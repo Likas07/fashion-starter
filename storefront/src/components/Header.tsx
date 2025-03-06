@@ -1,6 +1,5 @@
 import * as React from "react"
 import { listRegions } from "@lib/data/regions"
-import { retrieveCart } from "@lib/data/cart"
 import { getCustomer } from "@lib/data/customer"
 import { SearchField } from "@/components/SearchField"
 import { CartDrawer } from "@/components/CartDrawer"
@@ -14,7 +13,6 @@ import { Icon } from "@/components/Icon"
 
 export const Header: React.FC = async () => {
   const regions = await listRegions()
-  const cart = await retrieveCart()
   const customer = await getCustomer().catch(() => null)
 
   const countryOptions = regions
@@ -60,7 +58,7 @@ export const Header: React.FC = async () => {
                   <Icon name="user" className="w-6 h-6" />
                 </LocalizedButtonLink>
 
-                <CartDrawer cart={cart}>
+                <CartDrawer>
                   <CartIcon className="w-6 h-6" />
                 </CartDrawer>
               </div>
@@ -79,7 +77,7 @@ export const Header: React.FC = async () => {
                   />
                 </LocalizedButtonLink>
 
-                <CartDrawer cart={cart}>
+                <CartDrawer>
                   <CartIcon className="w-6 h-6" wrapperClassName="w-6 h-6" />
                 </CartDrawer>
                 <HeaderDrawer countryOptions={countryOptions} />

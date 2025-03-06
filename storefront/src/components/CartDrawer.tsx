@@ -10,19 +10,17 @@ import { Button } from "@/components/Button"
 import DiscountCode from "@modules/cart/components/discount-code"
 import { Icon } from "@/components/Icon"
 import { getCheckoutStep } from "@modules/cart/utils/getCheckoutStep"
+import { useCart } from "hooks/cart"
+import { withReactQueryProvider } from "@lib/util/react-query"
 
-// TODO: move cart loading to client side
-export const CartDrawer: React.FC<{
-  cart?:
-    | (HttpTypes.StoreCart & {
-        promotions: HttpTypes.StorePromotion[]
-      })
-    | null
+export const CartDrawer = withReactQueryProvider<{
   children: React.ReactNode
-}> = ({ cart, children }) => {
-  const step = getCheckoutStep(cart as HttpTypes.StoreCart)
-
+}>(({ children }) => {
   const [isCartDrawerOpen, setIsCartDrawerOpen] = React.useState(false)
+
+  const { data: cart } = useCart({ enabled: isCartDrawerOpen })
+
+  const step = getCheckoutStep(cart as HttpTypes.StoreCart)
 
   return (
     <>
@@ -105,4 +103,4 @@ export const CartDrawer: React.FC<{
       </Drawer>
     </>
   )
-}
+})
