@@ -16,7 +16,8 @@ import ErrorMessage from "@modules/checkout/components/error-message"
 import { capitalize } from "lodash"
 import PaymentCardButton from "@modules/checkout/components/payment-card-button"
 import { Input } from "@/components/Forms"
-import { setPaymentMethod } from "@lib/data/cart"
+import { withReactQueryProvider } from "@lib/util/react-query"
+import { useSetPaymentMethod } from "hooks/cart"
 
 const Payment = ({
   cart,
@@ -45,6 +46,7 @@ const Payment = ({
 
   const isOpen = searchParams.get("step") === "payment"
 
+  const setPaymentMethod = useSetPaymentMethod()
   const isStripe = isStripeFunc(activeSession?.provider_id)
   const stripeReady = useContext(StripeContext)
 
@@ -92,11 +94,18 @@ const Payment = ({
     setError(null)
   }, [isOpen])
 
-  const handleRemoveCard = useCallback(async () => {
+  const handleRemoveCard = useCallback(() => {
     try {
-      await setPaymentMethod(activeSession?.id, null)
-      setCardBrand(null)
-      setCardComplete(false)
+      setPaymentMethod.mutate(
+        { sessionId: activeSession?.id, token: null },
+        {
+          onSuccess: () => {
+            setCardBrand(null)
+            setCardComplete(false)
+          },
+          onError: (err) => setError("Failed to remove card"),
+        }
+      )
     } catch (err) {
       setError("Failed to remove card")
     }
@@ -246,4 +255,4 @@ const Payment = ({
   )
 }
 
-export default Payment
+export default withReactQueryProvider(Payment)

@@ -6,6 +6,7 @@ import {
   retrieveCart,
   setAddresses,
   setEmail,
+  setPaymentMethod,
   setShippingMethod,
   updateLineItem,
 } from "@lib/data/cart"
@@ -257,6 +258,34 @@ export const useInitiatePaymentSession = (
     mutationKey: ["payment", "cart"],
     mutationFn: async (payload: { providerId: string }) => {
       const response = await initiatePaymentSession(payload.providerId)
+
+      return response
+    },
+    onSuccess: async function (...args) {
+      await queryClient.invalidateQueries({
+        exact: false,
+        queryKey: ["cart"],
+      })
+
+      await options?.onSuccess?.(...args)
+    },
+    ...options,
+  })
+}
+
+export const useSetPaymentMethod = (
+  options?: UseMutationOptions<
+    void,
+    Error,
+    { sessionId: string; token: any },
+    unknown
+  >
+) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationKey: ["payment", "cart"],
+    mutationFn: async (payload) => {
+      const response = await setPaymentMethod(payload.sessionId, payload.token)
 
       return response
     },

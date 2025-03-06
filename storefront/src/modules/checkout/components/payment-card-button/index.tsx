@@ -4,11 +4,10 @@ import { useElements, useStripe } from "@stripe/react-stripe-js"
 import * as React from "react"
 import { HttpTypes } from "@medusajs/types"
 
-import { setPaymentMethod } from "@lib/data/cart"
 import { isStripe } from "@lib/constants"
 import { Button } from "@/components/Button"
 import { usePathname, useRouter } from "next/navigation"
-import { useInitiatePaymentSession } from "hooks/cart"
+import { useInitiatePaymentSession, useSetPaymentMethod } from "hooks/cart"
 import { withReactQueryProvider } from "@lib/util/react-query"
 
 type PaymentButtonProps = {
@@ -79,6 +78,8 @@ const StripeCardPaymentButton = ({
 
   const router = useRouter()
 
+  const setPaymentMethod = useSetPaymentMethod()
+
   const session = cart.payment_collection?.payment_sessions?.find(
     (s) => s.status === "pending"
   )
@@ -109,7 +110,10 @@ const StripeCardPaymentButton = ({
             address_state: cart.billing_address?.province ?? undefined,
           })
           if (token) {
-            await setPaymentMethod(session.id, token.token?.id)
+            await setPaymentMethod.mutateAsync({
+              sessionId: session.id,
+              token: token.token?.id,
+            })
           }
         }
         return router.push(
