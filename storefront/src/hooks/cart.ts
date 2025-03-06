@@ -1,5 +1,6 @@
 import {
   addToCart,
+  applyPromotions,
   deleteLineItem,
   initiatePaymentSession,
   placeOrder,
@@ -198,7 +199,7 @@ export const useSetShippingAddress = (
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationKey: ["cart"],
+    mutationKey: ["cart", "shipping-address-update"],
     mutationFn: async (payload) => {
       const response = await setAddresses(payload)
       return response
@@ -226,7 +227,7 @@ export const useSetEmail = (
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationKey: ["cart"],
+    mutationKey: ["cart", "email"],
     mutationFn: async (payload) => {
       const response = await setEmail(payload)
       return response
@@ -338,5 +339,28 @@ export const usePlaceOrder = (
 
       await options?.onSuccess?.(...args)
     },
+  })
+}
+
+export const useApplyPromotions = (
+  options?: UseMutationOptions<void, Error, string[], unknown>
+) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationKey: ["promotion", "cart"],
+    mutationFn: async (payload) => {
+      const response = await applyPromotions(payload)
+
+      return response
+    },
+    onSuccess: async function (...args) {
+      await queryClient.invalidateQueries({
+        exact: false,
+        queryKey: ["cart"],
+      })
+
+      await options?.onSuccess?.(...args)
+    },
+    ...options,
   })
 }
