@@ -2,6 +2,7 @@ import {
   addToCart,
   deleteLineItem,
   retrieveCart,
+  setAddresses,
   setShippingMethod,
   updateLineItem,
 } from "@lib/data/cart"
@@ -11,6 +12,7 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query"
+import { z } from "zod"
 
 export const useCart = ({ enabled }: { enabled: boolean }) => {
   return useQuery({
@@ -128,6 +130,72 @@ export const useSetShippingMethod = (
         shippingMethodId,
       })
 
+      return response
+    },
+    onSuccess: async function (...args) {
+      await queryClient.invalidateQueries({
+        exact: false,
+        queryKey: ["cart"],
+      })
+
+      await options?.onSuccess?.(...args)
+    },
+    ...options,
+  })
+}
+
+export const addressesFormSchema = z
+  .object({
+    shipping_address: z.object({
+      first_name: z.string().min(1),
+      last_name: z.string().min(1),
+      company: z.string().optional(),
+      address_1: z.string().min(1),
+      address_2: z.string().optional(),
+      city: z.string().min(1),
+      postal_code: z.string().min(1),
+      province: z.string().optional(),
+      country_code: z.string().min(2),
+      phone: z.string().optional(),
+    }),
+  })
+  .and(
+    z.discriminatedUnion("same_as_billing", [
+      z.object({
+        same_as_billing: z.literal("on"),
+      }),
+      z.object({
+        same_as_billing: z.literal("off").optional(),
+        billing_address: z.object({
+          first_name: z.string().min(1),
+          last_name: z.string().min(1),
+          company: z.string().optional(),
+          address_1: z.string().min(1),
+          address_2: z.string().optional(),
+          city: z.string().min(1),
+          postal_code: z.string().min(1),
+          province: z.string().optional(),
+          country_code: z.string().min(2),
+          phone: z.string().optional(),
+        }),
+      }),
+    ])
+  )
+
+export const useSetShippingAddress = (
+  options?: UseMutationOptions<
+    { success: boolean; error: string | null },
+    Error,
+    z.infer<typeof addressesFormSchema>,
+    unknown
+  >
+) => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationKey: ["cart"],
+    mutationFn: async (payload) => {
+      const response = await setAddresses(payload)
       return response
     },
     onSuccess: async function (...args) {

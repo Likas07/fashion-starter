@@ -4,7 +4,6 @@ import * as React from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { twJoin } from "tailwind-merge"
 import { HttpTypes } from "@medusajs/types"
-import { setAddresses } from "@lib/data/cart"
 import compareAddresses from "@lib/util/compare-addresses"
 import { SubmitButton } from "@modules/common/components/submit-button"
 import BillingAddress from "@modules/checkout/components/billing_address"
@@ -13,6 +12,8 @@ import ShippingAddress from "@modules/checkout/components/shipping-address"
 import { Button } from "@/components/Button"
 import { Form } from "@/components/Forms"
 import { z } from "zod"
+import { withReactQueryProvider } from "@lib/util/react-query"
+import { useSetShippingAddress } from "hooks/cart"
 
 const addressesFormSchema = z
   .object({
@@ -79,22 +80,17 @@ const Addresses = ({
     setSameAsBilling((prev) => !prev)
   }, [setSameAsBilling])
 
-  const [state, formAction, isPending] = React.useActionState(
-    setAddresses,
-    null
-  )
+  const { mutate, isPending, data } = useSetShippingAddress()
 
   const onSubmit = (values: z.infer<typeof addressesFormSchema>) => {
-    React.startTransition(() => {
-      formAction(values)
+    mutate(values, {
+      onSuccess: (data) => {
+        if (isOpen && data.success) {
+          router.push(pathname + "?step=shipping", { scroll: false })
+        }
+      },
     })
   }
-
-  React.useEffect(() => {
-    if (isOpen && state?.success) {
-      router.push(pathname + "?step=shipping", { scroll: false })
-    }
-  }, [state])
 
   return (
     <>
@@ -198,7 +194,7 @@ const Addresses = ({
                 >
                   Next
                 </SubmitButton>
-                <ErrorMessage error={state?.error} />
+                <ErrorMessage error={data?.error} />
               </>
             )
           }}
@@ -272,4 +268,4 @@ const Addresses = ({
   )
 }
 
-export default Addresses
+export default withReactQueryProvider(Addresses)
