@@ -2,13 +2,14 @@ import {
   addToCart,
   deleteLineItem,
   initiatePaymentSession,
+  placeOrder,
   retrieveCart,
   setAddresses,
   setEmail,
   setShippingMethod,
   updateLineItem,
 } from "@lib/data/cart"
-import { StorePaymentCollectionResponse } from "@medusajs/types"
+import { HttpTypes } from "@medusajs/types"
 import {
   useMutation,
   UseMutationOptions,
@@ -243,7 +244,7 @@ export const useSetEmail = (
 
 export const useInitiatePaymentSession = (
   options?: UseMutationOptions<
-    StorePaymentCollectionResponse,
+    HttpTypes.StorePaymentCollectionResponse,
     Error,
     {
       providerId: string
@@ -268,5 +269,45 @@ export const useInitiatePaymentSession = (
       await options?.onSuccess?.(...args)
     },
     ...options,
+  })
+}
+
+export const usePlaceOrder = (
+  options?: UseMutationOptions<
+    | {
+        type: "cart"
+        cart: HttpTypes.StoreCart
+        error: {
+          message: string
+          name: string
+          type: string
+        }
+      }
+    | {
+        type: "order"
+        order: HttpTypes.StoreOrder
+      }
+    | null,
+    Error,
+    {},
+    unknown
+  >
+) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationKey: ["cart"],
+    mutationFn: async () => {
+      const response = await placeOrder()
+      return response
+    },
+    ...options,
+    onSuccess: async function (...args) {
+      await queryClient.invalidateQueries({
+        exact: false,
+        queryKey: ["cart"],
+      })
+
+      await options?.onSuccess?.(...args)
+    },
   })
 }

@@ -5,12 +5,14 @@ import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js"
 import { useStripe } from "@stripe/react-stripe-js"
 import React, { useState } from "react"
 import { HttpTypes } from "@medusajs/types"
+import { useRouter } from "next/navigation"
 
 import Spinner from "@modules/common/icons/spinner"
-import { placeOrder } from "@lib/data/cart"
 import { isManual, isPaypal, isStripe } from "@lib/constants"
 import { Button } from "@/components/Button"
 import ErrorMessage from "@modules/checkout/components/error-message"
+import { usePlaceOrder } from "hooks/cart"
+import { withReactQueryProvider } from "@lib/util/react-query"
 
 type PaymentButtonProps = {
   cart: HttpTypes.StoreCart
@@ -61,10 +63,23 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
 
 const GiftCardPaymentButton = () => {
   const [submitting, setSubmitting] = useState(false)
+  const placeOrder = usePlaceOrder()
+  const router = useRouter()
 
-  const handleOrder = async () => {
+  const handleOrder = () => {
     setSubmitting(true)
-    await placeOrder()
+    placeOrder.mutate(
+      {},
+      {
+        onSuccess: (data) => {
+          if (data?.type === "order") {
+            const countryCode =
+              data.order.shipping_address?.country_code?.toLowerCase()
+            router.push(`/${countryCode}/order/confirmed/${data.order.id}`)
+          }
+        },
+      }
+    )
   }
 
   return (
@@ -83,15 +98,29 @@ const StripePaymentButton = ({
 }) => {
   const [submitting, setSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const placeOrder = usePlaceOrder()
+  const router = useRouter()
 
-  const onPaymentCompleted = async () => {
-    await placeOrder()
-      .catch((err) => {
-        setErrorMessage(err.message)
-      })
-      .finally(() => {
-        setSubmitting(false)
-      })
+  const onPaymentCompleted = () => {
+    placeOrder.mutate(
+      {},
+      {
+        onSuccess: (data) => {
+          if (data?.type === "order") {
+            const countryCode =
+              data.order.shipping_address?.country_code?.toLowerCase()
+            router.push(`/${countryCode}/order/confirmed/${data.order.id}`)
+          } else if (data?.error) {
+            setErrorMessage(data.error.message)
+          }
+          setSubmitting(false)
+        },
+        onError: (error) => {
+          setErrorMessage(error.message)
+          setSubmitting(false)
+        },
+      }
+    )
   }
 
   const stripe = useStripe()
@@ -166,14 +195,30 @@ const PayPalPaymentButton = ({
   const [submitting, setSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
-  const onPaymentCompleted = async () => {
-    await placeOrder()
-      .catch((err) => {
-        setErrorMessage(err.message)
-      })
-      .finally(() => {
-        setSubmitting(false)
-      })
+  const router = useRouter()
+
+  const placeOrder = usePlaceOrder()
+
+  const onPaymentCompleted = () => {
+    placeOrder.mutate(
+      {},
+      {
+        onSuccess: (data) => {
+          if (data?.type === "order") {
+            const countryCode =
+              data.order.shipping_address?.country_code?.toLowerCase()
+            router.push(`/${countryCode}/order/confirmed/${data.order.id}`)
+          } else if (data?.error) {
+            setErrorMessage(data.error.message)
+          }
+          setSubmitting(false)
+        },
+        onError: (error) => {
+          setErrorMessage(error.message)
+          setSubmitting(false)
+        },
+      }
+    )
   }
 
   const session = cart.payment_collection?.payment_sessions?.find(
@@ -221,22 +266,32 @@ const PayPalPaymentButton = ({
 }
 
 const ManualTestPaymentButton = ({ notReady }: { notReady: boolean }) => {
-  const [submitting, setSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const placeOrder = usePlaceOrder()
 
-  const onPaymentCompleted = async () => {
-    await placeOrder()
-      .catch((err) => {
-        setErrorMessage(err.message)
-      })
-      .finally(() => {
-        setSubmitting(false)
-      })
+  const router = useRouter()
+
+  const onPaymentCompleted = () => {
+    placeOrder.mutate(
+      {},
+      {
+        onSuccess: (data) => {
+          if (data?.type === "order") {
+            const countryCode =
+              data.order.shipping_address?.country_code?.toLowerCase()
+            router.push(`/${countryCode}/order/confirmed/${data.order.id}`)
+          } else if (data?.error) {
+            setErrorMessage(data.error.message)
+          }
+        },
+        onError: (error) => {
+          setErrorMessage(error.message)
+        },
+      }
+    )
   }
 
   const handlePayment = () => {
-    setSubmitting(true)
-
     onPaymentCompleted()
   }
 
@@ -244,7 +299,7 @@ const ManualTestPaymentButton = ({ notReady }: { notReady: boolean }) => {
     <>
       <Button
         isDisabled={notReady}
-        isLoading={submitting}
+        isLoading={placeOrder.isPending}
         onPress={handlePayment}
         className="w-full"
       >
@@ -255,4 +310,4 @@ const ManualTestPaymentButton = ({ notReady }: { notReady: boolean }) => {
   )
 }
 
-export default PaymentButton
+export default withReactQueryProvider(PaymentButton)
