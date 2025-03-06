@@ -10,6 +10,7 @@ import {
   setPaymentMethod,
   setShippingMethod,
   updateLineItem,
+  updateRegion,
 } from "@lib/data/cart"
 import { HttpTypes } from "@medusajs/types"
 import {
@@ -357,6 +358,32 @@ export const useApplyPromotions = (
       await queryClient.invalidateQueries({
         exact: false,
         queryKey: ["cart"],
+      })
+
+      await options?.onSuccess?.(...args)
+    },
+    ...options,
+  })
+}
+
+export const useUpdateRegion = (
+  options?: UseMutationOptions<
+    void,
+    Error,
+    { countryCode: string; currentPath: string },
+    unknown
+  >
+) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationKey: ["update-region"],
+    mutationFn: async ({ countryCode, currentPath }) => {
+      await updateRegion(countryCode, currentPath)
+    },
+    onSuccess: async function (...args) {
+      await queryClient.invalidateQueries({
+        exact: false,
+        queryKey: ["cart", "region", "products"],
       })
 
       await options?.onSuccess?.(...args)
