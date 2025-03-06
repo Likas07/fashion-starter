@@ -1,13 +1,11 @@
 "use client"
 
-import React, { startTransition } from "react"
-import { useActionState } from "react"
+import React from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { twJoin } from "tailwind-merge"
 import { HttpTypes } from "@medusajs/types"
 import { z } from "zod"
 
-import { setEmail } from "@lib/data/cart"
 import { SubmitButton } from "@modules/common/components/submit-button"
 import { Button } from "@/components/Button"
 import { Form, InputField } from "@/components/Forms"
@@ -16,6 +14,8 @@ import { UiModal, UiModalOverlay } from "@/components/ui/Modal"
 import { Icon } from "@/components/Icon"
 import { LoginForm } from "@modules/auth/components/LoginForm"
 import ErrorMessage from "@modules/checkout/components/error-message"
+import { useSetEmail } from "hooks/cart"
+import { withReactQueryProvider } from "@lib/util/react-query"
 
 export const emailFormSchema = z.object({
   email: z.string().min(3).email("Enter a valid email address."),
@@ -36,19 +36,20 @@ const Email = ({
 
   const isOpen = searchParams.get("step") === "email"
 
-  const [state, formAction, isPending] = useActionState(setEmail, null)
+  const { mutate, isPending, data } = useSetEmail()
 
   const onSubmit = (values: z.infer<typeof emailFormSchema>) => {
-    startTransition(() => {
-      formAction({ email: values.email, country_code: countryCode })
-    })
+    mutate(
+      { ...values, country_code: countryCode },
+      {
+        onSuccess: (res) => {
+          if (isOpen && res?.success) {
+            router.push(pathname + "?step=delivery", { scroll: false })
+          }
+        },
+      }
+    )
   }
-
-  React.useEffect(() => {
-    if (isOpen && state?.success) {
-      router.push(pathname + "?step=delivery", { scroll: false })
-    }
-  }, [state])
 
   return (
     <>
@@ -129,7 +130,7 @@ const Email = ({
                 >
                   Next
                 </SubmitButton>
-                <ErrorMessage error={state?.error} />
+                <ErrorMessage error={data?.error} />
               </>
             )
           }}
@@ -144,4 +145,4 @@ const Email = ({
   )
 }
 
-export default Email
+export default withReactQueryProvider(Email)

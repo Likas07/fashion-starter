@@ -3,6 +3,7 @@ import {
   deleteLineItem,
   retrieveCart,
   setAddresses,
+  setEmail,
   setShippingMethod,
   updateLineItem,
 } from "@lib/data/cart"
@@ -209,3 +210,32 @@ export const useSetShippingAddress = (
     ...options,
   })
 }
+
+export const useSetEmail = (
+    options?: UseMutationOptions<
+      { success: boolean; error: string | null },
+      Error,
+      { email: string; country_code: string },
+      unknown
+    >
+  ) => {
+    const queryClient = useQueryClient()
+  
+    return useMutation({
+      mutationKey: ["cart"],
+      mutationFn: async (payload) => {
+        const response = await setEmail(payload)
+        return response
+      },
+      onSuccess: async function (...args) {
+        await queryClient.invalidateQueries({
+          exact: false,
+          queryKey: ["cart"],
+        })
+  
+        await options?.onSuccess?.(...args)
+      },
+      ...options,
+    })
+  }
+  

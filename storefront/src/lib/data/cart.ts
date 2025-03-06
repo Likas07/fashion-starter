@@ -300,10 +300,13 @@ export async function applyPromotions(codes: string[]) {
     .catch(medusaError)
 }
 
-export async function setEmail(
-  currentState: unknown,
-  { email, country_code }: { email: string; country_code: string }
-) {
+export async function setEmail({
+  email,
+  country_code,
+}: {
+  email: string
+  country_code: string
+}) {
   try {
     const cartId = await getCartId()
     if (!cartId) {
