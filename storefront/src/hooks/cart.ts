@@ -1,12 +1,14 @@
 import {
   addToCart,
   deleteLineItem,
+  initiatePaymentSession,
   retrieveCart,
   setAddresses,
   setEmail,
   setShippingMethod,
   updateLineItem,
 } from "@lib/data/cart"
+import { StorePaymentCollectionResponse } from "@medusajs/types"
 import {
   useMutation,
   UseMutationOptions,
@@ -212,30 +214,59 @@ export const useSetShippingAddress = (
 }
 
 export const useSetEmail = (
-    options?: UseMutationOptions<
-      { success: boolean; error: string | null },
-      Error,
-      { email: string; country_code: string },
-      unknown
-    >
-  ) => {
-    const queryClient = useQueryClient()
-  
-    return useMutation({
-      mutationKey: ["cart"],
-      mutationFn: async (payload) => {
-        const response = await setEmail(payload)
-        return response
-      },
-      onSuccess: async function (...args) {
-        await queryClient.invalidateQueries({
-          exact: false,
-          queryKey: ["cart"],
-        })
-  
-        await options?.onSuccess?.(...args)
-      },
-      ...options,
-    })
-  }
-  
+  options?: UseMutationOptions<
+    { success: boolean; error: string | null },
+    Error,
+    { email: string; country_code: string },
+    unknown
+  >
+) => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationKey: ["cart"],
+    mutationFn: async (payload) => {
+      const response = await setEmail(payload)
+      return response
+    },
+    onSuccess: async function (...args) {
+      await queryClient.invalidateQueries({
+        exact: false,
+        queryKey: ["cart"],
+      })
+
+      await options?.onSuccess?.(...args)
+    },
+    ...options,
+  })
+}
+
+export const useInitiatePaymentSession = (
+  options?: UseMutationOptions<
+    StorePaymentCollectionResponse,
+    Error,
+    {
+      providerId: string
+    },
+    unknown
+  >
+) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationKey: ["payment", "cart"],
+    mutationFn: async (payload: { providerId: string }) => {
+      const response = await initiatePaymentSession(payload.providerId)
+
+      return response
+    },
+    onSuccess: async function (...args) {
+      await queryClient.invalidateQueries({
+        exact: false,
+        queryKey: ["cart"],
+      })
+
+      await options?.onSuccess?.(...args)
+    },
+    ...options,
+  })
+}

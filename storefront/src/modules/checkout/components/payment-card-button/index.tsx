@@ -4,10 +4,12 @@ import { useElements, useStripe } from "@stripe/react-stripe-js"
 import * as React from "react"
 import { HttpTypes } from "@medusajs/types"
 
-import { initiatePaymentSession, setPaymentMethod } from "@lib/data/cart"
+import { setPaymentMethod } from "@lib/data/cart"
 import { isStripe } from "@lib/constants"
 import { Button } from "@/components/Button"
 import { usePathname, useRouter } from "next/navigation"
+import { useInitiatePaymentSession } from "hooks/cart"
+import { withReactQueryProvider } from "@lib/util/react-query"
 
 type PaymentButtonProps = {
   cart: HttpTypes.StoreCart
@@ -82,13 +84,15 @@ const StripeCardPaymentButton = ({
   )
   const pathname = usePathname()
 
+  const initiatePaymentSession = useInitiatePaymentSession()
+
   const handleSubmit = async () => {
     setIsLoading(true)
     try {
       const shouldInputCard = !session
 
       if (!isStripe(session?.provider_id)) {
-        await initiatePaymentSession("stripe")
+        await initiatePaymentSession.mutateAsync({ providerId: "stripe" })
       }
       if (!shouldInputCard) {
         if (card) {
@@ -153,10 +157,14 @@ const PaymentMethodButton = ({
   const router = useRouter()
   const pathname = usePathname()
 
+  const initiatePaymentSession = useInitiatePaymentSession()
+
   const handleSubmit = async () => {
     setIsLoading(true)
     try {
-      await initiatePaymentSession(selectedPaymentMethod)
+      await initiatePaymentSession.mutateAsync({
+        providerId: selectedPaymentMethod,
+      })
       if (!isStripe(selectedPaymentMethod)) {
         return router.push(
           pathname + "?" + createQueryString("step", "review"),
@@ -187,4 +195,4 @@ const PaymentMethodButton = ({
   )
 }
 
-export default PaymentCardButton
+export default withReactQueryProvider(PaymentCardButton)
