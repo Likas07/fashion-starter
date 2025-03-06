@@ -9,7 +9,13 @@ import { CartIcon } from "@/components/CartIcon"
 import { HeaderDrawer } from "@/components/HeaderDrawer"
 import { RegionSwitcher } from "@/components/RegionSwitcher"
 import { HeaderWrapper } from "@/components/HeaderWrapper"
-import LoginLink from "@modules/header/components/LoginLink"
+
+import dynamic from "next/dynamic"
+
+const LoginLink = dynamic(
+  () => import("@modules/header/components/LoginLink"),
+  { loading: () => <></> }
+)
 
 export const Header: React.FC = async () => {
   const regions = await listRegions()
