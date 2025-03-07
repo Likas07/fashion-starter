@@ -17,16 +17,14 @@ import { capitalize } from "lodash"
 import PaymentCardButton from "@modules/checkout/components/payment-card-button"
 import { Input } from "@/components/Forms"
 import { withReactQueryProvider } from "@lib/util/react-query"
-import { useSetPaymentMethod } from "hooks/cart"
+import { useGetPaymentMethod, useSetPaymentMethod } from "hooks/cart"
 
 const Payment = ({
   cart,
   availablePaymentMethods,
-  paymentMethod,
 }: {
   cart: any
   availablePaymentMethods: any[]
-  paymentMethod: PaymentMethod | null
 }) => {
   const activeSession = cart.payment_collection?.payment_sessions?.find(
     (paymentSession: any) => paymentSession.status === "pending"
@@ -49,6 +47,11 @@ const Payment = ({
   const setPaymentMethod = useSetPaymentMethod()
   const isStripe = isStripeFunc(activeSession?.provider_id)
   const stripeReady = useContext(StripeContext)
+
+  const paymentMethodId = cart.payment_collection?.payment_sessions?.find(
+    (paymentSession: any) => paymentSession.status === "pending"
+  )?.data?.payment_method_id
+  const { data: paymentMethod } = useGetPaymentMethod(paymentMethodId)
 
   const paidByGiftcard =
     cart?.gift_cards && cart?.gift_cards?.length > 0 && cart?.total === 0
@@ -109,7 +112,7 @@ const Payment = ({
     } catch (err) {
       setError("Failed to remove card")
     }
-  }, [activeSession?.id])
+  }, [activeSession?.id, setPaymentMethod])
 
   useEffect(() => {
     if (paymentMethod) {

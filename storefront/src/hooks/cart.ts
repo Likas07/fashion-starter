@@ -2,6 +2,7 @@ import {
   addToCart,
   applyPromotions,
   deleteLineItem,
+  getPaymentMethod,
   initiatePaymentSession,
   placeOrder,
   retrieveCart,
@@ -266,7 +267,7 @@ export const useInitiatePaymentSession = (
     onSuccess: async function (...args) {
       await queryClient.invalidateQueries({
         exact: false,
-        queryKey: ["cart"],
+        queryKey: ["cart", "payment"],
       })
 
       await options?.onSuccess?.(...args)
@@ -294,12 +295,25 @@ export const useSetPaymentMethod = (
     onSuccess: async function (...args) {
       await queryClient.invalidateQueries({
         exact: false,
-        queryKey: ["cart"],
+        queryKey: ["cart", "payment"],
       })
 
       await options?.onSuccess?.(...args)
     },
     ...options,
+  })
+}
+
+export const useGetPaymentMethod = (id: string | undefined) => {
+  return useQuery({
+    queryKey: ["payment", id],
+    queryFn: async () => {
+      if (!id) {
+        return null
+      }
+      const res = await getPaymentMethod(id)
+      return res
+    },
   })
 }
 
