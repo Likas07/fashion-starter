@@ -9,9 +9,7 @@ import { codeFormSchema } from "@modules/cart/components/discount-code"
 import { SubmitButton } from "@modules/common/components/submit-button"
 
 type DiscountCodeProps = {
-  cart: HttpTypes.StoreCart & {
-    promotions: HttpTypes.StorePromotion[]
-  }
+  cart: HttpTypes.StoreCart
 }
 
 const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {

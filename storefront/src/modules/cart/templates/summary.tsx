@@ -11,9 +11,7 @@ import { useCustomer } from "hooks/customer"
 import { withReactQueryProvider } from "@lib/util/react-query"
 
 type SummaryProps = {
-  cart: HttpTypes.StoreCart & {
-    promotions: HttpTypes.StorePromotion[]
-  }
+  cart: HttpTypes.StoreCart
 }
 
 const Summary = ({ cart }: SummaryProps) => {

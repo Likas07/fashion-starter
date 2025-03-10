@@ -13,11 +13,7 @@ import { getCheckoutStep } from "@modules/cart/utils/getCheckoutStep"
 
 // TODO: move cart loading to client side
 export const CartDrawer: React.FC<{
-  cart?:
-    | (HttpTypes.StoreCart & {
-        promotions: HttpTypes.StorePromotion[]
-      })
-    | null
+  cart?: HttpTypes.StoreCart | null
   children: React.ReactNode
 }> = ({ cart, children }) => {
   const step = getCheckoutStep(cart as HttpTypes.StoreCart)

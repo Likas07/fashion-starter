@@ -10,9 +10,7 @@ import { SubmitButton } from "@modules/common/components/submit-button"
 import { z } from "zod"
 
 type DiscountCodeProps = {
-  cart: HttpTypes.StoreCart & {
-    promotions: HttpTypes.StorePromotion[]
-  }
+  cart: HttpTypes.StoreCart
   className?: string
 }
 

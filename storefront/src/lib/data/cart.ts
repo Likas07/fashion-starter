@@ -39,11 +39,7 @@ export async function retrieveCart() {
     cart.items = await enrichLineItems(cart.items, cart.region_id)
   }
 
-  return cart as
-    | (HttpTypes.StoreCart & {
-        promotions: HttpTypes.StorePromotion[]
-      })
-    | null
+  return cart
 }
 
 export async function getCartQuantity() {
@@ -76,9 +72,7 @@ export async function getOrSetCart(input: unknown) {
       {},
       await getAuthHeaders()
     )
-    cart = cartResp.cart as HttpTypes.StoreCart & {
-      promotions: HttpTypes.StorePromotion[]
-    }
+    cart = cartResp.cart
 
     await setCartId(cart.id)
     revalidateTag("cart")
