@@ -11,6 +11,12 @@ import {
   removeAuthToken,
   getCartId,
 } from "@lib/data/cookies"
+import {
+  customerAddressSchema,
+  loginFormSchema,
+  signupFormSchema,
+  updateCustomerFormSchema,
+} from "hooks/customer"
 
 export const getCustomer = async function () {
   return sdk.store.customer
@@ -19,13 +25,7 @@ export const getCustomer = async function () {
     .catch(() => null)
 }
 
-const updateCustomerFormSchema = z.object({
-  first_name: z.string().min(1),
-  last_name: z.string().min(1),
-  phone: z.string().optional().nullable(),
-})
 export const updateCustomer = async function (
-  _currentState: unknown,
   formData: z.infer<typeof updateCustomerFormSchema>
 ): Promise<
   { state: "initial" | "success" } | { state: "error"; error: string }
@@ -55,18 +55,7 @@ export const updateCustomer = async function (
     })
 }
 
-const signupFormSchema = z.object({
-  email: z.string().email(),
-  first_name: z.string().min(1),
-  last_name: z.string().min(1),
-  phone: z.string().optional().nullable(),
-  password: z.string().min(6),
-})
-
-export async function signup(
-  _currentState: unknown,
-  formData: z.infer<typeof signupFormSchema>
-) {
+export async function signup(formData: z.infer<typeof signupFormSchema>) {
   try {
     const token = await sdk.auth.register("customer", "emailpass", {
       email: formData.email,
@@ -94,7 +83,7 @@ export async function signup(
     if (typeof loginToken === "object") {
       redirect(loginToken.location)
 
-      return
+      return { success: true, customer: createdCustomer }
     }
 
     await setAuthToken(loginToken)
@@ -105,22 +94,20 @@ export async function signup(
     })
 
     revalidateTag("customer")
-    return createdCustomer
+
+    const cartId = await getCartId()
+    if (cartId) {
+      await sdk.store.cart.transferCart(cartId, {}, await getAuthHeaders())
+      revalidateTag("cart")
+    }
+
+    return { success: true, customer: createdCustomer }
   } catch (error: any) {
-    return error.toString()
+    return { success: false, error: error.toString() }
   }
 }
 
-const loginFormSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6),
-  redirect_url: z.string().optional().nullable(),
-})
-
-export async function login(
-  _currentState: unknown,
-  formData: z.infer<typeof loginFormSchema>
-) {
+export async function login(formData: z.infer<typeof loginFormSchema>) {
   const redirectUrl = formData.redirect_url
 
   try {
@@ -130,9 +117,7 @@ export async function login(
     })
 
     if (typeof token === "object") {
-      redirect(token.location)
-
-      return
+      return { success: true, redirectUrl: token.location }
     }
 
     await setAuthToken(token)
@@ -143,11 +128,10 @@ export async function login(
       await sdk.store.cart.transferCart(cartId, {}, await getAuthHeaders())
       revalidateTag("cart")
     }
+    return { success: true, redirectUrl: redirectUrl || "/" }
   } catch (error: any) {
-    return error.toString()
+    return { success: false, message: error.message }
   }
-
-  redirect(typeof redirectUrl === "string" ? redirectUrl : "/")
 }
 
 export async function signout(countryCode: string) {
@@ -157,21 +141,7 @@ export async function signout(countryCode: string) {
   return countryCode
 }
 
-const customerAddressSchema = z.object({
-  first_name: z.string().min(1),
-  last_name: z.string().min(1),
-  company: z.string().optional().nullable(),
-  address_1: z.string().min(1),
-  address_2: z.string().optional().nullable(),
-  city: z.string().min(1),
-  postal_code: z.string().min(1),
-  province: z.string().optional().nullable(),
-  country_code: z.string().min(2),
-  phone: z.string().optional().nullable(),
-})
-
 export const addCustomerAddress = async (
-  _currentState: unknown,
   formData: z.infer<typeof customerAddressSchema>
 ) => {
   return sdk.store.customer
@@ -224,23 +194,16 @@ export const deleteCustomerAddress = async (
 }
 
 export const updateCustomerAddress = async (
-  currentState: unknown,
+  addressId: string,
   formData: z.infer<typeof customerAddressSchema>
 ) => {
-  if (
-    typeof currentState !== "object" ||
-    !currentState ||
-    !("addressId" in currentState) ||
-    typeof currentState.addressId !== "string"
-  ) {
+  if (!addressId) {
     throw new Error("Invalid input data")
   }
 
-  const addressId = currentState.addressId
-
   return sdk.store.customer
     .updateAddress(
-      currentState.addressId,
+      addressId,
       {
         first_name: formData.first_name,
         last_name: formData.last_name,

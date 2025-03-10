@@ -36,7 +36,10 @@ export default async function LoginPage({
         <h1 className="text-xl md:text-2xl mb-10 md:mb-16">
           Welcome back to Sofa Society!
         </h1>
-        <LoginForm className="mb-10 md:mb-15" countryCode={countryCode} />
+        <LoginForm
+          className="mb-10 md:mb-15"
+          redirectUrl={`/${countryCode}/account`}
+        />
         <p className="text-grayscale-500">
           Don&apos;t have an account yet? You can{" "}
           <LocalizedLink

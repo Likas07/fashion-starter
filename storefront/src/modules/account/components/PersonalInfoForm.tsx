@@ -2,39 +2,32 @@
 
 import * as React from "react"
 import * as ReactAria from "react-aria-components"
+import { z } from "zod"
 
 import { UiCloseButton } from "@/components/Dialog"
 import { Form, InputField } from "@/components/Forms"
-import { updateCustomer } from "@lib/data/customer"
 import { SubmitButton } from "@modules/common/components/submit-button"
-import { z } from "zod"
+import { updateCustomerFormSchema, useUpdateCustomer } from "hooks/customer"
+import { withReactQueryProvider } from "@lib/util/react-query"
 
-const updateCustomerFormSchema = z.object({
-  first_name: z.string().min(1),
-  last_name: z.string().min(1),
-  phone: z.string().optional().nullable(),
-})
-
-export const PersonalInfoForm: React.FC<{
+export const PersonalInfoForm = withReactQueryProvider<{
   defaultValues?: {
     first_name: string
     last_name: string
     phone?: string
   }
-}> = ({ defaultValues }) => {
-  const [formState, formAction, isPending] = React.useActionState(
-    updateCustomer,
-    { state: "initial" }
-  )
-  const { close } = React.useContext(ReactAria.OverlayTriggerStateContext)!
+}>(({ defaultValues }) => {
+  const { mutate, isPending, data } = useUpdateCustomer()
 
-  React.useEffect(() => {
-    if (formState.state === "success") {
-      close()
-    }
-  }, [formState, close])
+  const { close } = React.useContext(ReactAria.OverlayTriggerStateContext)!
   const onSubmit = (values: z.infer<typeof updateCustomerFormSchema>) => {
-    React.startTransition(() => formAction(values))
+    mutate(values, {
+      onSuccess: (res) => {
+        if (res.state === "success") {
+          close()
+        }
+      },
+    })
   }
   return (
     <Form
@@ -77,10 +70,8 @@ export const PersonalInfoForm: React.FC<{
                 type="tel"
                 inputProps={{ autoComplete: "tel" }}
               />
-              {formState.state === "error" && (
-                <div className="text-sm text-red-primary">
-                  {formState.error}
-                </div>
+              {data?.state === "error" && (
+                <div className="text-sm text-red-primary">{data?.error}</div>
               )}
             </div>
             <div className="flex gap-6 justify-between">
@@ -94,4 +85,4 @@ export const PersonalInfoForm: React.FC<{
       }}
     </Form>
   )
-}
+})

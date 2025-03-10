@@ -11,11 +11,9 @@ import { getPaymentMethod } from "@lib/data/cart"
 
 export default async function CheckoutForm({
   cart,
-  customer,
   countryCode,
 }: {
   cart: HttpTypes.StoreCart | null
-  customer: HttpTypes.StoreCustomer | null
   countryCode: string
 }) {
   if (!cart) {
@@ -38,10 +36,14 @@ export default async function CheckoutForm({
 
   return (
     <>
-      <Email cart={cart} customer={customer} countryCode={countryCode} />
-      <Addresses cart={cart} customer={customer} />
+      <Email cart={cart} countryCode={countryCode} />
+      <Addresses cart={cart} />
       <Shipping cart={cart} availableShippingMethods={shippingMethods} />
-      <Payment cart={cart} availablePaymentMethods={paymentMethods} paymentMethod={paymentMethod} />
+      <Payment
+        cart={cart}
+        availablePaymentMethods={paymentMethods}
+        paymentMethod={paymentMethod}
+      />
       <Review cart={cart} />
     </>
   )
