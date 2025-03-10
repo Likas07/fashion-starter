@@ -11664,6 +11664,49 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fashion-starter-medusa@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "fashion-starter-medusa@workspace:."
+  dependencies:
+    "@medusajs/admin-sdk": "npm:2.5.1"
+    "@medusajs/cli": "npm:2.5.1"
+    "@medusajs/framework": "npm:2.5.1"
+    "@medusajs/medusa": "npm:2.5.1"
+    "@medusajs/test-utils": "npm:2.5.1"
+    "@mikro-orm/cli": "npm:6.4.3"
+    "@mikro-orm/core": "npm:6.4.3"
+    "@mikro-orm/knex": "npm:6.4.3"
+    "@mikro-orm/migrations": "npm:6.4.3"
+    "@mikro-orm/postgresql": "npm:6.4.3"
+    "@react-email/components": "npm:0.0.33"
+    "@swc/core": "npm:^1.7.28"
+    "@swc/jest": "npm:^0.2.37"
+    "@tanstack/eslint-plugin-query": "npm:5.64.2"
+    "@tanstack/react-query": "npm:5.64.2"
+    "@types/jest": "npm:^29.5.14"
+    "@types/lodash": "npm:^4.17.16"
+    "@types/node": "npm:^22.13.10"
+    "@types/react": "npm:^18.3.18"
+    "@types/react-dom": "npm:^18.3.5"
+    awilix: "npm:^8.0.1"
+    eslint: "npm:^9.17.0"
+    jest: "npm:^29.7.0"
+    lodash: "npm:^4.17.21"
+    meilisearch: "npm:^0.49.0"
+    pg: "npm:^8.13.3"
+    prop-types: "npm:^15.8.1"
+    react: "npm:^18.2.0"
+    react-dom: "npm:^18.2.0"
+    react-dropzone: "npm:^14.3.8"
+    react-email: "npm:3.0.7"
+    resend: "npm:^4.1.2"
+    ts-node: "npm:^10.9.2"
+    typescript: "npm:^5.8.2"
+    vite: "npm:^5.4.14"
+    zod: "npm:3.24.2"
+  languageName: unknown
+  linkType: soft
+
 "fast-deep-equal@npm:^2.0.1":
   version: 2.0.1
   resolution: "fast-deep-equal@npm:2.0.1"
@@ -14080,49 +14123,6 @@ __metadata:
   checksum: 10/38e0984db39139604756903a01397e29e17dcb04207bb3e081412ce725ab17338ecc47220c1b186b6bbe79a658aad1b0d41142884f5a481f36290cdefbe6aa46
   languageName: node
   linkType: hard
-
-"medusa-starter-default@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "medusa-starter-default@workspace:."
-  dependencies:
-    "@medusajs/admin-sdk": "npm:2.5.1"
-    "@medusajs/cli": "npm:2.5.1"
-    "@medusajs/framework": "npm:2.5.1"
-    "@medusajs/medusa": "npm:2.5.1"
-    "@medusajs/test-utils": "npm:2.5.1"
-    "@mikro-orm/cli": "npm:6.4.3"
-    "@mikro-orm/core": "npm:6.4.3"
-    "@mikro-orm/knex": "npm:6.4.3"
-    "@mikro-orm/migrations": "npm:6.4.3"
-    "@mikro-orm/postgresql": "npm:6.4.3"
-    "@react-email/components": "npm:0.0.33"
-    "@swc/core": "npm:^1.7.28"
-    "@swc/jest": "npm:^0.2.37"
-    "@tanstack/eslint-plugin-query": "npm:5.64.2"
-    "@tanstack/react-query": "npm:5.64.2"
-    "@types/jest": "npm:^29.5.14"
-    "@types/lodash": "npm:^4.17.16"
-    "@types/node": "npm:^22.13.10"
-    "@types/react": "npm:^18.3.18"
-    "@types/react-dom": "npm:^18.3.5"
-    awilix: "npm:^8.0.1"
-    eslint: "npm:^9.17.0"
-    jest: "npm:^29.7.0"
-    lodash: "npm:^4.17.21"
-    meilisearch: "npm:^0.49.0"
-    pg: "npm:^8.13.3"
-    prop-types: "npm:^15.8.1"
-    react: "npm:^18.2.0"
-    react-dom: "npm:^18.2.0"
-    react-dropzone: "npm:^14.3.8"
-    react-email: "npm:3.0.7"
-    resend: "npm:^4.1.2"
-    ts-node: "npm:^10.9.2"
-    typescript: "npm:^5.8.2"
-    vite: "npm:^5.4.14"
-    zod: "npm:3.24.2"
-  languageName: unknown
-  linkType: soft
 
 "meilisearch@npm:^0.49.0":
   version: 0.49.0
