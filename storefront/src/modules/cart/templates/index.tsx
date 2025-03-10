@@ -8,7 +8,11 @@ import { Layout, LayoutColumn } from "@/components/Layout"
 const CartTemplate = ({
   cart,
 }: {
-  cart: HttpTypes.StoreCart | null
+  cart:
+    | (HttpTypes.StoreCart & {
+        promotions: HttpTypes.StorePromotion[]
+      })
+    | null
 }) => {
   return (
     <Layout className="py-26 md:pb-36 md:pt-39">
@@ -22,9 +26,7 @@ const CartTemplate = ({
             <ItemsTemplate items={cart?.items} />
           </LayoutColumn>
           <LayoutColumn start={{ base: 1, lg: 9, xl: 10 }} end={13}>
-            {cart && cart.region && (
-              <Summary cart={cart as any} />
-            )}
+            {cart && cart.region && <Summary cart={cart} />}
           </LayoutColumn>
         </>
       ) : (

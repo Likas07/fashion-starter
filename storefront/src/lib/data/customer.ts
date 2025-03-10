@@ -46,7 +46,7 @@ export const updateCustomer = async function (
         state: "success" as const,
       }
     })
-    .catch((error) => {
+    .catch(() => {
       revalidateTag("customer")
       return {
         state: "error" as const,
@@ -102,8 +102,11 @@ export async function signup(formData: z.infer<typeof signupFormSchema>) {
     }
 
     return { success: true, customer: createdCustomer }
-  } catch (error: any) {
-    return { success: false, error: error.toString() }
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : `${error}`,
+    }
   }
 }
 
@@ -129,8 +132,11 @@ export async function login(formData: z.infer<typeof loginFormSchema>) {
       revalidateTag("cart")
     }
     return { success: true, redirectUrl: redirectUrl || "/" }
-  } catch (error: any) {
-    return { success: false, message: error.message }
+  } catch (error) {
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : `${error}`,
+    }
   }
 }
 
@@ -264,6 +270,7 @@ const forgotPasswordSchema = z.object({
   new_password: z.string().min(6),
   confirm_new_password: z.string().min(6),
 })
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const baseSchema = z.discriminatedUnion("type", [
   resetPasswordFormSchema,
   forgotPasswordSchema,
@@ -283,7 +290,8 @@ export async function resetPassword(
         email: validatedState.email,
         password: formData.current_password,
       })
-    } catch (err) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
       return {
         ...validatedState,
         state: "error" as const,
@@ -316,6 +324,7 @@ export async function resetPassword(
     })
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const forgotPasswordFormSchema = z.object({
   email: z.string().email(),
 })

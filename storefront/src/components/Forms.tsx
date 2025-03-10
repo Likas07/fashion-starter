@@ -17,9 +17,7 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import CountrySelect from "@modules/checkout/components/country-select"
 
-export type FormProps<T extends z.ZodType<any, any>> = UseFormProps<
-  z.infer<T>
-> & {
+export type FormProps<T extends z.ZodTypeAny> = UseFormProps<z.infer<T>> & {
   schema: T
   onSubmit: (
     values: z.infer<T>,
@@ -33,7 +31,7 @@ export type FormProps<T extends z.ZodType<any, any>> = UseFormProps<
   formProps?: Omit<React.ComponentProps<"form">, "onSubmit">
 }
 
-export const Form = <T extends z.ZodType<any, any>>({
+export const Form = <T extends z.ZodTypeAny>({
   schema,
   onSubmit,
   children,

@@ -92,6 +92,7 @@ const Addresses = ({ cart }: { cart: HttpTypes.StoreCart | null }) => {
     if (isOpen && state?.success) {
       router.push(pathname + "?step=shipping", { scroll: false })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state])
 
   return (

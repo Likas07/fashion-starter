@@ -82,6 +82,7 @@ export const SearchField: React.FC<{
     } else {
       if (!isInputAlwaysShown) setIsInputShown(false)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isInputShown, list.filterText, router, countryCode])
 
   const handleKeyDown = React.useCallback(
@@ -93,6 +94,7 @@ export const SearchField: React.FC<{
         if (!isInputAlwaysShown) setIsInputShown(false)
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [list.filterText, router, countryCode]
   )
 
@@ -100,10 +102,12 @@ export const SearchField: React.FC<{
     if (searchQuery && !list.filterText) {
       list.setFilterText(searchQuery)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery])
 
   React.useEffect(() => {
     if (isInputAlwaysShown) setIsInputShown(true)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

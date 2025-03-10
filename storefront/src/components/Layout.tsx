@@ -19,6 +19,7 @@ Layout.displayName = "Layout"
 
 // const fullConfig = resolveConfig(tailwindConfig);
 // const breakpointsNamesArray = Object.keys(fullConfig.theme.screens);
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const breakpointsNamesArray = ["base", "xs", "sm", "md", "lg", "xl"] as const
 
 type BreakpointsNames = (typeof breakpointsNamesArray)[number]

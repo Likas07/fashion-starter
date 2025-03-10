@@ -50,6 +50,7 @@ const Email = ({
     if (isOpen && state?.success) {
       router.push(pathname + "?step=delivery", { scroll: false })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state])
 
   return (

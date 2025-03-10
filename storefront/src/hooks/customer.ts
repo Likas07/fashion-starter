@@ -118,7 +118,7 @@ export const customerAddressSchema = z.object({
 export const useAddressMutation = (
   addressId?: string,
   options?: UseMutationOptions<
-    { addressId: string; success: boolean; error: any },
+    { addressId: string; success: boolean; error: string | null },
     Error,
     z.infer<typeof customerAddressSchema>
   >
@@ -168,7 +168,7 @@ export const signupFormSchema = z.object({
 
 export const useSignup = (
   options?: UseMutationOptions<
-    { success: boolean; error?: any; customer?: StoreCustomer },
+    { success: boolean; error?: string | null; customer?: StoreCustomer },
     Error,
     z.infer<typeof signupFormSchema>
   >

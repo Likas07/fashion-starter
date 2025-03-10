@@ -14,7 +14,21 @@ import { useCountryCode } from "hooks/country-code"
 import { twMerge } from "tailwind-merge"
 import { useFormContext } from "react-hook-form"
 
-const isBillingAddressEmpty = (formData: Record<string, any>) => {
+const isBillingAddressEmpty = (formData: {
+  billing_address?: Pick<
+    HttpTypes.StoreCartAddress,
+    | "first_name"
+    | "last_name"
+    | "address_1"
+    | "address_2"
+    | "company"
+    | "postal_code"
+    | "city"
+    | "country_code"
+    | "province"
+    | "phone"
+  >
+}) => {
   return (
     !formData?.billing_address?.first_name &&
     !formData?.billing_address?.last_name &&
@@ -106,9 +120,8 @@ const BillingAddress = ({
         isBillingAddressEmpty(formData)
       ) {
         const defaultBillingAddress =
-          addressesInRegion.find((a) => {
-            a.is_default_billing
-          }) || addressesInRegion[0]
+          addressesInRegion.find((a) => a.is_default_billing) ||
+          addressesInRegion[0]
 
         setFormAddress({
           first_name: defaultBillingAddress.first_name ?? undefined,
@@ -124,6 +137,7 @@ const BillingAddress = ({
         })
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cart, customer, addressesInRegion])
 
   return (
@@ -342,7 +356,7 @@ const BillingAddress = ({
               autoComplete: "country",
               region: cart?.region,
               selectedKey: formData.billing_address?.country_code || null,
-              onSelectionChange: (value: any) =>
+              onSelectionChange: (value) =>
                 handleChange({
                   target: {
                     name: "billing_address.country_code",

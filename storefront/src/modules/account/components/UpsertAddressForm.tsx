@@ -148,8 +148,8 @@ export const UpsertAddressForm = withReactQueryProvider<{
                     region: region ?? undefined,
                     defaultSelectedKey: defaultValues?.country_code,
                     autoComplete: "country",
-                    onSelectionChange: (value: any) =>
-                      setValue("country_code", value),
+                    onSelectionChange: (value) =>
+                      setValue("country_code", `${value}`),
                   }}
                   name="country_code"
                   className="flex-1"

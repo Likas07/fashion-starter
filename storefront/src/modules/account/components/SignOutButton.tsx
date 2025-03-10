@@ -8,7 +8,7 @@ import { useSignout } from "hooks/customer"
 import { withReactQueryProvider } from "@lib/util/react-query"
 
 export const SignOutButton = withReactQueryProvider<Omit<ButtonProps, "type">>(
-  ({ isLoading, ...rest }) => {
+  (rest) => {
     const countryCode = useCountryCode()
     const { mutateAsync, isPending } = useSignout()
 

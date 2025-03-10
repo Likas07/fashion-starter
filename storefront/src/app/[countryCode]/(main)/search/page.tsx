@@ -47,7 +47,6 @@ export default async function SearchPage({ params, searchParams }: Props) {
             categoryId={undefined}
             productsIds={results.hits.map((h) => h.id)}
             typeId={undefined}
-            region={region}
           />
         )}
       </Suspense>

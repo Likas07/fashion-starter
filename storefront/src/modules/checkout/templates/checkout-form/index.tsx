@@ -27,7 +27,7 @@ export default async function CheckoutForm({
     return null
   }
   const paymentMethodId = cart.payment_collection?.payment_sessions?.find(
-    (paymentSession: any) => paymentSession.status === "pending"
+    (paymentSession) => paymentSession.status === "pending"
   )?.data?.payment_method_id
   let paymentMethod = null
   if (paymentMethodId && typeof paymentMethodId === "string") {

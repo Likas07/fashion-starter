@@ -6,7 +6,7 @@ import { useCountryCode } from "hooks/country-code"
 import { Link, LinkOwnProps } from "@/components/Link"
 import { ButtonLink, ButtonOwnProps } from "@/components/Button"
 
-export const LocalizedLink = <RouteInferType extends any>({
+export const LocalizedLink = <RouteInferType,>({
   children,
   href,
   ...props
@@ -22,7 +22,7 @@ export const LocalizedLink = <RouteInferType extends any>({
   )
 }
 
-export const LocalizedButtonLink = <RouteInferType extends any>({
+export const LocalizedButtonLink = <RouteInferType,>({
   children,
   href,
   ...props

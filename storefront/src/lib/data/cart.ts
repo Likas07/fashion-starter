@@ -237,7 +237,10 @@ export async function setShippingMethod({
     .catch(medusaError)
 }
 
-export async function setPaymentMethod(session_id: string, token: any) {
+export async function setPaymentMethod(
+  session_id: string,
+  token: string | null | undefined
+) {
   await sdk.client
     .fetch("/store/custom/stripe/set-payment-method", {
       method: "POST",
@@ -308,7 +311,7 @@ export async function setEmail(
     if (!cartId) {
       throw new Error("No existing cart found when setting addresses")
     }
-  } catch (e: any) {
+  } catch (e) {
     return {
       success: false,
       error: e instanceof Error ? e.message : "Could not get your cart",
@@ -325,6 +328,7 @@ export async function setEmail(
   return { success: true, error: null }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const addressesFormSchema = z
   .object({
     shipping_address: z.object({
@@ -383,7 +387,7 @@ export async function setAddresses(
           ? formData.shipping_address
           : formData.billing_address,
     })
-  } catch (e: any) {
+  } catch (e) {
     return {
       success: false,
       error: e instanceof Error ? e.message : "Could not set addresses",

@@ -9,7 +9,7 @@ const DeleteButton = ({ id }: { id: string }) => {
 
   const handleDelete = async (id: string) => {
     setIsDeleting(true)
-    await deleteLineItem(id).catch((err) => {
+    await deleteLineItem(id).catch(() => {
       setIsDeleting(false)
     })
   }
