@@ -14,8 +14,9 @@ const ItemPrice: React.FC<{
     calculated_price,
     original_price_number,
     calculated_price_number,
-  } = getPricesForVariant(item.variant) ?? {}
-  const hasReducedPrice = calculated_price_number < original_price_number
+  } = item.variant ? (getPricesForVariant(item.variant) ?? {}) : {}
+  const hasReducedPrice =
+    (calculated_price_number ?? 0) < (original_price_number ?? 0)
 
   return (
     <div>
@@ -82,7 +83,7 @@ const CheckoutSummary = ({
                   </div>
                   <ItemPrice item={item} />
                 </div>
-                <div className="flex flex-col max-lg:gap-1.5 max-lg:text-xs">
+                <div className="flex flex-col gap-1.5 max-lg:text-xs">
                   {item.variant?.title && (
                     <p>
                       Variant:{" "}
