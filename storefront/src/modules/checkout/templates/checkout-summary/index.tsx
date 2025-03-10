@@ -32,13 +32,7 @@ const ItemPrice: React.FC<{
   )
 }
 
-const CheckoutSummary = ({
-  cart,
-}: {
-  cart: HttpTypes.StoreCart & {
-    promotions: HttpTypes.StorePromotion[]
-  }
-}) => {
+const CheckoutSummary = ({ cart }: { cart: HttpTypes.StoreCart }) => {
   const items = cart.items ?? []
   const numOfItems = items.length
 

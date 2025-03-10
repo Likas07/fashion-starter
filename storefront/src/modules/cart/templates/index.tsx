@@ -5,15 +5,7 @@ import { HttpTypes } from "@medusajs/types"
 import { Layout, LayoutColumn } from "@/components/Layout"
 
 // TODO: Ask customer if they want to sign in or continue as guest
-const CartTemplate = ({
-  cart,
-}: {
-  cart:
-    | (HttpTypes.StoreCart & {
-        promotions: HttpTypes.StorePromotion[]
-      })
-    | null
-}) => {
+const CartTemplate = ({ cart }: { cart: HttpTypes.StoreCart | null }) => {
   return (
     <Layout className="py-26 md:pb-36 md:pt-39">
       {cart?.items?.length ? (
