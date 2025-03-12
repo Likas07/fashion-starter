@@ -135,8 +135,6 @@ const Payment = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paymentMethod])
 
-  console.log(availablePaymentMethods)
-
   if (!cart) {
     return
   }
