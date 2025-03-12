@@ -3,7 +3,6 @@
 import * as React from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { twJoin } from "tailwind-merge"
-import { HttpTypes } from "@medusajs/types"
 import compareAddresses from "@lib/util/compare-addresses"
 import { SubmitButton } from "@modules/common/components/submit-button"
 import BillingAddress from "@modules/checkout/components/billing_address"
@@ -13,8 +12,8 @@ import { Button } from "@/components/Button"
 import { Form } from "@/components/Forms"
 import { z } from "zod"
 import { withReactQueryProvider } from "@lib/util/react-query"
-import { useSetShippingAddress } from "hooks/cart"
 import { useCustomer } from "hooks/customer"
+import { useCart, useSetShippingAddress } from "hooks/cart"
 
 const addressesFormSchema = z
   .object({
@@ -54,12 +53,14 @@ const addressesFormSchema = z
     ])
   )
 
-const Addresses = ({ cart }: { cart: HttpTypes.StoreCart | null }) => {
+const Addresses = () => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
 
   const isOpen = searchParams.get("step") === "delivery"
+
+  const { data: cart } = useCart({ enabled: isOpen })
 
   const [sameAsBilling, setSameAsBilling] = React.useState(true)
 
@@ -87,6 +88,9 @@ const Addresses = ({ cart }: { cart: HttpTypes.StoreCart | null }) => {
         }
       },
     })
+  }
+  if (!cart) {
+    return
   }
 
   return (

@@ -18,52 +18,26 @@ import { Button } from "@/components/Button"
 import { UiRadioGroup } from "@/components/ui/Radio"
 import { Input } from "@/components/Forms"
 import { withReactQueryProvider } from "@lib/util/react-query"
-import { useGetPaymentMethod, useSetPaymentMethod } from "hooks/cart"
+
 import {
-  StoreCart,
-  StorePaymentProvider,
-  StorePaymentSession,
-} from "@medusajs/types"
+  useCart,
+  useCartPaymentMethods,
+  useGetPaymentMethod,
+  useSetPaymentMethod,
+} from "hooks/cart"
+import { StorePaymentSession } from "@medusajs/types"
 
-const Payment = ({
-  cart,
-  availablePaymentMethods,
-}: {
-  cart: StoreCart
-  availablePaymentMethods: StorePaymentProvider[]
-}) => {
-  const activeSession = cart.payment_collection?.payment_sessions?.find(
-    (paymentSession: StorePaymentSession) => paymentSession.status === "pending"
-  )
-
+const Payment = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [cardBrand, setCardBrand] = useState<string | null>(null)
   const [cardComplete, setCardComplete] = useState(false)
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(
-    activeSession?.provider_id ?? ""
-  )
 
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
 
   const isOpen = searchParams.get("step") === "payment"
-
-  const setPaymentMethod = useSetPaymentMethod()
-  const isStripe = isStripeFunc(activeSession?.provider_id)
-  const stripeReady = useContext(StripeContext)
-
-  const paymentMethodId = cart.payment_collection?.payment_sessions?.find(
-    (paymentSession: StorePaymentSession) => paymentSession.status === "pending"
-  )?.data?.payment_method_id as string
-  const { data: paymentMethod } = useGetPaymentMethod(paymentMethodId)
-
-  // const paidByGiftcard =
-  //   cart?.gift_cards && cart?.gift_cards?.length > 0 && cart?.total === 0
-
-  const paymentReady =
-    activeSession && cart.shipping_methods && cart.shipping_methods.length !== 0
 
   const useOptions: StripeCardElementOptions = useMemo(() => {
     return {
@@ -103,6 +77,33 @@ const Payment = ({
     setError(null)
   }, [isOpen])
 
+  const { data: cart } = useCart({ enabled: isOpen })
+
+  const setPaymentMethod = useSetPaymentMethod()
+
+  const activeSession = cart?.payment_collection?.payment_sessions?.find(
+    (paymentSession: StorePaymentSession) => paymentSession.status === "pending"
+  )
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(
+    activeSession?.provider_id ?? ""
+  )
+  const { data: availablePaymentMethods } = useCartPaymentMethods(
+    cart?.region?.id ?? ""
+  )
+  const isStripe = isStripeFunc(activeSession?.provider_id)
+  const stripeReady = useContext(StripeContext)
+
+  const paymentMethodId = activeSession?.data?.payment_method_id as string
+  const { data: paymentMethod } = useGetPaymentMethod(paymentMethodId)
+
+  const paidByGiftcard = cart?.total === 0
+
+  const paymentReady =
+    (activeSession &&
+      cart?.shipping_methods &&
+      cart?.shipping_methods.length !== 0) ||
+    paidByGiftcard
+
   const handleRemoveCard = useCallback(() => {
     if (!activeSession?.id) {
       return
@@ -111,6 +112,7 @@ const Payment = ({
     try {
       setPaymentMethod.mutate(
         { sessionId: activeSession.id, token: null },
+
         {
           onSuccess: () => {
             setCardBrand(null)
@@ -130,8 +132,14 @@ const Payment = ({
       setCardBrand(capitalize(paymentMethod?.card?.brand))
       setCardComplete(true)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paymentMethod])
 
+  console.log(availablePaymentMethods)
+
+  if (!cart) {
+    return
+  }
   return (
     <>
       <div className="flex justify-between mb-6 md:mb-8 border-t border-grayscale-200 pt-8 mt-8">
@@ -152,7 +160,7 @@ const Payment = ({
         )}
       </div>
       <div className={isOpen ? "block" : "hidden"}>
-        {availablePaymentMethods.length && (
+        {availablePaymentMethods?.length && (
           <>
             <UiRadioGroup
               value={selectedPaymentMethod}
@@ -163,6 +171,7 @@ const Payment = ({
                 .sort((a, b) => {
                   return a.id > b.id ? 1 : -1
                 })
+
                 .map((paymentMethod) => {
                   return (
                     <PaymentContainer

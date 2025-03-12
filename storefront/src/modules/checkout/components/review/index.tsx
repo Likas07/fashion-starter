@@ -2,12 +2,13 @@
 
 import { twJoin } from "tailwind-merge"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { HttpTypes } from "@medusajs/types"
 
 import { Button } from "@/components/Button"
 import PaymentButton from "@modules/checkout/components/payment-button"
+import { withReactQueryProvider } from "@lib/util/react-query"
+import { useCart } from "hooks/cart"
 
-const Review = ({ cart }: { cart: HttpTypes.StoreCart }) => {
+const Review = () => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
@@ -16,6 +17,11 @@ const Review = ({ cart }: { cart: HttpTypes.StoreCart }) => {
 
   // const paidByGiftcard =
   //   cart?.gift_cards && cart?.gift_cards?.length > 0 && cart?.total === 0
+  const { data: cart } = useCart({ enabled: isOpen })
+
+  if (!cart) {
+    return
+  }
 
   const previousStepsCompleted =
     cart.shipping_address &&
@@ -71,4 +77,4 @@ const Review = ({ cart }: { cart: HttpTypes.StoreCart }) => {
   )
 }
 
-export default Review
+export default withReactQueryProvider(Review)

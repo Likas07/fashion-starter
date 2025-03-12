@@ -3,7 +3,6 @@
 import React from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { twJoin } from "tailwind-merge"
-import { HttpTypes } from "@medusajs/types"
 import { z } from "zod"
 
 import { SubmitButton } from "@modules/common/components/submit-button"
@@ -15,20 +14,14 @@ import { Icon } from "@/components/Icon"
 import { LoginForm } from "@modules/auth/components/LoginForm"
 import ErrorMessage from "@modules/checkout/components/error-message"
 import { useCustomer } from "hooks/customer"
+import { useCart, useSetEmail } from "hooks/cart"
 import { withReactQueryProvider } from "@lib/util/react-query"
-import { useSetEmail } from "hooks/cart"
 
 export const emailFormSchema = z.object({
   email: z.string().min(3).email("Enter a valid email address."),
 })
 
-const Email = ({
-  cart,
-  countryCode,
-}: {
-  cart: HttpTypes.StoreCart | null
-  countryCode: string
-}) => {
+const Email = ({ countryCode }: { countryCode: string }) => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
@@ -36,6 +29,7 @@ const Email = ({
   const { data: customer } = useCustomer()
 
   const isOpen = searchParams.get("step") === "email"
+  const { data: cart } = useCart({ enabled: isOpen })
 
   const { mutate, isPending, data } = useSetEmail()
 

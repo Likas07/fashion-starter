@@ -1,16 +1,20 @@
 "use client"
 
 import { loadStripe } from "@stripe/stripe-js"
-import React from "react"
+import * as React from "react"
 import StripeWrapper from "@modules/checkout/components/payment-wrapper/stripe-wrapper"
 import { PayPalScriptProvider } from "@paypal/react-paypal-js"
 import { createContext } from "react"
-import { HttpTypes } from "@medusajs/types"
 import { isPaypal, isStripe } from "@lib/constants"
+import { useCart } from "hooks/cart"
+import { withReactQueryProvider } from "@lib/util/react-query"
+import { useRouter } from "next/navigation"
+import { getCheckoutStep } from "@modules/cart/utils/getCheckoutStep"
 
 type WrapperProps = {
-  cart: HttpTypes.StoreCart
   children: React.ReactNode
+  step?: string
+  countryCode: string
 }
 
 export const StripeContext = createContext(false)
@@ -20,7 +24,19 @@ const stripePromise = stripeKey ? loadStripe(stripeKey) : null
 
 const paypalClientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID
 
-const Wrapper: React.FC<WrapperProps> = ({ cart, children }) => {
+const Wrapper: React.FC<WrapperProps> = ({ children, step, countryCode }) => {
+  const router = useRouter()
+  const { data: cart } = useCart({ enabled: true })
+
+  React.useEffect(() => {
+    if (!step && cart) {
+      const checkoutStep = getCheckoutStep(cart)
+      router.push(`/${countryCode}/checkout?step=${checkoutStep}`)
+    }
+  }, [step, countryCode, cart])
+  if (!cart) {
+    return
+  }
   const paymentSession = cart.payment_collection?.payment_sessions?.find(
     (s) => s.status === "pending"
   )
@@ -65,4 +81,4 @@ const Wrapper: React.FC<WrapperProps> = ({ cart, children }) => {
   return <div>{children}</div>
 }
 
-export default Wrapper
+export default withReactQueryProvider(Wrapper)

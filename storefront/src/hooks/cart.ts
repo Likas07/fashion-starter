@@ -13,6 +13,8 @@ import {
   updateLineItem,
   updateRegion,
 } from "@lib/data/cart"
+import { listCartShippingMethods } from "@lib/data/fulfillment"
+import { listCartPaymentMethods } from "@lib/data/payment"
 import { HttpTypes } from "@medusajs/types"
 import {
   useMutation,
@@ -30,6 +32,26 @@ export const useCart = ({ enabled }: { enabled: boolean }) => {
       return res
     },
     enabled,
+  })
+}
+
+export const useCartShippingMethods = (cartId: string) => {
+  return useQuery({
+    queryKey: [cartId],
+    queryFn: async () => {
+      const res = await listCartShippingMethods(cartId)
+      return res
+    },
+  })
+}
+
+export const useCartPaymentMethods = (regionId: string) => {
+  return useQuery({
+    queryKey: [regionId],
+    queryFn: async () => {
+      const res = await listCartPaymentMethods(regionId)
+      return res
+    },
   })
 }
 
