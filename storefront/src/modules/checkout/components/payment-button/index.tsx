@@ -61,33 +61,20 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
   }
 }
 
-const GiftCardPaymentButton = () => {
-  const [submitting, setSubmitting] = useState(false)
-  const placeOrder = usePlaceOrder()
-  const router = useRouter()
+// const GiftCardPaymentButton = () => {
+//   const [submitting, setSubmitting] = useState(false)
 
-  const handleOrder = () => {
-    setSubmitting(true)
-    placeOrder.mutate(
-      {},
-      {
-        onSuccess: (data) => {
-          if (data?.type === "order") {
-            const countryCode =
-              data.order.shipping_address?.country_code?.toLowerCase()
-            router.push(`/${countryCode}/order/confirmed/${data.order.id}`)
-          }
-        },
-      }
-    )
-  }
+//   const handleOrder = async () => {
+//     setSubmitting(true)
+//     await placeOrder()
+//   }
 
-  return (
-    <Button onPress={handleOrder} isLoading={submitting} className="w-full">
-      Place order
-    </Button>
-  )
-}
+//   return (
+//     <Button onPress={handleOrder} isLoading={submitting} className="w-full">
+//       Place order
+//     </Button>
+//   )
+// }
 
 const StripePaymentButton = ({
   cart,
@@ -102,25 +89,22 @@ const StripePaymentButton = ({
   const router = useRouter()
 
   const onPaymentCompleted = () => {
-    placeOrder.mutate(
-      {},
-      {
-        onSuccess: (data) => {
-          if (data?.type === "order") {
-            const countryCode =
-              data.order.shipping_address?.country_code?.toLowerCase()
-            router.push(`/${countryCode}/order/confirmed/${data.order.id}`)
-          } else if (data?.error) {
-            setErrorMessage(data.error.message)
-          }
-          setSubmitting(false)
-        },
-        onError: (error) => {
-          setErrorMessage(error.message)
-          setSubmitting(false)
-        },
-      }
-    )
+    placeOrder.mutate(null, {
+      onSuccess: (data) => {
+        if (data?.type === "order") {
+          const countryCode =
+            data.order.shipping_address?.country_code?.toLowerCase()
+          router.push(`/${countryCode}/order/confirmed/${data.order.id}`)
+        } else if (data?.error) {
+          setErrorMessage(data.error.message)
+        }
+        setSubmitting(false)
+      },
+      onError: (error) => {
+        setErrorMessage(error.message)
+        setSubmitting(false)
+      },
+    })
   }
 
   const stripe = useStripe()
@@ -200,25 +184,22 @@ const PayPalPaymentButton = ({
   const placeOrder = usePlaceOrder()
 
   const onPaymentCompleted = () => {
-    placeOrder.mutate(
-      {},
-      {
-        onSuccess: (data) => {
-          if (data?.type === "order") {
-            const countryCode =
-              data.order.shipping_address?.country_code?.toLowerCase()
-            router.push(`/${countryCode}/order/confirmed/${data.order.id}`)
-          } else if (data?.error) {
-            setErrorMessage(data.error.message)
-          }
-          setSubmitting(false)
-        },
-        onError: (error) => {
-          setErrorMessage(error.message)
-          setSubmitting(false)
-        },
-      }
-    )
+    placeOrder.mutate(null, {
+      onSuccess: (data) => {
+        if (data?.type === "order") {
+          const countryCode =
+            data.order.shipping_address?.country_code?.toLowerCase()
+          router.push(`/${countryCode}/order/confirmed/${data.order.id}`)
+        } else if (data?.error) {
+          setErrorMessage(data.error.message)
+        }
+        setSubmitting(false)
+      },
+      onError: (error) => {
+        setErrorMessage(error.message)
+        setSubmitting(false)
+      },
+    })
   }
 
   const session = cart.payment_collection?.payment_sessions?.find(
@@ -272,23 +253,20 @@ const ManualTestPaymentButton = ({ notReady }: { notReady: boolean }) => {
   const router = useRouter()
 
   const onPaymentCompleted = () => {
-    placeOrder.mutate(
-      {},
-      {
-        onSuccess: (data) => {
-          if (data?.type === "order") {
-            const countryCode =
-              data.order.shipping_address?.country_code?.toLowerCase()
-            router.push(`/${countryCode}/order/confirmed/${data.order.id}`)
-          } else if (data?.error) {
-            setErrorMessage(data.error.message)
-          }
-        },
-        onError: (error) => {
-          setErrorMessage(error.message)
-        },
-      }
-    )
+    placeOrder.mutate(null, {
+      onSuccess: (data) => {
+        if (data?.type === "order") {
+          const countryCode =
+            data.order.shipping_address?.country_code?.toLowerCase()
+          router.push(`/${countryCode}/order/confirmed/${data.order.id}`)
+        } else if (data?.error) {
+          setErrorMessage(data.error.message)
+        }
+      },
+      onError: (error) => {
+        setErrorMessage(error.message)
+      },
+    })
   }
 
   const handlePayment = () => {

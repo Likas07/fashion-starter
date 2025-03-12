@@ -10,9 +10,7 @@ import { useApplyPromotions } from "hooks/cart"
 import { withReactQueryProvider } from "@lib/util/react-query"
 
 type DiscountCodeProps = {
-  cart: HttpTypes.StoreCart & {
-    promotions: HttpTypes.StorePromotion[]
-  }
+  cart: HttpTypes.StoreCart
 }
 
 const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {

@@ -31,7 +31,9 @@ export const DefaultBillingAddressSelect: React.FC<{
         placeholder="Select default shipping address"
         className="mb-8"
         onSelectionChange={(key) => {
-          typeof key === "string" && handleAddressSelect(key)
+          if (typeof key === "string") {
+            handleAddressSelect(key)
+          }
         }}
       >
         <UiSelectButton className="!h-14">

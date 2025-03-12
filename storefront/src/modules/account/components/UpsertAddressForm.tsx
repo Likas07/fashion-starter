@@ -2,27 +2,15 @@
 
 import * as React from "react"
 import * as ReactAria from "react-aria-components"
-import { addCustomerAddress, updateCustomerAddress } from "@lib/data/customer"
 import { CountrySelectProps } from "@modules/checkout/components/country-select"
 import { CountrySelectField, Form, InputField } from "@/components/Forms"
 import { UiCloseButton } from "@/components/Dialog"
 import { z } from "zod"
 import { SubmitButton } from "@modules/common/components/submit-button"
+import { customerAddressSchema, useAddressMutation } from "hooks/customer"
+import { withReactQueryProvider } from "@lib/util/react-query"
 
-const customerAddressSchema = z.object({
-  first_name: z.string().min(1),
-  last_name: z.string().min(1),
-  company: z.string().optional().nullable(),
-  address_1: z.string().min(1),
-  address_2: z.string().optional().nullable(),
-  city: z.string().min(1),
-  postal_code: z.string().min(1),
-  province: z.string().optional().nullable(),
-  country_code: z.string().min(2),
-  phone: z.string().optional().nullable(),
-})
-
-export const UpsertAddressForm: React.FC<{
+export const UpsertAddressForm = withReactQueryProvider<{
   addressId?: string
   region?: CountrySelectProps["region"]
   defaultValues?: {
@@ -37,34 +25,19 @@ export const UpsertAddressForm: React.FC<{
     country_code?: string
     phone?: string
   }
-}> = ({ addressId, region, defaultValues }) => {
-  const [
-    addAddressFormMessage,
-    addAddressFormAction,
-    isAddAddressFormActionPending,
-  ] = React.useActionState(addCustomerAddress, null)
-  const [
-    updateAddressFormMessage,
-    updateAddressFormAction,
-    isUpdateAddressFormActionPending,
-  ] = React.useActionState(updateCustomerAddress, {
-    addressId: addressId || "",
-    success: false,
-    error: undefined,
-  })
+}>(({ addressId, region, defaultValues }) => {
   const { close } = React.useContext(ReactAria.OverlayTriggerStateContext)!
+  const { mutate, isPending, data } = useAddressMutation(addressId)
 
   const onSubmit = (values: z.infer<typeof customerAddressSchema>) => {
-    React.startTransition(() => {
-      addressId ? updateAddressFormAction(values) : addAddressFormAction(values)
+    mutate(values, {
+      onSuccess: (res) => {
+        if (res.success) {
+          close()
+        }
+      },
     })
   }
-
-  React.useEffect(() => {
-    if (addAddressFormMessage?.success || updateAddressFormMessage?.success) {
-      close()
-    }
-  }, [addAddressFormMessage, updateAddressFormMessage])
 
   return (
     <Form
@@ -175,36 +148,19 @@ export const UpsertAddressForm: React.FC<{
                     region: region ?? undefined,
                     defaultSelectedKey: defaultValues?.country_code,
                     autoComplete: "country",
-                    onSelectionChange: (value: any) =>
-                      setValue("country_code", value),
+                    onSelectionChange: (value) =>
+                      setValue("country_code", `${value}`),
                   }}
                   name="country_code"
                   className="flex-1"
                 />
               </div>
-              {!addressId &&
-                addAddressFormMessage &&
-                !addAddressFormMessage.success && (
-                  <p className="text-red-primary">
-                    {addAddressFormMessage.error}
-                  </p>
-                )}
-              {addressId &&
-                updateAddressFormMessage &&
-                !updateAddressFormMessage.success && (
-                  <p className="text-red-primary">
-                    {updateAddressFormMessage.error}
-                  </p>
-                )}
+              {!data?.success && (
+                <p className="text-red-primary">{data?.error}</p>
+              )}
             </div>
             <div className="flex gap-6 justify-between">
-              <SubmitButton
-                isLoading={
-                  isAddAddressFormActionPending ||
-                  isUpdateAddressFormActionPending
-                }
-                isDisabled={isDisabled}
-              >
+              <SubmitButton isLoading={isPending} isDisabled={isDisabled}>
                 {addressId ? "Save changes" : "Add address"}
               </SubmitButton>
               <UiCloseButton variant="outline">Cancel</UiCloseButton>
@@ -214,4 +170,4 @@ export const UpsertAddressForm: React.FC<{
       }}
     </Form>
   )
-}
+})

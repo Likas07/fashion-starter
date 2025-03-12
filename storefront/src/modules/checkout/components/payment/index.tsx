@@ -4,30 +4,36 @@ import { useCallback, useContext, useEffect, useMemo, useState } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { CreditCard } from "@medusajs/icons"
 import { CardElement } from "@stripe/react-stripe-js"
-import { PaymentMethod, StripeCardElementOptions } from "@stripe/stripe-js"
+import { StripeCardElementOptions } from "@stripe/stripe-js"
 import { twJoin } from "tailwind-merge"
+import { capitalize } from "lodash"
+
 import { isStripe as isStripeFunc, paymentInfoMap } from "@lib/constants"
 import PaymentContainer from "@modules/checkout/components/payment-container"
 import { StripeContext } from "@modules/checkout/components/payment-wrapper"
+import ErrorMessage from "@modules/checkout/components/error-message"
+import PaymentCardButton from "@modules/checkout/components/payment-card-button"
+
 import { Button } from "@/components/Button"
 import { UiRadioGroup } from "@/components/ui/Radio"
-
-import ErrorMessage from "@modules/checkout/components/error-message"
-import { capitalize } from "lodash"
-import PaymentCardButton from "@modules/checkout/components/payment-card-button"
 import { Input } from "@/components/Forms"
 import { withReactQueryProvider } from "@lib/util/react-query"
 import { useGetPaymentMethod, useSetPaymentMethod } from "hooks/cart"
+import {
+  StoreCart,
+  StorePaymentProvider,
+  StorePaymentSession,
+} from "@medusajs/types"
 
 const Payment = ({
   cart,
   availablePaymentMethods,
 }: {
-  cart: any
-  availablePaymentMethods: any[]
+  cart: StoreCart
+  availablePaymentMethods: StorePaymentProvider[]
 }) => {
   const activeSession = cart.payment_collection?.payment_sessions?.find(
-    (paymentSession: any) => paymentSession.status === "pending"
+    (paymentSession: StorePaymentSession) => paymentSession.status === "pending"
   )
 
   const [isLoading, setIsLoading] = useState(false)
@@ -49,15 +55,15 @@ const Payment = ({
   const stripeReady = useContext(StripeContext)
 
   const paymentMethodId = cart.payment_collection?.payment_sessions?.find(
-    (paymentSession: any) => paymentSession.status === "pending"
-  )?.data?.payment_method_id
+    (paymentSession: StorePaymentSession) => paymentSession.status === "pending"
+  )?.data?.payment_method_id as string
   const { data: paymentMethod } = useGetPaymentMethod(paymentMethodId)
 
-  const paidByGiftcard =
-    cart?.gift_cards && cart?.gift_cards?.length > 0 && cart?.total === 0
+  // const paidByGiftcard =
+  //   cart?.gift_cards && cart?.gift_cards?.length > 0 && cart?.total === 0
 
   const paymentReady =
-    (activeSession && cart?.shipping_methods.length !== 0) || paidByGiftcard
+    activeSession && cart.shipping_methods && cart.shipping_methods.length !== 0
 
   const useOptions: StripeCardElementOptions = useMemo(() => {
     return {
@@ -98,17 +104,22 @@ const Payment = ({
   }, [isOpen])
 
   const handleRemoveCard = useCallback(() => {
+    if (!activeSession?.id) {
+      return
+    }
+
     try {
       setPaymentMethod.mutate(
-        { sessionId: activeSession?.id, token: null },
+        { sessionId: activeSession.id, token: null },
         {
           onSuccess: () => {
             setCardBrand(null)
             setCardComplete(false)
           },
-          onError: (err) => setError("Failed to remove card"),
+          onError: () => setError("Failed to remove card"),
         }
       )
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
       setError("Failed to remove card")
     }
@@ -141,7 +152,7 @@ const Payment = ({
         )}
       </div>
       <div className={isOpen ? "block" : "hidden"}>
-        {!paidByGiftcard && availablePaymentMethods?.length && (
+        {availablePaymentMethods.length && (
           <>
             <UiRadioGroup
               value={selectedPaymentMethod}
@@ -150,7 +161,7 @@ const Payment = ({
             >
               {availablePaymentMethods
                 .sort((a, b) => {
-                  return a.provider_id > b.provider_id ? 1 : -1
+                  return a.id > b.id ? 1 : -1
                 })
                 .map((paymentMethod) => {
                   return (
@@ -189,12 +200,12 @@ const Payment = ({
           </>
         )}
 
-        {paidByGiftcard && (
+        {/* {paidByGiftcard && (
           <div className="flex gap-10">
             <div className="text-grayscale-500">Payment method</div>
             <div>Gift card</div>
           </div>
-        )}
+        )} */}
         <ErrorMessage
           error={error}
           data-testid="payment-method-error-message"
@@ -246,12 +257,12 @@ const Payment = ({
                 </div>
               )}
             </div>
-          </div>
-        ) : paidByGiftcard ? (
+          </div> /* : paidByGiftcard ? (
           <div className="flex gap-10">
             <div className="text-grayscale-500">Payment method</div>
             <div>Gift card</div>
           </div>
+        ) */
         ) : null}
       </div>
     </>

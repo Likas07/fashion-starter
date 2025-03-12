@@ -3,7 +3,6 @@ import { Metadata } from "next"
 import { notFound, redirect } from "next/navigation"
 
 import { retrieveCart } from "@lib/data/cart"
-import { getCustomer } from "@lib/data/customer"
 import Wrapper from "@modules/checkout/components/payment-wrapper"
 import CheckoutForm from "@modules/checkout/templates/checkout-form"
 import { getCheckoutStep } from "@modules/cart/utils/getCheckoutStep"
@@ -26,7 +25,6 @@ export default async function Checkout({
 
   const { countryCode } = await params
   const { step } = await searchParams
-  const customer = await getCustomer()
   const checkoutStep = getCheckoutStep(cart)
 
   if (!step) {
@@ -35,7 +33,7 @@ export default async function Checkout({
 
   return (
     <Wrapper cart={cart}>
-      <CheckoutForm cart={cart} customer={customer} countryCode={countryCode} />
+      <CheckoutForm cart={cart} countryCode={countryCode} />
     </Wrapper>
   )
 }

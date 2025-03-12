@@ -19,7 +19,21 @@ import {
 } from "@/components/ui/Checkbox"
 import { useFormContext, useWatch } from "react-hook-form"
 
-const isShippingAddressEmpty = (formData: Record<string, any>) => {
+const isShippingAddressEmpty = (formData: {
+  shipping_address?: Pick<
+    HttpTypes.StoreCartAddress,
+    | "first_name"
+    | "last_name"
+    | "address_1"
+    | "address_2"
+    | "company"
+    | "postal_code"
+    | "city"
+    | "country_code"
+    | "province"
+    | "phone"
+  >
+}) => {
   return (
     !formData?.shipping_address?.first_name &&
     !formData?.shipping_address?.last_name &&
@@ -127,6 +141,7 @@ const ShippingAddress = ({
         })
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cart, customer, addressesInRegion])
 
   const handleChange = (

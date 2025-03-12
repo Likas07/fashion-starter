@@ -2,25 +2,33 @@
 
 import * as React from "react"
 import { SubmitButton } from "@modules/common/components/submit-button"
-import { signout } from "@lib/data/customer"
 import { useCountryCode } from "hooks/country-code"
 import { ButtonProps } from "@/components/Button"
+import { useSignout } from "hooks/customer"
+import { withReactQueryProvider } from "@lib/util/react-query"
 
-export const SignOutButton: React.FC<Omit<ButtonProps, "type">> = ({
-  isLoading,
-  ...rest
-}) => {
-  const countryCode = useCountryCode()
-  const [_, formAction, isPending] = React.useActionState(
-    signout,
-    countryCode ?? ""
-  )
+export const SignOutButton = withReactQueryProvider<Omit<ButtonProps, "type">>(
+  (rest) => {
+    const countryCode = useCountryCode()
+    const { mutateAsync, isPending } = useSignout()
 
-  return (
-    <form action={formAction}>
-      <SubmitButton {...rest} isLoading={isPending || isLoading}>
-        Log out
-      </SubmitButton>
-    </form>
-  )
-}
+    const handleSignout = async () => {
+      if (countryCode) {
+        await mutateAsync(countryCode ?? "")
+      }
+    }
+
+    return (
+      <form
+        onSubmit={(e) => {
+          e.preventDefault()
+          handleSignout()
+        }}
+      >
+        <SubmitButton {...rest} isLoading={isPending}>
+          Log out
+        </SubmitButton>
+      </form>
+    )
+  }
+)

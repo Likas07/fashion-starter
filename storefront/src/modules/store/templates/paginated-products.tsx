@@ -1,5 +1,5 @@
 "use client"
-import { HttpTypes, StoreProduct, StoreRegion } from "@medusajs/types"
+import { HttpTypes, StoreProduct } from "@medusajs/types"
 import ProductPreview from "@modules/products/components/product-preview"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 import { Layout, LayoutColumn } from "@/components/Layout"
@@ -17,7 +17,6 @@ function PaginatedProducts({
   typeId,
   productsIds,
   countryCode,
-  region,
 }: {
   sortBy?: SortOptions
   page: number
@@ -26,7 +25,6 @@ function PaginatedProducts({
   typeId?: string | string[]
   productsIds?: string[]
   countryCode: string
-  region: StoreRegion
 }) {
   const queryParams: HttpTypes.StoreProductListParams = {
     limit: PRODUCT_LIMIT,
@@ -84,18 +82,13 @@ function PaginatedProducts({
       <Layout className="gap-y-10 md:gap-y-16 mb-16">
         {productsQuery?.data?.pages[0]?.response?.products?.length ? (
           productsQuery?.data?.pages.flatMap((page) => {
-            return page?.response?.products.map(
-              (p: StoreProduct, i: number) => {
-                return (
-                  <LayoutColumn
-                    key={p.id}
-                    className="md:!col-span-4 !col-span-6"
-                  >
-                    <ProductPreview product={p} region={region} />
-                  </LayoutColumn>
-                )
-              }
-            )
+            return page?.response?.products.map((p: StoreProduct) => {
+              return (
+                <LayoutColumn key={p.id} className="md:!col-span-4 !col-span-6">
+                  <ProductPreview product={p} />
+                </LayoutColumn>
+              )
+            })
           })
         ) : (
           <NoResults />

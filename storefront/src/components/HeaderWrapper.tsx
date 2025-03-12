@@ -56,9 +56,10 @@ export const HeaderWrapper: React.FC<{ children?: React.ReactNode }> = ({
     const handleScroll = () => {
       const position = window.scrollY
 
-      position > triggerPosition
-        ? headerElement.setAttribute("data-sticky", "true")
-        : headerElement.setAttribute("data-sticky", "false")
+      headerElement.setAttribute(
+        "data-sticky",
+        position > triggerPosition ? "true" : "false"
+      )
     }
 
     updateTriggerPosition()

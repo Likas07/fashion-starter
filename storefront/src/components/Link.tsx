@@ -16,7 +16,7 @@ export const getLinkClassNames = ({ variant }: LinkOwnProps): string =>
     variant === "underline" && "hover:border-transparent"
   )
 
-export const Link = <RouteInferType extends any>({
+export const Link = <RouteInferType,>({
   variant = "unstyled",
   className,
   children,

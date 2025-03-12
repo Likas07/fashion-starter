@@ -14,6 +14,7 @@ import { Form } from "@/components/Forms"
 import { z } from "zod"
 import { withReactQueryProvider } from "@lib/util/react-query"
 import { useSetShippingAddress } from "hooks/cart"
+import { useCustomer } from "hooks/customer"
 
 const addressesFormSchema = z
   .object({
@@ -53,13 +54,7 @@ const addressesFormSchema = z
     ])
   )
 
-const Addresses = ({
-  cart,
-  customer,
-}: {
-  cart: HttpTypes.StoreCart | null
-  customer: HttpTypes.StoreCustomer | null
-}) => {
+const Addresses = ({ cart }: { cart: HttpTypes.StoreCart | null }) => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
@@ -67,6 +62,8 @@ const Addresses = ({
   const isOpen = searchParams.get("step") === "delivery"
 
   const [sameAsBilling, setSameAsBilling] = React.useState(true)
+
+  const { data: customer } = useCustomer()
 
   React.useEffect(() => {
     if (cart?.shipping_address && cart?.billing_address) {
@@ -177,14 +174,14 @@ const Addresses = ({
             return (
               <>
                 <ShippingAddress
-                  customer={customer}
+                  customer={customer || null}
                   checked={sameAsBilling}
                   onChange={toggleSameAsBilling}
                   cart={cart}
                 />
 
                 {!sameAsBilling && (
-                  <BillingAddress cart={cart} customer={customer} />
+                  <BillingAddress cart={cart} customer={customer || null} />
                 )}
 
                 <SubmitButton

@@ -2,24 +2,26 @@
 
 import { twJoin } from "tailwind-merge"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { HttpTypes } from "@medusajs/types"
 
 import { Button } from "@/components/Button"
 import PaymentButton from "@modules/checkout/components/payment-button"
 
-const Review = ({ cart }: { cart: any }) => {
+const Review = ({ cart }: { cart: HttpTypes.StoreCart }) => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
 
   const isOpen = searchParams.get("step") === "review"
 
-  const paidByGiftcard =
-    cart?.gift_cards && cart?.gift_cards?.length > 0 && cart?.total === 0
+  // const paidByGiftcard =
+  //   cart?.gift_cards && cart?.gift_cards?.length > 0 && cart?.total === 0
 
   const previousStepsCompleted =
     cart.shipping_address &&
+    cart.shipping_methods &&
     cart.shipping_methods.length > 0 &&
-    (cart.payment_collection || paidByGiftcard)
+    cart.payment_collection
 
   return (
     <>

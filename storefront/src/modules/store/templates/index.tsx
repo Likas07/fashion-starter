@@ -82,7 +82,6 @@ const StoreTemplate = async ({
                     .filter((t) => type.includes(t.value))
                     .map((t) => t.id)
             }
-            region={region}
           />
         )}
       </Suspense>

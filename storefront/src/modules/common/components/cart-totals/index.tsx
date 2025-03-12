@@ -6,9 +6,7 @@ import { HttpTypes } from "@medusajs/types"
 import { convertToLocale } from "@lib/util/money"
 
 type CartTotalsProps = {
-  cart: HttpTypes.StoreCart & {
-    promotions: HttpTypes.StorePromotion[]
-  }
+  cart: HttpTypes.StoreCart
 }
 
 const CartTotals: React.FC<CartTotalsProps> = ({ cart }) => {

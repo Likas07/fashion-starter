@@ -123,8 +123,8 @@ const StripeCardPaymentButton = ({
           }
         )
       }
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : `${err}`)
     } finally {
       setIsLoading(false)
     }
@@ -144,7 +144,6 @@ const StripeCardPaymentButton = ({
 }
 
 const PaymentMethodButton = ({
-  cart,
   isLoading,
   setIsLoading,
   createQueryString,
@@ -177,8 +176,8 @@ const PaymentMethodButton = ({
           }
         )
       }
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : `${err}`)
     } finally {
       setIsLoading(false)
     }

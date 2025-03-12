@@ -280,7 +280,7 @@ export const useSetPaymentMethod = (
   options?: UseMutationOptions<
     void,
     Error,
-    { sessionId: string; token: any },
+    { sessionId: string; token: string | null | undefined },
     unknown
   >
 ) => {
@@ -334,7 +334,7 @@ export const usePlaceOrder = (
       }
     | null,
     Error,
-    {},
+    null,
     unknown
   >
 ) => {

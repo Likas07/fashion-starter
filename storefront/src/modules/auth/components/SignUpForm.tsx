@@ -4,27 +4,15 @@ import * as React from "react"
 
 import { SubmitButton } from "@modules/common/components/submit-button"
 import { Form, InputField } from "@/components/Forms"
-import { signup } from "@lib/data/customer"
 import { z } from "zod"
+import { signupFormSchema, useSignup } from "hooks/customer"
+import { withReactQueryProvider } from "@lib/util/react-query"
 
-const signupFormSchema = z
-  .object({
-    email: z.string().email(),
-    first_name: z.string().min(1),
-    last_name: z.string().min(1),
-    phone: z.string().optional().nullable(),
-    password: z.string().min(6),
-    confirm_password: z.string().min(6),
-  })
-  .refine((data) => data.password === data.confirm_password, {
-    message: "Passwords must match",
-    path: ["confirm_password"],
-  })
+export const SignUpForm = withReactQueryProvider(() => {
+  const { mutateAsync, isPending, data } = useSignup()
 
-export const SignUpForm: React.FC = () => {
-  const [message, formAction] = React.useActionState(signup, null)
-  const onSubmit = (values: z.infer<typeof signupFormSchema>) => {
-    React.startTransition(() => formAction(values))
+  const onSubmit = async (values: z.infer<typeof signupFormSchema>) => {
+    await mutateAsync(values)
   }
 
   return (
@@ -77,11 +65,15 @@ export const SignUpForm: React.FC = () => {
               className=" flex-1"
               inputProps={{ autoComplete: "new-password" }}
             />
-            {message && <p className="text-red-primary text-sm">{message}</p>}
-            <SubmitButton isDisabled={isDisabled}>Register</SubmitButton>
+            {data?.error && (
+              <p className="text-red-primary text-sm">{data.error}</p>
+            )}
+            <SubmitButton isDisabled={isDisabled} isPending={isPending}>
+              Register
+            </SubmitButton>
           </div>
         )
       }}
     </Form>
   )
-}
+})

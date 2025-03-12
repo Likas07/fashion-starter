@@ -14,8 +14,9 @@ import { UiModal, UiModalOverlay } from "@/components/ui/Modal"
 import { Icon } from "@/components/Icon"
 import { LoginForm } from "@modules/auth/components/LoginForm"
 import ErrorMessage from "@modules/checkout/components/error-message"
-import { useSetEmail } from "hooks/cart"
+import { useCustomer } from "hooks/customer"
 import { withReactQueryProvider } from "@lib/util/react-query"
+import { useSetEmail } from "hooks/cart"
 
 export const emailFormSchema = z.object({
   email: z.string().min(3).email("Enter a valid email address."),
@@ -23,16 +24,16 @@ export const emailFormSchema = z.object({
 
 const Email = ({
   cart,
-  customer,
   countryCode,
 }: {
   cart: HttpTypes.StoreCart | null
-  customer: HttpTypes.StoreCustomer | null
   countryCode: string
 }) => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
+
+  const { data: customer } = useCustomer()
 
   const isOpen = searchParams.get("step") === "email"
 
@@ -75,7 +76,9 @@ const Email = ({
                     <UiModal className="relative max-w-108">
                       <UiDialog>
                         <p className="text-md mb-10">Log in</p>
-                        <LoginForm />
+                        <LoginForm
+                          redirectUrl={`/${countryCode}/checkout?step=delivery`}
+                        />
                         <UiCloseButton
                           variant="ghost"
                           className="absolute top-4 right-6 p-0"

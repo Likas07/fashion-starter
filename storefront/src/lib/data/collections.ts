@@ -61,7 +61,7 @@ export const getCollectionsWithProducts = cache(
           collection.products = []
         }
 
-        collection.products.push(product as any)
+        collection.products.push(product)
       }
     })
 

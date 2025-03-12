@@ -3,14 +3,10 @@ import { LocalizedLink } from "@/components/LocalizedLink"
 import Thumbnail from "@modules/products/components/thumbnail"
 import { getProductPrice } from "@lib/util/get-product-price"
 
-export default  function ProductPreview({
+export default function ProductPreview({
   product,
-  isFeatured,
-  region,
 }: {
   product: HttpTypes.StoreProduct
-  isFeatured?: boolean
-  region: HttpTypes.StoreRegion
 }) {
   const { cheapestPrice } = getProductPrice({
     product: product,
@@ -18,7 +14,8 @@ export default  function ProductPreview({
 
   const hasReducedPrice =
     cheapestPrice &&
-    cheapestPrice.calculated_price_number < (cheapestPrice?.original_price_number || 0)
+    cheapestPrice.calculated_price_number <
+      (cheapestPrice?.original_price_number || 0)
 
   return (
     <LocalizedLink href={`/products/${product.handle}`}>

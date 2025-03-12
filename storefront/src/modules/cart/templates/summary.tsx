@@ -7,16 +7,17 @@ import CartTotals from "@modules/cart/components/cart-totals"
 import DiscountCode from "@modules/cart/components/discount-code"
 import { getCheckoutStep } from "@modules/cart/utils/getCheckoutStep"
 import { Icon } from "@/components/Icon"
+import { useCustomer } from "hooks/customer"
+import { withReactQueryProvider } from "@lib/util/react-query"
 
 type SummaryProps = {
-  cart: HttpTypes.StoreCart & {
-    promotions: HttpTypes.StorePromotion[]
-  }
-  customer: HttpTypes.StoreCustomer | null
+  cart: HttpTypes.StoreCart
 }
 
-const Summary = ({ cart, customer }: SummaryProps) => {
+const Summary = ({ cart }: SummaryProps) => {
   const step = getCheckoutStep(cart)
+
+  const { data: customer } = useCustomer()
 
   return (
     <>
@@ -48,4 +49,4 @@ const Summary = ({ cart, customer }: SummaryProps) => {
   )
 }
 
-export default Summary
+export default withReactQueryProvider(Summary)

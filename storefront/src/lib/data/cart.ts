@@ -40,11 +40,7 @@ export async function retrieveCart() {
     cart.items = await enrichLineItems(cart.items, cart.region_id)
   }
 
-  return cart as
-    | (HttpTypes.StoreCart & {
-        promotions: HttpTypes.StorePromotion[]
-      })
-    | null
+  return cart
 }
 
 export async function getCartQuantity() {
@@ -77,9 +73,7 @@ export async function getOrSetCart(input: unknown) {
       {},
       await getAuthHeaders()
     )
-    cart = cartResp.cart as HttpTypes.StoreCart & {
-      promotions: HttpTypes.StorePromotion[]
-    }
+    cart = cartResp.cart
 
     await setCartId(cart.id)
     revalidateTag("cart")
@@ -238,7 +232,10 @@ export async function setShippingMethod({
     .catch(medusaError)
 }
 
-export async function setPaymentMethod(session_id: string, token: any) {
+export async function setPaymentMethod(
+  session_id: string,
+  token: string | null | undefined
+) {
   await sdk.client
     .fetch("/store/custom/stripe/set-payment-method", {
       method: "POST",
@@ -312,7 +309,7 @@ export async function setEmail({
     if (!cartId) {
       throw new Error("No existing cart found when setting addresses")
     }
-  } catch (e: any) {
+  } catch (e) {
     return {
       success: false,
       error: e instanceof Error ? e.message : "Could not get your cart",
@@ -348,7 +345,7 @@ export async function setAddresses(
           ? formData.shipping_address
           : formData.billing_address,
     })
-  } catch (e: any) {
+  } catch (e) {
     return {
       success: false,
       error: e instanceof Error ? e.message : "Could not set addresses",
