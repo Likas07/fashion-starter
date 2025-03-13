@@ -96,13 +96,10 @@ const Payment = () => {
   const paymentMethodId = activeSession?.data?.payment_method_id as string
   const { data: paymentMethod } = useGetPaymentMethod(paymentMethodId)
 
-  const paidByGiftcard = cart?.total === 0
-
   const paymentReady =
-    (activeSession &&
-      cart?.shipping_methods &&
-      cart?.shipping_methods.length !== 0) ||
-    paidByGiftcard
+    activeSession &&
+    cart?.shipping_methods &&
+    cart?.shipping_methods.length !== 0
 
   const handleRemoveCard = useCallback(() => {
     if (!activeSession?.id) {
