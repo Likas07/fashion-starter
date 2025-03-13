@@ -2,6 +2,7 @@ import {
   addToCart,
   applyPromotions,
   deleteLineItem,
+  getCartQuantity,
   getPaymentMethod,
   initiatePaymentSession,
   placeOrder,
@@ -32,6 +33,16 @@ export const useCart = ({ enabled }: { enabled: boolean }) => {
       return res
     },
     enabled,
+  })
+}
+
+export const useCartQuantity = () => {
+  return useQuery({
+    queryKey: ["cart"],
+    queryFn: async () => {
+      const res = await getCartQuantity()
+      return res
+    },
   })
 }
 
@@ -223,7 +234,7 @@ export const useSetShippingAddress = (
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationKey: ["cart", "shipping-address-update"],
+    mutationKey: ["shipping-address-update"],
     mutationFn: async (payload) => {
       const response = await setAddresses(payload)
       return response
@@ -251,7 +262,7 @@ export const useSetEmail = (
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationKey: ["cart", "email"],
+    mutationKey: ["set-email"],
     mutationFn: async (payload) => {
       const response = await setEmail(payload)
       return response
@@ -280,7 +291,7 @@ export const useInitiatePaymentSession = (
 ) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationKey: ["payment", "cart"],
+    mutationKey: ["initiate-payment"],
     mutationFn: async (payload: { providerId: string }) => {
       const response = await initiatePaymentSession(payload.providerId)
 
@@ -289,7 +300,7 @@ export const useInitiatePaymentSession = (
     onSuccess: async function (...args) {
       await queryClient.invalidateQueries({
         exact: false,
-        queryKey: ["cart", "payment"],
+        queryKey: ["cart"],
       })
 
       await options?.onSuccess?.(...args)
@@ -308,7 +319,7 @@ export const useSetPaymentMethod = (
 ) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationKey: ["payment", "cart"],
+    mutationKey: ["set-payment"],
     mutationFn: async (payload) => {
       const response = await setPaymentMethod(payload.sessionId, payload.token)
 
@@ -317,7 +328,7 @@ export const useSetPaymentMethod = (
     onSuccess: async function (...args) {
       await queryClient.invalidateQueries({
         exact: false,
-        queryKey: ["cart", "payment"],
+        queryKey: ["cart"],
       })
 
       await options?.onSuccess?.(...args)
@@ -362,7 +373,7 @@ export const usePlaceOrder = (
 ) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationKey: ["cart"],
+    mutationKey: ["place-order"],
     mutationFn: async () => {
       const response = await placeOrder()
       return response
@@ -384,7 +395,7 @@ export const useApplyPromotions = (
 ) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationKey: ["promotion", "cart"],
+    mutationKey: ["apply-promotion"],
     mutationFn: async (payload) => {
       const response = await applyPromotions(payload)
 
