@@ -1,17 +1,23 @@
-"use client"
+import { Suspense } from "react"
+import { getCartQuantity } from "@lib/data/cart"
 import { Icon, IconProps } from "@/components/Icon"
-import { withReactQueryProvider } from "@lib/util/react-query"
-import { useCartQuantity } from "hooks/cart"
 
-export const CartIcon = withReactQueryProvider<
+const CartIconWithQuantity: React.FC<
   Omit<IconProps, "status" | "name">
->((props) => {
-  const { data: quantity } = useCartQuantity()
+> = async (props) => {
+  const quantity = await getCartQuantity()
+
   return (
-    <Icon
-      name="case"
-      status={quantity && quantity > 0 ? quantity : undefined}
-      {...props}
-    />
+    <Icon name="case" status={quantity > 0 ? quantity : undefined} {...props} />
   )
-})
+}
+
+export const CartIcon: React.FC<Omit<IconProps, "status" | "name">> = (
+  props
+) => {
+  return (
+    <Suspense fallback={<Icon name="case" {...props} />}>
+      <CartIconWithQuantity {...props} />
+    </Suspense>
+  )
+}
