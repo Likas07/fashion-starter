@@ -18,7 +18,7 @@ export const CartDrawer = withReactQueryProvider<{
 }>(({ children }) => {
   const [isCartDrawerOpen, setIsCartDrawerOpen] = React.useState(false)
 
-  const { data: cart } = useCart({ enabled: isCartDrawerOpen })
+  const { data: cart, isPending } = useCart({ enabled: isCartDrawerOpen })
 
   const step = getCheckoutStep(cart as HttpTypes.StoreCart)
 
@@ -80,6 +80,10 @@ export const CartDrawer = withReactQueryProvider<{
                   </LocalizedButtonLink>
                 </div>
               </>
+            ) : isPending ? (
+              <div className="flex align-middle justify-around items-center h-screen ">
+                <Icon name="loader" className="w-10 md:w-15 animate-spin" />
+              </div>
             ) : (
               <>
                 <p className="md:text-sm max-sm:mr-10 mb-6 mt-2">
