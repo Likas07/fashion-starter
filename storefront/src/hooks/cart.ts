@@ -430,7 +430,15 @@ export const useUpdateRegion = (
     onSuccess: async function (...args) {
       await queryClient.invalidateQueries({
         exact: false,
-        queryKey: ["cart", "regions", "products"],
+        queryKey: ["cart"],
+      })
+      await queryClient.invalidateQueries({
+        exact: false,
+        queryKey: ["regions"],
+      })
+      await queryClient.invalidateQueries({
+        exact: false,
+        queryKey: ["products"],
       })
 
       await options?.onSuccess?.(...args)
