@@ -1,5 +1,4 @@
 "use client"
-
 import { HttpTypes } from "@medusajs/types"
 import { getVariantItemsInStock } from "@lib/util/inventory"
 import ErrorMessage from "@modules/checkout/components/error-message"
@@ -11,6 +10,7 @@ import { LocalizedLink } from "@/components/LocalizedLink"
 import { twMerge } from "tailwind-merge"
 import { useUpdateLineItem } from "hooks/cart"
 import { withReactQueryProvider } from "@lib/util/react-query"
+import * as React from "react"
 
 type ItemProps = {
   item: HttpTypes.StoreCartLineItem
@@ -19,10 +19,20 @@ type ItemProps = {
 
 const Item = ({ item, className }: ItemProps) => {
   const { handle } = item.variant?.product ?? {}
-
-  const { mutate, isPending, error } = useUpdateLineItem()
-
+  const { mutateAsync, isPending, error } = useUpdateLineItem()
   const maxQuantity = item.variant ? getVariantItemsInStock(item.variant) : 0
+
+  const [quantity, setQuantity] = React.useState(item.quantity)
+
+  React.useEffect(() => {
+    const handler = setTimeout(() => {
+      if (quantity !== item.quantity) {
+        mutateAsync({ lineId: item.id, quantity })
+      }
+    }, 500)
+
+    return () => clearTimeout(handler) // Očisti timeout ako se value promijeni prije nego istekne 300ms
+  }, [quantity])
 
   return (
     <div
@@ -56,8 +66,8 @@ const Item = ({ item, className }: ItemProps) => {
             size="sm"
             minValue={1}
             maxValue={maxQuantity}
-            value={item.quantity}
-            onChange={(quantity) => mutate({ lineId: item.id, quantity })}
+            value={quantity}
+            onChange={setQuantity}
             isDisabled={isPending}
             className="w-25"
             aria-label="Quantity"
