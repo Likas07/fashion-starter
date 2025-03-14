@@ -79,7 +79,7 @@ function ProductActions({ product, materials, disabled }: ProductActionsProps) {
   const [quantity, setQuantity] = useState(1)
   const countryCode = useCountryCode()
 
-  const { mutate, isPending } = useAddLineItem()
+  const { mutateAsync, isPending } = useAddLineItem()
 
   // If there is only 1 variant, preselect the options
   useEffect(() => {
@@ -114,10 +114,10 @@ function ProductActions({ product, materials, disabled }: ProductActionsProps) {
     : 0
 
   // add the selected variant to the cart
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (!selectedVariant?.id) return null
 
-    mutate({
+    await mutateAsync({
       variantId: selectedVariant.id,
       quantity,
       countryCode,
