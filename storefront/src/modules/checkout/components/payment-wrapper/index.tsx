@@ -10,6 +10,7 @@ import { useCart } from "hooks/cart"
 import { withReactQueryProvider } from "@lib/util/react-query"
 import { useRouter } from "next/navigation"
 import { getCheckoutStep } from "@modules/cart/utils/getCheckoutStep"
+import { Icon } from "@/components/Icon"
 
 type WrapperProps = {
   children: React.ReactNode
@@ -26,7 +27,7 @@ const paypalClientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID
 
 const Wrapper: React.FC<WrapperProps> = ({ children, step, countryCode }) => {
   const router = useRouter()
-  const { data: cart } = useCart({ enabled: true })
+  const { data: cart, isPending } = useCart({ enabled: true })
 
   React.useEffect(() => {
     if (!step && cart) {
@@ -34,6 +35,13 @@ const Wrapper: React.FC<WrapperProps> = ({ children, step, countryCode }) => {
       router.push(`/${countryCode}/checkout?step=${checkoutStep}`)
     }
   }, [step, countryCode, cart])
+  if (isPending) {
+    return (
+      <div className="absolute left-0 top-20 md:top-40 lg:top-0 w-[100vw] lg:max-w-[calc(100vw-((50vw-50%)+448px))] xl:max-w-[calc(100vw-((50vw-50%)+540px))] -ml-[calc(50vw-50%)] h-screen lg:w-full flex items-center justify-center">
+        <Icon name="loader" className="w-10 md:w-20 animate-spin" />
+      </div>
+    )
+  }
   if (!cart) {
     return
   }
