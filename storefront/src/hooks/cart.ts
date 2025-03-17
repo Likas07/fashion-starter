@@ -38,11 +38,12 @@ export const useCart = ({ enabled }: { enabled: boolean }) => {
 
 export const useCartQuantity = () => {
   return useQuery({
-    queryKey: ["cart"],
+    queryKey: ["cart", "cart-quantity"],
     queryFn: async () => {
       const res = await getCartQuantity()
       return res
     },
+
   })
 }
 

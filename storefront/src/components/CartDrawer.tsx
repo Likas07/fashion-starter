@@ -10,17 +10,17 @@ import { Button } from "@/components/Button"
 import DiscountCode from "@modules/cart/components/discount-code"
 import { Icon } from "@/components/Icon"
 import { getCheckoutStep } from "@modules/cart/utils/getCheckoutStep"
-import { useCart } from "hooks/cart"
+import { useCart, useCartQuantity } from "hooks/cart"
 import { withReactQueryProvider } from "@lib/util/react-query"
 
-export const CartDrawer = withReactQueryProvider<{
-  children: React.ReactNode
-}>(({ children }) => {
+export const CartDrawer = withReactQueryProvider(() => {
   const [isCartDrawerOpen, setIsCartDrawerOpen] = React.useState(false)
 
   const { data: cart, isPending } = useCart({ enabled: isCartDrawerOpen })
 
   const step = getCheckoutStep(cart as HttpTypes.StoreCart)
+
+  const { data: quantity, isPending: pendingQuantity } = useCartQuantity()
 
   return (
     <>
@@ -30,7 +30,15 @@ export const CartDrawer = withReactQueryProvider<{
         className="p-1 group-data-[light=true]:md:text-white group-data-[sticky=true]:md:text-black"
         aria-label="Open cart"
       >
-        {children}
+        {pendingQuantity ? (
+          <Icon name="case" className=" w-6 h-6" />
+        ) : (
+          <Icon
+            name="case"
+            className=" w-6 h-6"
+            status={quantity && quantity > 0 ? quantity : undefined}
+          />
+        )}
       </Button>
       <Drawer
         colorScheme="light"

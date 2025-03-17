@@ -4,7 +4,6 @@ import { SearchField } from "@/components/SearchField"
 import { CartDrawer } from "@/components/CartDrawer"
 import { Layout, LayoutColumn } from "@/components/Layout"
 import { LocalizedLink } from "@/components/LocalizedLink"
-import { CartIcon } from "@/components/CartIcon"
 import { HeaderDrawer } from "@/components/HeaderDrawer"
 import { RegionSwitcher } from "@/components/RegionSwitcher"
 import { HeaderWrapper } from "@/components/HeaderWrapper"
@@ -53,16 +52,12 @@ export const Header: React.FC = async () => {
                 />
                 <SearchField countryOptions={countryOptions} />
                 <LoginLink className="p-1 group-data-[light=true]:md:text-white group-data-[sticky=true]:md:text-black" />
-                <CartDrawer>
-                  <CartIcon className="w-6 h-6" />
-                </CartDrawer>
+                <CartDrawer />
               </div>
               <div className="flex items-center gap-4 md:hidden">
                 <LoginLink className="p-1 group-data-[light=true]:md:text-white" />
 
-                <CartDrawer>
-                  <CartIcon className="w-6 h-6" wrapperClassName="w-6 h-6" />
-                </CartDrawer>
+                <CartDrawer />
                 <HeaderDrawer countryOptions={countryOptions} />
               </div>
             </div>
