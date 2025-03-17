@@ -6,16 +6,12 @@ import StripeWrapper from "@modules/checkout/components/payment-wrapper/stripe-w
 import { PayPalScriptProvider } from "@paypal/react-paypal-js"
 import { createContext } from "react"
 import { isPaypal, isStripe } from "@lib/constants"
-import { useCart } from "hooks/cart"
 import { withReactQueryProvider } from "@lib/util/react-query"
-import { useRouter } from "next/navigation"
-import { getCheckoutStep } from "@modules/cart/utils/getCheckoutStep"
-import { Icon } from "@/components/Icon"
+import { StoreCart } from "@medusajs/types"
 
 type WrapperProps = {
   children: React.ReactNode
-  step?: string
-  countryCode: string
+  cart: StoreCart
 }
 
 export const StripeContext = createContext(false)
@@ -25,26 +21,7 @@ const stripePromise = stripeKey ? loadStripe(stripeKey) : null
 
 const paypalClientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID
 
-const Wrapper: React.FC<WrapperProps> = ({ children, step, countryCode }) => {
-  const router = useRouter()
-  const { data: cart, isPending } = useCart({ enabled: true })
-
-  React.useEffect(() => {
-    if (!step && cart) {
-      const checkoutStep = getCheckoutStep(cart)
-      router.push(`/${countryCode}/checkout?step=${checkoutStep}`)
-    }
-  }, [step, countryCode, cart])
-  if (isPending) {
-    return (
-      <div className="absolute left-0 top-20 md:top-40 lg:top-0 w-[100vw] lg:max-w-[calc(100vw-((50vw-50%)+448px))] xl:max-w-[calc(100vw-((50vw-50%)+540px))] -ml-[calc(50vw-50%)] h-screen lg:w-full flex items-center justify-center">
-        <Icon name="loader" className="w-10 md:w-20 animate-spin" />
-      </div>
-    )
-  }
-  if (!cart) {
-    return
-  }
+const Wrapper: React.FC<WrapperProps> = ({ children, cart }) => {
   const paymentSession = cart.payment_collection?.payment_sessions?.find(
     (s) => s.status === "pending"
   )

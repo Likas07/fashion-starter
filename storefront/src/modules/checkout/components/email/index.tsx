@@ -14,22 +14,27 @@ import { Icon } from "@/components/Icon"
 import { LoginForm } from "@modules/auth/components/LoginForm"
 import ErrorMessage from "@modules/checkout/components/error-message"
 import { useCustomer } from "hooks/customer"
-import { useCart, useSetEmail } from "hooks/cart"
-import { withReactQueryProvider } from "@lib/util/react-query"
+import { useSetEmail } from "hooks/cart"
+import { StoreCart } from "@medusajs/types"
 
 export const emailFormSchema = z.object({
   email: z.string().min(3).email("Enter a valid email address."),
 })
 
-const Email = ({ countryCode }: { countryCode: string }) => {
+const Email = ({
+  countryCode,
+  cart,
+}: {
+  countryCode: string
+  cart: StoreCart
+}) => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
 
-  const { data: customer } = useCustomer()
+  const { data: customer, isPending: customerPending } = useCustomer()
 
   const isOpen = searchParams.get("step") === "email"
-  const { data: cart } = useCart({ enabled: isOpen })
 
   const { mutate, isPending, data } = useSetEmail()
 
@@ -60,7 +65,7 @@ const Email = ({ countryCode }: { countryCode: string }) => {
               1. Email
             </p>
           </div>
-          {isOpen && !customer && (
+          {isOpen && !customer && !customerPending && (
             <div className="text-grayscale-500">
               <p>
                 Already have an account? No worries, just{" "}
@@ -142,4 +147,4 @@ const Email = ({ countryCode }: { countryCode: string }) => {
   )
 }
 
-export default withReactQueryProvider(Email)
+export default Email

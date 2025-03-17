@@ -11,9 +11,9 @@ import ShippingAddress from "@modules/checkout/components/shipping-address"
 import { Button } from "@/components/Button"
 import { Form } from "@/components/Forms"
 import { z } from "zod"
-import { withReactQueryProvider } from "@lib/util/react-query"
 import { useCustomer } from "hooks/customer"
-import { useCart, useSetShippingAddress } from "hooks/cart"
+import { useSetShippingAddress } from "hooks/cart"
+import { StoreCart } from "@medusajs/types"
 
 const addressesFormSchema = z
   .object({
@@ -53,14 +53,12 @@ const addressesFormSchema = z
     ])
   )
 
-const Addresses = () => {
+const Addresses = ({ cart }: { cart: StoreCart }) => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
 
   const isOpen = searchParams.get("step") === "delivery"
-
-  const { data: cart } = useCart({ enabled: isOpen })
 
   const [sameAsBilling, setSameAsBilling] = React.useState(true)
 
@@ -269,4 +267,4 @@ const Addresses = () => {
   )
 }
 
-export default withReactQueryProvider(Addresses)
+export default Addresses

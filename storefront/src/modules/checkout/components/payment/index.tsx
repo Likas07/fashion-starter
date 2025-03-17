@@ -17,17 +17,14 @@ import PaymentCardButton from "@modules/checkout/components/payment-card-button"
 import { Button } from "@/components/Button"
 import { UiRadioGroup } from "@/components/ui/Radio"
 import { Input } from "@/components/Forms"
-import { withReactQueryProvider } from "@lib/util/react-query"
-
 import {
-  useCart,
   useCartPaymentMethods,
   useGetPaymentMethod,
   useSetPaymentMethod,
 } from "hooks/cart"
-import { StorePaymentSession } from "@medusajs/types"
+import { StoreCart, StorePaymentSession } from "@medusajs/types"
 
-const Payment = () => {
+const Payment = ({ cart }: { cart: StoreCart }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [cardBrand, setCardBrand] = useState<string | null>(null)
@@ -76,8 +73,6 @@ const Payment = () => {
   useEffect(() => {
     setError(null)
   }, [isOpen])
-
-  const { data: cart } = useCart({ enabled: isOpen })
 
   const setPaymentMethod = useSetPaymentMethod()
 
@@ -273,4 +268,4 @@ const Payment = () => {
   )
 }
 
-export default withReactQueryProvider(Payment)
+export default Payment

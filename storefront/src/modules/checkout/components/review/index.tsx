@@ -5,10 +5,9 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation"
 
 import { Button } from "@/components/Button"
 import PaymentButton from "@modules/checkout/components/payment-button"
-import { withReactQueryProvider } from "@lib/util/react-query"
-import { useCart } from "hooks/cart"
+import { StoreCart } from "@medusajs/types"
 
-const Review = () => {
+const Review = ({ cart }: { cart: StoreCart }) => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
@@ -17,12 +16,6 @@ const Review = () => {
 
   // const paidByGiftcard =
   //   cart?.gift_cards && cart?.gift_cards?.length > 0 && cart?.total === 0
-  const { data: cart } = useCart({ enabled: isOpen })
-
-  if (!cart) {
-    return
-  }
-
   const previousStepsCompleted =
     cart.shipping_address &&
     cart.shipping_methods &&
@@ -77,4 +70,4 @@ const Review = () => {
   )
 }
 
-export default withReactQueryProvider(Review)
+export default Review

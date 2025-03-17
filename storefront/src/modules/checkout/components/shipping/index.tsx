@@ -12,14 +12,10 @@ import {
   UiRadioGroup,
   UiRadioLabel,
 } from "@/components/ui/Radio"
-import { withReactQueryProvider } from "@lib/util/react-query"
-import {
-  useCart,
-  useCartShippingMethods,
-  useSetShippingMethod,
-} from "hooks/cart"
+import { useCartShippingMethods, useSetShippingMethod } from "hooks/cart"
+import { StoreCart } from "@medusajs/types"
 
-const Shipping = withReactQueryProvider(() => {
+const Shipping = ({ cart }: { cart: StoreCart }) => {
   const [error, setError] = useState<string | null>(null)
 
   const searchParams = useSearchParams()
@@ -28,11 +24,6 @@ const Shipping = withReactQueryProvider(() => {
 
   const isOpen = searchParams.get("step") === "shipping"
 
-  const { data: cart } = useCart({ enabled: isOpen })
-
-  if (!cart) {
-    return
-  }
   const { data: availableShippingMethods } = useCartShippingMethods(cart.id)
 
   const { mutate, isPending } = useSetShippingMethod({ cartId: cart.id })
@@ -138,6 +129,6 @@ const Shipping = withReactQueryProvider(() => {
       ) : null}
     </>
   )
-})
+}
 
 export default Shipping
