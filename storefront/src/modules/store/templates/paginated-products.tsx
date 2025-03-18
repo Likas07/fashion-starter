@@ -7,6 +7,7 @@ import { NoResults } from "@modules/store/components/no-results.tsx"
 import { withReactQueryProvider } from "@lib/util/react-query"
 import * as React from "react"
 import { useStoreProducts } from "hooks/store"
+import SkeletonProductGrid from "@modules/skeletons/templates/skeleton-product-grid"
 
 const PRODUCT_LIMIT = 12
 function PaginatedProducts({
@@ -76,6 +77,10 @@ function PaginatedProducts({
     observer.observe(loadMoreRef.current)
     return () => observer.disconnect()
   }, [productsQuery, loadMoreRef])
+
+  if (productsQuery.isPending) {
+    return <SkeletonProductGrid />
+  }
 
   return (
     <>
