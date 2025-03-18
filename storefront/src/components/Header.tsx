@@ -54,15 +54,18 @@ export const Header: React.FC = async () => {
                   selectButtonClassName="h-auto !gap-0 !p-1 transition-none"
                   selectIconClassName="text-current"
                 />
-                <SearchField countryOptions={countryOptions} />
+                <React.Suspense>
+                  <SearchField countryOptions={countryOptions} />
+                </React.Suspense>
                 <LoginLink className="p-1 group-data-[light=true]:md:text-white group-data-[sticky=true]:md:text-black" />
                 <CartDrawer />
               </div>
               <div className="flex items-center gap-4 md:hidden">
                 <LoginLink className="p-1 group-data-[light=true]:md:text-white" />
-
                 <CartDrawer />
-                <HeaderDrawer countryOptions={countryOptions} />
+                <React.Suspense>
+                  <HeaderDrawer countryOptions={countryOptions} />
+                </React.Suspense>
               </div>
             </div>
           </LayoutColumn>
