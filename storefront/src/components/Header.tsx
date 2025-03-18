@@ -1,7 +1,6 @@
 import * as React from "react"
 import { listRegions } from "@lib/data/regions"
 import { SearchField } from "@/components/SearchField"
-import { CartDrawer } from "@/components/CartDrawer"
 import { Layout, LayoutColumn } from "@/components/Layout"
 import { LocalizedLink } from "@/components/LocalizedLink"
 import { HeaderDrawer } from "@/components/HeaderDrawer"
@@ -12,6 +11,11 @@ import dynamic from "next/dynamic"
 
 const LoginLink = dynamic(
   () => import("@modules/header/components/LoginLink"),
+  { loading: () => <></> }
+)
+
+const CartDrawer = dynamic(
+  () => import("@/components/CartDrawer").then((mod) => mod.CartDrawer),
   { loading: () => <></> }
 )
 
