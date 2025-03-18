@@ -124,7 +124,6 @@ const Payment = ({ cart }: { cart: StoreCart }) => {
       setCardBrand(capitalize(paymentMethod?.card?.brand))
       setCardComplete(true)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paymentMethod])
 
   if (!cart) {

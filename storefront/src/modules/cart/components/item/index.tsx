@@ -31,8 +31,9 @@ const Item = ({ item, className }: ItemProps) => {
       }
     }, 500)
 
-    return () => clearTimeout(handler) // Očisti timeout ako se value promijeni prije nego istekne 300ms
-  }, [quantity])
+    return () => clearTimeout(handler)
+     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [quantity, item])
 
   return (
     <div
