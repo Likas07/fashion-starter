@@ -54,7 +54,7 @@ export const getProductFashionDataByHandle = async function (handle: string) {
     }[]
   }>(`/store/custom/fashion/${handle}`, {
     method: "GET",
-    headers: { next: { tags: ["products"] } },
+    next: { tags: ["products"] },
     cache: "force-cache",
   })
 }
