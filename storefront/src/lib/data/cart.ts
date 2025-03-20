@@ -401,6 +401,7 @@ export async function placeOrder() {
     .complete(cartId, {}, await getAuthHeaders())
     .then((cartRes) => {
       revalidateTag("cart")
+      revalidateTag("orders")
       return cartRes
     })
     .catch(medusaError)
