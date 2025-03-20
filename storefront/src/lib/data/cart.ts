@@ -27,7 +27,7 @@ export async function retrieveCart() {
     .fetch<HttpTypes.StoreCartResponse>(`/store/carts/${cartId}`, {
       next: { tags: ["cart"] },
       headers: { ...(await getAuthHeaders()) },
-      cache: "force-cache",
+      cache: "no-store",
     })
     .then(({ cart }) => cart)
     .catch(() => {
