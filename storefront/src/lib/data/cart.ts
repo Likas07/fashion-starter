@@ -23,13 +23,12 @@ export async function retrieveCart() {
   if (!cartId) {
     return null
   }
-
-  const cart = await sdk.store.cart
-    .retrieve(
-      cartId,
-      {},
-      { next: { tags: ["cart"] }, ...(await getAuthHeaders()) }
-    )
+  const cart = await sdk.client
+    .fetch<HttpTypes.StoreCartResponse>(`/store/carts/${cartId}`, {
+      next: { tags: ["cart"] },
+      headers: { ...(await getAuthHeaders()) },
+      cache: "force-cache",
+    })
     .then(({ cart }) => cart)
     .catch(() => {
       return null
