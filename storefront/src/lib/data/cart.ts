@@ -386,7 +386,7 @@ export async function setAddresses(
       error: e instanceof Error ? e.message : "Could not set addresses",
     }
   }
-
+  revalidateTag("shipping")
   return { success: true, error: null }
 }
 
