@@ -16,7 +16,7 @@ export const retrieveOrder = cache(async function (id: unknown) {
     .fetch<HttpTypes.StoreOrderResponse>(`/store/orders/${id}`, {
       query: { fields: "*payment_collections.payments" },
       next: { tags: ["orders"] },
-      ...(await getAuthHeaders()),
+      headers: { ...(await getAuthHeaders()) },
       cache: "force-cache",
     })
     .then(({ order }) => order)
