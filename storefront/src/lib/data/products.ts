@@ -36,7 +36,6 @@ export const getProductByHandle = async function (
         fields: "*variants.calculated_price,+variants.inventory_quantity",
       },
       next: { tags: ["products"] },
-      cache: "force-cache",
     })
     .then(({ products }) => products[0])
 }
