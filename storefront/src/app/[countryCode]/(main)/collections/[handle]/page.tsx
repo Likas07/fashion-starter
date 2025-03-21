@@ -81,8 +81,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function CollectionPage({ params, searchParams }: Props) {
-  const { handle, countryCode } = await params
-  const { sortBy, page, category, type } = await searchParams
+  const [{ handle, countryCode }, { sortBy, page, category, type }] =
+    await Promise.all([params, searchParams])
 
   const collection = await getCollectionByHandle(handle, [
     "id",
