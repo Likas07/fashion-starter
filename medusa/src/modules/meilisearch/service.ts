@@ -29,8 +29,6 @@ export class MeiliSearchService extends SearchUtils.AbstractSearchService {
       );
     }
 
-    console.log(`MeiliSearch host: ${options.config.host}`);
-
     this.client = new MeiliSearch(options.config);
   }
 
