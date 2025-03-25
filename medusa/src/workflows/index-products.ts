@@ -5,7 +5,7 @@ import {
   WorkflowResponse,
 } from '@medusajs/framework/workflows-sdk';
 import { Modules } from '@medusajs/framework/utils';
-import { ProductDTO } from '@medusajs/framework/types';
+import { ISearchService, ProductDTO } from '@medusajs/framework/types';
 
 const retrieveProductsStep = createStep(
   {
@@ -34,7 +34,9 @@ const indexProductsStep = createStep(
     name: 'indexProductsStep',
   },
   async (input: ProductDTO[], context) => {
-    const meilisearchService = context.container.resolve('meilisearchService');
+    const meilisearchService = context.container.resolve(
+      'meilisearchService',
+    ) as ISearchService;
     const result = await meilisearchService.addDocuments(
       'products',
       input,
