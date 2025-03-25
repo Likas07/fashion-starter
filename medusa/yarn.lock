@@ -6743,7 +6743,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-email/components@npm:0.0.33":
+"@react-email/components@npm:^0.0.33":
   version: 0.0.33
   resolution: "@react-email/components@npm:0.0.33"
   dependencies:
@@ -11678,7 +11678,7 @@ __metadata:
     "@mikro-orm/knex": "npm:6.4.3"
     "@mikro-orm/migrations": "npm:6.4.3"
     "@mikro-orm/postgresql": "npm:6.4.3"
-    "@react-email/components": "npm:0.0.33"
+    "@react-email/components": "npm:^0.0.33"
     "@swc/core": "npm:^1.7.28"
     "@swc/jest": "npm:^0.2.37"
     "@tanstack/eslint-plugin-query": "npm:5.64.2"
