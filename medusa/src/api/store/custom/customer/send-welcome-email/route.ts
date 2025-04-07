@@ -2,7 +2,7 @@ import {
   AuthenticatedMedusaRequest,
   MedusaResponse,
 } from '@medusajs/framework';
-import emitCustomerWelcomeEvent from 'src/workflows/emit-customer-welcome-event';
+import emitCustomerWelcomeEvent from '../../../../../workflows/emit-customer-welcome-event';
 
 export const POST = async (
   req: AuthenticatedMedusaRequest,

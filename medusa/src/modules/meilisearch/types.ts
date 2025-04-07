@@ -1,4 +1,5 @@
 import { SearchTypes } from '@medusajs/types';
+// @ts-ignore
 import type { Config, Settings } from 'meilisearch';
 
 export interface MeiliSearchPluginOptions {

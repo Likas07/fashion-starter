@@ -100,7 +100,9 @@ module.exports = defineConfig({
        */
       options: {
         config: {
-          host: process.env.MEILISEARCH_HOST,
+          host:
+            process.env.MEILISEARCH_HOST ??
+            'https://fashion-starter-search.agilo.agency',
           apiKey: process.env.MEILISEARCH_API_KEY,
         },
         settings: {

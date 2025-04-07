@@ -1,5 +1,6 @@
 import { SearchTypes } from '@medusajs/types';
 import { SearchUtils } from '@medusajs/utils';
+// @ts-ignore
 import { MeiliSearch, MeiliSearchApiError, Settings } from 'meilisearch';
 import { MeiliSearchPluginOptions } from './types';
 import { logger } from '@medusajs/framework';
