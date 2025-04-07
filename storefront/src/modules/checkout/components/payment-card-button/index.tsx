@@ -164,29 +164,28 @@ const PaymentMethodButton = ({
 
   const handleSubmit = () => {
     setIsLoading(true)
-    try {
-      initiatePaymentSession.mutate(
-        {
-          providerId: selectedPaymentMethod,
+    initiatePaymentSession.mutate(
+      {
+        providerId: selectedPaymentMethod,
+      },
+      {
+        onSuccess: () => {
+          if (!isStripe(selectedPaymentMethod)) {
+            return router.push(
+              pathname + "?" + createQueryString("step", "review"),
+              {
+                scroll: false,
+              }
+            )
+          }
+          setIsLoading(false)
         },
-        {
-          onSuccess: () => {
-            if (!isStripe(selectedPaymentMethod)) {
-              return router.push(
-                pathname + "?" + createQueryString("step", "review"),
-                {
-                  scroll: false,
-                }
-              )
-            }
-          },
-        }
-      )
-    } catch (err) {
-      setError(err instanceof Error ? err.message : `${err}`)
-    } finally {
-      setIsLoading(false)
-    }
+        onError: (err) => {
+          setError(err instanceof Error ? err.message : `${err}`)
+          setIsLoading(false)
+        },
+      }
+    )
   }
 
   return (
