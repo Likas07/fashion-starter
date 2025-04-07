@@ -1,9 +1,5 @@
 "use client"
-
-import { useState } from "react"
 import { HttpTypes } from "@medusajs/types"
-
-import { updateLineItem } from "@lib/data/cart"
 import { getVariantItemsInStock } from "@lib/util/inventory"
 import ErrorMessage from "@modules/checkout/components/error-message"
 import DeleteButton from "@modules/common/components/delete-button"
@@ -12,6 +8,9 @@ import Thumbnail from "@modules/products/components/thumbnail"
 import { NumberField } from "@/components/NumberField"
 import { LocalizedLink } from "@/components/LocalizedLink"
 import { twMerge } from "tailwind-merge"
+import { useUpdateLineItem } from "hooks/cart"
+import { withReactQueryProvider } from "@lib/util/react-query"
+import * as React from "react"
 
 type ItemProps = {
   item: HttpTypes.StoreCartLineItem
@@ -19,28 +18,22 @@ type ItemProps = {
 }
 
 const Item = ({ item, className }: ItemProps) => {
-  const [updating, setUpdating] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
   const { handle } = item.variant?.product ?? {}
-
-  const changeQuantity = async (quantity: number) => {
-    setError(null)
-    setUpdating(true)
-
-    await updateLineItem({
-      lineId: item.id,
-      quantity,
-    })
-      .catch((err) => {
-        setError(err.message)
-      })
-      .finally(() => {
-        setUpdating(false)
-      })
-  }
-
+  const { mutateAsync, isPending, error } = useUpdateLineItem()
   const maxQuantity = item.variant ? getVariantItemsInStock(item.variant) : 0
+
+  const [quantity, setQuantity] = React.useState(item.quantity)
+
+  React.useEffect(() => {
+    const handler = setTimeout(() => {
+      if (quantity !== item.quantity) {
+        mutateAsync({ lineId: item.id, quantity })
+      }
+    }, 500)
+
+    return () => clearTimeout(handler)
+     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [quantity, item])
 
   return (
     <div
@@ -74,9 +67,9 @@ const Item = ({ item, className }: ItemProps) => {
             size="sm"
             minValue={1}
             maxValue={maxQuantity}
-            value={item.quantity}
-            onChange={(value) => changeQuantity(value)}
-            isDisabled={updating}
+            value={quantity}
+            onChange={setQuantity}
+            isDisabled={isPending}
             className="w-25"
             aria-label="Quantity"
           />
@@ -86,9 +79,12 @@ const Item = ({ item, className }: ItemProps) => {
           <DeleteButton id={item.id} data-testid="product-delete-button" />
         </div>
       </div>
-      <ErrorMessage error={error} data-testid="product-error-message" />
+      <ErrorMessage
+        error={error?.message}
+        data-testid="product-error-message"
+      />
     </div>
   )
 }
 
-export default Item
+export default withReactQueryProvider(Item)

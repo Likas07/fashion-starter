@@ -4,10 +4,11 @@ import { useElements, useStripe } from "@stripe/react-stripe-js"
 import * as React from "react"
 import { HttpTypes } from "@medusajs/types"
 
-import { initiatePaymentSession, setPaymentMethod } from "@lib/data/cart"
 import { isStripe } from "@lib/constants"
 import { Button } from "@/components/Button"
 import { usePathname, useRouter } from "next/navigation"
+import { useInitiatePaymentSession, useSetPaymentMethod } from "hooks/cart"
+import { withReactQueryProvider } from "@lib/util/react-query"
 
 type PaymentButtonProps = {
   cart: HttpTypes.StoreCart
@@ -77,10 +78,14 @@ const StripeCardPaymentButton = ({
 
   const router = useRouter()
 
+  const setPaymentMethod = useSetPaymentMethod()
+
   const session = cart.payment_collection?.payment_sessions?.find(
     (s) => s.status === "pending"
   )
   const pathname = usePathname()
+
+  const initiatePaymentSession = useInitiatePaymentSession()
 
   const handleSubmit = async () => {
     setIsLoading(true)
@@ -88,7 +93,7 @@ const StripeCardPaymentButton = ({
       const shouldInputCard = !session
 
       if (!isStripe(session?.provider_id)) {
-        await initiatePaymentSession("stripe")
+        await initiatePaymentSession.mutateAsync({ providerId: "stripe" })
       }
       if (!shouldInputCard) {
         if (card) {
@@ -105,7 +110,10 @@ const StripeCardPaymentButton = ({
             address_state: cart.billing_address?.province ?? undefined,
           })
           if (token) {
-            await setPaymentMethod(session.id, token.token?.id)
+            await setPaymentMethod.mutateAsync({
+              sessionId: session.id,
+              token: token.token?.id,
+            })
           }
         }
         return router.push(
@@ -152,23 +160,32 @@ const PaymentMethodButton = ({
   const router = useRouter()
   const pathname = usePathname()
 
-  const handleSubmit = async () => {
+  const initiatePaymentSession = useInitiatePaymentSession()
+
+  const handleSubmit = () => {
     setIsLoading(true)
-    try {
-      await initiatePaymentSession(selectedPaymentMethod)
-      if (!isStripe(selectedPaymentMethod)) {
-        return router.push(
-          pathname + "?" + createQueryString("step", "review"),
-          {
-            scroll: false,
+    initiatePaymentSession.mutate(
+      {
+        providerId: selectedPaymentMethod,
+      },
+      {
+        onSuccess: () => {
+          if (!isStripe(selectedPaymentMethod)) {
+            return router.push(
+              pathname + "?" + createQueryString("step", "review"),
+              {
+                scroll: false,
+              }
+            )
           }
-        )
+          setIsLoading(false)
+        },
+        onError: (err) => {
+          setError(err instanceof Error ? err.message : `${err}`)
+          setIsLoading(false)
+        },
       }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : `${err}`)
-    } finally {
-      setIsLoading(false)
-    }
+    )
   }
 
   return (
@@ -186,4 +203,4 @@ const PaymentMethodButton = ({
   )
 }
 
-export default PaymentCardButton
+export default withReactQueryProvider(PaymentCardButton)

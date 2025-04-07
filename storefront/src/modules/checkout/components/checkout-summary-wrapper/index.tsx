@@ -1,13 +1,16 @@
+"use client"
 import CheckoutSummary from "@modules/checkout/templates/checkout-summary"
-import { retrieveCart } from "@lib/data/cart"
-import { notFound } from "next/navigation"
+import { useCart } from "hooks/cart"
+import { withReactQueryProvider } from "@lib/util/react-query"
+import SkeletonCheckoutSummary from "@modules/skeletons/templates/skeleton-checkout-summary"
 
-export default async function CheckoutSummaryWrapper() {
-  const cart = await retrieveCart()
-
-  if (!cart) {
-    return notFound()
+function CheckoutSummaryWrapper() {
+  const { data: cart, isPending } = useCart({ enabled: true })
+  if (isPending || !cart) {
+    return <SkeletonCheckoutSummary />
   }
 
   return <CheckoutSummary cart={cart} />
 }
+
+export default withReactQueryProvider(CheckoutSummaryWrapper)

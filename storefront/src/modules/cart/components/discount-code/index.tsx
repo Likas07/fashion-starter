@@ -3,11 +3,12 @@
 import React from "react"
 import { HttpTypes } from "@medusajs/types"
 
-import { applyPromotions } from "@lib/data/cart"
 import { Form, InputField } from "@/components/Forms"
 import { twMerge } from "tailwind-merge"
 import { SubmitButton } from "@modules/common/components/submit-button"
 import { z } from "zod"
+import { useApplyPromotions } from "hooks/cart"
+import { withReactQueryProvider } from "@lib/util/react-query"
 
 type DiscountCodeProps = {
   cart: HttpTypes.StoreCart
@@ -19,6 +20,8 @@ export const codeFormSchema = z.object({
 })
 
 const DiscountCode: React.FC<DiscountCodeProps> = ({ cart, className }) => {
+  const applyPromotions = useApplyPromotions()
+
   const { promotions = [] } = cart
   const addPromotionCode = async (values: { code: string }) => {
     if (!values.code) {
@@ -29,7 +32,7 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart, className }) => {
       .map((p) => p.code!)
     codes.push(values.code)
 
-    await applyPromotions(codes)
+    await applyPromotions.mutateAsync(codes)
   }
 
   return (
@@ -47,4 +50,4 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart, className }) => {
   )
 }
 
-export default DiscountCode
+export default withReactQueryProvider(DiscountCode)
