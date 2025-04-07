@@ -1,11 +1,8 @@
 import * as React from "react"
 import { listRegions } from "@lib/data/regions"
-import { retrieveCart } from "@lib/data/cart"
 import { SearchField } from "@/components/SearchField"
-import { CartDrawer } from "@/components/CartDrawer"
 import { Layout, LayoutColumn } from "@/components/Layout"
 import { LocalizedLink } from "@/components/LocalizedLink"
-import { CartIcon } from "@/components/CartIcon"
 import { HeaderDrawer } from "@/components/HeaderDrawer"
 import { RegionSwitcher } from "@/components/RegionSwitcher"
 import { HeaderWrapper } from "@/components/HeaderWrapper"
@@ -17,9 +14,13 @@ const LoginLink = dynamic(
   { loading: () => <></> }
 )
 
+const CartDrawer = dynamic(
+  () => import("@/components/CartDrawer").then((mod) => mod.CartDrawer),
+  { loading: () => <></> }
+)
+
 export const Header: React.FC = async () => {
   const regions = await listRegions()
-  const cart = await retrieveCart()
 
   const countryOptions = regions
     .map((r) => {
@@ -53,19 +54,18 @@ export const Header: React.FC = async () => {
                   selectButtonClassName="h-auto !gap-0 !p-1 transition-none"
                   selectIconClassName="text-current"
                 />
-                <SearchField countryOptions={countryOptions} />
+                <React.Suspense>
+                  <SearchField countryOptions={countryOptions} />
+                </React.Suspense>
                 <LoginLink className="p-1 group-data-[light=true]:md:text-white group-data-[sticky=true]:md:text-black" />
-                <CartDrawer cart={cart}>
-                  <CartIcon className="w-6 h-6" />
-                </CartDrawer>
+                <CartDrawer />
               </div>
               <div className="flex items-center gap-4 md:hidden">
                 <LoginLink className="p-1 group-data-[light=true]:md:text-white" />
-
-                <CartDrawer cart={cart}>
-                  <CartIcon className="w-6 h-6" wrapperClassName="w-6 h-6" />
-                </CartDrawer>
-                <HeaderDrawer countryOptions={countryOptions} />
+                <CartDrawer />
+                <React.Suspense>
+                  <HeaderDrawer countryOptions={countryOptions} />
+                </React.Suspense>
               </div>
             </div>
           </LayoutColumn>

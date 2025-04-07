@@ -10,15 +10,17 @@ import { Button } from "@/components/Button"
 import DiscountCode from "@modules/cart/components/discount-code"
 import { Icon } from "@/components/Icon"
 import { getCheckoutStep } from "@modules/cart/utils/getCheckoutStep"
+import { useCart, useCartQuantity } from "hooks/cart"
+import { withReactQueryProvider } from "@lib/util/react-query"
 
-// TODO: move cart loading to client side
-export const CartDrawer: React.FC<{
-  cart?: HttpTypes.StoreCart | null
-  children: React.ReactNode
-}> = ({ cart, children }) => {
+export const CartDrawer = withReactQueryProvider(() => {
+  const [isCartDrawerOpen, setIsCartDrawerOpen] = React.useState(false)
+
+  const { data: cart, isPending } = useCart({ enabled: isCartDrawerOpen })
+
   const step = getCheckoutStep(cart as HttpTypes.StoreCart)
 
-  const [isCartDrawerOpen, setIsCartDrawerOpen] = React.useState(false)
+  const { data: quantity, isPending: pendingQuantity } = useCartQuantity()
 
   return (
     <>
@@ -28,7 +30,15 @@ export const CartDrawer: React.FC<{
         className="p-1 group-data-[light=true]:md:text-white group-data-[sticky=true]:md:text-black"
         aria-label="Open cart"
       >
-        {children}
+        {pendingQuantity ? (
+          <Icon name="case" className=" w-6 h-6" />
+        ) : (
+          <Icon
+            name="case"
+            className=" w-6 h-6"
+            status={quantity && quantity > 0 ? quantity : undefined}
+          />
+        )}
       </Button>
       <Drawer
         colorScheme="light"
@@ -78,6 +88,10 @@ export const CartDrawer: React.FC<{
                   </LocalizedButtonLink>
                 </div>
               </>
+            ) : isPending ? (
+              <div className="flex align-middle justify-around items-center h-screen ">
+                <Icon name="loader" className="w-10 md:w-15 animate-spin" />
+              </div>
             ) : (
               <>
                 <p className="md:text-sm max-sm:mr-10 mb-6 mt-2">
@@ -101,4 +115,4 @@ export const CartDrawer: React.FC<{
       </Drawer>
     </>
   )
-}
+})

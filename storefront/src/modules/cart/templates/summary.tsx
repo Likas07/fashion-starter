@@ -17,7 +17,7 @@ type SummaryProps = {
 const Summary = ({ cart }: SummaryProps) => {
   const step = getCheckoutStep(cart)
 
-  const { data: customer } = useCustomer()
+  const { data: customer, isPending } = useCustomer()
 
   return (
     <>
@@ -30,7 +30,7 @@ const Summary = ({ cart }: SummaryProps) => {
       >
         Proceed to checkout
       </LocalizedButtonLink>
-      {!customer && (
+      {!customer && !isPending && (
         <div className="bg-grayscale-50 mt-8 rounded-xs p-4 flex items-center text-grayscale-500 gap-4">
           <Icon name="info" />
           <p>

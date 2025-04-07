@@ -3,8 +3,6 @@
 import * as React from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { twJoin } from "tailwind-merge"
-import { HttpTypes } from "@medusajs/types"
-import { setAddresses } from "@lib/data/cart"
 import compareAddresses from "@lib/util/compare-addresses"
 import { SubmitButton } from "@modules/common/components/submit-button"
 import BillingAddress from "@modules/checkout/components/billing_address"
@@ -14,7 +12,8 @@ import { Button } from "@/components/Button"
 import { Form } from "@/components/Forms"
 import { z } from "zod"
 import { useCustomer } from "hooks/customer"
-import { withReactQueryProvider } from "@lib/util/react-query"
+import { useSetShippingAddress } from "hooks/cart"
+import { StoreCart } from "@medusajs/types"
 
 const addressesFormSchema = z
   .object({
@@ -54,7 +53,7 @@ const addressesFormSchema = z
     ])
   )
 
-const Addresses = ({ cart }: { cart: HttpTypes.StoreCart | null }) => {
+const Addresses = ({ cart }: { cart: StoreCart }) => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
@@ -77,23 +76,20 @@ const Addresses = ({ cart }: { cart: HttpTypes.StoreCart | null }) => {
     setSameAsBilling((prev) => !prev)
   }, [setSameAsBilling])
 
-  const [state, formAction, isPending] = React.useActionState(
-    setAddresses,
-    null
-  )
+  const { mutate, isPending, data } = useSetShippingAddress()
 
   const onSubmit = (values: z.infer<typeof addressesFormSchema>) => {
-    React.startTransition(() => {
-      formAction(values)
+    mutate(values, {
+      onSuccess: (data) => {
+        if (isOpen && data.success) {
+          router.push(pathname + "?step=shipping", { scroll: false })
+        }
+      },
     })
   }
-
-  React.useEffect(() => {
-    if (isOpen && state?.success) {
-      router.push(pathname + "?step=shipping", { scroll: false })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state])
+  if (!cart) {
+    return null
+  }
 
   return (
     <>
@@ -197,7 +193,7 @@ const Addresses = ({ cart }: { cart: HttpTypes.StoreCart | null }) => {
                 >
                   Next
                 </SubmitButton>
-                <ErrorMessage error={state?.error} />
+                <ErrorMessage error={data?.error} />
               </>
             )
           }}
@@ -271,4 +267,4 @@ const Addresses = ({ cart }: { cart: HttpTypes.StoreCart | null }) => {
   )
 }
 
-export default withReactQueryProvider(Addresses)
+export default Addresses

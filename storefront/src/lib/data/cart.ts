@@ -16,6 +16,7 @@ import {
   removeCartId,
 } from "@lib/data/cookies"
 import { getRegion } from "@lib/data/regions"
+import { addressesFormSchema } from "hooks/cart"
 
 export async function retrieveCart() {
   const cartId = await getCartId()
@@ -295,10 +296,13 @@ export async function applyPromotions(codes: string[]) {
     .catch(medusaError)
 }
 
-export async function setEmail(
-  currentState: unknown,
-  { email, country_code }: { email: string; country_code: string }
-) {
+export async function setEmail({
+  email,
+  country_code,
+}: {
+  email: string
+  country_code: string
+}) {
   try {
     const cartId = await getCartId()
     if (!cartId) {
@@ -321,47 +325,7 @@ export async function setEmail(
   return { success: true, error: null }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const addressesFormSchema = z
-  .object({
-    shipping_address: z.object({
-      first_name: z.string().min(1),
-      last_name: z.string().min(1),
-      company: z.string().optional(),
-      address_1: z.string().min(1),
-      address_2: z.string().optional(),
-      city: z.string().min(1),
-      postal_code: z.string().min(1),
-      province: z.string().optional(),
-      country_code: z.string().min(2),
-      phone: z.string().optional(),
-    }),
-  })
-  .and(
-    z.discriminatedUnion("same_as_billing", [
-      z.object({
-        same_as_billing: z.literal("on"),
-      }),
-      z.object({
-        same_as_billing: z.literal("off").optional(),
-        billing_address: z.object({
-          first_name: z.string().min(1),
-          last_name: z.string().min(1),
-          company: z.string().optional(),
-          address_1: z.string().min(1),
-          address_2: z.string().optional(),
-          city: z.string().min(1),
-          postal_code: z.string().min(1),
-          province: z.string().optional(),
-          country_code: z.string().min(2),
-          phone: z.string().optional(),
-        }),
-      }),
-    ])
-  )
-
 export async function setAddresses(
-  currentState: unknown,
   formData: z.infer<typeof addressesFormSchema>
 ) {
   try {
@@ -406,13 +370,10 @@ export async function placeOrder() {
     .catch(medusaError)
 
   if (cartRes?.type === "order") {
-    const countryCode =
-      cartRes.order.shipping_address?.country_code?.toLowerCase()
     await removeCartId()
-    redirect(`/${countryCode}/order/confirmed/${cartRes?.order.id}`)
   }
 
-  return cartRes.cart
+  return cartRes
 }
 
 /**

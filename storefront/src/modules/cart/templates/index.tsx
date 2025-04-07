@@ -1,11 +1,18 @@
+"use client"
 import EmptyCartMessage from "@modules/cart/components/empty-cart-message"
 import ItemsTemplate from "@modules/cart/templates/items"
 import Summary from "@modules/cart/templates/summary"
-import { HttpTypes } from "@medusajs/types"
 import { Layout, LayoutColumn } from "@/components/Layout"
+import { useCart } from "hooks/cart"
+import { withReactQueryProvider } from "@lib/util/react-query"
+import SkeletonCartPage from "@modules/skeletons/templates/skeleton-cart-page"
 
 // TODO: Ask customer if they want to sign in or continue as guest
-const CartTemplate = ({ cart }: { cart: HttpTypes.StoreCart | null }) => {
+const CartTemplate = () => {
+  const { data: cart, isPending } = useCart({ enabled: true })
+  if (isPending) {
+    return <SkeletonCartPage />
+  }
   return (
     <Layout className="py-26 md:pb-36 md:pt-39">
       {cart?.items?.length ? (
@@ -30,4 +37,4 @@ const CartTemplate = ({ cart }: { cart: HttpTypes.StoreCart | null }) => {
   )
 }
 
-export default CartTemplate
+export default withReactQueryProvider(CartTemplate)

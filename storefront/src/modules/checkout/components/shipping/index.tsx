@@ -2,9 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter, useSearchParams, usePathname } from "next/navigation"
-import { HttpTypes } from "@medusajs/types"
 import { twJoin } from "tailwind-merge"
-import { setShippingMethod } from "@lib/data/cart"
 import { convertToLocale } from "@lib/util/money"
 import ErrorMessage from "@modules/checkout/components/error-message"
 import { Button } from "@/components/Button"
@@ -14,17 +12,10 @@ import {
   UiRadioGroup,
   UiRadioLabel,
 } from "@/components/ui/Radio"
+import { useCartShippingMethods, useSetShippingMethod } from "hooks/cart"
+import { StoreCart } from "@medusajs/types"
 
-type ShippingProps = {
-  cart: HttpTypes.StoreCart
-  availableShippingMethods: HttpTypes.StoreCartShippingOption[] | null
-}
-
-const Shipping: React.FC<ShippingProps> = ({
-  cart,
-  availableShippingMethods,
-}) => {
-  const [isLoading, setIsLoading] = useState(false)
+const Shipping = ({ cart }: { cart: StoreCart }) => {
   const [error, setError] = useState<string | null>(null)
 
   const searchParams = useSearchParams()
@@ -33,6 +24,9 @@ const Shipping: React.FC<ShippingProps> = ({
 
   const isOpen = searchParams.get("step") === "shipping"
 
+  const { data: availableShippingMethods } = useCartShippingMethods(cart.id)
+
+  const { mutate, isPending } = useSetShippingMethod({ cartId: cart.id })
   const selectedShippingMethod = availableShippingMethods?.find(
     (method) => method.id === cart.shipping_methods?.[0]?.shipping_option_id
   )
@@ -41,15 +35,11 @@ const Shipping: React.FC<ShippingProps> = ({
     router.push(pathname + "?step=payment", { scroll: false })
   }
 
-  const set = async (id: string) => {
-    setIsLoading(true)
-    await setShippingMethod({ cartId: cart.id, shippingMethodId: id })
-      .catch((err) => {
-        setError(err.message)
-      })
-      .finally(() => {
-        setIsLoading(false)
-      })
+  const set = (id: string) => {
+    mutate(
+      { shippingMethodId: id },
+      { onError: (err) => setError(err.message) }
+    )
   }
 
   useEffect(() => {
@@ -122,7 +112,7 @@ const Shipping: React.FC<ShippingProps> = ({
 
             <Button
               onPress={handleSubmit}
-              isLoading={isLoading}
+              isLoading={isPending}
               isDisabled={!cart.shipping_methods?.[0]}
             >
               Next
