@@ -88,7 +88,7 @@ const Addresses = ({ cart }: { cart: StoreCart }) => {
     })
   }
   if (!cart) {
-    return
+    return null
   }
 
   return (

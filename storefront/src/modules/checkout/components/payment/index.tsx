@@ -127,7 +127,7 @@ const Payment = ({ cart }: { cart: StoreCart }) => {
   }, [paymentMethod])
 
   if (!cart) {
-    return
+    return null
   }
   return (
     <>

@@ -24,7 +24,7 @@ export const CheckoutForm = withReactQueryProvider<{
       const checkoutStep = getCheckoutStep(cart)
       router.push(`/${countryCode}/checkout?step=${checkoutStep}`)
     }
-     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step, countryCode, cart])
   if (isPending) {
     return (
@@ -35,7 +35,7 @@ export const CheckoutForm = withReactQueryProvider<{
   }
 
   if (!cart) {
-    return
+    return null
   }
 
   return (
