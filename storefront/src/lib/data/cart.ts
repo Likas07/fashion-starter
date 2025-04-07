@@ -380,14 +380,14 @@ export async function setAddresses(
           ? formData.shipping_address
           : formData.billing_address,
     })
+    revalidateTag("shipping")
+    return { success: true, error: null }
   } catch (e) {
     return {
       success: false,
       error: e instanceof Error ? e.message : "Could not set addresses",
     }
   }
-  revalidateTag("shipping")
-  return { success: true, error: null }
 }
 
 export async function placeOrder() {
