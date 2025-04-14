@@ -17,7 +17,6 @@ export const retrieveOrder = cache(async function (id: unknown) {
       query: { fields: "*payment_collections.payments" },
       next: { tags: ["orders"] },
       headers: { ...(await getAuthHeaders()) },
-      cache: "force-cache",
     })
     .then(({ order }) => order)
     .catch((err) => medusaError(err))
@@ -49,7 +48,6 @@ export const listOrders = async function (
       query: { limit, offset, order: "-created_at" },
       next: { tags: ["orders"] },
       headers: { ...(await getAuthHeaders()) },
-      cache: "force-cache",
     })
     .catch((err) => medusaError(err))
 }
