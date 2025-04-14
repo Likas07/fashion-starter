@@ -483,31 +483,24 @@
   resolved "https://registry.yarnpkg.com/@medusajs/client-types/-/client-types-0.2.12.tgz#b30953663ad2a6a0df43794672756e356dab8941"
   integrity sha512-Qj7/uRaonxswzv28bWusdMQGGgVRVH6AvhppD5MhTeWDLLxHMyp8DkFjaRB7Z1yIqV+apBIGqapLUVR1IqoF8w==
 
-"@medusajs/icons@^2.6.0":
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/@medusajs/icons/-/icons-2.6.0.tgz#19151b421572e85ca22fc64549ace0d6ce9b2c90"
-  integrity sha512-igwhY6a4Nm93m8FqBDHtEG0CQ12yV16mKs5JjoXjF3V2nr/7M/ZHOnumduBIXyEv8+rqV1iVgUJfEhL7SP68Xw==
+"@medusajs/icons@^2.6.1":
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/@medusajs/icons/-/icons-2.7.0.tgz#0c56495be3af17c578f3c1f17283a3f962e2f56c"
+  integrity sha512-0PqVre5MDbGy96KbCHaQmtUwqqIVOGK6ZwtXcBQjN/sT8XH/dU839F+9u0yGknqt7VGr11vmGmRkv0fWCXuiZQ==
 
-"@medusajs/js-sdk@2.5.1":
-  version "2.5.1"
-  resolved "https://registry.yarnpkg.com/@medusajs/js-sdk/-/js-sdk-2.5.1.tgz#63e1630781411dc7c899956bf91d7b77fae310ae"
-  integrity sha512-DCkEzrMKy0okkmlaENHjn4czr0U1XvCmVbO8Z8Ly0YXmVANL0Hc7bNNXx52kU4RZjCIn2KMuisOmgQzCiHMvIA==
+"@medusajs/js-sdk@2.6.1":
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/@medusajs/js-sdk/-/js-sdk-2.6.1.tgz#2871a1d887cae49be9bb68c29ddcc5ee74b74ced"
+  integrity sha512-X7gTuWSIEocBefs5Sqti+bax2zlXpsYDvFFZjKLAwLgxQdb4QJT3j8HXgRVkWo9Lcmjs1sL/wenmnYUgDxGtdQ==
   dependencies:
-    "@medusajs/types" "^2.5.1"
+    "@medusajs/types" "2.6.1"
     fetch-event-stream "^0.1.5"
     qs "^6.12.1"
 
-"@medusajs/types@2.5.1":
-  version "2.5.1"
-  resolved "https://registry.yarnpkg.com/@medusajs/types/-/types-2.5.1.tgz#673322694815a3dc41fea1f8877ed903314fe6bf"
-  integrity sha512-46oH5mB2guFPcc/WXNzKu8yMWL4UIkkH2l3KWK61/VORYG8ebmODZ1q6KHBDbvlE4NdIrGyMf63FmYcKTMjb+w==
-  dependencies:
-    bignumber.js "^9.1.2"
-
-"@medusajs/types@^2.5.1":
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/@medusajs/types/-/types-2.6.0.tgz#b9768826443588c484db93c34ec89e08f4c59264"
-  integrity sha512-xxjBmnFjtBnO0ChWryPJIGK6dvCR/LMVKWIzpf6L6M+YwQzw1JyLBJx5lXDWyMOSzy7Kz8MyRUDu0fY1NNyT3Q==
+"@medusajs/types@2.6.1":
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/@medusajs/types/-/types-2.6.1.tgz#acb7caf9f6a3d81c7b30dd144214894a876a9e63"
+  integrity sha512-cysEyeh/h1D3mkYSeaoo6fjpfCqHUGTaIoPLUxU3e2oyJ5GhwdpKB4N3mdkUFBSWmuWn5x7eLAwb7DqM4UzX+w==
   dependencies:
     bignumber.js "^9.1.2"
 
