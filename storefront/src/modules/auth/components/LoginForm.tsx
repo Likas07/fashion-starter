@@ -9,6 +9,7 @@ import { z } from "zod"
 import { useLogin } from "hooks/customer"
 import { withReactQueryProvider } from "@lib/util/react-query"
 import { useRouter } from "next/navigation"
+import { emailFormSchema } from "@modules/checkout/components/email"
 
 const loginFormSchema = z.object({
   email: z.string().email(),
@@ -18,7 +19,8 @@ const loginFormSchema = z.object({
 export const LoginForm = withReactQueryProvider<{
   className?: string
   redirectUrl?: string
-}>(({ className, redirectUrl }) => {
+  handleCheckout?: (values: z.infer<typeof emailFormSchema>) => void
+}>(({ className, redirectUrl, handleCheckout }) => {
   const { isPending, data, mutate } = useLogin()
 
   const router = useRouter()
@@ -28,7 +30,9 @@ export const LoginForm = withReactQueryProvider<{
       { ...values, redirect_url: redirectUrl },
       {
         onSuccess: (res) => {
-          if (res.success) {
+          if (handleCheckout) {
+            handleCheckout({ email: values.email })
+          } else if (res.success) {
             router.push(res.redirectUrl || "/")
           }
         },

@@ -77,6 +77,7 @@ const Email = ({
                         <p className="text-md mb-10">Log in</p>
                         <LoginForm
                           redirectUrl={`/${countryCode}/checkout?step=delivery`}
+                          handleCheckout={onSubmit}
                         />
                         <UiCloseButton
                           variant="ghost"
