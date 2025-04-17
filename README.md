@@ -155,6 +155,8 @@ This starter kit is an ideal solution for developers who need to set up a profes
 - Yarn >= 3.5
 - Docker and Docker Compose
 - Stripe account (for payments)
+- httpie
+- meilisearch
 
 ## Quickstart
 
@@ -210,6 +212,15 @@ yarn dev
 ```
 
 You should now be able to access the storefront at http://localhost:8000.
+
+### Meilisearch
+
+```bash
+# Get search api key
+http --auth "yoursecretmasterkey" --auth-type bearer GET http://localhost:7700/keys
+```
+
+You should go to `storefront/.env.local` file and paste obtained key into the `NEXT_PUBLIC_SEARCH_API_KEY` env variable. Also, go to the `backend/.env` file and paste admin key into `MEILISEARCH_API_KEY`
 
 <a href="https://agilo.com" target="_blank">
   <picture>
