@@ -85,7 +85,8 @@ function PaginatedProducts({
   return (
     <>
       <Layout className="gap-y-10 md:gap-y-16 mb-16">
-        {productsQuery?.data?.pages[0]?.response?.products?.length ? (
+        {productsQuery?.data?.pages[0]?.response?.products?.length &&
+        (!productsIds || productsIds.length > 0) ? (
           productsQuery?.data?.pages.flatMap((page) => {
             return page?.response?.products.map((p: StoreProduct) => {
               return (
