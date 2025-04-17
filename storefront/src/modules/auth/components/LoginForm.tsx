@@ -30,7 +30,7 @@ export const LoginForm = withReactQueryProvider<{
       { ...values, redirect_url: redirectUrl },
       {
         onSuccess: (res) => {
-          if (handleCheckout) {
+          if (handleCheckout && res.success) {
             handleCheckout({ email: values.email })
           } else if (res.success) {
             router.push(res.redirectUrl || "/")
