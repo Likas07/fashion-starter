@@ -2,6 +2,12 @@
 
 <video src="https://github.com/user-attachments/assets/1afe48e4-5a28-4aee-b4bd-e405701d3cc6" controls="controls" muted="muted" playsinline="playsinline"></video>
 
+<p align="center">
+  <a href="https://www.figma.com/community/file/1494273775050024009" target="_blank">
+    <img src="https://img.shields.io/badge/Figma-Design_Template-F24E1E?style=for-the-badge&logo=figma&logoColor=white" alt="Figma Design Template" />
+  </a>
+</p>
+
 The **Fashion E-commerce Starter** is a modern, customizable e-commerce template built with **Medusa 2.0**. Designed around the concept of the sustainable furniture brand **Sofa Society**, this starter showcases the power of new Medusa 2.0 version. With its focus on cutting-edge design, sustainability, and personalization, Sofa Society offers users an elegant shopping experience where they can explore customizable collections, product options, and a streamlined checkout flow.
 
 This starter kit is an ideal solution for developers who need to set up a professional, feature-rich fashion e-commerce store quickly. It comes with a sleek and modern design, customizable collections, an Inspiration page, an About page, and a streamlined checkout process. The storefront is fully responsive and optimized for mobile, tablet, and desktop devices.
@@ -15,6 +21,7 @@ This starter kit is an ideal solution for developers who need to set up a profes
 - [Quickstart](#quickstart)
   - [Medusa](#medusa)
   - [Storefront](#storefront)
+  - [Meilisearch](#meilisearch)
 
 ## Features
 
@@ -30,10 +37,10 @@ This starter kit is an ideal solution for developers who need to set up a profes
 - **Next.js and Tailwind CSS**: Built with **Next.js** v15 app router and **Tailwind CSS**, the starter is highly performant, customizable, and easy to extend with additional features.
 
 ## Roadmap
-- [x] **Figma Design Templates**: This will enable you to easily customize the design of the storefront to match your brand.
+- [x] **Figma Design Template**: This will enable you to easily customize the design of the storefront to match your brand. [View template](https://www.figma.com/community/file/1494273775050024009).
 - [x] **Search**: Integration with Meilisearch for a powerful search experience.
-- [x] ~~**404 Page**: Custom 404 page for a better user experience.~~
-- [x] ~~**Account Management**: Allow customers to create accounts, view order history, and manage their personal information.~~
+- [x] **404 Page**: Custom 404 page for a better user experience.
+- [x] **Account Management**: Allow customers to create accounts, view order history, and manage their personal information.
 - [x] **Cart Drawer**: Cart drawer that slides in from the side where customers can view and edit their cart items.
 - [x] **Email Templates**: Customizable email templates for order confirmation, shipping updates, and more.
 - [x] **Infinite Scroll Pagination**: Improve the product discovery experience with infinite scroll pagination on store and collection pages.
@@ -152,11 +159,10 @@ This starter kit is an ideal solution for developers who need to set up a profes
 ## Prerequisites
 
 - Node >= 20
-- Yarn >= 3.5
+- Yarn >= 3.5 for Medusa, Yarn v1 for Storefront
 - Docker and Docker Compose
 - Stripe account (for payments)
 - httpie
-- meilisearch
 
 ## Quickstart
 
