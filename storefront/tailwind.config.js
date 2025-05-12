@@ -1,5 +1,5 @@
 module.exports = {
-  darkMode: "class",
+  darkMode: ["class", "class"],
   content: [
     "./src/app/**/*.{js,ts,jsx,tsx}",
     "./src/pages/**/*.{js,ts,jsx,tsx}",
@@ -9,53 +9,48 @@ module.exports = {
   ],
   theme: {
     colors: {
-      black: "#050505",
-      "black-10%": "rgba(5, 5, 5, 0.1)",
-      "black-30%": "rgba(5, 5, 5, 0.3)",
-      white: "#FDFDFD",
+      black: "hsl(var(--foreground))",
+      "black-10%": "rgba(16, 24, 30, 0.1)", // --foreground at 10% opacity
+      "black-30%": "rgba(16, 24, 30, 0.3)", // --foreground at 30% opacity
+      white: "hsl(var(--background))",
       grayscale: {
-        800: "#1F1F20",
-        700: "#3A3A3B",
-        600: "#545457",
-        500: "#808080",
-        400: "#A3A3A3",
-        300: "#BBBBBB",
-        200: "#D1D1D1",
-        100: "#E7E7E7",
-        50: "#F4F4F4",
-        30: "#F8F8F9",
-        20: "#FBFBFB",
+        // Simplified grayscale palette, consider using theme variables directly
+        50: "hsl(var(--background))", // Lightest, maps to theme background
+        100: "hsl(var(--border))", // Light gray, maps to theme border
+        500: "hsl(210, 10%, 50%)", // Neutral mid-gray
+        700: "hsl(var(--muted-foreground))", // Dark gray, maps to theme muted foreground
+        800: "hsl(var(--foreground))", // Darkest, maps to theme foreground
       },
       red: {
-        900: "#BD3207",
-        primary: "#DF4718",
+        900: "hsl(0, 80%, 45%)", // Darker version of theme's destructive
+        primary: "hsl(var(--destructive))", // Uses theme's destructive color
       },
-      yellow: "#FFEFB7",
+      yellow: "hsl(45, 90%, 75%)", // Vibrant warm yellow
       transparent: "rgba(0,0,0,0)",
       current: "currentColor",
       "fg-subtle": {
-        DEFAULT: "rgba(82, 82, 91, 1)",
-        dark: "rgba(161, 161, 170, 1)",
+        DEFAULT: "hsl(var(--muted-foreground))",
+        dark: "rgba(161, 161, 170, 1)", // Kept original for un-updated dark theme
       },
       "fg-base": {
-        DEFAULT: "rgba(24, 24, 27, 1)",
-        dark: "rgba(244, 244, 245, 1)",
+        DEFAULT: "hsl(var(--foreground))",
+        dark: "rgba(244, 244, 245, 1)", // Kept original for un-updated dark theme
       },
       "bg-field": {
-        DEFAULT: "rgba(250, 250, 250, 1)",
-        dark: "rgba(255, 255, 255, 0.04)",
+        DEFAULT: "hsl(var(--card))", // Uses theme's card color (slightly lighter than bg)
+        dark: "rgba(255, 255, 255, 0.04)", // Kept original for un-updated dark theme
       },
       "bg-field-hover": {
-        DEFAULT: "rgba(244, 244, 245, 1)",
-        dark: "rgba(255, 255, 255, 0.08)",
+        DEFAULT: "hsl(var(--background))", // Uses theme's main background for hover
+        dark: "rgba(255, 255, 255, 0.08)", // Kept original for un-updated dark theme
       },
       "border-base": {
-        DEFAULT: "rgba(228, 228, 231, 1)",
-        dark: "rgba(255, 255, 255, 0.08)",
+        DEFAULT: "hsl(var(--border))",
+        dark: "rgba(255, 255, 255, 0.08)", // Kept original for un-updated dark theme
       },
       "fg-muted": {
-        DEFAULT: "rgba(161, 161, 170, 1)",
-        dark: "rgba(113, 113, 122, 1)",
+        DEFAULT: "hsl(var(--muted-foreground))",
+        dark: "rgba(113, 113, 122, 1)", // Kept original for un-updated dark theme
       },
     },
     fontSize: {
@@ -87,11 +82,7 @@ module.exports = {
     },
     extend: {
       spacing: {
-        6.5: "1.625rem",
-        11.5: "2.875rem",
         13: "3.25rem",
-        13.5: "3.375rem",
-        14.5: "3.625rem",
         15: "3.75rem",
         17: "4.25rem",
         18: "4.5rem",
@@ -138,6 +129,10 @@ module.exports = {
         154: "38.5rem",
         159: "39.75rem",
         200: "50rem",
+        6.5: "1.625rem",
+        11.5: "2.875rem",
+        13.5: "3.375rem",
+        14.5: "3.625rem",
       },
       borderWidth: {
         6: "6px",
@@ -161,6 +156,22 @@ module.exports = {
             transform: "translateX(100%)",
           },
         },
+        "accordion-down": {
+          from: {
+            height: "0",
+          },
+          to: {
+            height: "var(--radix-accordion-content-height)",
+          },
+        },
+        "accordion-up": {
+          from: {
+            height: "var(--radix-accordion-content-height)",
+          },
+          to: {
+            height: "0",
+          },
+        },
       },
       boxShadow: {
         modal: "0px 0px 40px -16px rgba(0, 0, 0, 0.20)",
@@ -168,6 +179,57 @@ module.exports = {
           "0px 0px 0px 1px rgba(59, 130, 246, 1), 0px 0px 0px 4px rgba(59, 130, 246, 0.2)",
         "borders-interactive-with-active-dark":
           "0px 0px 0px 1px rgba(96, 165, 250, 1), 0px 0px 0px 4px rgba(59, 130, 246, 0.25)",
+      },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+      },
+      colors: {
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
+        primary: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+        },
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        chart: {
+          1: "hsl(var(--chart-1))",
+          2: "hsl(var(--chart-2))",
+          3: "hsl(var(--chart-3))",
+          4: "hsl(var(--chart-4))",
+          5: "hsl(var(--chart-5))",
+        },
+      },
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
       },
     },
   },
