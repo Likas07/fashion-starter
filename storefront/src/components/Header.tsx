@@ -1,5 +1,7 @@
 import * as React from "react"
 import { listRegions } from "@lib/data/regions"
+import { getProductTypesList } from "@lib/data/product-types"
+import { slugify } from "@lib/util/slugify"
 import { SearchField } from "@/components/SearchField"
 import { Layout, LayoutColumn } from "@/components/Layout"
 import { LocalizedLink } from "@/components/LocalizedLink"
@@ -21,6 +23,7 @@ const CartDrawer = dynamic(
 
 export const Header: React.FC = async () => {
   const regions = await listRegions()
+  const { productTypes } = await getProductTypesList(0, 100, ["value"])
 
   const countryOptions = regions
     .map((r) => {
@@ -40,12 +43,19 @@ export const Header: React.FC = async () => {
           <LayoutColumn>
             <div className="flex justify-between items-center h-18 md:h-21">
               <h1 className="font-medium text-md">
-                <LocalizedLink href="/">SofaSocietyCo.</LocalizedLink>
+                <LocalizedLink href="/">Orla Da Praia</LocalizedLink>
               </h1>
               <div className="flex items-center gap-8 max-md:hidden">
-                <LocalizedLink href="/about">About</LocalizedLink>
-                <LocalizedLink href="/inspiration">Inspiration</LocalizedLink>
-                <LocalizedLink href="/store">Shop</LocalizedLink>
+                {productTypes &&
+                  productTypes.map((pt) => (
+                    <LocalizedLink
+                      key={pt.id}
+                      href={`/store/${slugify(pt.value)}`}
+                    >
+                      {pt.value}
+                    </LocalizedLink>
+                  ))}
+                <LocalizedLink href="/store">Todos</LocalizedLink>
               </div>
               <div className="flex items-center gap-3 lg:gap-6 max-md:hidden">
                 <RegionSwitcher

@@ -3,7 +3,6 @@ import { Suspense } from "react"
 import SkeletonProductGrid from "@modules/skeletons/templates/skeleton-product-grid"
 import RefinementList from "@modules/store/components/refinement-list"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
-import { CollectionsSlider } from "@modules/store/components/collections-slider"
 
 import { getCollectionsList } from "@lib/data/collections"
 import { getCategoriesList } from "@lib/data/categories"
@@ -18,6 +17,7 @@ const StoreTemplate = async ({
   type,
   page,
   countryCode,
+  pageDisplayTitle,
 }: {
   sortBy?: SortOptions
   collection?: string[]
@@ -25,6 +25,7 @@ const StoreTemplate = async ({
   type?: string[]
   page?: string
   countryCode: string
+  pageDisplayTitle?: string
 }) => {
   const pageNumber = page ? parseInt(page, 10) : 1
 
@@ -37,7 +38,6 @@ const StoreTemplate = async ({
 
   return (
     <div className="md:pt-47 py-26 md:pb-36">
-      <CollectionsSlider />
       <RefinementList
         collections={Object.fromEntries(
           collections.collections.map((c) => [c.handle, c.title])
@@ -52,6 +52,7 @@ const StoreTemplate = async ({
         )}
         type={type}
         sortBy={sortBy}
+        title={pageDisplayTitle}
       />
       <Suspense fallback={<SkeletonProductGrid />}>
         {region && (

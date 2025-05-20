@@ -4,8 +4,8 @@ import { SortOptions } from "@modules/store/components/refinement-list/sort-prod
 import StoreTemplate from "@modules/store/templates"
 
 export const metadata: Metadata = {
-  title: "Store",
-  description: "Explore all of our products.",
+  title: "Todos",
+  description: "Explore todos os nossos produtos.",
 }
 
 type Params = {
@@ -41,6 +41,7 @@ export default async function StorePage({ searchParams, params }: Params) {
         !category ? undefined : Array.isArray(category) ? category : [category]
       }
       type={!type ? undefined : Array.isArray(type) ? type : [type]}
+      pageDisplayTitle="Todos"
     />
   )
 }
