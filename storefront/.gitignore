@@ -54,3 +54,6 @@ dump.rdb
 /blob-report/
 /playwright/.cache/
 /playwright/.auth
+
+# archives
+*.tar.gz
