@@ -5,6 +5,7 @@ import { getProductTypesList } from "@lib/data/product-types"
 import { Layout, LayoutColumn } from "@/components/Layout"
 import { LocalizedLink } from "@/components/LocalizedLink"
 import { CollectionsSection } from "@/components/CollectionsSection"
+import { Carousel } from "@/components/Carousel"
 
 export const metadata: Metadata = {
   title: "Medusa Next.js Starter Template",
@@ -67,16 +68,35 @@ export default async function Home({
     return null
   }
 
+  const carouselImages = [
+    { src: "/images/content/Carousel_1.jpg", alt: "Hero image 1" },
+    { src: "/images/content/Carousel_2.jpg", alt: "Hero image 2" },
+    { src: "/images/content/Carousel_3.jpg", alt: "Hero image 3" },
+  ]
+
   return (
     <>
       <div className="max-md:pt-18">
-        <Image
-          src="/images/content/living-room-gray-armchair-two-seater-sofa.png"
-          width={2880}
-          height={1500}
-          alt="Living room with gray armchair and two-seater sofa"
-          className="md:h-screen md:object-cover"
-        />
+        <Carousel
+          autoplay={true}
+          autoplayDelay={5000}
+          loop={true}
+          arrows={true}
+          useInternalLayout={false} // Tell carousel to be full-width
+          className="md:h-screen w-full" // Ensure carousel itself takes full width
+        >
+          {carouselImages.map((image, index) => (
+            <div key={index} className="relative flex-[0_0_100%] md:h-screen">
+              <Image
+                src={image.src}
+                fill
+                alt={image.alt}
+                className="object-cover"
+                priority={index === 0}
+              />
+            </div>
+          ))}
+        </Carousel>
       </div>
       <div className="pt-8 pb-26 md:pt-26 md:pb-36">
         <Layout className="mb-26 md:mb-36">

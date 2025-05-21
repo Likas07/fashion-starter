@@ -42,7 +42,7 @@ export const Header: React.FC = async () => {
         <Layout>
           <LayoutColumn>
             <div className="flex justify-between items-center h-18 md:h-21">
-              <h1 className="font-medium text-md">
+              <h1 className="font-medium text-md text-header-text">
                 <LocalizedLink href="/">Orla Da Praia</LocalizedLink>
               </h1>
               <div className="flex items-center gap-8 max-md:hidden">
@@ -51,27 +51,30 @@ export const Header: React.FC = async () => {
                     <LocalizedLink
                       key={pt.id}
                       href={`/store/${slugify(pt.value)}`}
+                      className="text-header-text"
                     >
                       {pt.value}
                     </LocalizedLink>
                   ))}
-                <LocalizedLink href="/store">Todos</LocalizedLink>
+                <LocalizedLink href="/store" className="text-header-text">
+                  Todos
+                </LocalizedLink>
               </div>
               <div className="flex items-center gap-3 lg:gap-6 max-md:hidden">
                 <RegionSwitcher
                   countryOptions={countryOptions}
                   className="w-16"
-                  selectButtonClassName="h-auto !gap-0 !p-1 transition-none"
-                  selectIconClassName="text-current"
+                  selectButtonClassName="h-auto !gap-0 !p-1 transition-none text-header-text"
+                  selectIconClassName="text-header-text"
                 />
                 <React.Suspense>
                   <SearchField countryOptions={countryOptions} />
                 </React.Suspense>
-                <LoginLink className="p-1 group-data-[light=true]:md:text-white group-data-[sticky=true]:md:text-black" />
+                <LoginLink className="p-1 text-header-text font-semibold text-lg" />
                 <CartDrawer />
               </div>
               <div className="flex items-center gap-4 md:hidden">
-                <LoginLink className="p-1 group-data-[light=true]:md:text-white" />
+                <LoginLink className="p-1 text-header-text font-semibold text-lg" />
                 <CartDrawer />
                 <React.Suspense>
                   <HeaderDrawer countryOptions={countryOptions} />

@@ -53,7 +53,15 @@ export async function generateStaticParams() {
 }
 
 // Function to generate metadata for each product type page
-export async function generateMetadata({ params }: Params): Promise<Metadata> {
+export async function generateMetadata(
+  props: { params: Promise<Params["params"]> } | { params: Params["params"] }
+): Promise<Metadata> {
+  // Await params if it's a promise, otherwise use it directly
+  const params =
+    "then" in props.params && typeof props.params.then === "function"
+      ? await props.params
+      : props.params
+
   const { productTypes } = await getProductTypesList(0, 100, ["value"])
   const productType = productTypes.find(
     (pt) => slugify(pt.value) === params.productTypeSlug
@@ -73,10 +81,13 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   }
 }
 
-export default async function ProductTypeStorePage({
-  searchParams,
-  params,
-}: Params) {
+export default async function ProductTypeStorePage(props: {
+  params: Promise<Params["params"]>
+  searchParams: Promise<Params["searchParams"]>
+}) {
+  const params = await props.params
+  const searchParams = await props.searchParams
+
   const { countryCode, productTypeSlug } = params
   const { sortBy, page, collection, category } = searchParams
 

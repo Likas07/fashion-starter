@@ -4,6 +4,7 @@ import * as React from "react"
 import { twJoin, twMerge } from "tailwind-merge"
 import { EmblaCarouselType } from "embla-carousel"
 import useEmblaCarousel from "embla-carousel-react"
+import Autoplay from "embla-carousel-autoplay"
 import { Icon } from "@/components/Icon"
 import { IconCircle } from "@/components/IconCircle"
 import { Layout, LayoutColumn } from "@/components/Layout"
@@ -12,20 +13,44 @@ export type CarouselProps = {
   heading?: React.ReactNode
   button?: React.ReactNode
   arrows?: boolean
+  autoplay?: boolean
+  autoplayDelay?: number
+  autoplayStopOnInteraction?: boolean
+  loop?: boolean
+  useInternalLayout?: boolean // New prop
 } & React.ComponentPropsWithRef<"div">
 
 export const Carousel: React.FC<CarouselProps> = ({
   heading,
   button,
   arrows = true,
+  autoplay = false,
+  autoplayDelay = 4000,
+  autoplayStopOnInteraction = true,
+  loop = false,
+  useInternalLayout = true, // Default to true
   children,
   className,
 }) => {
-  const [emblaRef, emblaApi] = useEmblaCarousel({
-    containScroll: "trimSnaps",
-    skipSnaps: true,
-    active: true,
-  })
+  const plugins = []
+  if (autoplay) {
+    plugins.push(
+      Autoplay({
+        delay: autoplayDelay,
+        stopOnInteraction: autoplayStopOnInteraction,
+      })
+    )
+  }
+
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    {
+      containScroll: "trimSnaps",
+      skipSnaps: true,
+      active: true,
+      loop: loop,
+    },
+    plugins
+  )
   const [prevBtnDisabled, setPrevBtnDisabled] = React.useState(true)
   const [nextBtnDisabled, setNextBtnDisabled] = React.useState(true)
 
@@ -50,61 +75,66 @@ export const Carousel: React.FC<CarouselProps> = ({
     emblaApi.on("select", onSelect)
   }, [emblaApi, onSelect])
 
-  return (
-    <div className={twMerge("overflow-hidden", className)}>
-      <Layout>
-        <LayoutColumn className="relative">
-          <div className="mb-8 md:mb-15 flex max-sm:flex-col justify-between sm:items-center gap-x-10 gap-y-6">
-            {heading}
-            {(arrows || button) && (
-              <div className="flex md:gap-6 shrink-0">
-                {button}
-                {arrows && (
-                  <div className="flex gap-2">
-                    <button
-                      type="button"
-                      onClick={scrollPrev}
-                      disabled={prevBtnDisabled}
-                      className={twJoin(
-                        "max-md:hidden transition-opacity",
-                        prevBtnDisabled && "opacity-50"
-                      )}
-                      aria-label="Previous"
-                    >
-                      <IconCircle>
-                        <Icon
-                          name="arrow-left"
-                          className="w-6 h-6 text-black"
-                        />
-                      </IconCircle>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={scrollNext}
-                      disabled={nextBtnDisabled}
-                      className={twJoin(
-                        "max-md:hidden transition-opacity",
-                        nextBtnDisabled && "opacity-50"
-                      )}
-                      aria-label="Next"
-                    >
-                      <IconCircle>
-                        <Icon
-                          name="arrow-right"
-                          className="w-6 h-6 text-black"
-                        />
-                      </IconCircle>
-                    </button>
-                  </div>
-                )}
-              </div>
+  const carouselContent = (
+    <>
+      {(heading || button) && useInternalLayout && (
+        <div className="mb-8 md:mb-15 flex max-sm:flex-col justify-between sm:items-center gap-x-10 gap-y-6">
+          {heading}
+          {button && <div className="flex md:gap-6 shrink-0">{button}</div>}
+        </div>
+      )}
+      <div ref={emblaRef} className="overflow-hidden w-full">
+        <div className="flex touch-pan-y">{children}</div>
+      </div>
+      {arrows && (
+        <>
+          <button
+            type="button"
+            onClick={scrollPrev}
+            disabled={prevBtnDisabled}
+            className={twJoin(
+              "absolute left-4 top-1/2 -translate-y-1/2 z-10 transition-opacity max-md:hidden",
+              prevBtnDisabled && "opacity-50"
             )}
-          </div>
-          <div ref={emblaRef}>
-            <div className="flex touch-pan-y gap-4 md:gap-10">{children}</div>
-          </div>
-        </LayoutColumn>
-      </Layout>
+            aria-label="Previous"
+          >
+            <IconCircle className="bg-black/50 hover:bg-black/75 transition-colors">
+              <Icon name="arrow-left" className="w-6 h-6 text-white" />
+            </IconCircle>
+          </button>
+          <button
+            type="button"
+            onClick={scrollNext}
+            disabled={nextBtnDisabled}
+            className={twJoin(
+              "absolute right-4 top-1/2 -translate-y-1/2 z-10 transition-opacity max-md:hidden",
+              nextBtnDisabled && "opacity-50"
+            )}
+            aria-label="Next"
+          >
+            <IconCircle className="bg-black/50 hover:bg-black/75 transition-colors">
+              <Icon name="arrow-right" className="w-6 h-6 text-white" />
+            </IconCircle>
+          </button>
+        </>
+      )}
+    </>
+  )
+
+  if (useInternalLayout) {
+    return (
+      <div className={twMerge("overflow-hidden", className)}>
+        <Layout>
+          <LayoutColumn className="relative">{carouselContent}</LayoutColumn>
+        </Layout>
+      </div>
+    )
+  }
+
+  // For full-width mode (useInternalLayout is false)
+  return (
+    <div className={twMerge("overflow-hidden relative", className)}>
+      {carouselContent}
     </div>
   )
 }

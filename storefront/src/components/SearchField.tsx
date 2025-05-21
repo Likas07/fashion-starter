@@ -115,7 +115,7 @@ export const SearchField: React.FC<{
       <Button
         onPress={buttonPressHandle}
         variant="ghost"
-        className="p-1 max-md:text-white group-data-[light=true]:md:text-white group-data-[sticky=true]:md:text-black"
+        className="p-1 text-header-text"
         aria-label="Open search"
       >
         <Icon name="search" className="w-5 h-5" />
