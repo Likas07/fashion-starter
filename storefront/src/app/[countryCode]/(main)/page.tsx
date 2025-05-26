@@ -6,6 +6,7 @@ import { Layout, LayoutColumn } from "@/components/Layout"
 import { LocalizedLink } from "@/components/LocalizedLink"
 import { CollectionsSection } from "@/components/CollectionsSection"
 import { Carousel } from "@/components/Carousel"
+import OfferBenefits from "@/components/OfferBenefits"
 
 export const metadata: Metadata = {
   title: "Medusa Next.js Starter Template",
@@ -98,6 +99,7 @@ export default async function Home({
           ))}
         </Carousel>
       </div>
+      <OfferBenefits />
       <div className="pt-8 pb-26 md:pt-26 md:pb-36">
         <Layout className="mb-26 md:mb-36">
           <LayoutColumn start={1} end={{ base: 13, md: 8 }}>
