@@ -27,7 +27,7 @@ export const CartDrawer = withReactQueryProvider(() => {
       <Button
         onPress={() => setIsCartDrawerOpen(true)}
         variant="ghost"
-        className="p-1 text-black md:text-header-text group-data-[sticky=true]:md:text-black"
+        className="p-0 text-black md:text-header-text group-data-[sticky=true]:md:text-black"
         aria-label="Open cart"
       >
         {pendingQuantity ? (

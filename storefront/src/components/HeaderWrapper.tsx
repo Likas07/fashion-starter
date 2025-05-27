@@ -85,7 +85,7 @@ export const HeaderWrapper: React.FC<{ children?: React.ReactNode }> = ({
   return (
     <div
       id="site-header"
-      className="top-0 left-0 w-full 
+      className="left-0 w-full top-14 
                  data-[light=true]:md:bg-gradient-to-b data-[light=true]:from-black/75 data-[light=true]:to-transparent 
                  data-[light=false]:bg-white 
                  data-[sticky=true]:bg-white data-[sticky=true]:md:bg-none
