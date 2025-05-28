@@ -23,7 +23,20 @@ Layout.displayName = "Layout"
 const breakpointsNamesArray = ["base", "xs", "sm", "md", "lg", "xl"] as const
 
 type BreakpointsNames = (typeof breakpointsNamesArray)[number]
-type ColumnsNumbers = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13
+export type ColumnsNumbers =
+  | 1
+  | 2
+  | 3
+  | 4
+  | 5
+  | 6
+  | 7
+  | 8
+  | 9
+  | 10
+  | 11
+  | 12
+  | 13 // Exported
 type LayoutOwnProps = {
   start?: { [key in BreakpointsNames]?: ColumnsNumbers } | ColumnsNumbers
   end?: { [key in BreakpointsNames]?: ColumnsNumbers } | ColumnsNumbers

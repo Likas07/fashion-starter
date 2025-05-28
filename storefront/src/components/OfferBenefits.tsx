@@ -65,7 +65,7 @@ export default function OfferBenefits() {
   return (
     <div className="w-full py-4 px-4 border-t border-b border-gray-100">
       <div className="mx-auto">
-        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-6 items-start text-center md:text-left">
+        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-6 text-center md:text-left">
           {allBenefits.map((benefit, index) => (
             <div
               key={index}

@@ -1,15 +1,19 @@
 import { Metadata } from "next"
 import Image from "next/image"
+import { HttpTypes } from "@medusajs/types" // Added
 import { getRegion } from "@lib/data/regions"
+import { getProductsList } from "@lib/data/products"
 import { getProductTypesList } from "@lib/data/product-types"
-import { Layout, LayoutColumn } from "@/components/Layout"
+import { Layout, LayoutColumn, ColumnsNumbers } from "@/components/Layout"
+import ProductPreview from "@modules/products/components/product-preview"
+import { siteConfig } from "@/config/site" // Added
 import { LocalizedLink } from "@/components/LocalizedLink"
 import { CollectionsSection } from "@/components/CollectionsSection"
 import { Carousel } from "@/components/Carousel"
 import OfferBenefits from "@/components/OfferBenefits"
 
 export const metadata: Metadata = {
-  title: "Medusa Next.js Starter Template",
+  title: "Orla Da Praia",
   description:
     "A performant frontend ecommerce starter template with Next.js 14 and Medusa.",
 }
@@ -69,6 +73,15 @@ export default async function Home({
     return null
   }
 
+  const { response } = await getProductsList({
+    countryCode,
+    queryParams: {
+      limit: siteConfig.featuredProducts.count, // Used siteConfig
+      fields: "handle,thumbnail,title,collection_id",
+    },
+  })
+  const products = response.products
+
   const carouselImages = [
     { src: "/images/content/Carousel_1.jpg", alt: "Hero image 1" },
     { src: "/images/content/Carousel_2.jpg", alt: "Hero image 2" },
@@ -100,6 +113,33 @@ export default async function Home({
         </Carousel>
       </div>
       <OfferBenefits />
+      {products && products.length > 0 && (
+        <div className="py-12 bg-gray-100">
+          <Layout>
+            <LayoutColumn className="col-span-full text-center mb-8">
+              <h2 className="text-2xl font-semibold">Featured Products</h2>
+            </LayoutColumn>
+            {products
+              .slice(0, siteConfig.featuredProducts.count) // Used siteConfig
+              .map((product: HttpTypes.StoreProduct, index: number) => (
+                <LayoutColumn
+                  key={product.id}
+                  className="max-md:mb-6"
+                  start={{
+                    base: (index % 2 === 0 ? 1 : 7) as ColumnsNumbers,
+                    md: (1 + index * 3) as ColumnsNumbers,
+                  }}
+                  end={{
+                    base: (index % 2 === 0 ? 7 : 13) as ColumnsNumbers,
+                    md: (1 + index * 3 + 3) as ColumnsNumbers,
+                  }}
+                >
+                  <ProductPreview product={product} />
+                </LayoutColumn>
+              ))}
+          </Layout>
+        </div>
+      )}
       <div className="pt-8 pb-26 md:pt-26 md:pb-36">
         <Layout className="mb-26 md:mb-36">
           <LayoutColumn start={1} end={{ base: 13, md: 8 }}>
