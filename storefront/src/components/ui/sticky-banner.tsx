@@ -1,22 +1,33 @@
 "use client"
-import React, { SVGProps, useState } from "react"
+import React, { SVGProps, useState, useEffect } from "react"
 import { motion, useMotionValueEvent, useScroll } from "framer-motion"
 import { cn } from "@lib/lib/utils"
 
 export const StickyBanner = ({
   className,
-  children,
+  phrases,
+  interval = 3000, // Default interval: 3 seconds
   hideOnScroll = false,
 }: {
   className?: string
-  children: React.ReactNode
+  phrases: string[]
+  interval?: number
   hideOnScroll?: boolean
 }) => {
   const [open, setOpen] = useState(true)
+  const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0)
   const { scrollY } = useScroll()
 
+  useEffect(() => {
+    if (phrases && phrases.length > 1) {
+      const timer = setInterval(() => {
+        setCurrentPhraseIndex((prevIndex) => (prevIndex + 1) % phrases.length)
+      }, interval)
+      return () => clearInterval(timer)
+    }
+  }, [phrases, interval])
+
   useMotionValueEvent(scrollY, "change", (latest) => {
-    console.log(latest)
     if (hideOnScroll && latest > 40) {
       setOpen(false)
     } else {
@@ -43,7 +54,7 @@ export const StickyBanner = ({
         ease: "easeInOut",
       }}
     >
-      {children}
+      {phrases && phrases.length > 0 && phrases[currentPhraseIndex]}
     </motion.div>
   )
 }

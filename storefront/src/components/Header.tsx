@@ -38,11 +38,19 @@ export const Header: React.FC = async () => {
     .flat()
     .sort((a, b) => (a?.label ?? "").localeCompare(b?.label ?? ""))
 
+  const bannerPhrases = [
+    "Free shipping on orders over $50!",
+    "New arrivals are here!",
+    "Shop our summer sale!",
+  ]
+
   return (
     <>
-      <StickyBanner className="bg-white text-black" hideOnScroll={true}>
-        <p>Your awesome banner content goes here!</p>
-      </StickyBanner>
+      <StickyBanner
+        className="bg-white text-black"
+        phrases={bannerPhrases}
+        interval={7000}
+      />
       <HeaderWrapper>
         <Layout className="w-full !mx-0 !max-w-none !px-8">
           <LayoutColumn className="!col-start-1 !col-end-[-1]">
