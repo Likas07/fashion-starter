@@ -2,11 +2,14 @@ import { HttpTypes } from "@medusajs/types"
 import { LocalizedLink } from "@/components/LocalizedLink"
 import Thumbnail from "@modules/products/components/thumbnail"
 import { getProductPrice } from "@lib/util/get-product-price"
+import { ThumbnailProps } from "@modules/products/components/thumbnail" // Import ThumbnailProps type
 
 export default function ProductPreview({
   product,
+  thumbnailSize, // Add new prop
 }: {
   product: HttpTypes.StoreProduct
+  thumbnailSize?: ThumbnailProps["size"] // Make it optional
 }) {
   const { cheapestPrice } = getProductPrice({
     product: product,
@@ -22,7 +25,7 @@ export default function ProductPreview({
       <Thumbnail
         thumbnail={product.thumbnail}
         images={product.images}
-        size="square"
+        size={thumbnailSize || "square"} // Use prop or default to "square"
         className="mb-4 md:mb-6"
       />
       <div className="flex justify-between max-md:flex-col">

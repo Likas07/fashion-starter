@@ -18,6 +18,7 @@ export type CarouselProps = {
   autoplayStopOnInteraction?: boolean
   loop?: boolean
   useInternalLayout?: boolean // New prop
+  arrowPosition?: "inside" | "outside" // New prop for arrow positioning
 } & React.ComponentPropsWithRef<"div">
 
 export const Carousel: React.FC<CarouselProps> = ({
@@ -29,6 +30,7 @@ export const Carousel: React.FC<CarouselProps> = ({
   autoplayStopOnInteraction = true,
   loop = false,
   useInternalLayout = true, // Default to true
+  arrowPosition = "outside", // Default to 'outside'
   children,
   className,
 }) => {
@@ -93,7 +95,8 @@ export const Carousel: React.FC<CarouselProps> = ({
             onClick={scrollPrev}
             disabled={prevBtnDisabled}
             className={twJoin(
-              "absolute left-4 top-1/2 -translate-y-1/2 z-10 transition-opacity max-md:hidden",
+              "absolute top-1/2 -translate-y-1/2 z-10 transition-opacity max-md:hidden",
+              arrowPosition === "inside" ? "left-4" : "left-[-2.5rem]",
               prevBtnDisabled && "opacity-50"
             )}
             aria-label="Previous"
@@ -107,7 +110,8 @@ export const Carousel: React.FC<CarouselProps> = ({
             onClick={scrollNext}
             disabled={nextBtnDisabled}
             className={twJoin(
-              "absolute right-4 top-1/2 -translate-y-1/2 z-10 transition-opacity max-md:hidden",
+              "absolute top-1/2 -translate-y-1/2 z-10 transition-opacity max-md:hidden",
+              arrowPosition === "inside" ? "right-4" : "right-[-2.5rem]",
               nextBtnDisabled && "opacity-50"
             )}
             aria-label="Next"

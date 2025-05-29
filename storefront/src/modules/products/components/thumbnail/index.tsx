@@ -5,7 +5,8 @@ import { twMerge } from "tailwind-merge"
 
 import PlaceholderImage from "@modules/common/icons/placeholder-image"
 
-type ThumbnailProps = {
+export type ThumbnailProps = {
+  // Add export here
   thumbnail?: HttpTypes.StoreProduct["thumbnail"]
   images?: HttpTypes.StoreProduct["images"]
   size?: "small" | "medium" | "large" | "full" | "square" | "3/4"
