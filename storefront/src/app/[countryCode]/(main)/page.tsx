@@ -73,14 +73,32 @@ export default async function Home({
     return null
   }
 
-  const { response } = await getProductsList({
-    countryCode,
-    queryParams: {
-      limit: siteConfig.featuredProducts.count, // Used siteConfig
-      fields: "handle,thumbnail,title,collection_id",
-    },
-  })
-  const products = response.products
+  let productsToFetch
+  const { handles, count } = siteConfig.featuredProducts
+
+  if (handles && handles.length > 0) {
+    // Fetch specific products by handles
+    const { response } = await getProductsList({
+      countryCode,
+      queryParams: {
+        handle: handles,
+        fields: "handle,thumbnail,title,collection_id",
+      },
+    })
+    productsToFetch = response.products
+  } else {
+    // Fallback: Fetch latest products by count
+    const { response } = await getProductsList({
+      countryCode,
+      queryParams: {
+        limit: count,
+        fields: "handle,thumbnail,title,collection_id",
+      },
+    })
+    productsToFetch = response.products
+  }
+
+  const products = productsToFetch
 
   const carouselImages = [
     { src: "/images/content/Carousel_1.jpg", alt: "Hero image 1" },
@@ -119,8 +137,7 @@ export default async function Home({
             <LayoutColumn className="col-span-full text-center mb-8">
               <h2 className="text-2xl font-semibold">Featured Products</h2>
             </LayoutColumn>
-            {products
-              .slice(0, siteConfig.featuredProducts.count) // Used siteConfig
+            {products // products are already limited by handles or count
               .map((product: HttpTypes.StoreProduct, index: number) => (
                 <LayoutColumn
                   key={product.id}
