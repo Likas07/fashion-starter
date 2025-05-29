@@ -135,7 +135,7 @@ export default async function Home({
         <div className="py-12 bg-gray-100">
           <Layout>
             <LayoutColumn className="col-span-full text-center mb-8">
-              <h2 className="text-2xl font-semibold">Featured Products</h2>
+              <h2 className="text-2xl font-semibold">VOCÊ VAI AMAR CONHECER</h2>
             </LayoutColumn>
             {products // products are already limited by handles or count
               .map((product: HttpTypes.StoreProduct, index: number) => (

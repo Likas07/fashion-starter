@@ -6,9 +6,51 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+@font-face {
+  font-family: "Agenda";
+  src: url("/fonts/Agenda Regular.ttf") format("truetype");
+  font-weight: 400; /* Regular */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Agenda";
+  src: url("/fonts/Agenda Italic.ttf") format("truetype");
+  font-weight: 400; /* Regular */
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Agenda";
+  src: url("/fonts/Agenda-Medium.otf") format("opentype");
+  font-weight: 500; /* Medium */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Agenda";
+  src: url("/fonts/Agenda Medium Italic.otf") format("opentype");
+  font-weight: 500; /* Medium */
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Agenda";
+  src: url("/fonts/Agenda Bold.otf") format("opentype");
+  font-weight: 700; /* Bold */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Agenda";
+  src: url("/fonts/Agenda Black.ttf") format("truetype");
+  font-weight: 900; /* Black */
+  font-style: normal;
+}
+
 @layer base {
   html {
-    @apply text-black font-normal;
+    @apply text-black font-agenda font-medium;
   }
 
   h1,
@@ -196,11 +238,11 @@
   }
 
   .txt-medium {
-    @apply text-[1.875rem] leading-[1.3125rem] font-normal font-inter;
+    @apply text-[1.875rem] leading-[1.3125rem] font-normal font-agenda;
   }
 
   .txt-xlarge-plus {
-    @apply text-[1.125rem] leading-[1.6875rem] font-medium font-inter;
+    @apply text-[1.125rem] leading-[1.6875rem] font-medium font-agenda;
   }
 }
 
