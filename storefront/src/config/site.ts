@@ -8,6 +8,10 @@ export const siteConfig = {
     count: 3, // Number of products to display if no specific handles are provided
     handles: [] as string[], // Array of product handles to feature.
   },
+  homeDisplayCollections: {
+    count: 4, // Number of products to display if no specific handles are provided
+    handles: [] as string[], // Array of product handles to feature.
+  },
   verticalBannerImage: "/images/content/Carousel_3.jpg", // Default banner image
   heroCarouselImages: [
     { src: "/images/content/Carousel_1.jpg", alt: "Hero image 1" },

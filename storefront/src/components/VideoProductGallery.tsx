@@ -6,7 +6,11 @@ import { siteConfig, VideoProductItem } from "@/config/site"
 import { LocalizedLink } from "@/components/LocalizedLink"
 import { Layout, LayoutColumn } from "@/components/Layout" // For consistent layout
 
-export const VideoProductGallery = () => {
+interface VideoProductGalleryProps {
+  title?: string
+}
+
+export const VideoProductGallery = ({ title }: VideoProductGalleryProps) => {
   if (
     !siteConfig.videoProductGalleryItems ||
     siteConfig.videoProductGalleryItems.length === 0
@@ -16,9 +20,13 @@ export const VideoProductGallery = () => {
 
   return (
     <Layout className="py-12 md:py-24">
-      <LayoutColumn className="col-span-full text-center mb-8 md:mb-12">
-        <h2 className="text-2xl md:text-3xl font-semibold">Assita & Compre</h2>
-      </LayoutColumn>
+      {(title !== "" || title === undefined) && (
+        <LayoutColumn className="col-span-full text-center mb-8 md:mb-12">
+          <h2 className="text-2xl md:text-3xl font-semibold">
+            {title || "Assita & Compre"}
+          </h2>
+        </LayoutColumn>
+      )}
       <LayoutColumn className="col-span-full">
         {" "}
         {/* Wrap the grid in a full-width LayoutColumn */}

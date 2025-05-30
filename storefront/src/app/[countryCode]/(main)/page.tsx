@@ -8,7 +8,6 @@ import { Layout, LayoutColumn, ColumnsNumbers } from "@/components/Layout"
 import ProductPreview from "@modules/products/components/product-preview"
 import { siteConfig } from "@/config/site" // Added
 import { LocalizedLink } from "@/components/LocalizedLink"
-import { CollectionsSection } from "@/components/CollectionsSection" // ProductTypesSection is removed, so CollectionsSection might be removed if not used elsewhere or if it was part of the same visual block. For now, I'll assume it's still needed.
 import { Carousel } from "@/components/Carousel"
 import OfferBenefits from "@/components/OfferBenefits"
 import { VideoProductGallery } from "@/components/VideoProductGallery" // Import the new component
@@ -84,6 +83,37 @@ export default async function Home({
     secondaryProductsToFetch = response.products
   }
   const secondaryProducts = secondaryProductsToFetch
+
+  // Fetch products for the home display collections carousel
+  let homeDisplayCollectionsProductsToFetch
+  const {
+    handles: homeDisplayCollectionsHandles,
+    count: homeDisplayCollectionsCount,
+  } = siteConfig.homeDisplayCollections || { handles: [], count: 2 } // Provide default if undefined
+
+  if (
+    homeDisplayCollectionsHandles &&
+    homeDisplayCollectionsHandles.length > 0
+  ) {
+    const { response } = await getProductsList({
+      countryCode,
+      queryParams: {
+        handle: homeDisplayCollectionsHandles,
+        fields: "handle,thumbnail,title,collection_id",
+      },
+    })
+    homeDisplayCollectionsProductsToFetch = response.products
+  } else {
+    const { response } = await getProductsList({
+      countryCode,
+      queryParams: {
+        limit: homeDisplayCollectionsCount,
+        fields: "handle,thumbnail,title,collection_id",
+      },
+    })
+    homeDisplayCollectionsProductsToFetch = response.products
+  }
+  const homeDisplayCollectionsProducts = homeDisplayCollectionsProductsToFetch
 
   return (
     <>
@@ -185,9 +215,68 @@ export default async function Home({
             )}
           </LayoutColumn>
         </Layout>
+        {/* New Collections Section */}
+        <Layout>
+          <LayoutColumn className="col-span-full text-center mb-8 pt-12">
+            <h2 className="text-2xl font-semibold">FEATURED COLLECTIONS</h2>
+          </LayoutColumn>
+        </Layout>
+        <Layout className="mb-26 md:mb-36 items-stretch">
+          {/* Left Column: Vertical Banner for Collections Section */}
+          <LayoutColumn
+            start={1}
+            end={{ base: 13, md: 7 }} // Banner takes 6/12 columns on medium+
+            className="relative min-h-[300px] md:min-h-0 md:aspect-[9/10] order-1 md:order-none" // Adjusted aspect ratio
+          >
+            <Image
+              src={siteConfig.verticalBannerImage} // Consider if this should be a different banner
+              alt="Collections Banner"
+              fill
+              className="object-cover rounded-lg"
+            />
+          </LayoutColumn>
+          {/* Right Column: Collections Carousel (Re-implemented) */}
+          <LayoutColumn
+            start={{ base: 1, md: 7 }} // Carousel takes 6/12 columns on medium+
+            end={13}
+            className="flex flex-col order-2 md:order-none mt-6 md:mt-0"
+          >
+            {homeDisplayCollectionsProducts &&
+            homeDisplayCollectionsProducts.length > 0 ? (
+              <Carousel
+                autoplay={false}
+                loop={false}
+                arrows={false} // No arrows for this carousel
+                useInternalLayout={false} // Manage layout explicitly
+                className="w-full h-full flex-grow"
+              >
+                {homeDisplayCollectionsProducts.map(
+                  (product: HttpTypes.StoreProduct) => (
+                    <div
+                      key={product.id}
+                      className="w-full sm:w-1/2 md:w-1/2 lg:w-1/2 p-4" // Increased padding
+                    >
+                      <ProductPreview
+                        product={product}
+                        thumbnailSize="medium"
+                      />
+                    </div>
+                  )
+                )}
+              </Carousel>
+            ) : (
+              <div className="flex items-center justify-center h-full bg-gray-100 rounded-lg p-8">
+                <p className="text-gray-500 text-center">
+                  No products for this collection yet. Configure them in
+                  siteConfig (homeDisplayCollections).
+                </p>
+              </div>
+            )}
+          </LayoutColumn>
+        </Layout>
         {/* <ProductTypesSection /> Removed */}
-        <VideoProductGallery /> {/* Add the new component here */}
-        <CollectionsSection className="mb-22 md:mb-36" />
+        <VideoProductGallery title="Assista & Compre" />{" "}
+        {/* Add the new component here */}
         <Layout>
           <LayoutColumn className="col-span-full">
             <h3 className="text-md md:text-2xl mb-8 md:mb-16">
