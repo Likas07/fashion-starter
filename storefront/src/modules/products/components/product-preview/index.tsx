@@ -25,7 +25,7 @@ export default function ProductPreview({
       <Thumbnail
         thumbnail={product.thumbnail}
         images={product.images}
-        size={thumbnailSize || "square"} // Use prop or default to "square"
+        size={thumbnailSize || "medium"} // Use prop or default to "medium"
         className="mb-4 md:mb-6"
       />
       <div className="flex justify-between max-md:flex-col">

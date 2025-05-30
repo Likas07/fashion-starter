@@ -21,6 +21,14 @@ const nextConfig = {
         protocol: "https",
         hostname: "fashion-starter-demo.s3.eu-central-1.amazonaws.com",
       },
+      {
+        protocol: "https",
+        hostname: "via.placeholder.com",
+      },
+      {
+        protocol: "https",
+        hostname: "placehold.co",
+      },
     ],
   },
 }

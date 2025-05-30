@@ -14,7 +14,39 @@ export const siteConfig = {
     { src: "/images/content/Carousel_2.jpg", alt: "Hero image 2" },
     { src: "/images/content/Carousel_3.jpg", alt: "Hero image 3" },
   ],
+  videoProductGalleryItems: [
+    {
+      videoUrl: "https://www.youtube.com/embed/n61ULEU7CO0",
+      product: {
+        imageUrl: "https://placehold.co/300x200.png?text=Product+Image+1",
+        name: "Placeholder Product 1",
+        price: "R$ 99,99",
+        productLink: "#",
+      },
+    },
+    {
+      videoUrl: "https://www.youtube.com/embed/n61ULEU7CO0",
+      product: {
+        imageUrl: "https://placehold.co/300x200.png?text=Product+Image+2",
+        name: "Placeholder Product 2",
+        price: "R$ 129,99",
+        productLink: "#",
+      },
+    },
+  ] as VideoProductItemConfig[],
   // Add other site-wide configurations here as needed
 }
 
 export type SiteConfig = typeof siteConfig
+
+export interface VideoProductItemConfig {
+  videoUrl: string
+  product: {
+    imageUrl: string
+    name: string
+    price: string
+    productLink?: string
+  }
+}
+
+export type VideoProductItem = VideoProductItemConfig

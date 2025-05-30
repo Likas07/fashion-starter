@@ -8,9 +8,10 @@ import { Layout, LayoutColumn, ColumnsNumbers } from "@/components/Layout"
 import ProductPreview from "@modules/products/components/product-preview"
 import { siteConfig } from "@/config/site" // Added
 import { LocalizedLink } from "@/components/LocalizedLink"
-import { CollectionsSection } from "@/components/CollectionsSection"
+import { CollectionsSection } from "@/components/CollectionsSection" // ProductTypesSection is removed, so CollectionsSection might be removed if not used elsewhere or if it was part of the same visual block. For now, I'll assume it's still needed.
 import { Carousel } from "@/components/Carousel"
 import OfferBenefits from "@/components/OfferBenefits"
+import { VideoProductGallery } from "@/components/VideoProductGallery" // Import the new component
 
 export const metadata: Metadata = {
   title: "Orla Da Praia",
@@ -18,48 +19,7 @@ export const metadata: Metadata = {
     "A performant frontend ecommerce starter template with Next.js 14 and Medusa.",
 }
 
-const ProductTypesSection: React.FC = async () => {
-  const productTypes = await getProductTypesList(0, 20, [
-    "id",
-    "value",
-    "metadata",
-  ])
-
-  if (!productTypes) {
-    return null
-  }
-
-  return (
-    <Layout className="mb-26 md:mb-36 max-md:gap-x-2">
-      <LayoutColumn>
-        <h3 className="text-md md:text-2xl mb-8 md:mb-15">Our products</h3>
-      </LayoutColumn>
-      {productTypes.productTypes.map((productType, index) => (
-        <LayoutColumn
-          key={productType.id}
-          start={index % 2 === 0 ? 1 : 7}
-          end={index % 2 === 0 ? 7 : 13}
-        >
-          <LocalizedLink href={`/store?type=${productType.value}`}>
-            {typeof productType.metadata?.image === "object" &&
-              productType.metadata.image &&
-              "url" in productType.metadata.image &&
-              typeof productType.metadata.image.url === "string" && (
-                <Image
-                  src={productType.metadata.image.url}
-                  width={1200}
-                  height={900}
-                  alt={productType.value}
-                  className="mb-2 md:mb-8"
-                />
-              )}
-            <p className="text-xs md:text-md">{productType.value}</p>
-          </LocalizedLink>
-        </LayoutColumn>
-      ))}
-    </Layout>
-  )
-}
+// ProductTypesSection removed
 
 export default async function Home({
   params,
@@ -225,7 +185,8 @@ export default async function Home({
             )}
           </LayoutColumn>
         </Layout>
-        <ProductTypesSection />
+        {/* <ProductTypesSection /> Removed */}
+        <VideoProductGallery /> {/* Add the new component here */}
         <CollectionsSection className="mb-22 md:mb-36" />
         <Layout>
           <LayoutColumn className="col-span-full">
