@@ -8,10 +8,13 @@ export const HeaderWrapper: React.FC<{ children?: React.ReactNode }> = ({
   children,
 }) => {
   const pathName = usePathname()
-  const countryCode = useCountryCode()
-  const currentPath = countryCode
-    ? pathName.split(`/${countryCode}`)[1]
+  const countryCodeValue = useCountryCode()
+  const stableCountryCode =
+    countryCodeValue === undefined ? null : countryCodeValue
+  const currentPath = countryCodeValue
+    ? pathName.split(`/${countryCodeValue}`)[1]
     : pathName
+  const isMainPage = !currentPath || currentPath === "/"
   const isPageWithHeroImage =
     !currentPath ||
     currentPath === "/" ||
@@ -22,18 +25,32 @@ export const HeaderWrapper: React.FC<{ children?: React.ReactNode }> = ({
     currentPath.startsWith("/auth") || currentPath.startsWith("/account")
 
   React.useEffect(() => {
-    if (isAlwaysSticky) {
-      return
-    }
-
-    const headerElement = document.querySelector("#site-header")
+    const headerElement = document.querySelector<HTMLElement>("#site-header") // Cast to HTMLElement
 
     if (!headerElement) {
       return
     }
 
+    if (isAlwaysSticky || !isMainPage) {
+      // If it's an 'always sticky' page or any non-main page,
+      // it's already sticky or should be.
+      // We can ensure the attribute is set correctly, though the JSX change should handle it.
+      if (headerElement.dataset.sticky !== "true") {
+        headerElement.setAttribute("data-sticky", "true")
+      }
+      return // No scroll/resize listeners needed for these pages to manage stickiness.
+    }
+
+    // The rest of the effect is for the main page's scroll-to-sticky behavior
+    if (isAlwaysSticky) {
+      // This check is now effectively for the main page only if it were also 'alwaysSticky' (unlikely scenario but good for completeness)
+      return
+    }
+
     const nextElement = headerElement.nextElementSibling
     let triggerPosition = 0
+
+    // Removed redundant check for headerElement and declaration of nextElement
 
     const updateTriggerPosition = () => {
       if (isPageWithHeroImage) {
@@ -80,7 +97,14 @@ export const HeaderWrapper: React.FC<{ children?: React.ReactNode }> = ({
       window.removeEventListener("orientationchange", updateTriggerPosition)
       window.removeEventListener("scroll", handleScroll)
     }
-  }, [pathName, isPageWithHeroImage, isAlwaysSticky])
+  }, [
+    pathName,
+    isPageWithHeroImage,
+    isAlwaysSticky,
+    stableCountryCode, // Use stableCountryCode
+    currentPath,
+    isMainPage,
+  ])
 
   return (
     <div
@@ -92,7 +116,7 @@ export const HeaderWrapper: React.FC<{ children?: React.ReactNode }> = ({
                  data-[light=true]:md:text-white data-[sticky=true]:md:text-black 
                  transition-colors fixed z-40 group"
       data-light={isPageWithHeroImage}
-      data-sticky={isAlwaysSticky}
+      data-sticky={isAlwaysSticky || !isMainPage}
     >
       {children}
     </div>
