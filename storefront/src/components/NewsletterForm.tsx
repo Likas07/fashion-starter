@@ -17,16 +17,16 @@ export const NewsletterForm: React.FC<{ className?: string }> = ({
 
   return (
     <div className={className}>
-      <h2 className="text-md md:text-lg mb-2 md:mb-1">Join our newsletter</h2>
+      <h2 className="text-md md:text-lg mb-2 md:mb-1">
+        Assine nossa newsletter
+      </h2>
       {isSubmitted ? (
         <p className="max-md:text-xs">
           Thank you for subscribing to our newsletter!
         </p>
       ) : (
         <>
-          <p className="max-md:text-xs mb-4">
-            We will also send you our discount coupons!
-          </p>
+          <p className="max-md:text-xs mb-4">Lorem ipsum dolor sit amet</p>
           <Form
             onSubmit={() => {
               setIsSubmitted(true)
@@ -42,11 +42,11 @@ export const NewsletterForm: React.FC<{ className?: string }> = ({
                 }}
                 name="email"
                 type="email"
-                placeholder="Your email"
+                placeholder="Seu email"
                 className="mb-4 flex-1"
               />
               <Button type="submit" size="sm" className="h-9 text-xs">
-                Subscribe
+                Assine
               </Button>
             </div>
           </Form>

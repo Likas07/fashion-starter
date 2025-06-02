@@ -237,6 +237,7 @@ module.exports = {
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         "header-text": "hsl(46, 22%, 92%)",
+        "footer-bg": "hsl(200, 36.8%, 37.3%)",
         chart: {
           1: "hsl(var(--chart-1))",
           2: "hsl(var(--chart-2))",

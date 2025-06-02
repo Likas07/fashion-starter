@@ -278,40 +278,38 @@ export default async function Home({
         <VideoProductGallery title="Assista & Compre" />{" "}
         {/* Add the new component here */}
         <Layout>
-          <LayoutColumn className="col-span-full">
-            <h3 className="text-md md:text-2xl mb-8 md:mb-16">
-              About Sofa Society
+          {/* Optional: Main title for the section, if you want it above the two columns */}
+          <LayoutColumn className="col-span-full mb-8 md:mb-12">
+            <h3 className="text-xl md:text-3xl text-center font-semibold">
+              Sobre a Orla
             </h3>
+          </LayoutColumn>
+
+          {/* Left Column: Image */}
+          <LayoutColumn className="col-span-full md:col-span-5 order-1 md:order-1 flex items-center justify-center">
             <Image
-              src="/images/content/gray-sofa-against-concrete-wall.png"
-              width={2496}
-              height={1400}
-              alt="Gray sofa against concrete wall"
-              className="mb-8 md:mb-16 max-md:aspect-[3/2] max-md:object-cover"
+              src="/images/content/gray-sofa-against-concrete-wall.png" // Or a new image if you prefer
+              width={800} // Adjust as needed
+              height={600} // Adjust as needed
+              alt="About Sofa Society Image"
+              className="rounded-lg object-cover w-full h-auto md:max-h-[500px]" // Adjust styling
             />
           </LayoutColumn>
-          <LayoutColumn start={1} end={{ base: 13, md: 7 }}>
-            <h2 className="text-md md:text-2xl">
-              At Sofa Society, we believe that a sofa is the heart of every
-              home.
+
+          {/* Right Column: Text Content */}
+          <LayoutColumn className="col-span-full md:col-span-7 order-2 md:order-2 flex flex-col justify-center mt-6 md:mt-0 md:pl-8 lg:pl-12">
+            <h2 className="text-lg md:text-2xl font-semibold mb-4">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
             </h2>
-          </LayoutColumn>
-          <LayoutColumn
-            start={{ base: 1, md: 8 }}
-            end={13}
-            className="mt-6 md:mt-19"
-          >
-            <div className="md:text-md">
-              <p className="mb-5 md:mb-9">
-                We are dedicated to delivering high-quality, thoughtfully
-                designed sofas that merge comfort and style effortlessly.
+            <div className="text-sm md:text-md">
+              <p className="mb-4 md:mb-6">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
               </p>
-              <p className="mb-5 md:mb-3">
-                Our mission is to transform your living space into a sanctuary
-                of relaxation and beauty, with products built to last.
+              <p className="mb-4 md:mb-6">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
               </p>
               <LocalizedLink href="/about" variant="underline">
-                Read more about Sofa Society
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
               </LocalizedLink>
             </div>
           </LayoutColumn>

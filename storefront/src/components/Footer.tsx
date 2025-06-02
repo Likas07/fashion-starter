@@ -5,6 +5,7 @@ import { twMerge } from "tailwind-merge"
 import { Layout, LayoutColumn } from "@/components/Layout"
 import { NewsletterForm } from "@/components/NewsletterForm"
 import { LocalizedLink } from "@/components/LocalizedLink"
+import { FooterLogoSVG } from "@/components/FooterSVGs"
 
 export const Footer: React.FC = () => {
   const pathName = usePathname()
@@ -16,76 +17,90 @@ export const Footer: React.FC = () => {
   return (
     <div
       className={twMerge(
-        "bg-grayscale-50 py-8 md:py-20",
+        "bg-footer-bg text-white py-8 md:py-20",
         isAuthPage && "hidden"
       )}
     >
       <Layout>
         <LayoutColumn className="col-span-13">
-          <div className="flex max-lg:flex-col justify-between md:gap-20 max-md:px-4">
-            <div className="flex flex-1 max-lg:w-full max-lg:order-2 max-sm:flex-col justify-between sm:gap-30 lg:gap-20 md:items-center">
-              <div className="max-w-35 md:flex-1 max-md:mb-9">
-                <h1 className="text-lg md:text-xl mb-2 md:mb-6 leading-none md:leading-[0.9]">
-                  Sofa Society Co.
-                </h1>
-                <p className="text-xs">
-                  &copy; {new Date().getFullYear()}, Sofa Society
+          <div className="flex max-lg:flex-col justify-between md:gap-20 max-md:px-4 lg:items-start">
+            <div className="flex flex-1 max-lg:w-full max-lg:order-2 max-sm:flex-col justify-between sm:gap-30 lg:gap-20 md:items-start">
+              <div className="max-w-35 max-md:mb-9 mr-12 lg:mr-16 flex flex-col items-center">
+                <FooterLogoSVG />
+                <p className="text-xs mt-2">
+                  &copy; {new Date().getFullYear()}, Orla da Praia
                 </p>
               </div>
-              <div className="flex gap-10 xl:gap-18 max-md:text-xs flex-1 justify-between lg:justify-center">
+              <div className="flex gap-10 xl:gap-18 max-md:text-xs justify-between lg:justify-center">
                 <ul className="flex flex-col gap-6 md:gap-3.5">
                   <li>
-                    <LocalizedLink href="/">FAQ</LocalizedLink>
+                    <strong>Institucional</strong>
                   </li>
                   <li>
-                    <LocalizedLink href="/">Help</LocalizedLink>
+                    <LocalizedLink href="/about">Sobre nós</LocalizedLink>
                   </li>
                   <li>
-                    <LocalizedLink href="/">Delivery</LocalizedLink>
+                    <LocalizedLink href="/guia-de-cuidados">
+                      Guia de cuidados
+                    </LocalizedLink>
                   </li>
                   <li>
-                    <LocalizedLink href="/">Returns</LocalizedLink>
+                    <LocalizedLink href="/devolucao-ou-troca">
+                      Devolução ou troca
+                    </LocalizedLink>
+                  </li>
+                  <li>
+                    <LocalizedLink href="/garantia">Garantia</LocalizedLink>
+                  </li>
+                  <li>
+                    <LocalizedLink href="/pagamento">Pagamento</LocalizedLink>
                   </li>
                 </ul>
                 <ul className="flex flex-col gap-6 md:gap-3.5">
                   <li>
-                    <a
-                      href="https://www.instagram.com/agiloltd/"
-                      target="_blank"
-                    >
-                      Instagram
-                    </a>
+                    <strong>Atacado</strong>
                   </li>
                   <li>
-                    <a href="https://tiktok.com" target="_blank">
-                      TikTok
-                    </a>
+                    <LocalizedLink href="/atacado/politicas">
+                      Políticas para compra
+                    </LocalizedLink>
                   </li>
                   <li>
-                    <a href="https://pinterest.com" target="_blank">
-                      Pinterest
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://facebook.com" target="_blank">
-                      Facebook
-                    </a>
+                    <LocalizedLink href="/atacado/cadastro">
+                      Faça seu cadastro
+                    </LocalizedLink>
                   </li>
                 </ul>
                 <ul className="flex flex-col gap-6 md:gap-3.5">
                   <li>
-                    <LocalizedLink href="/privacy-policy">
-                      Privacy Policy
+                    <strong>Fale conosco</strong>
+                  </li>
+                  <li>
+                    <LocalizedLink href="/contato/telefone">
+                      Telefone
                     </LocalizedLink>
                   </li>
                   <li>
-                    <LocalizedLink href="/cookie-policy">
-                      Cookie Policy
+                    <LocalizedLink href="/contato/email">E-mail</LocalizedLink>
+                  </li>
+                  <li>
+                    <LocalizedLink href="/contato/redes-sociais">
+                      Redes sociais
+                    </LocalizedLink>
+                  </li>
+                </ul>
+                <ul className="flex flex-col gap-6 md:gap-3.5">
+                  <li>
+                    <strong>Promoções</strong>
+                  </li>
+                  <li>
+                    <LocalizedLink href="/promocoes/cupons">
+                      Cupons
                     </LocalizedLink>
                   </li>
                   <li>
-                    <LocalizedLink href="/terms-of-use">
-                      Terms of Use
+                    <LocalizedLink href="/promocoes/programas-de-desconto">
+                      Programas de desconto
                     </LocalizedLink>
                   </li>
                 </ul>
