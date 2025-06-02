@@ -3,8 +3,7 @@ import Image from "next/image"
 import { HttpTypes } from "@medusajs/types" // Added
 import { getRegion } from "@lib/data/regions"
 import { getProductsList } from "@lib/data/products"
-import { getProductTypesList } from "@lib/data/product-types"
-import { Layout, LayoutColumn, ColumnsNumbers } from "@/components/Layout"
+import { Layout, LayoutColumn } from "@/components/Layout"
 import ProductPreview from "@modules/products/components/product-preview"
 import { siteConfig } from "@/config/site" // Added
 import { LocalizedLink } from "@/components/LocalizedLink"

@@ -11,6 +11,10 @@ import ProductInfo from "@modules/products/templates/product-info"
 import SkeletonRelatedProducts from "@modules/skeletons/templates/skeleton-related-products"
 import { LocalizedLink } from "@/components/LocalizedLink"
 import { Layout, LayoutColumn } from "@/components/Layout"
+import BuyTogether from "@modules/products/components/buy-together"
+import DiscountProgressBar from "@modules/products/components/discount-progress-bar"
+import ProductInfoAccordions from "@modules/products/components/product-info-accordions"
+import ReviewsPlaceholder from "@modules/products/components/reviews-placeholder"
 
 type ProductTemplateProps = {
   product: HttpTypes.StoreProduct
@@ -53,6 +57,8 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
       data-testid="product-container"
     >
       <ImageGallery className="md:hidden" images={images} />
+
+      {/* Main Product Section */}
       <Layout>
         <LayoutColumn className="mb-26 md:mb-52">
           <div className="flex max-lg:flex-col gap-8 xl:gap-27">
@@ -73,6 +79,68 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
           </div>
         </LayoutColumn>
       </Layout>
+
+      {/* Discount Progress Bar */}
+      <Layout>
+        <LayoutColumn>
+          <DiscountProgressBar
+            currentValue={75}
+            targetValue={149}
+            rewardType="frete"
+            className="mb-8"
+          />
+        </LayoutColumn>
+      </Layout>
+
+      {/* Product Information Accordions */}
+      <Layout>
+        <LayoutColumn>
+          <ProductInfoAccordions
+            product={product}
+            materials={materials}
+            className="mb-12"
+          />
+        </LayoutColumn>
+      </Layout>
+
+      {/* Buy Together Section */}
+      <Layout>
+        <LayoutColumn>
+          <BuyTogether
+            currentProduct={product}
+            suggestedProducts={[
+              {
+                id: "suggestion-1",
+                title: "Saída de Praia Complementar",
+                thumbnail: product.thumbnail || "/placeholder-product.jpg",
+                price: {
+                  calculated_price: 8900,
+                  currency_code: "BRL",
+                },
+              },
+              {
+                id: "suggestion-2",
+                title: "Protetor Solar FPS 60",
+                thumbnail: product.thumbnail || "/placeholder-product.jpg",
+                price: {
+                  calculated_price: 4500,
+                  currency_code: "BRL",
+                },
+              },
+            ]}
+            className="mb-12"
+          />
+        </LayoutColumn>
+      </Layout>
+
+      {/* Reviews Placeholder */}
+      <Layout>
+        <LayoutColumn>
+          <ReviewsPlaceholder className="mb-12" />
+        </LayoutColumn>
+      </Layout>
+
+      {/* Collection Details Sections */}
       {collectionDetails.success &&
         ((typeof collectionDetails.data.product_page_heading === "string" &&
           collectionDetails.data.product_page_heading.length > 0) ||
@@ -168,6 +236,7 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
           </Layout>
         )}
 
+      {/* Related Products */}
       <Suspense fallback={<SkeletonRelatedProducts />}>
         <RelatedProducts product={product} countryCode={countryCode} />
       </Suspense>

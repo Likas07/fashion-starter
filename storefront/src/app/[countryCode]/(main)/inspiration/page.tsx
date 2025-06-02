@@ -4,7 +4,6 @@ import { StoreRegion } from "@medusajs/types"
 import { listRegions } from "@lib/data/regions"
 import { Layout, LayoutColumn } from "@/components/Layout"
 import { LocalizedLink } from "@/components/LocalizedLink"
-import { CollectionsSection } from "@/components/CollectionsSection"
 
 export const metadata: Metadata = {
   title: "Inspiration",
@@ -192,7 +191,6 @@ export default function InspirationPage() {
             </LocalizedLink>
           </LayoutColumn>
         </Layout>
-        <CollectionsSection className="mt-26 md:mt-36" />
       </div>
     </>
   )

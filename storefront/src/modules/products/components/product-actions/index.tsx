@@ -19,6 +19,9 @@ import ProductPrice from "@modules/products/components/product-price"
 import { UiRadioGroup } from "@/components/ui/Radio"
 import { withReactQueryProvider } from "@lib/util/react-query"
 import { useAddLineItem } from "hooks/cart"
+import BikinySizeSelector from "@modules/products/components/bikini-size-selector"
+import WhatsAppButton from "@modules/products/components/whatsapp-button"
+import ShippingCalculatorPlaceholder from "@modules/products/components/shipping-calculator-placeholder"
 
 type ProductActionsProps = {
   product: HttpTypes.StoreProduct
@@ -284,30 +287,47 @@ function ProductActions({ product, materials, disabled }: ProductActionsProps) {
             })}
         </div>
       )}
-      <div className="flex max-sm:flex-col gap-4">
-        <NumberField
-          isDisabled={
+      <div className="space-y-4">
+        <div className="flex max-sm:flex-col gap-4">
+          <NumberField
+            isDisabled={
+              !itemsInStock || !selectedVariant || !!disabled || isPending
+            }
+            value={quantity}
+            onChange={setQuantity}
+            minValue={1}
+            maxValue={itemsInStock}
+            className="w-full sm:w-35 max-md:justify-center max-md:gap-2"
+            aria-label="Quantity"
+          />
+          <Button
+            onPress={handleAddToCart}
+            isDisabled={!itemsInStock || !selectedVariant || !!disabled}
+            isLoading={isPending}
+            className="sm:flex-1"
+          >
+            {!selectedVariant
+              ? "Select variant"
+              : !itemsInStock
+                ? "Out of stock"
+                : "Add to cart"}
+          </Button>
+        </div>
+
+        {/* WhatsApp Button */}
+        <WhatsAppButton
+          product={product}
+          selectedVariant={selectedVariant}
+          quantity={quantity}
+          disabled={
             !itemsInStock || !selectedVariant || !!disabled || isPending
           }
-          value={quantity}
-          onChange={setQuantity}
-          minValue={1}
-          maxValue={itemsInStock}
-          className="w-full sm:w-35 max-md:justify-center max-md:gap-2"
-          aria-label="Quantity"
         />
-        <Button
-          onPress={handleAddToCart}
-          isDisabled={!itemsInStock || !selectedVariant || !!disabled}
-          isLoading={isPending}
-          className="sm:flex-1"
-        >
-          {!selectedVariant
-            ? "Select variant"
-            : !itemsInStock
-              ? "Out of stock"
-              : "Add to cart"}
-        </Button>
+      </div>
+
+      {/* Shipping Calculator */}
+      <div className="mt-8">
+        <ShippingCalculatorPlaceholder />
       </div>
     </>
   )
