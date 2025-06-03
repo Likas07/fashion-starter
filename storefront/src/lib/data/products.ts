@@ -90,7 +90,8 @@ export const getProductsList = async function ({
           limit,
           offset,
           region_id: region.id,
-          fields: "*variants.calculated_price",
+          fields:
+            "*variants.calculated_price,+options,+options.values,+options.title,+options.id,+options.values.value,+options.values.id,+variants.options,+variants.options.value,+variants.options.option_id",
           ...queryParams,
         },
         next: { tags: ["products"] },

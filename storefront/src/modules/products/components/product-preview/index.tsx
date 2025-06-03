@@ -11,30 +11,18 @@ import ProductOverlay from "./ProductOverlay"
 export default function ProductPreview({
   product,
   thumbnailSize, // Add new prop
-  materials,
   // Overlay control props
   overlayCustomWidth,
   overlayCustomHeight,
   overlayCustomAspectRatio,
-  overlayPositioningMode,
   overlayDebugMode,
 }: {
   product: HttpTypes.StoreProduct
   thumbnailSize?: ThumbnailProps["size"] // Make it optional
-  materials?: {
-    id: string
-    name: string
-    colors: {
-      id: string
-      name: string
-      hex_code: string
-    }[]
-  }[]
   // Overlay control props
   overlayCustomWidth?: string
   overlayCustomHeight?: string
   overlayCustomAspectRatio?: string
-  overlayPositioningMode?: "absolute" | "relative"
   overlayDebugMode?: boolean
 }) {
   const [isOverlayVisible, setIsOverlayVisible] = useState(false)
@@ -93,13 +81,11 @@ export default function ProductPreview({
             <ProductOverlay
               product={product}
               isVisible={isOverlayVisible}
-              materials={materials}
               thumbnailSize={thumbnailSize || "medium"}
               isFeatured={false} // Add this if you need featured support
               customWidth={overlayCustomWidth}
               customHeight={overlayCustomHeight}
               customAspectRatio={overlayCustomAspectRatio}
-              positioningMode={overlayPositioningMode}
               debugMode={overlayDebugMode}
             />
           </div>

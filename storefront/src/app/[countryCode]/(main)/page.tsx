@@ -41,7 +41,8 @@ export default async function Home({
       countryCode,
       queryParams: {
         handle: featuredHandles,
-        fields: "handle,thumbnail,title,collection_id",
+        fields:
+          "handle,thumbnail,title,collection_id,+options,+options.values,+options.title,+options.id,+options.values.value,+options.values.id,+variants,+variants.options,+variants.options.value,+variants.options.option_id",
       },
     })
     productsToFetch = response.products
@@ -50,7 +51,8 @@ export default async function Home({
       countryCode,
       queryParams: {
         limit: featuredCount,
-        fields: "handle,thumbnail,title,collection_id",
+        fields:
+          "handle,thumbnail,title,collection_id,+options,+options.values,+options.title,+options.id,+options.values.value,+options.values.id,+variants,+variants.options,+variants.options.value,+variants.options.option_id",
       },
     })
     productsToFetch = response.products
@@ -67,7 +69,8 @@ export default async function Home({
       countryCode,
       queryParams: {
         handle: secondaryHandles,
-        fields: "handle,thumbnail,title,collection_id",
+        fields:
+          "handle,thumbnail,title,collection_id,+options,+options.values,+options.title,+options.id,+options.values.value,+options.values.id,+variants,+variants.options,+variants.options.value,+variants.options.option_id",
       },
     })
     secondaryProductsToFetch = response.products
@@ -76,7 +79,8 @@ export default async function Home({
       countryCode,
       queryParams: {
         limit: secondaryCount,
-        fields: "handle,thumbnail,title,collection_id",
+        fields:
+          "handle,thumbnail,title,collection_id,+options,+options.values,+options.title,+options.id,+options.values.value,+options.values.id,+variants,+variants.options,+variants.options.value,+variants.options.option_id",
       },
     })
     secondaryProductsToFetch = response.products
@@ -98,7 +102,8 @@ export default async function Home({
       countryCode,
       queryParams: {
         handle: homeDisplayCollectionsHandles,
-        fields: "handle,thumbnail,title,collection_id",
+        fields:
+          "handle,thumbnail,title,collection_id,+options,+options.values,+options.title,+options.id,+options.values.value,+options.values.id,+variants,+variants.options,+variants.options.value,+variants.options.option_id",
       },
     })
     homeDisplayCollectionsProductsToFetch = response.products
@@ -107,7 +112,8 @@ export default async function Home({
       countryCode,
       queryParams: {
         limit: homeDisplayCollectionsCount,
-        fields: "handle,thumbnail,title,collection_id",
+        fields:
+          "handle,thumbnail,title,collection_id,+options,+options.values,+options.title,+options.id,+options.values.value,+options.values.id,+variants,+variants.options,+variants.options.value,+variants.options.option_id",
       },
     })
     homeDisplayCollectionsProductsToFetch = response.products

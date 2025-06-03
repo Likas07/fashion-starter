@@ -19,7 +19,6 @@ import ProductPrice from "@modules/products/components/product-price"
 import { UiRadioGroup } from "@/components/ui/Radio"
 import { withReactQueryProvider } from "@lib/util/react-query"
 import { useAddLineItem } from "hooks/cart"
-import BikinySizeSelector from "@modules/products/components/bikini-size-selector"
 import WhatsAppButton from "@modules/products/components/whatsapp-button"
 import ShippingCalculatorPlaceholder from "@modules/products/components/shipping-calculator-placeholder"
 

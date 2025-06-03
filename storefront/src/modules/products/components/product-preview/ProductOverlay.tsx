@@ -14,15 +14,6 @@ import { ThumbnailProps } from "@modules/products/components/thumbnail"
 type ProductOverlayProps = {
   product: HttpTypes.StoreProduct
   isVisible: boolean
-  materials?: {
-    id: string
-    name: string
-    colors: {
-      id: string
-      name: string
-      hex_code: string
-    }[]
-  }[]
   // Thumbnail dimension matching
   thumbnailSize?: ThumbnailProps["size"]
   isFeatured?: boolean
@@ -30,7 +21,6 @@ type ProductOverlayProps = {
   customWidth?: string
   customHeight?: string
   customAspectRatio?: string
-  positioningMode?: "absolute" | "relative"
   debugMode?: boolean
 }
 
@@ -48,6 +38,41 @@ const getSizeDisplayName = (size: string): string => {
     XXL: "XGG",
   }
   return sizeMap[size] || size
+}
+
+// Helper function to get color hex code from color name
+const getColorHexCode = (colorName: string): string => {
+  const colorMap: Record<string, string> = {
+    Blue: "#0066CC",
+    Navy: "#000080",
+    "Royal Blue": "#4169E1",
+    "Light Blue": "#87CEEB",
+    Red: "#CC0000",
+    Crimson: "#DC143C",
+    "Dark Red": "#8B0000",
+    Pink: "#FFC0CB",
+    Beige: "#F5F5DC",
+    Cream: "#FFFDD0",
+    Ivory: "#FFFFF0",
+    White: "#FFFFFF",
+    Black: "#000000",
+    Gray: "#808080",
+    Grey: "#808080",
+    "Dark Gray": "#A9A9A9",
+    "Light Gray": "#D3D3D3",
+    Brown: "#A52A2A",
+    Tan: "#D2B48C",
+    Green: "#008000",
+    "Forest Green": "#228B22",
+    Olive: "#808000",
+    Yellow: "#FFFF00",
+    Gold: "#FFD700",
+    Orange: "#FFA500",
+    Purple: "#800080",
+    Violet: "#EE82EE",
+    Lavender: "#E6E6FA",
+  }
+  return colorMap[colorName] || "#CCCCCC" // Default to light gray if color not found
 }
 
 // Helper function to get variant options as keymap
@@ -86,13 +111,11 @@ const getThumbnailDimensions = (
 function ProductOverlay({
   product,
   isVisible,
-  materials = [],
   thumbnailSize,
   isFeatured,
   customWidth,
   customHeight,
   customAspectRatio,
-  positioningMode = "absolute",
   debugMode = false,
 }: ProductOverlayProps) {
   const [selectedOptions, setSelectedOptions] = useState<
@@ -104,14 +127,14 @@ function ProductOverlay({
 
   // Extract available options from product
   const availableOptions = useMemo(() => {
-    if (!product.options)
+    if (!product.options) {
       return {
         sizeOption: null,
         colorOption: null,
-        materialOption: null,
         sizes: [],
         colors: [],
       }
+    }
 
     const sizeOption = product.options.find(
       (opt) => opt.title?.toLowerCase() === "size"
@@ -119,41 +142,24 @@ function ProductOverlay({
     const colorOption = product.options.find(
       (opt) => opt.title?.toLowerCase() === "color"
     )
-    const materialOption = product.options.find(
-      (opt) => opt.title?.toLowerCase() === "material"
-    )
 
     const sizes = sizeOption?.values?.map((v) => v.value).filter(Boolean) || []
     const colors =
       colorOption?.values?.map((v) => v.value).filter(Boolean) || []
 
-    // Get colors from materials if available
-    let materialColors: { name: string; hex_code: string }[] = []
-    if (materialOption && materials && materials.length > 0) {
-      const selectedMaterial = materials.find((m) =>
-        selectedOptions[materialOption.id]
-          ? m.name === selectedOptions[materialOption.id]
-          : true
-      )
-      if (selectedMaterial) {
-        materialColors = selectedMaterial.colors
-      }
-    }
-
     return {
       sizeOption,
       colorOption,
-      materialOption,
       sizes: sizes.map((size) => ({
         value: size,
         display: getSizeDisplayName(size),
       })),
-      colors:
-        materialColors.length > 0
-          ? materialColors
-          : colors.map((color) => ({ name: color, hex_code: "#000000" })),
+      colors: colors.map((color) => ({
+        name: color,
+        hex_code: getColorHexCode(color),
+      })),
     }
-  }, [product.options, materials, selectedOptions])
+  }, [product.options])
 
   // Find selected variant
   const selectedVariant = useMemo(() => {
@@ -222,7 +228,7 @@ function ProductOverlay({
     return styles
   }, [thumbnailSize, isFeatured, customWidth, customHeight, customAspectRatio])
 
-  // Build overlay className based on positioning mode
+  // Build overlay className
   const overlayClassName = useMemo(() => {
     const baseClasses =
       "text-white flex items-end p-2 transition-all duration-300 ease-out group-hover:scale-105"
