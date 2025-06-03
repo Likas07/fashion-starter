@@ -1,0 +1,329 @@
+"use client"
+
+import { useState, useMemo } from "react"
+import { HttpTypes } from "@medusajs/types"
+import { Button } from "@/components/Button"
+import { useAddLineItem } from "hooks/cart"
+import { useCountryCode } from "hooks/country-code"
+import { getVariantItemsInStock } from "@lib/util/inventory"
+import { withReactQueryProvider } from "@lib/util/react-query"
+import { isEqual } from "lodash"
+
+import { ThumbnailProps } from "@modules/products/components/thumbnail"
+
+type ProductOverlayProps = {
+  product: HttpTypes.StoreProduct
+  isVisible: boolean
+  materials?: {
+    id: string
+    name: string
+    colors: {
+      id: string
+      name: string
+      hex_code: string
+    }[]
+  }[]
+  // Thumbnail dimension matching
+  thumbnailSize?: ThumbnailProps["size"]
+  isFeatured?: boolean
+  // Manual width control options
+  customWidth?: string
+  customHeight?: string
+  customAspectRatio?: string
+  positioningMode?: "absolute" | "relative"
+  debugMode?: boolean
+}
+
+// Helper function to convert size options to Portuguese
+const getSizeDisplayName = (size: string): string => {
+  const sizeMap: Record<string, string> = {
+    XS: "PP",
+    S: "P",
+    Small: "P",
+    M: "M",
+    Medium: "M",
+    L: "G",
+    Large: "G",
+    XL: "GG",
+    XXL: "XGG",
+  }
+  return sizeMap[size] || size
+}
+
+// Helper function to get variant options as keymap
+const optionsAsKeymap = (
+  variantOptions: HttpTypes.StoreProductVariant["options"]
+) => {
+  return variantOptions?.reduce((acc: Record<string, string>, varopt) => {
+    if (varopt.option_id) {
+      acc[varopt.option_id] = varopt.value
+    }
+    return acc
+  }, {})
+}
+
+// Helper function to calculate thumbnail dimensions (matches Thumbnail component logic)
+const getThumbnailDimensions = (
+  size: ThumbnailProps["size"] = "small",
+  isFeatured = false
+) => {
+  // Width calculations
+  let width = "100%"
+  if (size === "small") width = "180px"
+  else if (size === "medium") width = "290px"
+  else if (size === "large") width = "440px"
+  else if (size === "full") width = "100%"
+
+  // Aspect ratio calculations
+  let aspectRatio = "9/16" // default
+  if (isFeatured) aspectRatio = "11/14"
+  else if (size === "square") aspectRatio = "1/1"
+  else if (size === "3/4") aspectRatio = "3/4"
+
+  return { width, aspectRatio }
+}
+
+function ProductOverlay({
+  product,
+  isVisible,
+  materials = [],
+  thumbnailSize,
+  isFeatured,
+  customWidth,
+  customHeight,
+  customAspectRatio,
+  positioningMode = "absolute",
+  debugMode = false,
+}: ProductOverlayProps) {
+  const [selectedOptions, setSelectedOptions] = useState<
+    Record<string, string>
+  >({})
+  const [showSuccess, setShowSuccess] = useState(false)
+  const countryCode = useCountryCode()
+  const { mutateAsync, isPending } = useAddLineItem()
+
+  // Extract available options from product
+  const availableOptions = useMemo(() => {
+    if (!product.options)
+      return {
+        sizeOption: null,
+        colorOption: null,
+        materialOption: null,
+        sizes: [],
+        colors: [],
+      }
+
+    const sizeOption = product.options.find(
+      (opt) => opt.title?.toLowerCase() === "size"
+    )
+    const colorOption = product.options.find(
+      (opt) => opt.title?.toLowerCase() === "color"
+    )
+    const materialOption = product.options.find(
+      (opt) => opt.title?.toLowerCase() === "material"
+    )
+
+    const sizes = sizeOption?.values?.map((v) => v.value).filter(Boolean) || []
+    const colors =
+      colorOption?.values?.map((v) => v.value).filter(Boolean) || []
+
+    // Get colors from materials if available
+    let materialColors: { name: string; hex_code: string }[] = []
+    if (materialOption && materials && materials.length > 0) {
+      const selectedMaterial = materials.find((m) =>
+        selectedOptions[materialOption.id]
+          ? m.name === selectedOptions[materialOption.id]
+          : true
+      )
+      if (selectedMaterial) {
+        materialColors = selectedMaterial.colors
+      }
+    }
+
+    return {
+      sizeOption,
+      colorOption,
+      materialOption,
+      sizes: sizes.map((size) => ({
+        value: size,
+        display: getSizeDisplayName(size),
+      })),
+      colors:
+        materialColors.length > 0
+          ? materialColors
+          : colors.map((color) => ({ name: color, hex_code: "#000000" })),
+    }
+  }, [product.options, materials, selectedOptions])
+
+  // Find selected variant
+  const selectedVariant = useMemo(() => {
+    if (!product.variants || Object.keys(selectedOptions).length === 0) {
+      return product.variants?.[0] // Default to first variant if no selection
+    }
+
+    return product.variants.find((variant) => {
+      const variantOptions = optionsAsKeymap(variant.options)
+      return isEqual(variantOptions, selectedOptions)
+    })
+  }, [product.variants, selectedOptions])
+
+  const itemsInStock = selectedVariant
+    ? getVariantItemsInStock(selectedVariant)
+    : 0
+
+  const handleOptionSelect = (optionId: string, value: string) => {
+    setSelectedOptions((prev) => ({
+      ...prev,
+      [optionId]: value,
+    }))
+  }
+
+  const handleAddToCart = async () => {
+    if (!selectedVariant?.id || !itemsInStock) return
+
+    try {
+      await mutateAsync({
+        variantId: selectedVariant.id,
+        quantity: 1,
+        countryCode,
+      })
+
+      setShowSuccess(true)
+      setTimeout(() => setShowSuccess(false), 2000)
+    } catch (error) {
+      console.error("Failed to add to cart:", error)
+    }
+  }
+
+  // Calculate overlay styles based on thumbnail dimensions and manual controls
+  const overlayStyles = useMemo(() => {
+    const styles: React.CSSProperties = {}
+
+    // Get thumbnail dimensions if not manually overridden
+    if (!customWidth || !customAspectRatio) {
+      const thumbnailDimensions = getThumbnailDimensions(
+        thumbnailSize,
+        isFeatured
+      )
+
+      if (!customWidth) {
+        styles.width = thumbnailDimensions.width
+      }
+      if (!customAspectRatio) {
+        styles.aspectRatio = thumbnailDimensions.aspectRatio
+      }
+    }
+
+    // Apply manual overrides
+    if (customWidth) styles.width = customWidth
+    if (customHeight) styles.height = customHeight
+    if (customAspectRatio) styles.aspectRatio = customAspectRatio
+
+    return styles
+  }, [thumbnailSize, isFeatured, customWidth, customHeight, customAspectRatio])
+
+  // Build overlay className based on positioning mode
+  const overlayClassName = useMemo(() => {
+    const baseClasses =
+      "text-white flex items-end p-2 transition-all duration-300 ease-out group-hover:scale-105"
+    const visibilityClasses = isVisible
+      ? "translate-y-0 opacity-100 pointer-events-auto"
+      : "translate-y-full opacity-0 pointer-events-none"
+
+    // Use absolute positioning with calculated dimensions
+    const positionClasses = "absolute top-0 left-0"
+
+    const debugClasses = debugMode ? "ring-2 ring-red-500 ring-opacity-50" : ""
+
+    return `${baseClasses} ${visibilityClasses} ${positionClasses} ${debugClasses}`
+  }, [isVisible, debugMode])
+
+  return (
+    <div className={overlayClassName} style={overlayStyles}>
+      <div className="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-black/80 to-transparent" />
+      <div className="w-full flex flex-col space-y-1 relative z-10">
+        {/* Size Selection */}
+        {availableOptions.sizes && availableOptions.sizes.length > 0 && (
+          <div className="flex gap-1 justify-center">
+            {availableOptions.sizes.map((size) => (
+              <button
+                key={size.value}
+                onClick={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  if (availableOptions.sizeOption) {
+                    handleOptionSelect(
+                      availableOptions.sizeOption.id,
+                      size.value
+                    )
+                  }
+                }}
+                className={`px-2 py-1 text-xs font-medium rounded border transition-colors ${
+                  selectedOptions[availableOptions.sizeOption?.id || ""] ===
+                  size.value
+                    ? "bg-white text-black border-white"
+                    : "bg-transparent text-white border-white/50 hover:border-white"
+                }`}
+              >
+                {size.display}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Color Selection and Add Button */}
+        <div className="flex items-center justify-between">
+          {/* Colors */}
+          {availableOptions.colors && availableOptions.colors.length > 0 && (
+            <div className="flex gap-1">
+              {availableOptions.colors.slice(0, 4).map((color) => (
+                <button
+                  key={color.name}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    if (availableOptions.colorOption) {
+                      handleOptionSelect(
+                        availableOptions.colorOption.id,
+                        color.name
+                      )
+                    }
+                  }}
+                  className={`w-6 h-6 rounded-full border-2 transition-all ${
+                    selectedOptions[availableOptions.colorOption?.id || ""] ===
+                    color.name
+                      ? "border-white scale-110"
+                      : "border-white/50 hover:border-white"
+                  }`}
+                  style={{ backgroundColor: color.hex_code }}
+                  title={color.name}
+                />
+              ))}
+              {availableOptions.colors &&
+                availableOptions.colors.length > 4 && (
+                  <div className="w-6 h-6 rounded-full bg-white/20 border border-white/50 flex items-center justify-center">
+                    <span className="text-xs">
+                      +{availableOptions.colors.length - 4}
+                    </span>
+                  </div>
+                )}
+            </div>
+          )}
+
+          {/* Add to Cart Button */}
+          <Button
+            onPress={handleAddToCart}
+            isDisabled={!itemsInStock || !selectedVariant}
+            isLoading={isPending}
+            size="sm"
+            className="bg-white text-black hover:bg-gray-100 disabled:bg-gray-300"
+          >
+            {showSuccess ? "Adicionado!" : "Adicionar"}
+          </Button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default withReactQueryProvider(ProductOverlay)
