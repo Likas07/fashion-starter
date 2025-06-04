@@ -1,11 +1,11 @@
-const { loadEnv, defineConfig } = require('@medusajs/framework/utils');
+const { loadEnv, defineConfig } = require("@medusajs/framework/utils");
 
 loadEnv(process.env.NODE_ENV, process.cwd());
 
 module.exports = defineConfig({
   admin: {
     backendUrl:
-      process.env.BACKEND_URL ?? 'https://sofa-society-starter.medusajs.app',
+      process.env.BACKEND_URL ?? "https://sofa-society-starter.medusajs.app",
     storefrontUrl: process.env.STOREFRONT_URL,
   },
   projectConfig: {
@@ -15,18 +15,18 @@ module.exports = defineConfig({
       storeCors: process.env.STORE_CORS,
       adminCors: process.env.ADMIN_CORS,
       authCors: process.env.AUTH_CORS,
-      jwtSecret: process.env.JWT_SECRET || 'supersecret',
-      cookieSecret: process.env.COOKIE_SECRET || 'supersecret',
+      jwtSecret: process.env.JWT_SECRET || "supersecret",
+      cookieSecret: process.env.COOKIE_SECRET || "supersecret",
     },
   },
   modules: [
     {
-      resolve: '@medusajs/medusa/payment',
+      resolve: "@medusajs/medusa/payment",
       options: {
         providers: [
           {
-            id: 'stripe',
-            resolve: '@medusajs/medusa/payment-stripe',
+            id: "stripe",
+            resolve: "@medusajs/medusa/payment-stripe",
             options: {
               apiKey: process.env.STRIPE_API_KEY,
               webhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
@@ -36,15 +36,15 @@ module.exports = defineConfig({
       },
     },
     {
-      resolve: './src/modules/fashion',
+      resolve: "./src/modules/fashion",
     },
     {
-      resolve: '@medusajs/medusa/file',
+      resolve: "@medusajs/medusa/file",
       options: {
         providers: [
           {
-            resolve: '@medusajs/medusa/file-s3',
-            id: 's3',
+            resolve: "@medusajs/medusa/file-s3",
+            id: "s3",
             options: {
               file_url: process.env.S3_FILE_URL,
               access_key_id: process.env.S3_ACCESS_KEY_ID,
@@ -54,7 +54,7 @@ module.exports = defineConfig({
               endpoint: process.env.S3_ENDPOINT,
               additional_client_config: {
                 forcePathStyle:
-                  process.env.S3_FORCE_PATH_STYLE === 'true' ? true : undefined,
+                  process.env.S3_FORCE_PATH_STYLE === "true" ? true : undefined,
               },
             },
           },
@@ -62,30 +62,30 @@ module.exports = defineConfig({
       },
     },
     {
-      resolve: '@medusajs/medusa/notification',
+      resolve: "@medusajs/medusa/notification",
       options: {
         providers: [
           {
-            resolve: './src/modules/resend',
-            id: 'resend',
+            resolve: "./src/modules/resend",
+            id: "resend",
             options: {
-              channels: ['email'],
+              channels: ["email"],
               api_key: process.env.RESEND_API_KEY,
               from: process.env.RESEND_FROM,
-              siteTitle: 'SofaSocietyCo.',
-              companyName: 'Sofa Society',
+              siteTitle: "SofaSocietyCo.",
+              companyName: "Sofa Society",
               footerLinks: [
                 {
-                  url: 'https://agilo.com',
-                  label: 'Agilo',
+                  url: "https://agilo.com",
+                  label: "Agilo",
                 },
                 {
-                  url: 'https://www.instagram.com/agiloltd/',
-                  label: 'Instagram',
+                  url: "https://www.instagram.com/agiloltd/",
+                  label: "Instagram",
                 },
                 {
-                  url: 'https://www.linkedin.com/company/agilo/',
-                  label: 'LinkedIn',
+                  url: "https://www.linkedin.com/company/agilo/",
+                  label: "LinkedIn",
                 },
               ],
             },
@@ -94,7 +94,7 @@ module.exports = defineConfig({
       },
     },
     {
-      resolve: './src/modules/meilisearch',
+      resolve: "./src/modules/meilisearch",
       /**
        * @type {import('./src/modules/meilisearch/types').MeiliSearchPluginOptions}
        */
@@ -102,43 +102,43 @@ module.exports = defineConfig({
         config: {
           host:
             process.env.MEILISEARCH_HOST ??
-            'https://fashion-starter-search.agilo.agency',
+            "https://fashion-starter-search.agilo.agency",
           apiKey: process.env.MEILISEARCH_API_KEY,
         },
         settings: {
           products: {
             indexSettings: {
               searchableAttributes: [
-                'title',
-                'subtitle',
-                'description',
-                'collection',
-                'categories',
-                'type',
-                'tags',
-                'variants',
-                'sku',
+                "title",
+                "subtitle",
+                "description",
+                "collection",
+                "categories",
+                "type",
+                "tags",
+                "variants",
+                "sku",
               ],
               displayedAttributes: [
-                'id',
-                'title',
-                'handle',
-                'subtitle',
-                'description',
-                'is_giftcard',
-                'status',
-                'thumbnail',
-                'collection',
-                'collection_handle',
-                'categories',
-                'categories_handle',
-                'type',
-                'tags',
-                'variants',
-                'sku',
+                "id",
+                "title",
+                "handle",
+                "subtitle",
+                "description",
+                "is_giftcard",
+                "status",
+                "thumbnail",
+                "collection",
+                "collection_handle",
+                "categories",
+                "categories_handle",
+                "type",
+                "tags",
+                "variants",
+                "sku",
               ],
             },
-            primaryKey: 'id',
+            primaryKey: "id",
             /**
              * @param {import('@medusajs/types').ProductDTO} product
              */
@@ -163,7 +163,7 @@ module.exports = defineConfig({
                 variants: product.variants.map((variant) => variant.title),
                 sku: product.variants
                   .filter(
-                    (variant) => typeof variant.sku === 'string' && variant.sku,
+                    (variant) => typeof variant.sku === "string" && variant.sku
                   )
                   .map((variant) => variant.sku),
               };

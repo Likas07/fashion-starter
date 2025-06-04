@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react"
 import { HttpTypes } from "@medusajs/types"
 import { Button } from "@/components/Button"
+import { Icon } from "@/components/Icon"
 import { useAddLineItem } from "hooks/cart"
 import { useCountryCode } from "hooks/country-code"
 import { getVariantItemsInStock } from "@lib/util/inventory"
@@ -136,12 +137,14 @@ function ProductOverlay({
       }
     }
 
-    const sizeOption = product.options.find(
-      (opt) => opt.title?.toLowerCase() === "size"
-    )
-    const colorOption = product.options.find(
-      (opt) => opt.title?.toLowerCase() === "color"
-    )
+    const sizeOption = product.options.find((opt) => {
+      const title = opt.title?.toLowerCase()
+      return title === "size" || title === "tamanho"
+    })
+    const colorOption = product.options.find((opt) => {
+      const title = opt.title?.toLowerCase()
+      return title === "color" || title === "cor"
+    })
 
     const sizes = sizeOption?.values?.map((v) => v.value).filter(Boolean) || []
     const colors =
@@ -163,14 +166,29 @@ function ProductOverlay({
 
   // Find selected variant
   const selectedVariant = useMemo(() => {
-    if (!product.variants || Object.keys(selectedOptions).length === 0) {
-      return product.variants?.[0] // Default to first variant if no selection
+    if (!product.variants) {
+      return null
     }
 
-    return product.variants.find((variant) => {
-      const variantOptions = optionsAsKeymap(variant.options)
-      return isEqual(variantOptions, selectedOptions)
+    // If no options are selected yet, return the first variant as default
+    if (Object.keys(selectedOptions).length === 0) {
+      return product.variants[0] || null
+    }
+
+    // Find variant that matches selected options
+    const matchingVariant = product.variants.find((variant) => {
+      const variantOptions = optionsAsKeymap(variant.options) || {}
+
+      // Check if all selected options match this variant
+      for (const [optionId, selectedValue] of Object.entries(selectedOptions)) {
+        if (variantOptions[optionId] !== selectedValue) {
+          return false
+        }
+      }
+      return true
     })
+
+    return matchingVariant || product.variants[0] || null
   }, [product.variants, selectedOptions])
 
   const itemsInStock = selectedVariant
@@ -184,12 +202,30 @@ function ProductOverlay({
     }))
   }
 
+  // Check if all required options are selected
+  const isReadyToAddToCart = useMemo(() => {
+    const hasRequiredSize =
+      !availableOptions.sizes.length ||
+      (availableOptions.sizeOption &&
+        selectedOptions[availableOptions.sizeOption.id])
+
+    const hasRequiredColor =
+      !availableOptions.colors.length ||
+      (availableOptions.colorOption &&
+        selectedOptions[availableOptions.colorOption.id])
+
+    const isValid =
+      hasRequiredSize && hasRequiredColor && selectedVariant && itemsInStock > 0
+
+    return isValid
+  }, [availableOptions, selectedOptions, selectedVariant, itemsInStock])
+
   const handleAddToCart = async () => {
-    if (!selectedVariant?.id || !itemsInStock) return
+    if (!isReadyToAddToCart) return
 
     try {
       await mutateAsync({
-        variantId: selectedVariant.id,
+        variantId: selectedVariant!.id,
         quantity: 1,
         countryCode,
       })
@@ -246,11 +282,11 @@ function ProductOverlay({
 
   return (
     <div className={overlayClassName} style={overlayStyles}>
-      <div className="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-black/80 to-transparent" />
-      <div className="w-full flex flex-col space-y-1 relative z-10">
+      <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-black/80 to-transparent" />
+      <div className="w-full flex flex-col space-y-1 relative z-10 mb-4">
         {/* Size Selection */}
         {availableOptions.sizes && availableOptions.sizes.length > 0 && (
-          <div className="flex gap-1 justify-center">
+          <div className="flex gap-1">
             {availableOptions.sizes.map((size) => (
               <button
                 key={size.value}
@@ -295,7 +331,7 @@ function ProductOverlay({
                       )
                     }
                   }}
-                  className={`w-6 h-6 rounded-full border-2 transition-all ${
+                  className={`w-7 h-7 text-xs font-medium rounded border transition-colors ${
                     selectedOptions[availableOptions.colorOption?.id || ""] ===
                     color.name
                       ? "border-white scale-110"
@@ -307,7 +343,7 @@ function ProductOverlay({
               ))}
               {availableOptions.colors &&
                 availableOptions.colors.length > 4 && (
-                  <div className="w-6 h-6 rounded-full bg-white/20 border border-white/50 flex items-center justify-center">
+                  <div className="w-7 h-7 text-xs font-medium rounded border bg-white/20 border-white/50 flex items-center justify-center">
                     <span className="text-xs">
                       +{availableOptions.colors.length - 4}
                     </span>
@@ -317,15 +353,24 @@ function ProductOverlay({
           )}
 
           {/* Add to Cart Button */}
-          <Button
-            onPress={handleAddToCart}
-            isDisabled={!itemsInStock || !selectedVariant}
-            isLoading={isPending}
-            size="sm"
-            className="bg-white text-black hover:bg-gray-100 disabled:bg-gray-300"
+          <button
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              handleAddToCart()
+            }}
+            disabled={!isReadyToAddToCart || isPending}
+            className="w-8 h-8 bg-white text-black hover:bg-gray-100 disabled:bg-gray-300 rounded border border-white flex items-center justify-center transition-colors"
+            title={showSuccess ? "Adicionado!" : "Adicionar ao carrinho"}
           >
-            {showSuccess ? "Adicionado!" : "Adicionar"}
-          </Button>
+            {isPending ? (
+              <Icon name="loader" className="w-4 h-4 animate-spin" />
+            ) : showSuccess ? (
+              <Icon name="check" className="w-4 h-4" />
+            ) : (
+              <Icon name="case" className="w-4 h-4" />
+            )}
+          </button>
         </div>
       </div>
     </div>
