@@ -23,6 +23,9 @@ type ProductOverlayProps = {
   customHeight?: string
   customAspectRatio?: string
   debugMode?: boolean
+  // Shared state for options selection
+  selectedOptions?: Record<string, string>
+  onOptionSelect?: (options: Record<string, string>) => void
 }
 
 // Helper function to convert size options to Portuguese
@@ -118,13 +121,19 @@ function ProductOverlay({
   customHeight,
   customAspectRatio,
   debugMode = false,
+  selectedOptions: externalSelectedOptions,
+  onOptionSelect,
 }: ProductOverlayProps) {
-  const [selectedOptions, setSelectedOptions] = useState<
+  const [localSelectedOptions, setLocalSelectedOptions] = useState<
     Record<string, string>
   >({})
   const [showSuccess, setShowSuccess] = useState(false)
   const countryCode = useCountryCode()
   const { mutateAsync, isPending } = useAddLineItem()
+
+  // Use external options if provided, otherwise use local state
+  const selectedOptions = externalSelectedOptions || localSelectedOptions
+  const setSelectedOptions = onOptionSelect || setLocalSelectedOptions
 
   // Extract available options from product
   const availableOptions = useMemo(() => {
@@ -196,10 +205,19 @@ function ProductOverlay({
     : 0
 
   const handleOptionSelect = (optionId: string, value: string) => {
-    setSelectedOptions((prev) => ({
-      ...prev,
-      [optionId]: value,
-    }))
+    if (onOptionSelect) {
+      // When using external state, we need to merge with existing options
+      onOptionSelect({
+        ...selectedOptions,
+        [optionId]: value,
+      })
+    } else {
+      // When using local state, we can use the setter function
+      setLocalSelectedOptions((prev) => ({
+        ...prev,
+        [optionId]: value,
+      }))
+    }
   }
 
   // Check if all required options are selected
@@ -248,8 +266,9 @@ function ProductOverlay({
         isFeatured
       )
 
+      // Use 100% width to fill the container, but keep aspect ratio
       if (!customWidth) {
-        styles.width = thumbnailDimensions.width
+        styles.width = "100%"
       }
       if (!customAspectRatio) {
         styles.aspectRatio = thumbnailDimensions.aspectRatio
@@ -267,7 +286,7 @@ function ProductOverlay({
   // Build overlay className
   const overlayClassName = useMemo(() => {
     const baseClasses =
-      "text-white flex items-end p-2 transition-all duration-300 ease-out group-hover:scale-105"
+      "text-white flex items-end transition-all duration-300 ease-out group-hover:scale-105"
     const visibilityClasses = isVisible
       ? "translate-y-0 opacity-100 pointer-events-auto"
       : "translate-y-full opacity-0 pointer-events-none"
@@ -282,11 +301,11 @@ function ProductOverlay({
 
   return (
     <div className={overlayClassName} style={overlayStyles}>
-      <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-black/80 to-transparent" />
-      <div className="w-full flex flex-col space-y-1 relative z-10 mb-4">
+      <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-black/90 to-transparent" />
+      <div className="w-full flex flex-col relative z-10 h-full">
         {/* Size Selection */}
         {availableOptions.sizes && availableOptions.sizes.length > 0 && (
-          <div className="flex gap-1">
+          <div className="flex gap-1 justify-center p-2 flex-1 items-end">
             {availableOptions.sizes.map((size) => (
               <button
                 key={size.value}
@@ -313,65 +332,33 @@ function ProductOverlay({
           </div>
         )}
 
-        {/* Color Selection and Add Button */}
-        <div className="flex items-center justify-between">
-          {/* Colors */}
-          {availableOptions.colors && availableOptions.colors.length > 0 && (
-            <div className="flex gap-1">
-              {availableOptions.colors.slice(0, 4).map((color) => (
-                <button
-                  key={color.name}
-                  onClick={(e) => {
-                    e.preventDefault()
-                    e.stopPropagation()
-                    if (availableOptions.colorOption) {
-                      handleOptionSelect(
-                        availableOptions.colorOption.id,
-                        color.name
-                      )
-                    }
-                  }}
-                  className={`w-7 h-7 text-xs font-medium rounded border transition-colors ${
-                    selectedOptions[availableOptions.colorOption?.id || ""] ===
-                    color.name
-                      ? "border-white scale-110"
-                      : "border-white/50 hover:border-white"
-                  }`}
-                  style={{ backgroundColor: color.hex_code }}
-                  title={color.name}
-                />
-              ))}
-              {availableOptions.colors &&
-                availableOptions.colors.length > 4 && (
-                  <div className="w-7 h-7 text-xs font-medium rounded border bg-white/20 border-white/50 flex items-center justify-center">
-                    <span className="text-xs">
-                      +{availableOptions.colors.length - 4}
-                    </span>
-                  </div>
-                )}
-            </div>
-          )}
-
-          {/* Add to Cart Button */}
-          <button
-            onClick={(e) => {
-              e.preventDefault()
-              e.stopPropagation()
-              handleAddToCart()
-            }}
-            disabled={!isReadyToAddToCart || isPending}
-            className="w-8 h-8 bg-white text-black hover:bg-gray-100 disabled:bg-gray-300 rounded border border-white flex items-center justify-center transition-colors"
-            title={showSuccess ? "Adicionado!" : "Adicionar ao carrinho"}
-          >
-            {isPending ? (
+        {/* Add to Cart Button - Full Width, No Padding */}
+        <button
+          onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            handleAddToCart()
+          }}
+          disabled={!isReadyToAddToCart || isPending}
+          className="w-full pt-1 pb-4 bg-white text-black hover:bg-white/90 disabled:bg-white/50 disabled:text-black/50 font-medium text-sm transition-colors flex items-center justify-center gap-2"
+        >
+          {isPending ? (
+            <>
               <Icon name="loader" className="w-4 h-4 animate-spin" />
-            ) : showSuccess ? (
+              Adicionando...
+            </>
+          ) : showSuccess ? (
+            <>
               <Icon name="check" className="w-4 h-4" />
-            ) : (
+              Adicionado!
+            </>
+          ) : (
+            <>
               <Icon name="case" className="w-4 h-4" />
-            )}
-          </button>
-        </div>
+              Adicionar à Sacola
+            </>
+          )}
+        </button>
       </div>
     </div>
   )

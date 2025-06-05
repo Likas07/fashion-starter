@@ -34,9 +34,10 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
         !isFeatured && size !== "square" && size !== "3/4" && "aspect-[9/16]",
         size === "square" && "aspect-[1/1]",
         size === "3/4" && "aspect-[3/4]",
-        size === "small" && "w-[180px]",
-        size === "medium" && "w-[290px]",
-        size === "large" && "w-[440px]",
+        // Only apply explicit widths if parent doesn't have w-full in className
+        !className?.includes("w-full") && size === "small" && "w-[180px]",
+        !className?.includes("w-full") && size === "medium" && "w-[290px]",
+        !className?.includes("w-full") && size === "large" && "w-[440px]",
         size === "full" && "w-full"
       )}
       data-testid={dataTestid}
