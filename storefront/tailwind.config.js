@@ -6,9 +6,7 @@ module.exports = {
     "./src/components/**/*.{js,ts,jsx,tsx}",
     "./src/modules/**/*.{js,ts,jsx,tsx}",
     "./node_modules/@medusajs/ui/dist/**/*.{js,jsx,ts,tsx}",
-    "./node_modules/@relume_io/relume-ui/dist/**/*.{js,ts,jsx,tsx}",
   ],
-  presets: [require("@relume_io/relume-tailwind")],
   theme: {
     colors: {
       black: "hsl(var(--foreground))",

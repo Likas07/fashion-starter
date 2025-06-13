@@ -1,7 +1,7 @@
 import { Suspense } from "react"
 
 import SkeletonProductGrid from "@modules/skeletons/templates/skeleton-product-grid"
-import RefinementList from "@modules/store/components/refinement-list"
+import { StoreClientWrapper } from "@modules/store/templates/store-client"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 
 import { getCollectionsList } from "@lib/data/collections"
@@ -37,23 +37,32 @@ const StoreTemplate = async ({
   ])
 
   return (
-    <div className="md:pt-47 py-26 md:pb-36">
-      <RefinementList
-        collections={Object.fromEntries(
-          collections.collections.map((c) => [c.handle, c.title])
-        )}
-        collection={collection}
-        categories={Object.fromEntries(
-          categories.product_categories.map((c) => [c.handle, c.name])
-        )}
-        category={category}
-        types={Object.fromEntries(
-          types.productTypes.map((t) => [t.value, t.value])
-        )}
-        type={type}
-        sortBy={sortBy}
-        title={pageDisplayTitle}
-      />
+    <StoreClientWrapper
+      title={pageDisplayTitle}
+      sortBy={sortBy}
+      typeId={
+        !type
+          ? undefined
+          : types.productTypes
+              .filter((t) => type.includes(t.value))
+              .map((t) => t.id)
+      }
+      collectionId={
+        !collection
+          ? undefined
+          : collections.collections
+              .filter((c) => collection.includes(c.handle))
+              .map((c) => c.id)
+      }
+      categoryId={
+        !category
+          ? undefined
+          : categories.product_categories
+              .filter((c) => category.includes(c.handle))
+              .map((c) => c.id)
+      }
+      regionId={region?.id}
+    >
       <Suspense fallback={<SkeletonProductGrid />}>
         {region && (
           <PaginatedProducts
@@ -84,7 +93,7 @@ const StoreTemplate = async ({
           />
         )}
       </Suspense>
-    </div>
+    </StoreClientWrapper>
   )
 }
 
