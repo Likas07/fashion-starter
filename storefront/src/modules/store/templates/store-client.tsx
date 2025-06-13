@@ -180,7 +180,10 @@ export const StoreClientWrapper = ({
     setFilters(newFilters)
 
     // Reset the flag after a short delay
-    setTimeout(() => setIsUpdatingFromURL(false), 100)
+    const timeoutId = setTimeout(() => setIsUpdatingFromURL(false), 100)
+
+    // Cleanup function to clear timeout
+    return () => clearTimeout(timeoutId)
   }, [searchParams])
 
   const updateURLParams = useCallback(

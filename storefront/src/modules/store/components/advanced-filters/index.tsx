@@ -81,9 +81,19 @@ export const AdvancedFilters = ({
   }
 
   const removeFilter = (filterType: string, value: string) => {
-    // This will be handled by the parent component
-    // The parent component should implement this logic to update the filters
+    // TODO: This function must be overridden by the parent component to handle filter removal properly
+    // The parent component should update its filter state and call onFiltersChange with the updated filters
+    // excluding the specified filterType and value
+
+    if (!onFiltersChange) {
+      console.warn(
+        "onFiltersChange prop not provided - filter removal not functional"
+      )
+      return
+    }
+
     console.log("Remove filter:", filterType, value)
+    // Parent component must implement the actual filter removal logic
   }
 
   return (

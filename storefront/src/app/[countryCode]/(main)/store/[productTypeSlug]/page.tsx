@@ -1,7 +1,8 @@
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
 
-import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
+import { SortOptions } from "@/lib/constants"
+import { SortOptions as MedusaSortOptions } from "@modules/store/components/refinement-list/sort-products"
 import StoreTemplate from "@modules/store/templates"
 import { getProductTypesList } from "@lib/data/product-types"
 import { listRegions } from "@lib/data/regions"
@@ -78,14 +79,25 @@ export async function generateMetadata({
   }
 }
 
-export default async function ProductTypeStorePage(props: {
-  params: Promise<Params["params"]>
-  searchParams: Promise<Params["searchParams"]>
-}) {
-  const params = await props.params
-  const searchParams = await props.searchParams
+interface ProductTypeStorePageProps {
+  params: {
+    countryCode: string
+    productTypeSlug: string
+  }
+  searchParams: {
+    sortBy?: string
+    page?: string
+    collection?: string
+    category?: string
+  }
+}
 
+const ProductTypeStorePage: React.FC<ProductTypeStorePageProps> = async ({
+  params,
+  searchParams,
+}) => {
   const { countryCode, productTypeSlug } = params
+
   const { sortBy, page, collection, category } = searchParams
 
   const { productTypes } = await getProductTypesList(0, 100, ["id", "value"])
@@ -99,7 +111,7 @@ export default async function ProductTypeStorePage(props: {
 
   return (
     <StoreTemplate
-      sortBy={sortBy}
+      sortBy={sortBy as any}
       page={page}
       countryCode={countryCode}
       collection={
@@ -117,3 +129,5 @@ export default async function ProductTypeStorePage(props: {
     />
   )
 }
+
+export default ProductTypeStorePage
