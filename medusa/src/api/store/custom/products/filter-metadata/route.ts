@@ -1,12 +1,18 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework";
 import { Modules } from "@medusajs/framework/utils";
 import { IProductModuleService } from "@medusajs/framework/types";
+import Redis from "ioredis";
 
 interface FilterOptions {
   priceRange: { min: number; max: number };
-  colors: Array<{ name: string; hex_code: string }>;
+  colors: string[];
   styles: string[];
+  sizes: string[];
   productCount: number;
+}
+
+interface ProductFilterData {
+  [contextKey: string]: FilterOptions;
 }
 
 interface QueryParams {
@@ -14,69 +20,6 @@ interface QueryParams {
   collection_id?: string | string[];
   category_id?: string | string[];
   region_id?: string;
-}
-
-// Color mapping for Portuguese and English color names
-const COLOR_HEX_MAP: Record<string, string> = {
-  // Portuguese colors
-  preto: "#000000",
-  branco: "#FFFFFF",
-  vermelho: "#FF0000",
-  azul: "#0000FF",
-  verde: "#008000",
-  amarelo: "#FFFF00",
-  rosa: "#FFC0CB",
-  roxo: "#800080",
-  laranja: "#FFA500",
-  cinza: "#808080",
-  cinzento: "#808080",
-  marrom: "#A52A2A",
-  bege: "#F5F5DC",
-  dourado: "#FFD700",
-  prateado: "#C0C0C0",
-  navy: "#000080",
-  turquesa: "#40E0D0",
-  "coral-pt": "#FF7F50",
-  salmão: "#FA8072",
-  limão: "#32CD32",
-  lilás: "#DDA0DD",
-  "magenta-pt": "#FF00FF",
-  ciano: "#00FFFF",
-  "olive-pt": "#808000",
-  marinho: "#000080",
-  // English colors (fallbacks)
-  black: "#000000",
-  white: "#FFFFFF",
-  red: "#FF0000",
-  blue: "#0000FF",
-  green: "#008000",
-  yellow: "#FFFF00",
-  pink: "#FFC0CB",
-  purple: "#800080",
-  orange: "#FFA500",
-  gray: "#808080",
-  grey: "#808080",
-  brown: "#A52A2A",
-  beige: "#F5F5DC",
-  gold: "#FFD700",
-  silver: "#C0C0C0",
-  turquoise: "#40E0D0",
-  coral: "#FF7F50",
-  salmon: "#FA8072",
-  lime: "#32CD32",
-  lilac: "#DDA0DD",
-  magenta: "#FF00FF",
-  cyan: "#00FFFF",
-  olive: "#808000",
-  // Color variations
-  "dark gray": "#808080",
-  "light gray": "#D3D3D3",
-  violet: "#EE82EE",
-};
-
-function mapColorToHex(colorName: string): string {
-  const normalizedName = colorName.toLowerCase().trim();
-  return COLOR_HEX_MAP[normalizedName] || "#808080"; // Default to gray if color not found
 }
 
 function normalizeArray(value: any): string[] {
@@ -100,6 +43,112 @@ function isStyleOption(title: string): boolean {
   );
 }
 
+function isSizeOption(title: string): boolean {
+  const normalizedTitle = title.toLowerCase();
+  return (
+    normalizedTitle.includes("size") ||
+    normalizedTitle.includes("tamanho") ||
+    normalizedTitle.includes("talla")
+  );
+}
+
+function generateContextKey(filters: any): string {
+  const parts = [];
+
+  if (filters.type_id && filters.type_id.length > 0) {
+    parts.push(`type:${filters.type_id.join(",")}`);
+  }
+
+  if (filters.collection_id && filters.collection_id.length > 0) {
+    parts.push(`collection:${filters.collection_id.join(",")}`);
+  }
+
+  if (filters.category_id && filters.category_id.length > 0) {
+    parts.push(`category:${filters.category_id.join(",")}`);
+  }
+
+  return parts.length > 0 ? parts.join("|") : "global";
+}
+
+async function getFallbackFilterData(
+  productModuleService: IProductModuleService,
+  filters: any
+): Promise<FilterOptions> {
+  console.log("Using fallback database query with filters:", filters);
+
+  // Query products using the product module service
+  const products = await productModuleService.listProducts(filters, {
+    relations: ["options", "options.values", "variants"],
+  });
+
+  console.log("Fallback query - Products found:", products?.length || 0);
+
+  // Initialize collections for processing
+  const uniqueColors = new Set<string>();
+  const uniqueStyles = new Set<string>();
+  const uniqueSizes = new Set<string>();
+  const prices: number[] = [];
+
+  // Process products to extract filter data
+  products?.forEach((product: any) => {
+    // Process product options
+    if (product.options) {
+      product.options.forEach((option: any) => {
+        if (option.title && option.values) {
+          if (isColorOption(option.title)) {
+            // Extract color values (simplified - no hex codes)
+            option.values.forEach((value: any) => {
+              if (value.value) {
+                uniqueColors.add(value.value);
+              }
+            });
+          } else if (isStyleOption(option.title)) {
+            // Extract style values
+            option.values.forEach((value: any) => {
+              if (value.value) {
+                uniqueStyles.add(value.value);
+              }
+            });
+          } else if (isSizeOption(option.title)) {
+            // Extract size values
+            option.values.forEach((value: any) => {
+              if (value.value) {
+                uniqueSizes.add(value.value);
+              }
+            });
+          }
+        }
+      });
+    }
+
+    // Process product variants for price calculation (no stock requirement)
+    if (product.variants) {
+      product.variants.forEach((variant: any) => {
+        const price = variant.calculated_price || variant.price;
+        if (typeof price === "number" && price > 0) {
+          prices.push(price);
+        }
+      });
+    }
+  });
+
+  // Calculate price range
+  const minPrice = prices.length > 0 ? Math.min(...prices) : 0;
+  const maxPrice = prices.length > 0 ? Math.max(...prices) : 1000;
+
+  // Return simplified filter data
+  return {
+    priceRange: {
+      min: Math.floor(minPrice / 100), // Convert from cents to currency units
+      max: Math.ceil(maxPrice / 100),
+    },
+    colors: Array.from(uniqueColors),
+    styles: Array.from(uniqueStyles),
+    sizes: Array.from(uniqueSizes),
+    productCount: products?.length || 0,
+  };
+}
+
 export const GET = async (
   req: MedusaRequest<QueryParams>,
   res: MedusaResponse
@@ -119,14 +168,27 @@ export const GET = async (
       region_id,
     });
 
-    // Get the product module service
+    // Get required services
     const productModuleService: IProductModuleService = req.scope.resolve(
       Modules.PRODUCT
     );
 
-    console.log("Product module service resolved:", !!productModuleService);
+    // Create direct Redis client
+    const redisUrl =
+      process.env.CACHE_REDIS_URL ||
+      process.env.REDIS_URL ||
+      "redis://localhost:6379";
+    const redis = new Redis(redisUrl, {
+      maxRetriesPerRequest: 3,
+      lazyConnect: true,
+    });
 
-    // Build filters for the product query
+    console.log("Services resolved:", {
+      productService: !!productModuleService,
+      redisConnection: !!redis,
+    });
+
+    // Build filters for context key generation and fallback query
     const filters: any = {
       status: "published",
     };
@@ -143,119 +205,89 @@ export const GET = async (
       filters.category_id = categoryIds;
     }
 
-    console.log("Applied filters:", filters);
-
-    // Query products using the product module service
-    const products = await productModuleService.listProducts(filters, {
-      relations: ["options", "options.values", "variants"],
+    // Generate context key for the current request
+    const contextKey = generateContextKey({
+      type_id: typeIds,
+      collection_id: collectionIds,
+      category_id: categoryIds,
     });
 
-    console.log("Products found:", products?.length || 0);
+    console.log("Generated context key:", contextKey);
 
-    if (products?.length > 0) {
-      console.log("Sample product:", {
-        id: products[0].id,
-        title: products[0].title,
-        options: products[0].options?.map((opt: any) => ({
-          title: opt.title,
-          values: opt.values?.map((val: any) => val.value),
-        })),
-      });
+    // Try to retrieve cached data first using direct Redis
+    try {
+      await redis.connect();
+      const cachedData = await redis.get("product_filters_v1");
+
+      if (cachedData && typeof cachedData === "string") {
+        console.log("✅ Cache hit! Retrieved cached filter data from Redis");
+        const filterData: ProductFilterData = JSON.parse(cachedData);
+
+        // Check if we have data for the specific context
+        if (filterData[contextKey]) {
+          console.log(`✅ Found cached data for context: ${contextKey}`);
+          await redis.disconnect();
+          res.json(filterData[contextKey]);
+          return;
+        } else if (contextKey !== "global" && filterData["global"]) {
+          console.log("✅ Using global cached data as fallback");
+          await redis.disconnect();
+          res.json(filterData["global"]);
+          return;
+        }
+
+        console.log(
+          "⚠️ Context not found in cache, falling back to database query"
+        );
+      } else {
+        console.log("⚠️ Cache miss - no cached data found in Redis");
+      }
+    } catch (cacheError) {
+      console.error("❌ Error retrieving from Redis cache:", cacheError);
+      console.log("Falling back to database query");
     }
 
-    // Initialize collections for processing
-    const uniqueColors = new Set<string>();
-    const uniqueStyles = new Set<string>();
-    const prices: number[] = [];
+    // Fallback to database query
+    const fallbackData = await getFallbackFilterData(
+      productModuleService,
+      filters
+    );
 
-    // Process products to extract filter data
-    products?.forEach((product: any) => {
-      console.log(
-        "Processing product:",
-        product.title,
-        "with options:",
-        product.options?.length || 0
+    // Try to cache the fallback result for future requests using direct Redis
+    try {
+      if (!redis.status || redis.status === "end") {
+        await redis.connect();
+      }
+
+      const existingCacheData = await redis.get("product_filters_v1");
+      let cacheData: ProductFilterData = {};
+
+      if (existingCacheData && typeof existingCacheData === "string") {
+        cacheData = JSON.parse(existingCacheData);
+      }
+
+      // Update cache with the new data
+      cacheData[contextKey] = fallbackData;
+
+      await redis.setex(
+        "product_filters_v1",
+        3600, // TTL: 1 hour
+        JSON.stringify(cacheData)
       );
 
-      // Process product options
-      if (product.options) {
-        product.options.forEach((option: any) => {
-          console.log(
-            "Processing option:",
-            option.title,
-            "with values:",
-            option.values?.length || 0
-          );
-
-          if (option.title && option.values) {
-            if (isColorOption(option.title)) {
-              console.log("Found color option:", option.title);
-              // Extract color values
-              option.values.forEach((value: any) => {
-                if (value.value) {
-                  console.log("Adding color:", value.value);
-                  uniqueColors.add(value.value);
-                }
-              });
-            } else if (isStyleOption(option.title)) {
-              console.log("Found style option:", option.title);
-              // Extract style values
-              option.values.forEach((value: any) => {
-                if (value.value) {
-                  console.log("Adding style:", value.value);
-                  uniqueStyles.add(value.value);
-                }
-              });
-            }
-          }
-        });
+      console.log(`✅ Cached fallback data for context: ${contextKey}`);
+      await redis.disconnect();
+    } catch (cacheSetError) {
+      console.error("❌ Error setting Redis cache:", cacheSetError);
+      try {
+        await redis.disconnect();
+      } catch (disconnectError) {
+        // Ignore disconnect errors
       }
+    }
 
-      // Process product variants for price calculation (basic price extraction)
-      if (product.variants) {
-        product.variants.forEach((variant: any) => {
-          // For now, we'll use a simple approach since calculated_price might not be available
-          // In a real scenario, you would need to calculate prices based on region/currency
-          if (variant.price) {
-            const price = variant.price;
-            if (typeof price === "number" && price > 0) {
-              prices.push(price);
-            }
-          }
-        });
-      }
-    });
-
-    console.log("Extracted colors:", Array.from(uniqueColors));
-    console.log("Extracted styles:", Array.from(uniqueStyles));
-    console.log("Extracted prices:", prices);
-
-    // Calculate price range
-    const minPrice = prices.length > 0 ? Math.min(...prices) : 0;
-    const maxPrice = prices.length > 0 ? Math.max(...prices) : 1000;
-
-    // Convert colors to the expected format with hex codes
-    const colors = Array.from(uniqueColors).map((colorName) => ({
-      name: colorName,
-      hex_code: mapColorToHex(colorName),
-    }));
-
-    // Convert styles to array
-    const styles = Array.from(uniqueStyles);
-
-    // Prepare response
-    const response_data: FilterOptions = {
-      priceRange: {
-        min: Math.floor(minPrice / 100), // Convert from cents to currency units if needed
-        max: Math.ceil(maxPrice / 100),
-      },
-      colors,
-      styles,
-      productCount: products?.length || 0,
-    };
-
-    console.log("Final response:", response_data);
-    res.json(response_data);
+    console.log("Final response (from fallback):", fallbackData);
+    res.json(fallbackData);
   } catch (error) {
     console.error("Error fetching filter metadata:", error);
 
@@ -264,6 +296,7 @@ export const GET = async (
       priceRange: { min: 0, max: 1000 },
       colors: [],
       styles: [],
+      sizes: [],
       productCount: 0,
     };
 
