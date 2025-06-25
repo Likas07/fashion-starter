@@ -2,12 +2,13 @@
 
 import * as React from "react"
 import { twJoin, twMerge } from "tailwind-merge"
-import { EmblaCarouselType } from "embla-carousel"
-import useEmblaCarousel from "embla-carousel-react"
+import useEmblaCarousel, { UseEmblaCarouselType } from "embla-carousel-react"
 import Autoplay from "embla-carousel-autoplay"
 import { Icon } from "@/components/Icon"
 import { IconCircle } from "@/components/IconCircle"
 import { Layout, LayoutColumn } from "@/components/Layout"
+
+type EmblaCarouselType = UseEmblaCarouselType[1]
 
 export type CarouselProps = {
   heading?: React.ReactNode
@@ -34,7 +35,7 @@ export const Carousel: React.FC<CarouselProps> = ({
   children,
   className,
 }) => {
-  const plugins = []
+  const plugins: any[] = []
   if (autoplay) {
     plugins.push(
       Autoplay({
@@ -51,7 +52,7 @@ export const Carousel: React.FC<CarouselProps> = ({
       active: true,
       loop: loop,
     },
-    plugins
+    plugins as any
   )
   const [prevBtnDisabled, setPrevBtnDisabled] = React.useState(true)
   const [nextBtnDisabled, setNextBtnDisabled] = React.useState(true)
@@ -64,7 +65,7 @@ export const Carousel: React.FC<CarouselProps> = ({
     () => emblaApi && emblaApi.scrollNext(),
     [emblaApi]
   )
-  const onSelect = React.useCallback((emblaApi: EmblaCarouselType) => {
+  const onSelect = React.useCallback((emblaApi: any) => {
     setPrevBtnDisabled(!emblaApi.canScrollPrev())
     setNextBtnDisabled(!emblaApi.canScrollNext())
   }, [])

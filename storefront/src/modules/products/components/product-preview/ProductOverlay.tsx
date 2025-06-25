@@ -2,13 +2,11 @@
 
 import { useState, useMemo } from "react"
 import { HttpTypes } from "@medusajs/types"
-import { Button } from "@/components/Button"
 import { Icon } from "@/components/Icon"
 import { useAddLineItem } from "hooks/cart"
 import { useCountryCode } from "hooks/country-code"
 import { getVariantItemsInStock } from "@lib/util/inventory"
 import { withReactQueryProvider } from "@lib/util/react-query"
-import { isEqual } from "lodash"
 
 import { ThumbnailProps } from "@modules/products/components/thumbnail"
 
@@ -133,7 +131,7 @@ function ProductOverlay({
 
   // Use external options if provided, otherwise use local state
   const selectedOptions = externalSelectedOptions || localSelectedOptions
-  const setSelectedOptions = onOptionSelect || setLocalSelectedOptions
+  // const setSelectedOptions = onOptionSelect || setLocalSelectedOptions
 
   // Extract available options from product
   const availableOptions = useMemo(() => {

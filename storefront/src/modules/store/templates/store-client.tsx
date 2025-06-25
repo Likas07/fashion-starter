@@ -1,13 +1,11 @@
 "use client"
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { useCallback, useEffect, useState, useMemo } from "react"
-import {
-  AdvancedFilters,
-  FilterOptions,
-} from "@modules/store/components/advanced-filters"
+import { useCallback, useEffect, useState } from "react"
+import { AdvancedFilters } from "@modules/store/components/advanced-filters"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
-import { sdk } from "@lib/config"
+import { useFilterMetadata } from "@lib/hooks/use-filter-metadata"
+import { withReactQueryProvider } from "@lib/util/react-query"
 
 type FilterState = {
   size: string[]
@@ -17,7 +15,7 @@ type FilterState = {
   priceRange: number[]
 }
 
-export const StoreClientWrapper = ({
+const StoreClientWrapperComponent = ({
   title,
   sortBy,
   productCount = 0,
@@ -50,113 +48,19 @@ export const StoreClientWrapper = ({
     priceRange: [0, 1000],
   })
 
-  const [filterOptions, setFilterOptions] = useState<FilterOptions | undefined>(
-    undefined
-  )
-
-  const [dynamicProductCount, setDynamicProductCount] = useState<number>(0)
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const [isUpdatingFromURL, setIsUpdatingFromURL] = useState(false)
 
-  // Memoize the dependencies to prevent infinite loop
-  const stableTypeId = useMemo(
-    () => (Array.isArray(typeId) ? typeId.join(",") : typeId),
-    [typeId]
-  )
-  const stableCollectionId = useMemo(
-    () => (Array.isArray(collectionId) ? collectionId.join(",") : collectionId),
-    [collectionId]
-  )
-  const stableCategoryId = useMemo(
-    () => (Array.isArray(categoryId) ? categoryId.join(",") : categoryId),
-    [categoryId]
-  )
-
-  // Fetch filter metadata when component mounts or filter params change
-  useEffect(() => {
-    const getFilterMetadata = async ({
-      type_id,
-      collection_id,
-      category_id,
-      region_id,
-    }: {
-      type_id?: string | string[]
-      collection_id?: string | string[]
-      category_id?: string | string[]
-      region_id?: string
-    }): Promise<FilterOptions> => {
-      const query = new URLSearchParams()
-
-      // Add filters to query
-      if (type_id) {
-        const typeIds = Array.isArray(type_id) ? type_id : [type_id]
-        typeIds.forEach((id) => query.append("type_id", id))
-      }
-      if (collection_id) {
-        const collectionIds = Array.isArray(collection_id)
-          ? collection_id
-          : [collection_id]
-        collectionIds.forEach((id) => query.append("collection_id", id))
-      }
-      if (category_id) {
-        const categoryIds = Array.isArray(category_id)
-          ? category_id
-          : [category_id]
-        categoryIds.forEach((id) => query.append("category_id", id))
-      }
-      if (region_id) {
-        query.append("region_id", region_id)
-      }
-
-      const queryString = query.toString()
-      const url = `/store/custom/products/filter-metadata${queryString ? `?${queryString}` : ""}`
-
-      try {
-        const response = await sdk.client.fetch<FilterOptions>(url, {
-          method: "GET",
-          next: { tags: ["filter-metadata"] },
-          cache: "force-cache",
-        })
-
-        return response
-      } catch (error) {
-        console.error("Error fetching filter metadata:", error)
-        // Return fallback data
-        return {
-          priceRange: { min: 0, max: 1000 },
-          colors: [],
-          styles: [],
-          productCount: 0,
-        }
-      }
-    }
-
-    const fetchFilterMetadata = async () => {
-      try {
-        setIsLoading(true)
-        setError(null)
-
-        const metadata = await getFilterMetadata({
-          type_id: typeId,
-          collection_id: collectionId,
-          category_id: categoryId,
-          region_id: regionId,
-        })
-
-        setFilterOptions(metadata)
-        setDynamicProductCount(metadata.productCount)
-      } catch (error) {
-        console.error("Error fetching filter metadata:", error)
-        setError("Failed to load filter options")
-        // Keep undefined to use fallback values
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    fetchFilterMetadata()
-  }, [stableTypeId, stableCollectionId, stableCategoryId, regionId])
+  // Use the custom hook for filter metadata
+  const {
+    data: filterOptions,
+    isLoading,
+    error,
+  } = useFilterMetadata({
+    type_id: typeId,
+    collection_id: collectionId,
+    category_id: categoryId,
+    region_id: regionId,
+  })
 
   // Parse URL parameters on mount
   useEffect(() => {
@@ -288,14 +192,20 @@ export const StoreClientWrapper = ({
     <AdvancedFilters
       title={title}
       sortBy={sortBy}
-      productCount={dynamicProductCount}
+      productCount={filterOptions?.productCount || productCount}
       totalCount={filterOptions?.productCount || totalCount}
       appliedFilters={appliedFilters}
       onFiltersChange={handleFiltersChange}
       onSortChange={handleSortChange}
       filterOptions={filterOptions}
+      isLoading={isLoading}
+      error={error?.message || null}
     >
       {children}
     </AdvancedFilters>
   )
 }
+
+export const StoreClientWrapper = withReactQueryProvider(
+  StoreClientWrapperComponent
+)

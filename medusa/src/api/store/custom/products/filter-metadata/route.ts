@@ -139,8 +139,8 @@ async function getFallbackFilterData(
   // Return simplified filter data
   return {
     priceRange: {
-      min: Math.floor(minPrice / 100), // Convert from cents to currency units
-      max: Math.ceil(maxPrice / 100),
+      min: Math.floor(minPrice), // Prices are already in currency units, not cents
+      max: Math.ceil(maxPrice),
     },
     colors: Array.from(uniqueColors),
     styles: Array.from(uniqueStyles),

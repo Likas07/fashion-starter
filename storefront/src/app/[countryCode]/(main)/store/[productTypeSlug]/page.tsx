@@ -1,12 +1,11 @@
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
 
-import { SortOptions } from "@/lib/constants"
-import { SortOptions as MedusaSortOptions } from "@modules/store/components/refinement-list/sort-products"
 import StoreTemplate from "@modules/store/templates"
+import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 import { getProductTypesList } from "@lib/data/product-types"
 import { listRegions } from "@lib/data/regions"
-import { slugify } from "@lib/util/slugify" // Assuming you created this utility
+import { slugify } from "@lib/util/slugify"
 
 type Params = {
   searchParams: {
@@ -111,7 +110,7 @@ const ProductTypeStorePage: React.FC<ProductTypeStorePageProps> = async ({
 
   return (
     <StoreTemplate
-      sortBy={sortBy as any}
+      sortBy={sortBy as SortOptions}
       page={page}
       countryCode={countryCode}
       collection={

@@ -28,17 +28,18 @@ import {
 } from "../../../../lib/components/ui/sheet"
 import { Slider } from "../../../../lib/components/ui/slider"
 import { useMediaQuery } from "../../../../lib/hooks/use-media-query"
+import { Skeleton } from "../../../../components/ui/Skeleton"
 
 export type FilterOptions = {
-  colors: Array<{ name: string; hex_code: string }>
+  colors: string[]
   styles: string[]
+  sizes: string[]
   priceRange: { min: number; max: number }
   productCount: number
 }
 
 export const AdvancedFilters = ({
   title = "Loja",
-  sortBy,
   appliedFilters = [],
   onFiltersChange,
   onSortChange,
@@ -46,6 +47,8 @@ export const AdvancedFilters = ({
   totalCount = 0,
   children,
   filterOptions,
+  isLoading = false,
+  error = null,
 }: {
   title?: string
   sortBy?: string
@@ -62,6 +65,8 @@ export const AdvancedFilters = ({
   totalCount?: number
   children?: React.ReactNode
   filterOptions?: FilterOptions
+  isLoading?: boolean
+  error?: string | null
 }) => {
   const isTablet = useMediaQuery("(max-width: 991px)")
   const [key, setKey] = useState(0)
@@ -106,9 +111,14 @@ export const AdvancedFilters = ({
           <p className="md:text-md font-agenda">
             Explore nossa coleção completa.
           </p>
-          {!filterOptions && (
+          {isLoading && (
             <p className="text-sm text-muted-foreground font-agenda mt-2">
               Carregando filtros...
+            </p>
+          )}
+          {error && (
+            <p className="text-sm text-red-500 font-agenda mt-2">
+              Erro ao carregar filtros. Usando valores padrão.
             </p>
           )}
         </div>
@@ -142,6 +152,7 @@ export const AdvancedFilters = ({
                     clearTrigger={key}
                     onFiltersChange={onFiltersChange}
                     filterOptions={filterOptions}
+                    isLoading={isLoading}
                   />
                 </div>
                 <SheetFooter className="sticky bottom-0 z-50 mt-6">
@@ -184,6 +195,7 @@ export const AdvancedFilters = ({
                   clearTrigger={key}
                   onFiltersChange={onFiltersChange}
                   filterOptions={filterOptions}
+                  isLoading={isLoading}
                 />
               </div>
             </div>
@@ -241,6 +253,7 @@ const FilterSections = ({
   clearTrigger,
   onFiltersChange,
   filterOptions,
+  isLoading = false,
 }: {
   clearTrigger: number
   onFiltersChange?: (filters: {
@@ -251,6 +264,8 @@ const FilterSections = ({
     priceRange: number[]
   }) => void
   filterOptions?: FilterOptions
+  isLoading?: boolean
+  error?: string | null
 }) => {
   const [selectedSizes, setSelectedSizes] = useState(new Set<string>())
   const [selectedStyle, setSelectedStyle] = useState("Todos")
@@ -258,27 +273,20 @@ const FilterSections = ({
   const [selectedBestSelling, setSelectedBestSelling] = useState("")
   const [priceRange, setPriceRange] = useState([0, 1000])
 
-  const sizes = ["PP", "P", "M", "G", "GG", "XGG"]
+  // Use dynamic sizes or fallback to default
+  const sizes = filterOptions?.sizes?.length
+    ? filterOptions.sizes
+    : ["PP", "P", "M", "G", "GG", "XGG"]
 
   // Use dynamic styles or fallback to default
   const styles = filterOptions?.styles?.length
     ? ["Todos", ...filterOptions.styles]
     : ["Todos", "Casual", "Esportivo", "Elegante", "Praia"]
 
-  // Use dynamic colors or fallback to default
+  // Use dynamic colors or fallback to default - simplified format (no hex codes)
   const colors = filterOptions?.colors?.length
-    ? filterOptions.colors.map((color) => ({
-        name: color.name,
-        hex: color.hex_code,
-      }))
-    : [
-        { name: "Preto", hex: "#000000" },
-        { name: "Branco", hex: "#FFFFFF" },
-        { name: "Vermelho", hex: "#FF0000" },
-        { name: "Azul", hex: "#0000FF" },
-        { name: "Verde", hex: "#008000" },
-        { name: "Rosa", hex: "#FFC0CB" },
-      ]
+    ? filterOptions.colors
+    : ["Preto", "Branco", "Vermelho", "Azul", "Verde", "Rosa"]
 
   // Reset filters when clear trigger changes
   useEffect(() => {
@@ -375,6 +383,29 @@ const FilterSections = ({
     }
   }
 
+  if (isLoading) {
+    return (
+      <div className="lg:w-[18rem]">
+        {/* Loading skeletons for filters */}
+        {[1, 2, 3, 4].map((i) => (
+          <div key={i} className="border-b border-border">
+            <div className="flex items-center justify-between py-4 md:py-5">
+              <Skeleton className="h-5 w-20" />
+              <Skeleton className="h-4 w-12" />
+            </div>
+            <div className="mb-7 lg:mb-5">
+              <div className="grid grid-cols-1 gap-2">
+                {[1, 2, 3].map((j) => (
+                  <Skeleton key={j} className="h-8 w-full" />
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
   return (
     <div className="lg:w-[18rem]">
       {/* Size Filter */}
@@ -455,26 +486,22 @@ const FilterSections = ({
         <div className="mb-7 lg:mb-5">
           <div className="flex flex-wrap gap-2">
             {colors.map((color) => (
-              <div key={color.name} className="flex items-center">
+              <div key={color} className="flex items-center">
                 <Checkbox
-                  id={`color-${color.name}`}
+                  id={`color-${color}`}
                   className="hidden"
-                  checked={selectedColors.has(color.name)}
-                  onCheckedChange={() => handleColorChange(color.name)}
+                  checked={selectedColors.has(color)}
+                  onCheckedChange={() => handleColorChange(color)}
                 />
                 <label
-                  htmlFor={`color-${color.name}`}
+                  htmlFor={`color-${color}`}
                   className={`inline-flex cursor-pointer items-center justify-center border border-border px-4 py-2 text-base transition-colors font-agenda ${
-                    selectedColors.has(color.name)
+                    selectedColors.has(color)
                       ? "bg-primary text-primary-foreground"
                       : "bg-background"
                   }`}
                 >
-                  <div
-                    className="w-4 h-4 rounded-full mr-2 border border-border"
-                    style={{ backgroundColor: color.hex }}
-                  />
-                  {color.name}
+                  {color}
                 </label>
               </div>
             ))}

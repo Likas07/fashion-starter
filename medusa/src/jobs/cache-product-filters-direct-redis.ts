@@ -192,8 +192,8 @@ export default async function cacheProductFiltersDirectRedis(
       // Store filter data for this context
       filterData[contextKey] = {
         priceRange: {
-          min: Math.floor(minPrice / 100), // Convert from cents to currency units
-          max: Math.ceil(maxPrice / 100),
+          min: Math.floor(minPrice), // Prices are already in currency units, not cents
+          max: Math.ceil(maxPrice),
         },
         colors,
         styles,
