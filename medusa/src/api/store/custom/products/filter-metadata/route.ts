@@ -3,6 +3,35 @@ import { Modules } from "@medusajs/framework/utils";
 import { IProductModuleService } from "@medusajs/framework/types";
 import Redis from "ioredis";
 
+// Singleton Redis client
+let redisClient: Redis | null = null;
+
+function getRedisClient(): Redis {
+  if (!redisClient) {
+    const redisUrl =
+      process.env.CACHE_REDIS_URL ||
+      process.env.REDIS_URL ||
+      "redis://localhost:6379";
+
+    redisClient = new Redis(redisUrl, {
+      maxRetriesPerRequest: 3,
+      lazyConnect: true,
+      enableReadyCheck: false,
+    });
+
+    // Handle connection events
+    redisClient.on("error", (err) => {
+      console.error("Redis client error:", err);
+    });
+
+    redisClient.on("connect", () => {
+      console.log("Redis client connected");
+    });
+  }
+
+  return redisClient;
+}
+
 interface FilterOptions {
   priceRange: { min: number; max: number };
   colors: string[];
@@ -56,15 +85,20 @@ function generateContextKey(filters: any): string {
   const parts = [];
 
   if (filters.type_id && filters.type_id.length > 0) {
-    parts.push(`type:${filters.type_id.join(",")}`);
+    const sortedUniqueTypeIds = [...new Set(filters.type_id)].sort();
+    parts.push(`type:${sortedUniqueTypeIds.join(",")}`);
   }
 
   if (filters.collection_id && filters.collection_id.length > 0) {
-    parts.push(`collection:${filters.collection_id.join(",")}`);
+    const sortedUniqueCollectionIds = [
+      ...new Set(filters.collection_id),
+    ].sort();
+    parts.push(`collection:${sortedUniqueCollectionIds.join(",")}`);
   }
 
   if (filters.category_id && filters.category_id.length > 0) {
-    parts.push(`category:${filters.category_id.join(",")}`);
+    const sortedUniqueCategoryIds = [...new Set(filters.category_id)].sort();
+    parts.push(`category:${sortedUniqueCategoryIds.join(",")}`);
   }
 
   return parts.length > 0 ? parts.join("|") : "global";
@@ -173,15 +207,8 @@ export const GET = async (
       Modules.PRODUCT
     );
 
-    // Create direct Redis client
-    const redisUrl =
-      process.env.CACHE_REDIS_URL ||
-      process.env.REDIS_URL ||
-      "redis://localhost:6379";
-    const redis = new Redis(redisUrl, {
-      maxRetriesPerRequest: 3,
-      lazyConnect: true,
-    });
+    // Get singleton Redis client
+    const redis = getRedisClient();
 
     console.log("Services resolved:", {
       productService: !!productModuleService,
@@ -216,7 +243,6 @@ export const GET = async (
 
     // Try to retrieve cached data first using direct Redis
     try {
-      await redis.connect();
       const cachedData = await redis.get("product_filters_v1");
 
       if (cachedData && typeof cachedData === "string") {
@@ -226,12 +252,10 @@ export const GET = async (
         // Check if we have data for the specific context
         if (filterData[contextKey]) {
           console.log(`✅ Found cached data for context: ${contextKey}`);
-          await redis.disconnect();
           res.json(filterData[contextKey]);
           return;
         } else if (contextKey !== "global" && filterData["global"]) {
           console.log("✅ Using global cached data as fallback");
-          await redis.disconnect();
           res.json(filterData["global"]);
           return;
         }
@@ -255,10 +279,6 @@ export const GET = async (
 
     // Try to cache the fallback result for future requests using direct Redis
     try {
-      if (!redis.status || redis.status === "end") {
-        await redis.connect();
-      }
-
       const existingCacheData = await redis.get("product_filters_v1");
       let cacheData: ProductFilterData = {};
 
@@ -276,14 +296,8 @@ export const GET = async (
       );
 
       console.log(`✅ Cached fallback data for context: ${contextKey}`);
-      await redis.disconnect();
     } catch (cacheSetError) {
       console.error("❌ Error setting Redis cache:", cacheSetError);
-      try {
-        await redis.disconnect();
-      } catch (disconnectError) {
-        // Ignore disconnect errors
-      }
     }
 
     console.log("Final response (from fallback):", fallbackData);

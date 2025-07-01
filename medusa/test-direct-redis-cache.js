@@ -111,7 +111,10 @@ async function testDirectRedisCache() {
       process.env.CACHE_REDIS_URL ||
       process.env.REDIS_URL ||
       "redis://localhost:6379";
-    console.log(`🔌 Connecting to Redis: ${redisUrl}`);
+
+    // Log sanitized URL (hide credentials)
+    const sanitizedUrl = redisUrl.replace(/:\/\/[^@]*@/, "://***:***@");
+    console.log(`🔌 Connecting to Redis: ${sanitizedUrl}`);
 
     const redis = new Redis(redisUrl, {
       maxRetriesPerRequest: 3,

@@ -60,10 +60,11 @@ async function testCachePopulation() {
     console.log("🔍 Checking Redis cache status...");
 
     const { execSync } = require("child_process");
+    const redisUrl = process.env.REDIS_URL || "redis://localhost:6379";
 
     try {
       const cacheExists = execSync(
-        "redis-cli -u redis://localhost:6379 EXISTS product_filters_v1",
+        `redis-cli -u ${redisUrl} EXISTS product_filters_v1`,
         { encoding: "utf8" }
       ).trim();
 
@@ -72,7 +73,7 @@ async function testCachePopulation() {
 
         // Get cache content
         const cacheData = execSync(
-          "redis-cli -u redis://localhost:6379 GET product_filters_v1",
+          `redis-cli -u ${redisUrl} GET product_filters_v1`,
           { encoding: "utf8" }
         ).trim();
         console.log("📊 Cache content preview:");
@@ -119,7 +120,7 @@ async function testCachePopulation() {
       return;
     }
 
-    const testUrl = `${process.env.MEDUSA_BACKEND_URL || "http://localhost:9000"}/store/custom/products/filter-metadata`;
+    const testUrl = `${process.env.MEDUSA_BACKEND_URL || process.env.BACKEND_URL || "http://localhost:9000"}/store/custom/products/filter-metadata`;
 
     // Make multiple requests to test performance
     const times = [];

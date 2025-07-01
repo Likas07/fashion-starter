@@ -6,6 +6,7 @@
 
 const fs = require("fs");
 const path = require("path");
+const Redis = require("ioredis");
 
 // Load environment variables
 function loadEnvFile() {
@@ -42,21 +43,25 @@ async function testCacheService() {
     // Test direct Redis connection first
     console.log("1. Testing direct Redis connection...");
 
-    const { execSync } = require("child_process");
+    const redisUrl = process.env.REDIS_URL || "redis://localhost:6379";
+    const redis = new Redis(redisUrl, {
+      maxRetriesPerRequest: 3,
+      lazyConnect: true,
+    });
+
     try {
-      const redisUrl = process.env.REDIS_URL || "redis://localhost:6379";
-      const pingResult = execSync(`redis-cli -u ${redisUrl} ping`, {
-        encoding: "utf8",
-      }).trim();
+      const pingResult = await redis.ping();
 
       if (pingResult === "PONG") {
         console.log("✅ Direct Redis connection: OK");
       } else {
         console.log("❌ Direct Redis connection failed:", pingResult);
+        await redis.quit();
         return;
       }
     } catch (error) {
       console.log("❌ Direct Redis connection failed:", error.message);
+      await redis.quit();
       return;
     }
 
@@ -66,23 +71,13 @@ async function testCacheService() {
       const testKey = "cache_test_" + Date.now();
       const testValue = "test_value";
 
-      execSync(
-        `redis-cli -u ${process.env.REDIS_URL} SET ${testKey} "${testValue}"`,
-        { encoding: "utf8" }
-      );
-      const retrievedValue = execSync(
-        `redis-cli -u ${process.env.REDIS_URL} GET ${testKey}`,
-        { encoding: "utf8" }
-      )
-        .trim()
-        .replace(/"/g, "");
+      await redis.set(testKey, testValue);
+      const retrievedValue = await redis.get(testKey);
 
       if (retrievedValue === testValue) {
         console.log("✅ Direct Redis write/read: OK");
         // Clean up
-        execSync(`redis-cli -u ${process.env.REDIS_URL} DEL ${testKey}`, {
-          encoding: "utf8",
-        });
+        await redis.del(testKey);
       } else {
         console.log(
           "❌ Direct Redis write/read failed. Expected:",
@@ -94,6 +89,9 @@ async function testCacheService() {
     } catch (error) {
       console.log("❌ Direct Redis write failed:", error.message);
     }
+
+    // Close Redis connection
+    await redis.quit();
 
     // Test API endpoint cache behavior
     console.log("\n3. Testing API cache behavior...");

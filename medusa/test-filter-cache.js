@@ -120,37 +120,44 @@ class FilterCacheTestSuite {
         headers["x-publishable-api-key"] = this.publishableKey;
       }
 
-      const response = await fetch(url, {
-        timeout: 10000,
-        ...options,
-        headers,
-      });
-      const endTime = performance.now();
+      // Create AbortController for timeout handling
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-      const contentType = response.headers.get("content-type");
-      let data;
+      try {
+        const response = await fetch(url, {
+          ...options,
+          headers,
+          signal: controller.signal,
+        });
+        clearTimeout(timeoutId); // Clear timeout on successful response
+        const endTime = performance.now();
 
-      if (contentType && contentType.includes("application/json")) {
-        data = await response.json();
-      } else {
-        data = await response.text();
+        const contentType = response.headers.get("content-type");
+        let data;
+
+        if (contentType && contentType.includes("application/json")) {
+          data = await response.json();
+        } else {
+          data = await response.text();
+        }
+
+        return {
+          success: response.ok,
+          data,
+          status: response.status,
+          responseTime: endTime - startTime,
+          headers: Object.fromEntries(response.headers.entries()),
+        };
+      } catch (error) {
+        clearTimeout(timeoutId); // Clear timeout on error
+        const endTime = performance.now();
+        return {
+          success: false,
+          error: error.message,
+          responseTime: endTime - startTime,
+        };
       }
-
-      return {
-        success: response.ok,
-        data,
-        status: response.status,
-        responseTime: endTime - startTime,
-        headers: Object.fromEntries(response.headers.entries()),
-      };
-    } catch (error) {
-      const endTime = performance.now();
-      return {
-        success: false,
-        error: error.message,
-        responseTime: endTime - startTime,
-      };
-    }
   }
 
   validateFilterDataStructure(data) {

@@ -95,22 +95,51 @@ export default async function cacheProductFiltersDirectRedis(
 
     console.log("✅ Product service resolved successfully");
 
-    // Query all published products regardless of stock status
-    const products = await productService.listProducts(
-      {
-        status: "published",
-      },
-      {
-        relations: ["options", "options.values", "variants"],
-      }
-    );
+    // Query all published products with pagination to handle large datasets
+    console.log("📦 Fetching published products with pagination...");
 
-    console.log(`📦 Found ${products.length} published products`);
+    const batchSize = 100; // Process 100 products at a time
+    let skip = 0;
+    let allProducts: any[] = [];
+    let totalFetched = 0;
+
+    while (true) {
+      const productsBatch = await productService.listProducts(
+        {
+          status: "published",
+        },
+        {
+          relations: ["options", "options.values", "variants"],
+          skip: skip,
+          take: batchSize,
+        }
+      );
+
+      if (productsBatch.length === 0) {
+        // No more products to fetch
+        break;
+      }
+
+      allProducts.push(...productsBatch);
+      totalFetched += productsBatch.length;
+      skip += batchSize;
+
+      console.log(
+        `📦 Fetched batch: ${productsBatch.length} products (total: ${totalFetched})`
+      );
+
+      // Optional: Add a small delay to prevent overwhelming the database
+      if (productsBatch.length === batchSize) {
+        await new Promise((resolve) => setTimeout(resolve, 10));
+      }
+    }
+
+    console.log(`📦 Found ${allProducts.length} total published products`);
 
     // Group products by context (type, collection, category combinations)
     const contextGroups: { [key: string]: any[] } = {};
 
-    products.forEach((product: any) => {
+    allProducts.forEach((product: any) => {
       const contextKey = generateContextKey(product);
       if (!contextGroups[contextKey]) {
         contextGroups[contextKey] = [];
