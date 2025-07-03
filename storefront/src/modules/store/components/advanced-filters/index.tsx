@@ -96,11 +96,7 @@ export const AdvancedFilters = ({
           <p className="md:text-md font-agenda">
             Explore nossa coleção completa.
           </p>
-          {!filterOptions && (
-            <p className="text-sm text-muted-foreground font-agenda mt-2">
-              Carregando filtros...
-            </p>
-          )}
+          {!filterOptions}{" "}
         </div>
         <div className="grid grid-cols-1 items-start gap-10 md:gap-12 lg:grid-cols-[max-content_1fr]">
           {isTablet ? (
@@ -401,7 +397,7 @@ const FilterSections = ({
       {/* Style Filter */}
       <div className="border-b border-border">
         <div className="flex items-center justify-between py-4 md:py-5">
-          <h3 className="font-semibold md:text-md font-agenda">Estilo</h3>
+          <h3 className="font-semibold md:text-md font-agenda">Material</h3>
           <Button
             variant="link"
             size="link"
