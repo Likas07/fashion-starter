@@ -15,6 +15,9 @@ export const GET = async (req: MedusaRequest, res: MedusaResponse) => {
   let max_price = 0;
 
   for (const product of products) {
+    if (!product.variants || !Array.isArray(product.variants)) {
+      continue;
+    }
     for (const variant of product.variants) {
       if (variant.calculated_price?.calculated_amount) {
         const current_price = variant.calculated_price.calculated_amount;

@@ -3,10 +3,15 @@ import { FASHION_MODULE } from "../../../../modules/fashion";
 import FashionModuleService from "../../../../modules/fashion/service";
 
 export const GET = async (req: MedusaRequest, res: MedusaResponse) => {
-  const fashionModuleService: FashionModuleService =
-    req.scope.resolve(FASHION_MODULE);
+  try {
+    const fashionModuleService: FashionModuleService =
+      req.scope.resolve(FASHION_MODULE);
 
-  const colors = await fashionModuleService.listColors();
+    const colors = await fashionModuleService.listColors();
 
-  res.status(200).json({ colors });
+    res.status(200).json({ colors });
+  } catch (error) {
+    console.error("Error fetching colors:", error);
+    res.status(500).json({ error: "Failed to fetch colors" });
+  }
 };
