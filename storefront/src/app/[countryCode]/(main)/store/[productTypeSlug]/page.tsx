@@ -14,10 +14,10 @@ type Params = {
     category?: string | string[]
     page?: string
   }
-  params: {
+  params: Promise<{
     countryCode: string
     productTypeSlug: string
-  }
+  }>
 }
 
 // Function to generate static paths for each product type
@@ -56,11 +56,12 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: Params["params"]
+  params: Promise<Params["params"]>
 }): Promise<Metadata> {
+  const resolvedParams = await params
   const { productTypes } = await getProductTypesList(0, 100, ["value"])
   const productType = productTypes.find(
-    (pt) => slugify(pt.value) === params.productTypeSlug
+    (pt) => slugify(pt.value) === resolvedParams.productTypeSlug
   )
 
   if (!productType) {
