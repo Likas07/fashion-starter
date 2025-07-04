@@ -1,59 +1,72 @@
 "use client"
-import { HttpTypes, StoreProduct } from "@medusajs/types"
+import { StoreProduct } from "@medusajs/types"
 import ProductPreview from "@modules/products/components/product-preview"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 import { Layout, LayoutColumn } from "@/components/Layout"
 import { NoResults } from "@modules/store/components/no-results.tsx"
 import { withReactQueryProvider } from "@lib/util/react-query"
 import * as React from "react"
-import { useStoreProducts } from "hooks/store"
+import { StoreProductsParams, useStoreProducts } from "hooks/store"
 import SkeletonProductGrid from "@modules/skeletons/templates/skeleton-product-grid"
 
 const PRODUCT_LIMIT = 12
+
+type ColorInfo = {
+  id: string
+  name: string
+  hex_code: string
+}
+
+type PaginatedProductsProps = {
+  sortBy?: SortOptions
+  page: number
+  countryCode: string
+  collectionId?: string[]
+  categoryId?: string[]
+  typeId?: string[]
+  productsIds?: string[]
+  colors?: ColorInfo[] // Accept the global colors list
+  color?: string[]
+  material?: string[]
+  minPrice?: number
+  maxPrice?: number
+}
+
 function PaginatedProducts({
   sortBy,
   page,
+  countryCode,
   collectionId,
   categoryId,
   typeId,
   productsIds,
-  countryCode,
-}: {
-  sortBy?: SortOptions
-  page: number
-  collectionId?: string | string[]
-  categoryId?: string | string[]
-  typeId?: string | string[]
-  productsIds?: string[]
-  countryCode: string
-}) {
-  const queryParams: HttpTypes.StoreProductListParams = {
+  colors, // Receive the colors list
+  color,
+  material,
+  minPrice,
+  maxPrice,
+}: PaginatedProductsProps) {
+  const queryParams: StoreProductsParams = {
     limit: PRODUCT_LIMIT,
   }
 
-  if (collectionId) {
-    queryParams["collection_id"] = Array.isArray(collectionId)
-      ? collectionId
-      : [collectionId]
-  }
-
-  if (categoryId) {
-    queryParams["category_id"] = Array.isArray(categoryId)
-      ? categoryId
-      : [categoryId]
-  }
-
-  if (typeId) {
-    queryParams["type_id"] = Array.isArray(typeId) ? typeId : [typeId]
-  }
-
-  if (productsIds) {
-    queryParams["id"] = productsIds
-  }
-
-  if (sortBy === "created_at") {
-    queryParams["order"] = "created_at"
-  }
+  // Build queryParams object with all filters...
+  if (collectionId) queryParams["collection_id"] = collectionId
+  if (categoryId) queryParams["category_id"] = categoryId
+  if (typeId) queryParams["type_id"] = typeId
+  if (productsIds) queryParams["id"] = productsIds
+  if (sortBy === "created_at") queryParams["order"] = "created_at"
+  if (color && color.length > 0)
+    queryParams.options = { ...queryParams.options, color: color.join(",") }
+  if (material && material.length > 0)
+    queryParams.options = {
+      ...queryParams.options,
+      material: material.join(","),
+    }
+  if (minPrice !== undefined)
+    queryParams["variants.prices.amount[gte]"] = minPrice * 100
+  if (maxPrice !== undefined)
+    queryParams["variants.prices.amount[lte]"] = maxPrice * 100
 
   const productsQuery = useStoreProducts({
     page,
@@ -61,6 +74,7 @@ function PaginatedProducts({
     sortBy,
     countryCode,
   })
+
   const loadMoreRef = React.useRef<HTMLDivElement>(null)
 
   React.useEffect(() => {
@@ -73,7 +87,6 @@ function PaginatedProducts({
       },
       { rootMargin: "100px" }
     )
-
     observer.observe(loadMoreRef.current)
     return () => observer.disconnect()
   }, [productsQuery, loadMoreRef])
@@ -82,20 +95,20 @@ function PaginatedProducts({
     return <SkeletonProductGrid />
   }
 
+  const products = productsQuery.data?.pages.flatMap(
+    (page) => page?.response?.products || []
+  )
+
   return (
     <>
       <Layout className="gap-y-10 md:gap-y-16 mb-16">
-        {productsQuery?.data?.pages[0]?.response?.products?.length &&
-        (!productsIds || productsIds.length > 0) ? (
-          productsQuery?.data?.pages.flatMap((page) => {
-            return page?.response?.products.map((p: StoreProduct) => {
-              return (
-                <LayoutColumn key={p.id} className="md:!col-span-4 !col-span-6">
-                  <ProductPreview product={p} />
-                </LayoutColumn>
-              )
-            })
-          })
+        {products && products.length > 0 ? (
+          products.map((p: StoreProduct) => (
+            <LayoutColumn key={p.id} className="md:!col-span-4 !col-span-6">
+              {/* Pass the colors list down to each ProductPreview */}
+              <ProductPreview product={p} colors={colors} />
+            </LayoutColumn>
+          ))
         ) : (
           <NoResults />
         )}

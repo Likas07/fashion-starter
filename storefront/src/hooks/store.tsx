@@ -1,7 +1,15 @@
+"use client"
 import { getProductsListWithSort } from "@lib/data/products"
 import { HttpTypes } from "@medusajs/types"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 import { useInfiniteQuery } from "@tanstack/react-query"
+
+// Create a more specific type that extends the base params
+export type StoreProductsParams = HttpTypes.StoreProductListParams & {
+  "variants.prices.amount[gte]"?: number
+  "variants.prices.amount[lte]"?: number
+  options?: Record<string, string>
+}
 
 export const useStoreProducts = ({
   page,
@@ -10,7 +18,7 @@ export const useStoreProducts = ({
   countryCode,
 }: {
   page: number
-  queryParams: HttpTypes.StoreProductListParams
+  queryParams: StoreProductsParams
   sortBy: SortOptions | undefined
   countryCode: string
 }) => {
@@ -30,12 +38,10 @@ export const useStoreProducts = ({
       nextPage: number | null
       queryParams?: HttpTypes.FindParams & HttpTypes.StoreProductParams
     }) => {
-      if (!lastPage.nextPage) {
+      if (!lastPage?.nextPage) {
         return undefined
       }
-      return (
-        Math.ceil(lastPage.nextPage / (lastPage.queryParams?.limit || 12)) + 1
-      )
+      return lastPage.nextPage
     },
   })
 }

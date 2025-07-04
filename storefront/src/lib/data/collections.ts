@@ -19,33 +19,35 @@ export const getCollectionsList = async function (
   limit: number = 100,
   fields?: (keyof HttpTypes.StoreCollection)[]
 ): Promise<{ collections: HttpTypes.StoreCollection[]; count: number }> {
-  return sdk.client
-    .fetch<{
-      collections: HttpTypes.StoreCollection[]
-      count: number
-    }>("/store/collections", {
-      query: { limit, offset, fields: fields ? fields.join(",") : undefined },
-      next: { tags: ["collections"] },
-      cache: "force-cache",
-    })
-    .then(({ collections }) => ({ collections, count: collections.length }))
+  const { collections, count } = await sdk.client.fetch<{
+    collections: HttpTypes.StoreCollection[]
+    count: number
+  }>("/store/collections", {
+    query: { limit, offset, fields: fields ? fields.join(",") : undefined },
+    next: { tags: ["collections"] },
+    cache: "force-cache",
+  })
+  return { collections, count }
 }
 
 export const getCollectionByHandle = async function (
   handle: string,
   fields?: (keyof HttpTypes.StoreCollection)[]
 ): Promise<HttpTypes.StoreCollection> {
-  return sdk.client
-    .fetch<HttpTypes.StoreCollectionListResponse>(`/store/collections`, {
-      query: {
-        handle,
-        fields: fields ? fields.join(",") : undefined,
-        limit: 1,
-      },
-      next: { tags: ["collections"] },
-      cache: "force-cache",
-    })
-    .then(({ collections }) => collections[0])
+  const { collections } =
+    await sdk.client.fetch<HttpTypes.StoreCollectionListResponse>(
+      `/store/collections`,
+      {
+        query: {
+          handle,
+          fields: fields ? fields.join(",") : undefined,
+          limit: 1,
+        },
+        next: { tags: ["collections"] },
+        cache: "force-cache",
+      }
+    )
+  return collections[0]
 }
 
 export const getCollectionsWithProducts = async (
@@ -61,10 +63,18 @@ export const getCollectionsWithProducts = async (
     .map((collection) => collection.id)
     .filter(Boolean) as string[]
 
-  const { response } = await getProductsList({
-    queryParams: { collection_id: collectionIds },
+  const productsResult = await getProductsList({
+    queryParams: {
+      collection_id: collectionIds,
+    } as HttpTypes.StoreProductListParams, // Cast to the expected type
     countryCode,
   })
+
+  if (!productsResult) {
+    return collections as unknown as HttpTypes.StoreCollection[]
+  }
+
+  const { response } = productsResult
 
   response.products.forEach((product) => {
     const collection = collections.find(
@@ -75,7 +85,6 @@ export const getCollectionsWithProducts = async (
       if (!collection.products) {
         collection.products = []
       }
-
       collection.products.push(product)
     }
   })

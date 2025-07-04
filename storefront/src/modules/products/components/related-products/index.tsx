@@ -37,9 +37,17 @@ export default async function RelatedProducts({
   const products = await getProductsList({
     queryParams,
     countryCode,
-  }).then(({ response }) => {
-    return response.products.filter(
-      (responseProduct) => responseProduct.id !== product.id
+  }).then((result) => {
+    // 'result' can be null
+    if (!result) {
+      return [] // Return an empty array if the entire result is null
+    }
+    // Now it's safe to destructure 'response' from 'result'
+    const { response } = result
+    return (
+      response?.products?.filter(
+        (responseProduct) => responseProduct.id !== product.id
+      ) || []
     )
   })
 

@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/Select"
 import { UiDialogTrigger } from "@/components/Dialog"
 import {
-  UiSliderOutput,
   UiSliderThumb,
   UiSliderTrack,
   UiSliderOutputValue,

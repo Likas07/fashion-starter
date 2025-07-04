@@ -12,7 +12,11 @@ import SortProducts, {
   SortOptions,
 } from "@modules/store/components/refinement-list/sort-products"
 import { TypeFilter } from "@modules/store/components/refinement-list/type-filter"
+import { ColorFilter } from "./color-filter" // Import new component
+import { MaterialFilter } from "./material-filter" // Import new component
+import { PriceSliderFilter } from "./price-slider-filter" // Import new component
 
+// Extend props to include all new filter data and values
 type RefinementListProps = {
   title?: string
   collections?: Record<string, string>
@@ -21,6 +25,13 @@ type RefinementListProps = {
   category?: string[]
   types?: Record<string, string>
   type?: string[]
+  colors?: { id: string; name: string; hex_code: string }[]
+  color?: string[]
+  materials?: { id: string; name: string }[]
+  material?: string[]
+  priceRange?: { min_price: number; max_price: number }
+  minPrice?: number
+  maxPrice?: number
   sortBy: SortOptions | undefined
   "data-testid"?: string
 }
@@ -33,6 +44,13 @@ const RefinementList = ({
   category,
   types,
   type,
+  colors,
+  color,
+  materials,
+  material,
+  priceRange,
+  minPrice,
+  maxPrice,
   sortBy,
   "data-testid": dataTestId,
 }: RefinementListProps) => {
@@ -81,6 +99,7 @@ const RefinementList = ({
           {title}
         </h2>
         <div className="flex justify-between gap-10">
+          {/* Pass new filter data to MobileFilters */}
           <MobileFilters
             collections={collections}
             collection={collection}
@@ -88,9 +107,17 @@ const RefinementList = ({
             category={category}
             types={types}
             type={type}
+            colors={colors}
+            color={color}
+            materials={materials}
+            material={material}
+            priceRange={priceRange}
+            minPrice={minPrice}
+            maxPrice={maxPrice}
             setMultipleQueryParams={setMultipleQueryParams}
           />
           <MobileSort sortBy={sortBy} setQueryParams={setQueryParams} />
+          {/* Render new filters in the desktop view */}
           <div className="flex justify-between gap-4 max-md:hidden">
             {typeof collections !== "undefined" && (
               <CollectionFilter
@@ -111,6 +138,28 @@ const RefinementList = ({
                 types={types}
                 type={type}
                 setQueryParams={setQueryParams}
+              />
+            )}
+            {typeof colors !== "undefined" && (
+              <ColorFilter
+                colors={colors}
+                color={color}
+                setQueryParams={setQueryParams}
+              />
+            )}
+            {typeof materials !== "undefined" && (
+              <MaterialFilter
+                materials={materials}
+                material={material}
+                setQueryParams={setQueryParams}
+              />
+            )}
+            {typeof priceRange !== "undefined" && (
+              <PriceSliderFilter
+                priceRange={priceRange}
+                minPrice={minPrice}
+                maxPrice={maxPrice}
+                setMultipleQueryParams={setMultipleQueryParams}
               />
             )}
           </div>

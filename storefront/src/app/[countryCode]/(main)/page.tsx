@@ -1,15 +1,16 @@
 import { Metadata } from "next"
 import Image from "next/image"
-import { HttpTypes } from "@medusajs/types" // Added
+import { HttpTypes } from "@medusajs/types"
 import { getRegion } from "@lib/data/regions"
 import { getProductsList } from "@lib/data/products"
 import { Layout, LayoutColumn } from "@/components/Layout"
 import ProductPreview from "@modules/products/components/product-preview"
-import { siteConfig } from "@/config/site" // Added
+import { siteConfig } from "@/config/site"
 import { LocalizedLink } from "@/components/LocalizedLink"
 import { Carousel } from "@/components/Carousel"
 import OfferBenefits from "@/components/OfferBenefits"
 import { VideoProductGallery } from "@/components/VideoProductGallery" // Import the new component
+import { getColorsList } from "@lib/data/colors" // Import the new function
 
 export const metadata: Metadata = {
   title: "Orla Da Praia",
@@ -17,108 +18,57 @@ export const metadata: Metadata = {
     "A performant frontend ecommerce starter template with Next.js 14 and Medusa.",
 }
 
-// ProductTypesSection removed
+type FeaturedProductsParams = HttpTypes.StoreProductListParams & {
+  handle?: string[]
+}
+
+async function fetchFeaturedProducts({
+  config,
+  countryCode,
+}: {
+  config: { handles?: string[]; count?: number }
+  countryCode: string
+}) {
+  const { handles, count = 4 } = config || {}
+  const queryParams: FeaturedProductsParams = {
+    fields: "handle,thumbnail,title,collection_id,options,options.values",
+  }
+  if (handles && handles.length > 0) {
+    queryParams.handle = handles
+  } else {
+    queryParams.limit = count
+  }
+  const productsResult = await getProductsList({ countryCode, queryParams })
+  return productsResult ? productsResult.response.products : []
+}
 
 export default async function Home({
   params,
 }: {
-  params: Promise<{ countryCode: string }>
+  params: { countryCode: string }
 }) {
-  const { countryCode } = await params
+  const { countryCode } = params
   const region = await getRegion(countryCode)
+  if (!region) return null
 
-  if (!region) {
-    return null
-  }
-
-  // Fetch products for the first featured carousel
-  let productsToFetch
-  const { handles: featuredHandles, count: featuredCount } =
-    siteConfig.featuredProducts
-
-  if (featuredHandles && featuredHandles.length > 0) {
-    const { response } = await getProductsList({
+  // Fetch all data, including the new global list of colors
+  const [
+    products,
+    secondaryProducts,
+    homeDisplayCollectionsProducts,
+    colors, // Fetched once for the whole page
+  ] = await Promise.all([
+    fetchFeaturedProducts({ config: siteConfig.featuredProducts, countryCode }),
+    fetchFeaturedProducts({
+      config: siteConfig.secondaryFeaturedProducts,
       countryCode,
-      queryParams: {
-        handle: featuredHandles,
-        fields:
-          "handle,thumbnail,title,collection_id,+options,+options.values,+options.title,+options.id,+options.values.value,+options.values.id,+variants,+variants.options,+variants.options.value,+variants.options.option_id",
-      },
-    })
-    productsToFetch = response.products
-  } else {
-    const { response } = await getProductsList({
+    }),
+    fetchFeaturedProducts({
+      config: siteConfig.homeDisplayCollections,
       countryCode,
-      queryParams: {
-        limit: featuredCount,
-        fields:
-          "handle,thumbnail,title,collection_id,+options,+options.values,+options.title,+options.id,+options.values.value,+options.values.id,+variants,+variants.options,+variants.options.value,+variants.options.option_id",
-      },
-    })
-    productsToFetch = response.products
-  }
-  const products = productsToFetch
-
-  // Fetch products for the secondary featured carousel
-  let secondaryProductsToFetch
-  const { handles: secondaryHandles, count: secondaryCount } =
-    siteConfig.secondaryFeaturedProducts
-
-  if (secondaryHandles && secondaryHandles.length > 0) {
-    const { response } = await getProductsList({
-      countryCode,
-      queryParams: {
-        handle: secondaryHandles,
-        fields:
-          "handle,thumbnail,title,collection_id,+options,+options.values,+options.title,+options.id,+options.values.value,+options.values.id,+variants,+variants.options,+variants.options.value,+variants.options.option_id",
-      },
-    })
-    secondaryProductsToFetch = response.products
-  } else {
-    const { response } = await getProductsList({
-      countryCode,
-      queryParams: {
-        limit: secondaryCount,
-        fields:
-          "handle,thumbnail,title,collection_id,+options,+options.values,+options.title,+options.id,+options.values.value,+options.values.id,+variants,+variants.options,+variants.options.value,+variants.options.option_id",
-      },
-    })
-    secondaryProductsToFetch = response.products
-  }
-  const secondaryProducts = secondaryProductsToFetch
-
-  // Fetch products for the home display collections carousel
-  let homeDisplayCollectionsProductsToFetch
-  const {
-    handles: homeDisplayCollectionsHandles,
-    count: homeDisplayCollectionsCount,
-  } = siteConfig.homeDisplayCollections || { handles: [], count: 2 } // Provide default if undefined
-
-  if (
-    homeDisplayCollectionsHandles &&
-    homeDisplayCollectionsHandles.length > 0
-  ) {
-    const { response } = await getProductsList({
-      countryCode,
-      queryParams: {
-        handle: homeDisplayCollectionsHandles,
-        fields:
-          "handle,thumbnail,title,collection_id,+options,+options.values,+options.title,+options.id,+options.values.value,+options.values.id,+variants,+variants.options,+variants.options.value,+variants.options.option_id",
-      },
-    })
-    homeDisplayCollectionsProductsToFetch = response.products
-  } else {
-    const { response } = await getProductsList({
-      countryCode,
-      queryParams: {
-        limit: homeDisplayCollectionsCount,
-        fields:
-          "handle,thumbnail,title,collection_id,+options,+options.values,+options.title,+options.id,+options.values.value,+options.values.id,+variants,+variants.options,+variants.options.value,+variants.options.option_id",
-      },
-    })
-    homeDisplayCollectionsProductsToFetch = response.products
-  }
-  const homeDisplayCollectionsProducts = homeDisplayCollectionsProductsToFetch
+    }),
+    getColorsList(),
+  ])
 
   return (
     <>
@@ -154,10 +104,10 @@ export default async function Home({
             </LayoutColumn>
           </Layout>
           <Carousel
-            autoplay={false} // You might want to enable this
+            autoplay={false}
             loop={true}
             arrows={true}
-            useInternalLayout={true} // Use internal layout for product carousel
+            useInternalLayout={true}
             className="w-full"
           >
             {products.map((product: HttpTypes.StoreProduct) => (
@@ -165,7 +115,8 @@ export default async function Home({
                 key={product.id}
                 className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-2"
               >
-                <ProductPreview product={product} />
+                {/* Pass the global colors list to each preview */}
+                <ProductPreview product={product} colors={colors} />
               </div>
             ))}
           </Carousel>
@@ -176,8 +127,8 @@ export default async function Home({
           {/* Left Column: Vertical Banner */}
           <LayoutColumn
             start={1}
-            end={{ base: 13, md: 5 }} // Banner takes 4/12 columns on medium+
-            className="relative min-h-[300px] md:min-h-0 md:aspect-[3/5] order-1 md:order-none" // Aspect ratio for banner
+            end={{ base: 13, md: 5 }}
+            className="relative min-h-[300px] md:min-h-0 md:aspect-[3/5] order-1 md:order-none"
           >
             <Image
               src={siteConfig.verticalBannerImage}
@@ -186,9 +137,9 @@ export default async function Home({
               className="object-cover rounded-lg"
             />
           </LayoutColumn>
-          {/* Right Column: New Carousel */}
+          {/* Right Column: Secondary Products Carousel */}
           <LayoutColumn
-            start={{ base: 1, md: 5 }} // Carousel takes 8/12 columns on medium+
+            start={{ base: 1, md: 5 }}
             end={13}
             className="flex flex-col order-2 md:order-none mt-6 md:mt-0"
           >
@@ -197,16 +148,20 @@ export default async function Home({
                 autoplay={false}
                 loop={true}
                 arrows={true}
-                useInternalLayout={false} // Manage layout explicitly
-                arrowPosition="inside" // Add this prop
+                useInternalLayout={false}
+                arrowPosition="inside"
                 className="w-full h-full flex-grow"
               >
                 {secondaryProducts.map((product: HttpTypes.StoreProduct) => (
                   <div
                     key={product.id}
-                    className="w-full sm:w-1/2 md:w-1/2 lg:w-1/3 p-2" // Shows 1, 2, 2, or 3 items based on screen
+                    className="w-full sm:w-1/2 md:w-1/2 lg:w-1/3 p-2"
                   >
-                    <ProductPreview product={product} thumbnailSize="medium" />
+                    <ProductPreview
+                      product={product}
+                      thumbnailSize="medium"
+                      colors={colors} // Pass the global colors list
+                    />
                   </div>
                 ))}
               </Carousel>
@@ -220,6 +175,7 @@ export default async function Home({
             )}
           </LayoutColumn>
         </Layout>
+
         {/* New Collections Section */}
         <Layout>
           <LayoutColumn className="col-span-full text-center mb-8 pt-12">
@@ -230,8 +186,8 @@ export default async function Home({
           {/* Left Column: Vertical Banner for Collections Section */}
           <LayoutColumn
             start={1}
-            end={{ base: 13, md: 7 }} // Banner takes 6/12 columns on medium+
-            className="relative min-h-[300px] md:min-h-0 md:aspect-[9/10] order-1 md:order-none" // Adjusted aspect ratio
+            end={{ base: 13, md: 7 }}
+            className="relative min-h-[300px] md:min-h-0 md:aspect-[9/10] order-1 md:order-none"
           >
             <Image
               src={siteConfig.verticalBannerImage} // Consider if this should be a different banner
@@ -242,7 +198,7 @@ export default async function Home({
           </LayoutColumn>
           {/* Right Column: Collections Carousel (Re-implemented) */}
           <LayoutColumn
-            start={{ base: 1, md: 7 }} // Carousel takes 6/12 columns on medium+
+            start={{ base: 1, md: 7 }}
             end={13}
             className="flex flex-col order-2 md:order-none mt-6 md:mt-0"
           >
@@ -252,18 +208,19 @@ export default async function Home({
                 autoplay={false}
                 loop={false}
                 arrows={false} // No arrows for this carousel
-                useInternalLayout={false} // Manage layout explicitly
+                useInternalLayout={false}
                 className="w-full h-full flex-grow"
               >
                 {homeDisplayCollectionsProducts.map(
                   (product: HttpTypes.StoreProduct) => (
                     <div
                       key={product.id}
-                      className="w-full sm:w-1/2 md:w-1/2 lg:w-1/2 p-4" // Increased padding
+                      className="w-full sm:w-1/2 md:w-1/2 lg:w-1/2 p-4"
                     >
                       <ProductPreview
                         product={product}
                         thumbnailSize="medium"
+                        colors={colors} // Pass the global colors list
                       />
                     </div>
                   )
@@ -279,9 +236,9 @@ export default async function Home({
             )}
           </LayoutColumn>
         </Layout>
-        {/* <ProductTypesSection /> Removed */}
-        <VideoProductGallery title="Assista & Compre" />{" "}
-        {/* Add the new component here */}
+
+        <VideoProductGallery title="Assista & Compre" />
+
         <Layout>
           {/* Optional: Main title for the section, if you want it above the two columns */}
           <LayoutColumn className="col-span-full mb-8 md:mb-12">

@@ -97,7 +97,7 @@ export default async function CollectionTemplate({
           <PaginatedProducts
             sortBy={sortBy}
             page={pageNumber}
-            collectionId={collection.id}
+            collectionId={[collection.id]}
             countryCode={countryCode}
             categoryId={
               !category
